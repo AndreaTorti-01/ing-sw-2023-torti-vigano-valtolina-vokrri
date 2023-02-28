@@ -3,16 +3,18 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.example</groupId>
-  <artifactId>softeng</artifactId>
+  <artifactId>ing-sw-2023-torti-vigano-valtolina-vokrri</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>ing-sw-2023-torti-vigano-valtolina-vokrri</name>
+  <name>it.polimi.ingsw</name>
   <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
+    </properties>
 
   <dependencies>
     <dependency>
