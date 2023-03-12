@@ -1,6 +1,6 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
-public class Shelf implements GameObject{
+public class Shelf extends GameObject{
     private ItemCard[][] items;
 
 

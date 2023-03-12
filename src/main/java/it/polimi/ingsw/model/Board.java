@@ -1,6 +1,6 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
-public class Board implements GameObject{
+public class Board extends GameObject{
     private boolean[][] valid;
     private ItemCard[][] tile;
 

@@ -1,6 +1,6 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
-public class ItemCard {
+public class ItemCard extends GameObject {
     private ItemType type;
 
     public ItemType getType() {
