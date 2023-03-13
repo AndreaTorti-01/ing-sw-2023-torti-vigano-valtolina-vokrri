@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.Card;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -33,7 +31,7 @@ enum CommonGoalCardType {
 
 }
 
-public class CommonGoalCard implements Card {
+public class CommonGoalCard extends GameObject {
     private final Stack<Integer> assignedPoints;
     private final CommonGoalCardType type;
 
