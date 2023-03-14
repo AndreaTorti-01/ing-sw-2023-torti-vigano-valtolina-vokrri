@@ -1,4 +1,5 @@
-package it.polimi.ingsw.model;
+package main.java.it.polimi.ingsw.model;
+
 
 public class PersonalGoalCard extends GameObject {
     private ItemType[][] pattern;
@@ -8,7 +9,7 @@ public class PersonalGoalCard extends GameObject {
         // pattern randomici oppure ben definiti come nel gioco?
     }
 
-    public ItemType[6][5] getPattern() {
+    public ItemType[][] getPattern() {
         return pattern;
     }
 }

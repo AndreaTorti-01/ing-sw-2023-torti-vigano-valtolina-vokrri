@@ -1,4 +1,5 @@
-package it.polimi.ingsw.model;
+package main.java.it.polimi.ingsw.model;
+
 
 public class Board extends GameObject {
     private boolean[][] valid;

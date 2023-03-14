@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package main.java.it.polimi.ingsw.model;
 
 public class Player {
     private String nickname;
@@ -12,6 +12,7 @@ public class Player {
     public int getScore() {
         return score;
     }
+
     public void setScore(int score) {
         this.score = score;
     }

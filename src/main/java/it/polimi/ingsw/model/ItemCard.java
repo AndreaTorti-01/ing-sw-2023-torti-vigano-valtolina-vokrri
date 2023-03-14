@@ -1,6 +1,7 @@
-package it.polimi.ingsw.model;
+package main.java.it.polimi.ingsw.model;
 
-public enum ItemType {
+
+enum ItemType {
     CATS,
     GAMES,
     BOOKS,

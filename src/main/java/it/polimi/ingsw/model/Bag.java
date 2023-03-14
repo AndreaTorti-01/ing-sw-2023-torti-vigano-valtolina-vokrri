@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model;
+package main.java.it.polimi.ingsw.model;
 
-import java.util.*;
+import java.util.Set;
 
 public class Bag extends GameObject {
     private Set<ItemCard> cardsInside;
