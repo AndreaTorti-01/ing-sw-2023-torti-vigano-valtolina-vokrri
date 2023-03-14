@@ -7,18 +7,18 @@ import java.util.Stack;
 
 
 enum CommonGoalCardType {
-    SixPairs,
-    DiagonalFive,
-    FourQuartets,
-    FourLinesMaxThreeTypes,
-    EqualCorners,
-    TwoRainbowColumns,
-    TwoSquares,
-    TwoRainbowLines,
-    ThreeColumnsMaxThreeTypes,
-    Cross,
-    EightEqual,
-    Stair;
+    SIXPAIRS,
+    DIAGONALFIVE,
+    FOURQUARTETS,
+    FOURLINESMAXTHREETYPES,
+    EQUALCORNERS,
+    TWORAINBOWCOLUMNS,
+    TWOSQUARES,
+    TWORAINBOWLINES,
+    THREECOLUMNSMAXTHREETYPES,
+    CROSS,
+    EIGHTEQUAL,
+    STAIR;
 
     private static final List<CommonGoalCardType> values = Arrays.asList(CommonGoalCardType.values());
 
@@ -56,7 +56,6 @@ public class CommonGoalCard extends GameObject {
             }
         }
 
-        // TODO: da rivedere l'implementazione per evitare di assegnare più di 12 carte dello stesso tipo
         type = CommonGoalCardType.getRandomType();
 
     }
