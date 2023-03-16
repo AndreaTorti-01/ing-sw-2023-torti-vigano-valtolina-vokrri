@@ -11,7 +11,7 @@ public class Bag extends GameObject {
         // need ItemCard constructor to define the method
     }
 
-    public PersonalGoalCard pop() {
+    public PersonalGoalCard drawCard() {
         throw new UnsupportedOperationException("TO DO");
     }
 }
