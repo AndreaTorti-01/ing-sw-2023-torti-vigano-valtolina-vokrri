@@ -5,11 +5,13 @@ public class PersonalGoalCard extends GameObject {
     private ItemType[][] pattern;
 
     public PersonalGoalCard() {
-        // TODO implement PersonalGoalCard constructor
-        // pattern randomici oppure ben definiti come nel gioco?
+
+        // TODO: implement PersonalGoalCard constructor
+        // the patters are well defined
     }
 
     public ItemType[][] getPattern() {
         return pattern;
     }
+
 }

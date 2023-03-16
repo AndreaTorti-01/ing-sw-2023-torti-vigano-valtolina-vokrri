@@ -19,7 +19,7 @@ public class Shelf extends GameObject {
     public ItemCard getCard(int row, int col) {
         return items[row][col];
     }
-
+    
     public ItemCard[][] getShelf() { return items; }
 
     public void insert(int col, ItemCard item) {
