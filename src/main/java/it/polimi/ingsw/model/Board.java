@@ -7,14 +7,18 @@ public class Board extends GameObject {
     private ItemCard[][] tile;
 
     public Board(int playerCount) throws FileNotFoundException {
+        InputStream inputStream = getClass().getResourceAsStream(String.format("/Board/board%d.dat", playerCount));
+        ObjectInputStream objectInputStream;
         try {
-            FileInputStream file = new FileInputStream(String.format("board%d.dat", playerCount));
-                ObjectInputStream inputStream = new ObjectInputStream(file);
-                valid = (boolean[][]) inputStream.readObject();
+            objectInputStream = new ObjectInputStream(inputStream);
+            valid = (boolean[][]) objectInputStream.readObject();
+
+
+
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        // TODO:   l'import di ItemCard[][]
+        tile = new ItemCard[9][9];
     }
 
     public boolean isValid(int row, int col) {
@@ -30,5 +34,13 @@ public class Board extends GameObject {
         ItemCard card = tile[row][col];
         tile[row][col] = null;
         return card;
+    }
+
+    public void setTile(ItemCard tile, int row, int col) {
+        this.tile[row][col] = tile;
+    }
+
+    public ItemCard[][] getTile() {
+        return tile;
     }
 }
