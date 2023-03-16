@@ -1,35 +1,39 @@
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 
-
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
-
 enum CommonGoalCardType {
-    SIXPAIRS,
-    DIAGONALFIVE,
-    FOURQUARTETS,
-    FOURLINESMAXTHREETYPES,
-    EQUALCORNERS,
-    TWORAINBOWCOLUMNS,
-    TWOSQUARES,
-    TWORAINBOWLINES,
-    THREECOLUMNSMAXTHREETYPES,
+    SIX_PAIRS,
+    DIAGONAL_FIVE,
+    FOUR_QUARTETS,
+    FOUR_LINES_MAX_THREET_YPES,
+    EQUAL_CORNERS,
+    TWO_RAINBOW_COLUMNS,
+    TWO_SQUARES,
+    TWO_RAINBOW_LINES,
+    THREE_COLUMNS_MAX_THREE_TYPES,
     CROSS,
-    EIGHTEQUAL,
+    EIGHT_EQUAL,
     STAIR;
 
-    private static final List<CommonGoalCardType> values = Arrays.asList(CommonGoalCardType.values());
-
+    private static final ArrayList<CommonGoalCardType> values = new ArrayList<>(
+            Arrays.asList(CommonGoalCardType.values())
+    );
     private static final Random random = new Random();
-    private static final int size = values.size();
 
+    /**
+     * Gets a new random type from the common goal card type enumeration and deletes it from the values in order not to return the same value twice
+     *
+     * @return a random value from the enumeration
+     */
     public static CommonGoalCardType getRandomType() {
-        return values.get(random.nextInt(size));
+        CommonGoalCardType randomValue = values.get(random.nextInt(values.size()));
+        values.remove(randomValue);
+        return randomValue;
     }
-
 }
 
 public class CommonGoalCard extends GameObject {
@@ -39,6 +43,7 @@ public class CommonGoalCard extends GameObject {
     public CommonGoalCard(int numberOfPlayers) {
         assignedPoints = new Stack<>();
 
+        // inserts the points in the stack based on the number of players
         switch (numberOfPlayers) {
             case 2 -> {
                 assignedPoints.push(4);
@@ -57,8 +62,8 @@ public class CommonGoalCard extends GameObject {
             }
         }
 
+        // assigns the card a random type from the ones not already taken
         type = CommonGoalCardType.getRandomType();
-
     }
 
     public CommonGoalCardType getType() {

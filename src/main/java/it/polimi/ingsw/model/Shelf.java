@@ -1,4 +1,4 @@
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 
 public class Shelf extends GameObject {
     private ItemCard[][] items;
@@ -18,9 +18,7 @@ public class Shelf extends GameObject {
     public ItemCard getCard(int row, int col) {
         return items[row][col];
     }
-
-    //in the UML diagram the return type is ItemCard(?)
-    //but ItemCard should probably be a parameter
+    
     public void insert(int col, ItemCard item) {
         throw new UnsupportedOperationException("TO DO");
     }
