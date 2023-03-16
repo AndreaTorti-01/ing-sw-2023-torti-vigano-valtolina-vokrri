@@ -26,6 +26,7 @@ public class datGenerator {
                 {0, 0, 0, 0, 1, 1, 0, 0, 0},};
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("board4.dat"))) {
             outputStream.writeObject(board4);
+            
         }
     }
 }
