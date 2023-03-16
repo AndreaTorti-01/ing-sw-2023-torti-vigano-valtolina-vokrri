@@ -1,4 +1,4 @@
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 
 public abstract class GameObject {
     private float height; // length in inches

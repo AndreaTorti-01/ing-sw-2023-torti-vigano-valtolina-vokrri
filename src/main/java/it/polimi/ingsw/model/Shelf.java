@@ -1,4 +1,4 @@
-package main.java.it.polimi.ingsw.model;
+package it.polimi.ingsw.model;
 
 public class Shelf extends GameObject {
     private ItemCard[][] items;
