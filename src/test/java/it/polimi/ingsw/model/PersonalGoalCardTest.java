@@ -9,4 +9,8 @@ class PersonalGoalCardTest {
     void getPattern() {
 
     }
+
+    @Test
+    void testGetPattern() {
+    }
 }

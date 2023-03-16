@@ -1,41 +1,58 @@
 package it.polimi.ingsw.model;
 
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class PersonalGoalCard extends GameObject {
     private final ItemType[][] pattern;
 
     /**
-     * creates the pattern from the file with corresponding index.
-     * file name: PGC{index}.txt
+     * Creates a new PersonalGoalCard and initializes the pattern with the one found in the pattern file
+     * found in ./resources/personalGoalCards folder with the corresponding index.
+     * <p>
+     * The file name has the following structure: PGC{index}.txt (with index = number from 0 to 11 given to the constructor)
      *
-     * @param index index of the PersonalGoalCard
+     * @param index of the personalGoalCard, used to get the corresponding pattern from the file
+     * @throws IndexOutOfBoundsException when given an index outside the range 0-11.
      */
-    public PersonalGoalCard(int index) {
-        pattern = new ItemType[6][5];
-        String fileName = String.format("personalGoalCards/PGC%d.txt", index);
-        try {
-            Scanner scanner = new Scanner(new File(fileName));
+    public PersonalGoalCard(int index) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= 12)
+            throw new IndexOutOfBoundsException("provided index" + index + "is out of bounds 0 - 11");
 
-            String line = scanner.nextLine();
-            int row = 0;
+        // initializes the pattern to a null matrix of size 6x5
+        pattern = new ItemType[6][5];
+
+        try {
+            // gets the pattern file corresponding to the given index
+            InputStream inputStream = getClass().getResourceAsStream(
+                    String.format("/personalGoalCards/PGC%d.txt", index)
+            );
+
+            // allows to read data from the obtained file
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            int i = 0;
+            String line = reader.readLine();
             while (line != null) {
-                char[] chars = line.toCharArray();
-                for (int i = 0; i < chars.length; i++) {
-                    char currentChar = chars[i];
+                for (int j = 0; j < line.length(); j++) {
+                    char currentChar = line.charAt(j);
                     if (currentChar != '*') {
-                        pattern[row][i] = ItemType.valueOf(
+                        // gets the type of the ItemCard given the abbreviation found in the file
+                        // and inserts it in the correct position of the matrix
+                        pattern[i][j] = ItemType.valueOf(
                                 String.valueOf(ItemType.getItemTypeFromAbbreviation(currentChar))
                         );
-                    } else pattern[row][i] = null;
+                    }
                 }
-                line = scanner.nextLine();
-                row++;
+
+                // goes to next line
+                line = reader.readLine();
+                i++;
             }
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             throw new RuntimeException(e);
         }
     }
