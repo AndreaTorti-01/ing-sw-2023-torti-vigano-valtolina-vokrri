@@ -1,7 +1,5 @@
-# Progettazione UML
-
-## UML Model
-Per la progettazione del diagramma delle classi UML, abbiamo deciso d'implementare una classe astratta globale **GameObject** che astrae tutti gli elementi di gioco. I probabili attributi height e width, in cm, verranno lavorati tramite scaling per ottenere la lunghezza in pixel.
+## UML - Model
+Per la progettazione del diagramma delle classi UML del Model, abbiamo deciso d'implementare una classe astratta globale **GameObject** che astrae tutti gli elementi di gioco. I probabili attributi height e width, in cm, verranno lavorati tramite scaling per ottenere la lunghezza in pixel.
 
 Questa classe viene ereditata da tutte le classi rappresentanti gli oggetti di gioco:
 
@@ -29,5 +27,14 @@ Il **Bag** è implementato tramite un set di ItemCard (tutti puntatori diversi),
 
 ---
 
-DOMANDE:
-- la funzione pop() nella classe Bag modifica lo stato della classe: è ok?
+### Thought process di Burro e Fabio del 17 marzo sul Game (classe wrapper di model) e sul controller.
+
+La classe Game, all'interno del model, è necessaria poiché conterrà le istanze di tutti gli oggetti di gioco: controller NON deve mai istanziare all'interno di se degli elementi di gioco al di fuori di game, ma si occuperà di chiamare i metodi appropriati per gestirli.
+
+Controller "dà gli ordini" a Game: Game li esegue, sposta gli oggetti, li crea e li distrugge.
+
+Come attributi, Game possiederà gli elementi di gioco, occupandosi di istanziarli, e informazioni sulla partita attuale, come un int che indichi di quale giocatore è attualmente il turno. I metodi saranno all'incirca gli stessi degli elementi di gioco che gestisce.
+
+Potrebbe esistere un solo controller globale, che controlla più sessioni di gioco contemporanee, avendo incluso nei pacchetti di rete delle informazioni su quale sessione si sta cercando di controllare. Tra gli attributi di controller per ora immagino solo una lista di Game.
+
+NOTA: probabilmente bisogna togliere personalgoalcard da player: non sono i player a "possedere" gli elementi di gioco (tra cui anche la shelf), ma è il game a sapere cosa appartiene a chi tramite dei banali indici. Shelf[0] apparterrà a Player[0] e così via
