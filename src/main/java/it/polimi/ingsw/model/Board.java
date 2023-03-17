@@ -1,18 +1,20 @@
 package it.polimi.ingsw.model;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 
 public class Board extends GameObject {
     private boolean[][] valid;
     private ItemCard[][] tile;
 
     public Board(int playerCount) throws FileNotFoundException {
-        InputStream inputStream = getClass().getResourceAsStream(String.format("/Board/board%d.dat", playerCount));
+        InputStream inputStream = getClass().getResourceAsStream(String.format("/board/board%d.dat", playerCount));
         ObjectInputStream objectInputStream;
         try {
             objectInputStream = new ObjectInputStream(inputStream);
             valid = (boolean[][]) objectInputStream.readObject();
-
 
 
         } catch (IOException | ClassNotFoundException e) {

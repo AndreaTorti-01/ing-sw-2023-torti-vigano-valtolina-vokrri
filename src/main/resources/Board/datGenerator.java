@@ -1,6 +1,7 @@
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 
-public class datGenerator {
+public class DatGenerator {
     public static void main(String args[]) {
 
         boolean[][] board2 = {
@@ -40,19 +41,19 @@ public class datGenerator {
         };
 
         try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("Board/board2.dat"));
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("board/board2.dat"));
             outputStream.writeObject(board2);
         } catch (Exception e) {
         }
 
         try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("Board/board3.dat"));
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("board/board3.dat"));
             outputStream.writeObject(board3);
         } catch (Exception e) {
         }
 
         try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("Board/board4.dat"));
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("board/board4.dat"));
             outputStream.writeObject(board4);
         } catch (Exception e) {
         }

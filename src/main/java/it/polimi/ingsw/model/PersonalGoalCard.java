@@ -34,15 +34,15 @@ public class PersonalGoalCard extends GameObject {
             // allows to read data from the obtained file
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-            int i = 0;
+            int row = 0;
             String line = reader.readLine();
             while (line != null) {
-                for (int j = 0; j < line.length(); j++) {
-                    char currentChar = line.charAt(j);
+                for (int col = 0; col < line.length(); col++) {
+                    char currentChar = line.charAt(col);
                     if (currentChar != '*') {
                         // gets the type of the ItemCard given the abbreviation found in the file
                         // and inserts it in the correct position of the matrix
-                        pattern[i][j] = ItemType.valueOf(
+                        pattern[row][col] = ItemType.valueOf(
                                 String.valueOf(ItemType.getItemTypeFromAbbreviation(currentChar))
                         );
                     }
@@ -50,7 +50,7 @@ public class PersonalGoalCard extends GameObject {
 
                 // goes to next line
                 line = reader.readLine();
-                i++;
+                row++;
             }
         } catch (IOException | NullPointerException e) {
             throw new RuntimeException(e);
