@@ -18,9 +18,9 @@ public class PersonalGoalCard extends GameObject {
      * @param index of the personalGoalCard, used to get the corresponding pattern from the file
      * @throws IndexOutOfBoundsException when given an index outside the range 0-11.
      */
-    public PersonalGoalCard(int index) throws IndexOutOfBoundsException {
-        if (index < 0 || index >= 12)
-            throw new IndexOutOfBoundsException("provided index" + index + "is out of bounds 0 - 11");
+    public PersonalGoalCard(int index) {
+        if (index < 0 || index > 11)
+            throw new IndexOutOfBoundsException("provided index (" + index + ") is out of range 0 - 11");
 
         // initializes the pattern to a null matrix of size 6x5
         pattern = new ItemType[6][5];
