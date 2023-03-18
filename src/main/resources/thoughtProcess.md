@@ -42,20 +42,22 @@ NOTA: probabilmente bisogna togliere personalgoalcard da player: non sono i play
 ### Implementazione UML di game  - Diego
 
 ### Attributi
+
 - **Player[] players** -> possibile implementazione tramite array come suggerito da burro e fabio
-- **int playersNum** -> necessario sia per istanziare board che per scorrere correttamente gli array.
-- **Shelf[] shelfs** -> indicizzato come a players
+- **Shelf[] shelves** -> indicizzato come a players
 - **PersonalGoalCard[] pgCards** -> indicizzato come a players // si istanziano solo le 2,3 o 4 che servono
 - **Board board** -> // 
 - **Bag bag** -> //
 - il set di ItemCards disponibili è già nella bag (e anche rappresentato dalla bag) -> non aggiungo
-- **CommonGoalCards[] cgCards** -> sarà un array di 2 elementi. //**NB**: ogni palyer può completare un obiettivo comune una sola volta.
-- **boolean[][] cgAchieved** -> pensato come attributo per stabilire se un player abbia o meno completato un commongoal.(prima il controllo era reso tramite 2 booleani come attributi di player
-- **boolean[][] pgAchieved** -> serve un array, non una matrice, essendoci solamente un CommonGoal per player
+- **CommonGoalCards[] cgCards** -> sarà un array di 2 elementi. //**NB**: ogni player può completare un obiettivo comune una sola volta.
+- **boolean[][] cgAchieved** -> pensato come attributo per stabilire se un player abbia o meno completato un CommonGoal.(prima il controllo era reso tramite 2 booleani come attributi di player
+- **boolean[] pgAchieved** -> serve un array, non una matrice, essendoci solamente un CommonGoal per player
 
 // andrebbero quindi cancellati gli attributi booleani di player che fanno riferimento al compimento degli obiettivi
 // **NB** ->  a questo punto, i punteggi ci conviene inserirli in Game come array, con la stessa indicizzazione di players?
+
 ### Metodi
+
 - **SetScore(int score, Player player)** nel caso decidessimo di metterlo come attributo di game
-- **RefillBoard()** -> forse è più giusto in board
+- **RefillBoard()** 
 - **others**
