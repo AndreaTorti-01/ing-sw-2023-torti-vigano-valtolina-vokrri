@@ -38,3 +38,24 @@ Come attributi, Game possiederà gli elementi di gioco, occupandosi di istanziar
 Potrebbe esistere un solo controller globale, che controlla più sessioni di gioco contemporanee, avendo incluso nei pacchetti di rete delle informazioni su quale sessione si sta cercando di controllare. Tra gli attributi di controller per ora immagino solo una lista di Game.
 
 NOTA: probabilmente bisogna togliere personalgoalcard da player: non sono i player a "possedere" gli elementi di gioco (tra cui anche la shelf), ma è il game a sapere cosa appartiene a chi tramite dei banali indici. Shelf[0] apparterrà a Player[0] e così via
+
+### Implementazione UML di game  - Diego
+
+### Attributi
+- **Player[] players** -> possibile implementazione tramite array come suggerito da burro e fabio
+- **int playersNum** -> necessario sia per istanziare board che per scorrere correttamente gli array.
+- **Shelf[] shelfs** -> indicizzato come a players
+- **PersonalGoalCard[] pgCards** -> indicizzato come a players // si istanziano solo le 2,3 o 4 che servono
+- **Board board** -> // 
+- **Bag bag** -> //
+- il set di ItemCards disponibili è già nella bag (e anche rappresentato dalla bag) -> non aggiungo
+- **CommonGoalCards[] cgCards** -> sarà un array di 2 elementi. //**NB**: ogni palyer può completare un obiettivo comune una sola volta.
+- **boolean[][] cgAchieved** -> pensato come attributo per stabilire se un player abbia o meno completato un commongoal.(prima il controllo era reso tramite 2 booleani come attributi di player
+- **boolean[][] pgAchieved** -> serve un array, non una matrice, essendoci solamente un CommonGoal per player
+
+// andrebbero quindi cancellati gli attributi booleani di player che fanno riferimento al compimento degli obiettivi
+// **NB** ->  a questo punto, i punteggi ci conviene inserirli in Game come array, con la stessa indicizzazione di players?
+### Metodi
+- **SetScore(int score, Player player)** nel caso decidessimo di metterlo come attributo di game
+- **RefillBoard()** -> forse è più giusto in board
+- **others**
