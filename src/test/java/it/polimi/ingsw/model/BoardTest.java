@@ -8,62 +8,97 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
 
-    @Test
-    void TestisValid3() {
+    void printBoard(Board bd) {
+        for (int i = 0; i < 9; i++) {
+            System.out.print("\n");
+            for (int j = 0; j < 9; j++) {
+                if (bd.isValid(i, j)) {
+                    System.out.print("O ");
+                } else {
+                    System.out.print("- ");
+                }
 
-        Board board;
+            }
+        }
+    }
+
+    @Test
+    void boardTest() {
+        assertThrows(Exception.class, () -> {
+            Board board = new Board(5);
+        });
+    }
+
+    @Test
+    void isValidTest() {
+        // setup
+        Board board2;
         try {
-            board = new Board(3);
+            board2 = new Board(2);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        assertTrue(board.isValid(5, 0));
-        assertFalse(board.isValid(4, 0));
-        assertThrows(ArrayIndexOutOfBoundsException.class,
-                () -> {
-                    board.isValid(9, 0);
-                });
-    }
+        assertTrue(board2.isValid(1, 3));
+        assertFalse(board2.isValid(4, 0));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            board2.isValid(9, 0);
+        });
 
-    @Test
-    void TestisValid2() {
-
-        Board board;
+        Board board3;
         try {
-            board = new Board(2);
+            board3 = new Board(3);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        assertTrue(board.isValid(1, 3));
-        assertFalse(board.isValid(4, 0));
-        assertThrows(ArrayIndexOutOfBoundsException.class,
-                () -> {
-                    board.isValid(9, 0);
-                });
+        assertTrue(board3.isValid(5, 0));
+        assertFalse(board3.isValid(4, 0));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            board3.isValid(9, 0);
+        });
+
+        Board board4;
+        try {
+            board4 = new Board(4);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        // test
+        assertTrue(board4.isValid(4, 0));
+        assertFalse(board4.isValid(3, 0));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            board4.isValid(9, 0);
+        });
+
+        // print
+        printBoard(board2);
+        System.out.println();
+        printBoard(board3);
+        System.out.println();
+        printBoard(board4);
     }
 
     @Test
-    void TestisValid4() {
+    void setTileTest() {
         Board board;
+        ItemCard itemCard = new ItemCard(ItemType.CATS);
         try {
             board = new Board(4);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        board.setTile(itemCard, 5, 5);
 
-        assertTrue(board.isValid(4, 0));
-        assertFalse(board.isValid(3, 0));
-        assertThrows(ArrayIndexOutOfBoundsException.class,
-                () -> {
-                    board.isValid(9, 0);
-                });
+        assertEquals(itemCard, board.peekCard(5, 5));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            board.setTile(itemCard, 0, 0);
+        });
     }
 
-
     @Test
-    void peekCard() {
+    void peekCardTest() {
         // setup
         Board board;
         ItemCard itemCard = new ItemCard(ItemType.BOOKS);
@@ -74,13 +109,34 @@ class BoardTest {
         }
         board.setTile(itemCard, 4, 4);
 
-        // inizio test
+        // test
         assertEquals(itemCard, board.peekCard(4, 4));
-        assertEquals(null, board.peekCard(3, 4));
+        assertNull(board.peekCard(3, 4));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            board.peekCard(0, 0);
+        });
 
     }
 
     @Test
-    void popCard() {
+    void popCardTest() {
+        // setup
+        Board board;
+        ItemCard itemCard = new ItemCard(ItemType.CATS);
+        try {
+            board = new Board(4);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        board.setTile(itemCard, 5, 5);
+
+        // test
+        ItemCard itemCardTest = board.popCard(5, 5);
+        assertEquals(itemCard, itemCardTest);
+        assertNull(board.peekCard(5, 5));
+
+        assertThrows(NullPointerException.class, () -> {
+            board.popCard(4, 3);
+        });
     }
 }
