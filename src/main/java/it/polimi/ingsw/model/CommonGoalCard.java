@@ -8,7 +8,7 @@ public class CommonGoalCard extends GameObject {
 
     public CommonGoalCard(int numberOfPlayers) {
         if (numberOfPlayers < 2 || numberOfPlayers > 4)
-            throw new IllegalArgumentException("The number of player given (" + numberOfPlayers + ") is not in range 2-4");
+            throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range 2-4");
 
         assignedPoints = new Stack<>();
 

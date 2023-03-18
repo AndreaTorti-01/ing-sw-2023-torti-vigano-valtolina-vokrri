@@ -85,15 +85,12 @@ public class CommonGoalCardTest {
     }
 
     @Test
-    void testMoreThanFourPlayers() {
+    void testIllegalNumberOfPlayers() {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new CommonGoalCard(5)
         );
-    }
 
-    @Test
-    void testLessThanTwoPlayers() {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new CommonGoalCard(1)
