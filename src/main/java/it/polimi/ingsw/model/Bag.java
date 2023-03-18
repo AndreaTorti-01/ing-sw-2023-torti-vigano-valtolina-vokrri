@@ -30,8 +30,7 @@ public class Bag extends GameObject {
             cardsInside.remove(ic_2);
             return ic_2;
         }
-        else return null;
-
+        else return null;  //Da aggiungere exception(?)
     }
 
     public static <Itemcard> Itemcard getRandomSetElement(Set<Itemcard> set) {
