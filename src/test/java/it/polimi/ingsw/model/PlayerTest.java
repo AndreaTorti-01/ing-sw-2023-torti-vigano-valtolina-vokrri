@@ -2,23 +2,12 @@ package it.polimi.ingsw.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PlayerTest {
 
     @Test
-    void getNickname() {
-    }
-
-    @Test
-    void getScore() {
-    }
-
-    @Test
-    void setScore() {
-    }
-
-    @Test
-    void getPersonalGoalCard() {
+    void playerTest() {
+        assertThrows(IllegalArgumentException.class, () -> new Player(null));
     }
 }
