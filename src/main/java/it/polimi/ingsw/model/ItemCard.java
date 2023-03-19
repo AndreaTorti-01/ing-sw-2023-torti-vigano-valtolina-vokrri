@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 
-public class ItemCard extends GameObject {
+public class  ItemCard extends GameObject {
     private ItemType type;
     public ItemCard(ItemType type) {
         this.type = type;
