@@ -33,34 +33,29 @@ La classe Game, all'interno del model, è necessaria poiché conterrà le istanz
 
 Controller "dà gli ordini" a Game: Game li esegue, sposta gli oggetti, li crea e li distrugge.
 
-Come attributi, Game possiederà gli elementi di gioco, occupandosi di istanziarli, e informazioni sulla partita attuale, come un int che indichi di quale giocatore è attualmente il turno. I metodi saranno all'incirca gli stessi degli elementi di gioco che gestisce.
+Come attributi, Game possiederà gli elementi di gioco, occupandosi di istanziarli. I metodi saranno all'incirca gli stessi degli elementi di gioco che gestisce.
 
-Potrebbe esistere un solo controller globale, che controlla più sessioni di gioco contemporanee, avendo incluso nei pacchetti di rete delle informazioni su quale sessione si sta cercando di controllare. Tra gli attributi di controller per ora immagino solo una lista di Game.
+Potrebbe esistere un solo controller globale, che controlla più sessioni di gioco contemporanee, avendo incluso nei pacchetti di rete delle informazioni su quale sessione si sta cercando di controllare. Tra gli attributi di controller per ora immagino solo una lista di Game. Eventualmente potremmo avere anche un controller per ogni sessione, e quindi l'elenco delle sessioni in main...
 
-NOTA: probabilmente bisogna togliere personalgoalcard da player: non sono i player a "possedere" gli elementi di gioco (tra cui anche la shelf), ma è il game a sapere cosa appartiene a chi tramite dei banali indici. Shelf[0] apparterrà a Player[0] e così via
+> - (ESEGUITO) probabilmente bisogna togliere personalgoalcard da player: non sono i player a "possedere" gli elementi di gioco (tra cui anche la shelf), ma è il game a sapere cosa appartiene a chi tramite dei banali indici. Shelf[0] apparterrà a Player[0] e così via
 
 ---
 
-### Implementazione UML di game  - Diego
+### Implementazione di Game - Diego
  
 ### Attributi
 
 - **int playersNum** -> indica il numero di player che partecipano alla partita. passato come parametro da controller, e utilizzato per istanziare a dovere gli array e la board
-- **Player[] players** -> possibile implementazione tramite array come suggerito da burro e fabio
+- (NO) **Player[] players** -> possibile implementazione tramite array come suggerito da burro e fabio
 - **Shelf[] shelves** -> indicizzato come a players
-- **int[] points** -> indicizzato come a players
+- **int[] scores** -> indicizzato come a players
 - **PersonalGoalCard[] pgCards** -> indicizzato come a players // si istanziano solo le 2,3 o 4 che servono
 - **Board board** -> // 
 - **Bag bag** -> //
--
 - il set di ItemCards disponibili è già nella bag (e anche rappresentato dalla bag) -> non aggiungo
--
 - **CommonGoalCards[] cgCards** -> sarà un array di 2 elementi. //**NB**: ogni player può completare un obiettivo comune una sola volta.
-- **boolean[][] cgAchieved** -> pensato come attributo per stabilire se un player abbia o meno completato un CommonGoal.(prima il controllo era reso tramite 2 booleani come attributi di player
+- **boolean[][] cgAchieved** -> pensato come attributo per stabilire se un player abbia o meno completato un CommonGoal.(nella seconda implementazione il controllo è fatto tramite 2 booleani come attributi di player)
 - **boolean[] pgAchieved** -> serve un array, non una matrice, essendoci solamente un CommonGoal per player
-
-//(1) andrebbero quindi cancellati gli attributi booleani di player che fanno riferimento al compimento degli obiettivi
-//(2) questa implementazione utilizza degli array per memorizzare i player, e degli array indicizzati nello stesso modo per memorizzare punteggi, shelves e tessere personali.
 
 ### Metodi
 
@@ -69,3 +64,14 @@ NOTA: probabilmente bisogna togliere personalgoalcard da player: non sono i play
 - **RefillBoard()** 
 - **others**  -> getter e setter
 
+> - (1) (ESEGUITO) andrebbero quindi cancellati gli attributi booleani di player che fanno riferimento al compimento degli obiettivi
+> - (2) (ESEGUITO) questa implementazione utilizza degli array per memorizzare i player, e degli array indicizzati nello stesso modo per memorizzare punteggi, shelves e tessere personali.
+
+Diego proponeva una seconda possibile implementazione in cui Player rivestiva un ruolo più importante, ma è stata scartata per le presunte difficoltà di passaggio parametri tra Game, Player e le classi possedute da Player come Shelf.
+
+### Cri e Burro - 20 marzo
+
+> - è stato rimosso Player poichè era rimasta una stringa
+> - GameObject rimane un'incognita
+> - rimane da decidere se i metodi di game devono astrarre gli oggetti di gioco o renderli trasparenti al controller
+> - l'implementazione trasparente è banale: basta mettere un getter per ogni attributo (il setter non serve perchè degli attributi cambiano solo i loro attributi, non gli attributi stessi... del tipo non cambierò mai bag, il bag sarà sempre quello, sarà quello che c'è all'interno di bag a cambiare)
