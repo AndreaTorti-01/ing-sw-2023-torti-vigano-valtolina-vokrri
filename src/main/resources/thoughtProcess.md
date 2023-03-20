@@ -39,14 +39,10 @@ Potrebbe esistere un solo controller globale, che controlla più sessioni di gio
 
 NOTA: probabilmente bisogna togliere personalgoalcard da player: non sono i player a "possedere" gli elementi di gioco (tra cui anche la shelf), ma è il game a sapere cosa appartiene a chi tramite dei banali indici. Shelf[0] apparterrà a Player[0] e così via
 
+---
+
 ### Implementazione UML di game  - Diego
-        -> due possibili implementazioni della classe Game.
-        -> la prima è più "meccanica" e quasi priva di astrazioni.
-        -> la seconda invece,  tende ad astrarre molto di più, danto più funzioni alle classi sottostanti Game.
--
-
-
-    ->>**PRIMA POSSIBILE IMPLEMENTAZIONE**<<-
+ 
 ### Attributi
 
 - **int playersNum** -> indica il numero di player che partecipano alla partita. passato come parametro da controller, e utilizzato per istanziare a dovere gli array e la board
@@ -73,26 +69,3 @@ NOTA: probabilmente bisogna togliere personalgoalcard da player: non sono i play
 - **RefillBoard()** 
 - **others**  -> getter e setter
 
-
-    ->>**SECONDA POSSIBILE IMPLEMENTAZIONE**<<-
-### Attributi
-
-- **int playersNum** -> indica il numero di player che partecipano alla partita. passato come parametro da controller, e utilizzato per istanziare a dovere liste e  board
-- **List<Player> players** -> comunque implementazione tramite lista o array
-- 
-- Le shelves e le PersonalGoalCards in questa implementazione sono attributi del player stesso. ci saranno quindi metodi getter e setter in player. **INOLTRE** le PersonalGoalCards hanno un attributo boolean (**achieved**) che indica se sono state o meno già convalidate. **a loro volta** le CommonGoalCards, avranno un attributo (**List<Player> achievedBy**), che contiene i player che hanno già soddisfatto i requisiti della tessera. **la tessere è quindi interrogabile in questo modo: EX-> if !GetAchievedBy.contains(Player_1) -> fai check del pattern**
--
-- **Board board** -> //
-- **Bag bag** -> //    board e bag gestiti anche qua direttamente da game
-- il set di ItemCards disponibili è già nella bag (e anche rappresentato dalla bag) -> non aggiungo -> come prima
-- **CommonGoalCards[] cgCards** -> sarà un array di 2 elementi. //**NB**: ogni player può completare un obiettivo comune una sola volta.  **le CommonGoalCards vengono quindi gestite --DIRETTAMENTE-- da game, come illustrato supra (non essendo proprie di un solo player)**
--
-- cgAchieved e pgAchieved non servono più
-
-// andrebbero **COMUNQUE** cancellati gli attributi booleani di player che fanno riferimento al compimento degli obiettivi, dato che li stiamo già gestendo in maniera -a mio parere- più semplice
-// **NB** ->  a questo punto, i punteggi ci conviene inserirli in Game come array, con la stessa indicizzazione di players?
-
-### Metodi
-
-- **RefillBoard()**
-- **others**  -> getter e setter 

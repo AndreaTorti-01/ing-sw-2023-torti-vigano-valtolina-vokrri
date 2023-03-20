@@ -15,8 +15,9 @@ class BagTest {
     void drawCard(){
         Bag bag2 = new Bag();
         ItemCard ic_3;
-        ic_3 = bag2.drawCard(bag2.getCardsInside());
+        ic_3 = bag2.drawCard();
         assertEquals(131, bag2.getCardsInside().size());
+        // TODO: ACCORCIARE
         if (ic_3.getType().equals(ItemType.BOOKS)) {
             int a=bag2.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.CATS)).toList().size();
             assertEquals(22,a);
@@ -103,11 +104,23 @@ class BagTest {
         }
         for (int i=0; i<131;i++){
             ItemCard ic_4;
-            ic_4= bag2.drawCard(bag2.getCardsInside());
+            ic_4= bag2.drawCard();
         }
         assertEquals(0,bag2.getCardsInside().size());
         ItemCard ic_5;
-        ic_5=bag2.drawCard(bag2.getCardsInside());
+        ic_5=bag2.drawCard();
         assertNull(ic_5);
     }
+
+    @Test
+    void randomtest(){
+        ItemCard ic_6;
+        Bag Bag3 = new Bag();
+        for (int k=0; k<5; k++){
+            ic_6=Bag3.drawCard();
+            System.out.println(ic_6.getType());
+        }
+
+    }
+
 }
