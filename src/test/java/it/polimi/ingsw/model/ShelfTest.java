@@ -7,14 +7,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class ShelfTest {
 
     @Test
-    void getCard() {
-    }
+    void ShelfTest(){
+        Shelf s1 = new Shelf();
+        ItemCard c1 = new ItemCard(ItemType.CATS);
+        ItemCard c2 = new ItemCard(ItemType.BOOKS);
 
-    @Test
-    void getShelf() {
-    }
+        assertNotNull(s1);
+        assertNotNull(s1.getShelf());
 
-    @Test
-    void insert() {
+        for(int i = 0; i < 6; i++)
+            for(int j = 0; j < 5; j++)
+                assertNull ( s1.getCard(i, j) );
+
+        s1.insert(0, c1);
+        assertEquals(s1.getCard(5, 0), c1);
+        s1.insert(0, c2);
+        assertEquals(s1.getCard(4, 0), c2);
+
+        for(int i = 0; i < 6; i++)
+            for(int j = 0; j < 5; j++)
+                if(i != 5 && j != 0 || i != 4 && j != 0)
+                    assertNull(s1.getCard(i, j));
     }
 }
