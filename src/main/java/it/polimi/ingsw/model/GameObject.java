@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 public abstract class GameObject {
+    /*
     private float height; // length in inches
     private float width;
 
@@ -11,4 +12,5 @@ public abstract class GameObject {
     public int getWidth(float scale) {
         return (int) (width * scale);
     }
+    */
 }
