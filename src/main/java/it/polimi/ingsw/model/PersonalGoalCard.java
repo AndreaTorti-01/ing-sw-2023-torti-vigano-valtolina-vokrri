@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,5 +58,9 @@ public class PersonalGoalCard extends GameObject {
 
     public ItemType[][] getPattern() {
         return pattern;
+    }
+
+    public ItemType getTypeAt(int i, int j) {
+        return pattern[i][j];
     }
 }
