@@ -102,3 +102,9 @@ scartata per le presunte difficoltà di passaggio parametri tra Game, Player e l
 > - il giorno dopo, con Fabio, è stato deciso di optare per l'implementazione che non astrae gli oggetti di gioco, ma ne
     usa i relativi metodi perché i metodi che astraggono sono già stati implementati nei relativi oggetti e non avrebbe
     senso aggiungere un secondo livello di astrazione.
+
+### Idea di Andrea del 26 marzo
+
+Per risolvere il "problema" delle sprite dei gatti, si potrebbe prendere in modulo l'hash dell'oggetto, l'output del
+"tostring" insomma. Non so se va bene che non ci sia lo stesso numero di tutti i tipi di gatti, ma essendo qualcosa
+di legato solo alla view, potrebbero non esserci problemi.
