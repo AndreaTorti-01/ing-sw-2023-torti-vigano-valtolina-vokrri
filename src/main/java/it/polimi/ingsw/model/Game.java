@@ -35,9 +35,7 @@ public class Game {
 
         // inizializzazione dei players
         players = new String[playerCount];
-        for (int i = 0; i < playerCount; i++) {
-            players[i] = playersNames[i];
-        }
+        System.arraycopy(playersNames, 0, players, 0, playerCount);
 
         // inizializzazione delle commonGoalCards
         commonGoalCards = new CommonGoalCard[NUMBER_OF_COMMON_GOAL_CARDS];
