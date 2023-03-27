@@ -9,6 +9,8 @@ public class PersonalGoalCard extends GameObject {
     private final ItemType[][] pattern;
 
     /**
+     * The file is read through a custom parser
+     * <p>
      * Creates a new PersonalGoalCard and initializes the pattern with the one found in the pattern file
      * found in ./resources/personalGoalCards folder with the corresponding index.
      * <p>

@@ -6,6 +6,10 @@ public class CommonGoalCard extends GameObject {
     private final Stack<Integer> assignedPoints;
     private final CommonGoalCardType type;
 
+    /**
+     * Creates a new CommonGoalCard with a random type and a stack of points based on the number of players.
+     * @param numberOfPlayers the number of players in the game in order to create the stack accordingly, must be in range 2-4
+     */
     public CommonGoalCard(int numberOfPlayers) {
         if (numberOfPlayers < 2 || numberOfPlayers > 4)
             throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range 2-4");
