@@ -108,3 +108,75 @@ scartata per le presunte difficoltà di passaggio parametri tra Game, Player e l
 Per risolvere il "problema" delle sprite dei gatti, si potrebbe prendere in modulo l'hash dell'oggetto, l'output del
 "tostring" insomma. Non so se va bene che non ci sia lo stesso numero di tutti i tipi di gatti, ma essendo qualcosa
 di legato solo alla view, potrebbero non esserci problemi.
+
+---
+
+### Cristiano vi spiega le sue terribili imolementazioni dei sottocasi del metodo checkCommonGoalCardPattern in GameController - 29/03/23
+
+> - SIX_PAIRS (probabilmente il più complesso di tutti ma a me piace)
+
+L'idea di base si basa sul creare per ongi itemtype una maschera diversa e contare per ogni mask il numero di coppie e
+sommarle tutte.
+
+(devo prima introdurvi il concetto di coppia: dopo un'attenta analisi con dede delle discussioni su slack siamo giunti
+alla conclusine che conta come coppia ogni gruppo di tessere adiacenti dello stesso tipo di dimensione >=2 o almeono
+così ho capito io e spero sia giusto se no anche questo è tutto da rifare.)
+
+Una volta chiarito ciò ho implementato il metodo chiamato *number_of_pair_in_mask* che funziona nel seguente modo:
+
+modifica un attributo di mask chiamato *matrix_adjacent* che é una matrice dove gli elementi di mask adiacenti prendo un
+numero venendo numerati per gruppetti così che il numero di gruppi sia il numero di coppie valide
+
+ho bisgono di voi però perche il codice non mi da errori però sono consapevole che nel momento di test ci dara errore
+perche io lavoro con il concetto di adiacenza che sono le tessere sopra-sott-destra-sinistra ma le celle sui bordi delle
+matrici non hanno tutte e 4 le adiacenze e vorrei capire come gestire il ritrono
+quando un elemento della matrice confronta uno "out of bound" va beh chiamatemi qunado avete il tempo che vi espongo
+meglio il dubbio
+
+> - CROSS (credo corretto)
+
+semplicemnte esamino la presenza di una croce supponendo che l'elemento da esaminare sia quello in posizione centrale
+della croce
+così da non dover esaminare i bordi della matrice e scorro tutti gli elementi della matrice(esclusi i bordi appunto)
+controllando i 4 elementi diagonali a quello in esamine abbiano il suo stesso tipo
+
+> - DIAGONAL_FIVE (corretto ma si può scrivere più carino)
+
+semplicemente partendo dai due elementi centrali per cui passano le diagonali ispeziono le 4 possibili diagonali
+controllando se almeno una di esse sia composta da elementi dello stesso tipo
+
+> - TWO_SQUARES (era bello ma da rifare)
+
+vi spiego al volo la specifica: i *GRUPPI* da 4 al contrario di come scritto sulle regole del gioco possono essere anche
+di tipi diversi sono solo le 4 tessere all'interno del singolo quuadrato che devono essere dello stesso tipo
+e inoltre due quadrati di tipi diversi possono essere adiacenti mentre due quadrati dello stesso tipo no
+
+> - FOUR_LINES_MAX_THREE_TYPES (ancora da fare)
+
+> - EQUAL_CORNERS (fatto)
+
+mooolto semplice controlla che gli elementi ai 4 angoli della shelf siano dello stesso tipo
+
+> - FOUR_QUARTETS (ancora da fare)
+
+> - TWO_RAINBOW_COLUMNS (fatto)
+
+controlla che esistano almeno due colonne con un elemento per ogni tipo creando un set con gli itemtype e rimovendo
+quelli incontrati controllando alla fine di averne rimossi 6 e refillando il set ogni volta che cambio colonna da
+controllare
+
+> - TWO_RAINBOW_LINES (fatto)
+
+stesso concetto del *TWO_RAINBOW_COLUMNS* ma implementato sulle righe
+
+> - THREE_COLUMNS_MAX_THREE_TYPES (da fare)
+
+> - EIGHT_EQUAL (fatto credo si possa fare più carioìno)
+
+io ho banalmente creato 6 contatori uno per tipo, scorro tutta la shelf incrementando i contatori e alla fine controllo
+se qualcuno è arrivato a 8
+
+> - STAIR (fatto)
+
+creato degli array in cui inserito tutte le celle che formano le scale e le corrispettive sopra
+e controllo che quelle sopra siano vuote e quelle che formano le scale piene
