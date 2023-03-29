@@ -11,6 +11,12 @@ public enum ItemType {
     ItemType(char abbreviation) {
     }
 
+    /**
+     * Return the ItemType from the abbreviation
+     *
+     * @param abbreviation the abbreviation of the ItemType
+     * @return the ItemType
+     */
     public static ItemType getItemTypeFromAbbreviation(char abbreviation) {
         return switch (abbreviation) {
             case 'C' -> ItemType.CATS;

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Constants;
+
 import java.util.Stack;
 
 public class CommonGoalCard extends GameObject {
@@ -8,11 +10,14 @@ public class CommonGoalCard extends GameObject {
 
     /**
      * Creates a new CommonGoalCard with a random type and a stack of points based on the number of players.
+     *
      * @param numberOfPlayers the number of players in the game in order to create the stack accordingly, must be in range 2-4
      */
     public CommonGoalCard(int numberOfPlayers) {
-        if (numberOfPlayers < 2 || numberOfPlayers > 4)
-            throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range 2-4");
+        if (numberOfPlayers < Constants.minNumberOfPlayers || numberOfPlayers > Constants.maxNumberOfPlayers)
+            throw new IllegalArgumentException(
+                    "provided number of players (" + numberOfPlayers + ") is out of range " + Constants.minNumberOfPlayers + "-" + Constants.maxNumberOfPlayers
+            );
 
         assignedPoints = new Stack<>();
 
@@ -35,7 +40,7 @@ public class CommonGoalCard extends GameObject {
             }
         }
 
-        // assigns the card a random type from the ones not already taken
+        // assigns the card a random type
         type = CommonGoalCardType.getRandomType();
     }
 

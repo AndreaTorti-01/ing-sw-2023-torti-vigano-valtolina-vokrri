@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Constants;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -21,7 +23,6 @@ public enum CommonGoalCardType {
     private static final ArrayList<CommonGoalCardType> values = new ArrayList<>(
             Arrays.asList(CommonGoalCardType.values())
     );
-    private static final Random random = new Random();
 
     public static ArrayList<CommonGoalCardType> getValues() {
         return values;
@@ -35,6 +36,6 @@ public enum CommonGoalCardType {
     public static CommonGoalCardType getRandomType() {
         // can return the same type multiple times.
         // the controller will take care of destroying duplicates
-        return values.get(random.nextInt(values.size()));
+        return values.get(new Random().nextInt(Constants.numberOfCardTypes));
     }
 }

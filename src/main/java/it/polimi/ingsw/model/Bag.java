@@ -1,12 +1,14 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Constants;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
 public class Bag extends GameObject {
-    private final int maxCards = 132;
-    private Set<ItemCard> cardsInside;
+    private final int maxCards = Constants.maxNumberOfCards;
+    private final Set<ItemCard> cardsInside;
 
     /**
      * The bag is filled with 132 cards when instantiated
@@ -14,8 +16,7 @@ public class Bag extends GameObject {
     public Bag() {
         cardsInside = new HashSet<>();
         for (ItemType type : ItemType.values()) {
-            // 22 the number of cards with the same type in the bag
-            for (int i = 0; i < 22; i++) {
+            for (int i = 0; i < Constants.numberOfCardWithSameType; i++) {
                 cardsInside.add(new ItemCard(type));
             }
         }
@@ -35,10 +36,11 @@ public class Bag extends GameObject {
      */
     public ItemCard drawCard() {
         if (cardsInside.size() > 0) {
-            ItemCard ic_2;
-            ic_2 = cardsInside.stream().skip(new Random().nextInt(cardsInside.size())).findFirst().orElse(null);
-            cardsInside.remove(ic_2);
-            return ic_2;
+            ItemCard itemCard = cardsInside.stream().skip(
+                    new Random().nextInt(cardsInside.size())
+            ).findFirst().orElse(null);
+            cardsInside.remove(itemCard);
+            return itemCard;
         } else return null;
     }
 

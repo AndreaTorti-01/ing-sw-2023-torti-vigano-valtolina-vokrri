@@ -62,7 +62,7 @@ public class PersonalGoalCard extends GameObject {
         return pattern;
     }
 
-    public ItemType getTypeAt(int i, int j) {
-        return pattern[i][j];
+    public ItemType getTypeAt(int row, int col) {
+        return pattern[row][col];
     }
 }
