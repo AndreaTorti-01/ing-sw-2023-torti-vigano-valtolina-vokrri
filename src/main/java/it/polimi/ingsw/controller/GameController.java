@@ -257,9 +257,11 @@ public class GameController {
                 // tag for efficiency
                 outer:
                 for (int row = 0; row < Constants.numberOfRows && counter < numberOfRowsToCheck; row++) {
-                    // if the first position of the row is empty, is impossible to have all types of cards
-                    // (except one) in that row
-                    if (shelf.getCardAt(row, 0) == null) continue;
+                    // if any position of the row is empty, is impossible to have all types of cards
+                    // except one in that row
+                    for (int column = 0; column < Constants.numberOfColumns; column++) {
+                        if (shelf.getCardAt(row, column) == null) continue outer;
+                    }
 
                     Set<ItemType> typesInCurrentColumn = new HashSet<>();
                     for (int column = 0; column < Constants.numberOfColumns; column++) {
@@ -283,7 +285,7 @@ public class GameController {
 
             }
             // TODO: to revise for better scalability
-            //      statically typed item types values 
+            //      statically typed item types values
             case EIGHT_EQUAL: {
                 int p = 0, b = 0, g = 0, f = 0, c = 0, t = 0;
                 for (int row = 0; row < Constants.numberOfRows; row++) {
