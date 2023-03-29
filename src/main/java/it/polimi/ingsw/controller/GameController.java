@@ -65,7 +65,7 @@ public class GameController {
     private boolean checkCommonGoalCardPattern(Shelf shelf, CommonGoalCard commonGoalCard) {
         switch (commonGoalCard.getType()) {
             // well done!
-            case CROSS:
+            case CROSS: {
                 // starts from second column and second row because we start checking from the center of the cross,
                 // which has "length" of one in every diagonal direction
                 for (int row = 1; row < Constants.numberOfRows - 1; row++) {
@@ -80,6 +80,9 @@ public class GameController {
                     }
                 }
                 return false;
+            }
+
+            // TODO: reimplement
             case SIX_PAIRS: {
                 // non c'ho capito un cazzo :)
                 int numberOfPairs = 0;
@@ -89,7 +92,7 @@ public class GameController {
                 }
                 return numberOfPairs > 5;
             }
-
+            // TODO: refactor
             case DIAGONAL_FIVE: {
                 int h = 0;
                 ItemType a = shelf.getCardAt(2, 2).getType();
@@ -122,6 +125,8 @@ public class GameController {
                 }
                 return h == 5;
             }
+
+            // TODO: refactor or reimplement
             /* Ho creato le classi maschera che ha un costruttore che genera una matrice maschera di 0/1 della shelf sulla base del tipo passato come parametro
               e una classe quadrato con attributi le coordinate delle quattro tessere che lo formano. a qusto punto con un po' di for annidati per oogni itemtypes
               creo la sua maschera e salvo su un set tutti i quadrati sulla maschera per poi con due cicli for che scorrono tutto il set cercare se ci sono due quadrati non
@@ -158,9 +163,74 @@ public class GameController {
                 return false;
             }
 
-            case FOUR_LINES_MAX_THREE_TYPES: {
+            // Well Done!
+            case THREE_COLUMNS_MAX_THREE_TYPES: {
+                // counts the number of columns that have a maximum of three different types of cards
+                int counter = 0;
+                final int numberOfColumnsToCheck = 3;
+                final int maxNumberOfTypesInColumn = 3;
 
+                outer:
+                for (int column = 0; column < Constants.numberOfColumns && counter < numberOfColumnsToCheck; column++) {
+                    if (shelf.getCardAt(0, column) == null) continue;
+
+                    Set<ItemType> typesInCurrentColumn = new HashSet<>();
+                    for (int row = 0; row < Constants.numberOfRows; row++) {
+                        ItemType currentType = shelf.getCardAt(row, column).getType();
+
+                        // if a card has a different type from the one already in the set and the set reached
+                        // the maximum number of possible types skips that row
+                        if (!typesInCurrentColumn.contains(currentType) && typesInCurrentColumn.size() == maxNumberOfTypesInColumn) {
+                            // clears the types added to the set in order to check new column
+                            typesInCurrentColumn.clear();
+                            continue outer;
+                        } else typesInCurrentColumn.add(currentType);
+                    }
+                    // if it reaches the end of the column, that column satisfies the required pattern
+                    counter++;
+                }
+
+                // if there are four or more columns that satisfy the pattern, return true
+                return counter >= numberOfColumnsToCheck;
             }
+
+            // Well Done!
+            case FOUR_LINES_MAX_THREE_TYPES: {
+                // counts the number of rows that have a maximum of three different types of cards
+                int counter = 0;
+                final int numberOfRowsToCheck = 4;
+                final int maxNumberOfTypesInRow = 3;
+
+                outer:
+                for (int row = 0; row < Constants.numberOfRows && counter < numberOfRowsToCheck; row++) {
+                    // if any position of the row is empty, is impossible to satisfy the required pattern,
+                    // so skips to the next row
+                    for (int column = 0; column < Constants.numberOfColumns; column++) {
+                        if (shelf.getCardAt(row, column) == null) {
+                            continue outer;
+                        }
+                    }
+
+                    Set<ItemType> typesInCurrentRow = new HashSet<>();
+                    for (int column = 0; column < Constants.numberOfColumns; column++) {
+                        ItemType currentType = shelf.getCardAt(row, column).getType();
+
+                        // if a card has a different type from the one already in the set and the set reached
+                        // the maximum number of possible types skips that row
+                        if (!typesInCurrentRow.contains(currentType) && typesInCurrentRow.size() == maxNumberOfTypesInRow) {
+                            // clears the types added to the set in order to check new column
+                            typesInCurrentRow.clear();
+                            continue outer;
+                        } else typesInCurrentRow.add(currentType);
+                    }
+                    // if it reaches the end of the row, that row satisfies the required pattern
+                    counter++;
+                }
+
+                // if there are four or more rows that satisfy the pattern, return true
+                return counter >= numberOfRowsToCheck;
+            }
+
             case EQUAL_CORNERS: {
                 ItemType firstCornerType = shelf.getCardAt(0, 0).getType();
                 return shelf.getCardAt(0, 4).getType().equals(firstCornerType) &&
@@ -171,30 +241,7 @@ public class GameController {
 
             }
 
-            /*case TWO_RAINBOW_COLUMNS: {
-                Set<ItemType> control = new HashSet<>();
-                for (ItemType type : ItemType.values()) {
-                    control.add(type);
-                }
-                int j, m = 0;
-                for (int i = 0; i < 5; i++) {
-                    j = 5;
-                    for (ItemType type : ItemType.values()) {
-                        if (!control.contains(type)) control.add(type);
-                    }
-                    int k = 0;
-                    do {
-                        control.remove(shelf.getCardAt(i, j));
-                        j = j - 1;
-                        k++;
-                    }
-                    while (shelf.getCardAt(i, j) != null && j >= 0
-                            && control.contains(shelf.getCardAt(i, j)));
-                    if (k == 6) m++;
-                }
-                return m > 1;
-
-            }*/
+            // Well Done!
             case TWO_RAINBOW_COLUMNS: {
                 // counts the number of columns that have cards all with different types
                 int counter = 0;
@@ -221,33 +268,11 @@ public class GameController {
                     if (typesInCurrentColumn.size() == Constants.numberOfCardTypes) counter++;
                 }
 
-                // if there are two columns that satisfy the pattern return true
+                // if there are two columns that satisfy the pattern, return true
                 return counter == numberOfColumnsToCheck;
             }
-            /*case TWO_RAINBOW_LINES: {
-                Set<ItemType> control = new HashSet<>();
-                for (ItemType type : ItemType.values()) {
-                    control.add(type);
-                }
-                int j, m = 0;
-                for (int i = 0; i < 6; i++) {
-                    j = 4;
-                    for (ItemType type : ItemType.values()) {
-                        if (!control.contains(type)) control.add(type);
-                    }
-                    int k = 0;
-                    do {
-                        control.remove(shelf.getCardAt(i, j));
-                        j = j - 1;
-                        k++;
-                    }
-                    while (shelf.getCardAt(i, j) != null && j >= 0
-                            && control.contains(shelf.getCardAt(i, j)));
-                    if (k == 5) m++;
-                }
-                return m > 1;
 
-            }*/
+            // Well Done!
             case TWO_RAINBOW_LINES: {
                 // counts the number of lines that have cards all with different types
                 int counter = 0;
@@ -281,9 +306,6 @@ public class GameController {
                 return counter == numberOfRowsToCheck;
             }
 
-            case THREE_COLUMNS_MAX_THREE_TYPES: {
-
-            }
             // TODO: to revise for better scalability
             //      statically typed item types values
             case EIGHT_EQUAL: {
