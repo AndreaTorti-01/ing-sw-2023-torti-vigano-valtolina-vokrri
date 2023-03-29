@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.Constants;
 
 import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 // Fabio Vokrri 29/03/2023
 // TODO: refactor checkPersonalGoalCardPattern method (DONE!)
@@ -83,7 +83,7 @@ public class GameController {
             }
 
             // TODO: reimplement
-            case SIX_PAIRS: {
+/*            case SIX_PAIRS: {
                 // non c'ho capito un cazzo :)
                 int numberOfPairs = 0;
                 for (ItemType type : ItemType.values()) {
@@ -92,6 +92,62 @@ public class GameController {
                 }
                 return numberOfPairs > 5;
             }
+
+ */
+            case SIX_PAIRS: {
+                List<ItemCard> heads = new ArrayList<>();   // le heads sarebbero le celle adiacenti capitooooooooooooooooooooooooooooooooooooo
+                ItemCard[][] slf = new ItemCard[6][];       // questa è una copia di shelf COPIA
+                int pairNum = 0;
+
+                for(int i = 0; i < shelf.getShelf().length; i++)       //la copia
+                    slf[i] = shelf.getShelf()[i].clone();
+
+                for(int i = 0; i < 6 && pairNum < 6; i++){
+                    for(int j = 0; j < 5 && pairNum < 6; j++){
+                        if(slf[i][j] != null){       //se è nulla non la considero popo
+
+                            int ihead = i++;
+                            int jhead = j;
+                            if(0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
+                                if(slf[ihead][jhead] != null)                                       // se rispettano le condizioni, sono head
+                                    if(slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                        heads.add(slf[ihead][jhead]);
+
+                            ihead = i;
+                            jhead = j++;
+                            if(0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
+                                if(slf[ihead][jhead] != null)
+                                    if(slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                        heads.add(slf[ihead][jhead]);
+
+                            ihead = i--;
+                            jhead = j;
+                            if(0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
+                                if(slf[ihead][jhead] != null)
+                                    if(slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                        heads.add(slf[ihead][jhead]);
+
+                            ihead = i;
+                            jhead = j--;
+                            if(0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
+                                if(slf[ihead][jhead] != null)
+                                    if(slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                        heads.add(slf[ihead][jhead]);
+
+                            if(!heads.isEmpty()){    //se ho trovato head, vuol dire che c'è la coppia, incremento il numero di coppie
+                                pairNum++;
+                                slf[i][j] = null;       // "elimino" la cella di partenza
+                                for(ItemCard h : heads)         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
+                                    headLiminate(h);
+                                heads.clear();          // resetto la lista di heads :D
+                            }
+                        }
+                    }
+                }
+                return pairNum == 6;
+            }
+
+
             // TODO: refactor
             case DIAGONAL_FIVE: {
                 int h = 0;
@@ -400,6 +456,8 @@ public class GameController {
         return counter;
     }
 
+    private void headLiminate(ItemCard head){}
+
     private boolean hasToFix(Mask mask, int row, int column) {
         return (mask.matrixAdjacent[row][column - 1] != 0 && mask.matrixAdjacent[row - 1][column] != 0 && mask.matrixAdjacent[row][column - 1] != mask.matrixAdjacent[row - 1][column]) ||
                 (mask.matrixAdjacent[row][column - 1] != 0 && mask.matrixAdjacent[row][column + 1] != 0 && mask.matrixAdjacent[row][column - 1] != mask.matrixAdjacent[row][column + 1]) ||
@@ -418,6 +476,8 @@ public class GameController {
         if (small == 100) small = 0;
         return small;
     }
+
+
 
     private boolean hasAdjacent(Mask mask, int i, int j) {
         return mask.matrixMask[i][j] == mask.matrixMask[i + 1][j] ||
