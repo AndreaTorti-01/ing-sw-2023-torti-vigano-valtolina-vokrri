@@ -279,17 +279,6 @@ public class GameController {
             }
 
             // Well Done!
-            case EQUAL_CORNERS: {
-                ItemType firstCornerType = shelf.getCardAt(0, 0).getType();
-                return shelf.getCardAt(0, Constants.numberOfColumns - 1).getType().equals(firstCornerType) &&
-                        shelf.getCardAt(Constants.numberOfRows - 1, Constants.numberOfColumns - 1).getType().equals(firstCornerType) &&
-                        shelf.getCardAt(Constants.numberOfRows - 1, 0).getType().equals(firstCornerType);
-            }
-
-            case FOUR_QUARTETS: {
-            }
-
-            // Well Done!
             case TWO_RAINBOW_COLUMNS: {
                 // counts the number of columns that have cards all with different types
                 int counter = 0;
@@ -355,6 +344,14 @@ public class GameController {
             }
 
             // Well Done!
+            case EQUAL_CORNERS: {
+                ItemType firstCornerType = shelf.getCardAt(0, 0).getType();
+                return shelf.getCardAt(0, Constants.numberOfColumns - 1).getType().equals(firstCornerType) &&
+                        shelf.getCardAt(Constants.numberOfRows - 1, Constants.numberOfColumns - 1).getType().equals(firstCornerType) &&
+                        shelf.getCardAt(Constants.numberOfRows - 1, 0).getType().equals(firstCornerType);
+            }
+
+            // Well Done!
             case EIGHT_EQUAL: {
                 final int cardsToCheck = 8;
 
@@ -374,46 +371,40 @@ public class GameController {
                 return false;
             }
 
-            // TODO: refactor
+            case FOUR_QUARTETS: {
+            }
+
+            // Well Done!
             case STAIR: {
-                ItemCard[] increasing_stair = {
-                        shelf.getCardAt(5, 0),
-                        shelf.getCardAt(4, 1),
-                        shelf.getCardAt(3, 2),
-                        shelf.getCardAt(2, 3),
-                        shelf.getCardAt(1, 4)
-                };
-                ItemCard[] decreasing_stair = {
-                        shelf.getCardAt(1, 0),
-                        shelf.getCardAt(2, 1),
-                        shelf.getCardAt(3, 2),
-                        shelf.getCardAt(4, 3),
-                        shelf.getCardAt(5, 4)
-                };
-                ItemCard[] above_increasing_stair = {
-                        shelf.getCardAt(6, 0),
-                        shelf.getCardAt(5, 1),
-                        shelf.getCardAt(4, 2),
-                        shelf.getCardAt(3, 3),
-                        shelf.getCardAt(2, 4)
-                };
-                ItemCard[] above_decreasing_stair = {
-                        shelf.getCardAt(2, 0),
-                        shelf.getCardAt(3, 1),
-                        shelf.getCardAt(4, 2),
-                        shelf.getCardAt(5, 3),
-                        shelf.getCardAt(6, 4)
-                };
-                int k = 0, m = 0;
-                for (int i = 0; i < 5; i++) {
-                    if (above_decreasing_stair[i] != null) return false;
-                    if (above_increasing_stair[i] != null) return false;
-                    if (increasing_stair[i] != null) k++;
-                    if (decreasing_stair[i] != null) m++;
+                // checks if the first column has length one, in order to determine if the pattern is increasing
+                boolean isIncreasing = shelf.getColumnLength(0) == 1;
+                // checks if the last column has length one, in order to determine if the pattern is decreasing
+                boolean isDecreasing = shelf.getColumnLength(Constants.numberOfColumns - 1) == 1;
+
+                if (isIncreasing) {
+                    // for every column checks if the height is one unit longer than the previous
+                    for (int column = 1; column < Constants.numberOfColumns; column++) {
+                        int previousColumnHeight = shelf.getColumnLength(column - 1);
+                        if (shelf.getColumnLength(column) != previousColumnHeight + 1) return false;
+                    }
+                    // if the pattern is satisfied return true
+                    return true;
+                } else if (isDecreasing) {
+                    // fore every column starting from the end checks if the length is one unit longer than the previous
+                    for (int column = Constants.numberOfColumns - 2; column >= 0; column--) {
+                        int previousColumnHeight = shelf.getColumnLength(column + 1);
+                        if (shelf.getColumnLength(column) != previousColumnHeight + 1) return false;
+                    }
+                    // if the pattern is satisfied return true
+                    return true;
                 }
-                return m > 4 || k > 4;
+
+                // if the pattern is not satisfied return false
+                return false;
             }
         }
+
+        // if no pattern is satisfied return false
         return false;
     }
 
