@@ -436,7 +436,7 @@ public class GameController {
             case FOUR_QUARTETS: {
             }
 
-            // Well Done!
+            // TODO: reimplement
             case STAIR: {
                 // checks if the first column has length one, in order to determine if the pattern is increasing
                 boolean isIncreasing = shelf.getColumnLength(0) == 1;
@@ -468,40 +468,6 @@ public class GameController {
 
         // if no pattern is satisfied return false
         return false;
-    }
-
-    private int numberOfPairsInMask(Mask mask) {
-        int count = 0, counter = 0, small = 0;
-        foundFirstAdjacent(mask);
-        for (int row = Constants.numberOfRows; row >= 0; row--) {
-            for (int column = 0; column < Constants.numberOfColumns; column++) {
-                if (hasAdjacent(mask, row, column)) {
-
-                    if (mask.matrixAdjacent[row + 1][column] == 0 &&
-                            mask.matrixAdjacent[row - 1][column] == 0 &&
-                            mask.matrixAdjacent[row][column + 1] == 0 &&
-                            mask.matrixAdjacent[row][column - 1] == 0
-                    ) {
-                        count++;
-                        counter++;
-                        mask.matrixAdjacent[row][column] = count;
-                    } else if (hasToFix(mask, row, column)) {
-                        counter--;
-                        small = findSmallest(mask, row, column);
-                        fixMatrixAdjacent(mask, mask.matrixAdjacent[row][column - 1], small);
-                        fixMatrixAdjacent(mask, mask.matrixAdjacent[row - 1][column], small);
-                        fixMatrixAdjacent(mask, mask.matrixAdjacent[row][column + 1], small);
-                        fixMatrixAdjacent(mask, mask.matrixAdjacent[row + 1][column], small);
-                        mask.matrixAdjacent[row][column] = small;
-
-                    } else {
-                        mask.matrixAdjacent[row][column] = findSmallest(mask, row, column);
-                    }
-
-                }
-            }
-        }
-        return counter;
     }
 
     private void headLiminate(ItemCard hot, ItemCard[][] slf) {
@@ -551,58 +517,6 @@ public class GameController {
                     }
             }
         }
-    }
-
-    private boolean hasToFix(Mask mask, int row, int column) {
-        return (mask.matrixAdjacent[row][column - 1] != 0 && mask.matrixAdjacent[row - 1][column] != 0 && mask.matrixAdjacent[row][column - 1] != mask.matrixAdjacent[row - 1][column]) ||
-                (mask.matrixAdjacent[row][column - 1] != 0 && mask.matrixAdjacent[row][column + 1] != 0 && mask.matrixAdjacent[row][column - 1] != mask.matrixAdjacent[row][column + 1]) ||
-                (mask.matrixAdjacent[row][column - 1] != 0 && mask.matrixAdjacent[row + 1][column] != 0 && mask.matrixAdjacent[row][column - 1] != mask.matrixAdjacent[row + 1][column]) ||
-                (mask.matrixAdjacent[row][column + 1] != 0 && mask.matrixAdjacent[row - 1][column] != 0 && mask.matrixAdjacent[row][column + 1] != mask.matrixAdjacent[row - 1][column]) ||
-                (mask.matrixAdjacent[row + 1][column] != 0 && mask.matrixAdjacent[row - 1][column] != 0 && mask.matrixAdjacent[row + 1][column] != mask.matrixAdjacent[row - 1][column]) ||
-                (mask.matrixAdjacent[row][column + 1] != 0 && mask.matrixAdjacent[row + 1][column] != 0 && mask.matrixAdjacent[row][column + 1] != mask.matrixAdjacent[row + 1][column]);
-    }
-
-    private int findSmallest(Mask mask, int i, int j) {
-        int small = 100; // cos'è 100?
-        if (mask.matrixAdjacent[i][j - 1] < small) small = mask.matrixAdjacent[i][j - 1];
-        if (mask.matrixAdjacent[i - 1][j] < small) small = mask.matrixAdjacent[i - 1][j];
-        if (mask.matrixAdjacent[i][j + 1] < small) small = mask.matrixAdjacent[i][j + 1];
-        if (mask.matrixAdjacent[i + 1][j] < small) small = mask.matrixAdjacent[i + 1][j];
-        if (small == 100) small = 0;
-        return small;
-    }
-
-
-    private boolean hasAdjacent(Mask mask, int i, int j) {
-        return mask.matrixMask[i][j] == mask.matrixMask[i + 1][j] ||
-                mask.matrixMask[i][j] == mask.matrixMask[i][j + 1] ||
-                mask.matrixMask[i][j] == mask.matrixMask[i - 1][j] ||
-                mask.matrixMask[i][j] == mask.matrixMask[i][j - 1];
-    }
-
-    private void fixMatrixAdjacent(Mask mask, int l, int m) {
-        if (l == 0) return;
-        else {
-            for (int i = 0; i < 6; i++) {
-                for (int j = 0; j < 5; j++) {
-                    if (mask.matrixAdjacent[i][j] == l)
-                        mask.matrixAdjacent[i][j] = m;
-                }
-            }
-        }
-
-    }
-
-    private void foundFirstAdjacent(Mask mask) {
-        for (int i = 6; i >= 0; i--) {
-            for (int j = 0; j < 5; j++) {
-                if (mask.matrixMask[i][j] == mask.matrixMask[i - 1][j] || mask.matrixMask[i][j] == mask.matrixMask[i][j + 1]) {
-                    mask.matrixAdjacent[i][j] = 1;
-                    return;
-                }
-            }
-        }
-        return;
     }
 
     private static class Square {
