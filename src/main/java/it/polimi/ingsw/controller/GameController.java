@@ -129,7 +129,7 @@ public class GameController {
                                 pairNum++;
                                 slf[i][j] = null;       // "elimino" la cella di partenza
                                 for (ItemCard h : heads)         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
-                                    headLiminate(h);
+                                    headLiminate(h, slf);
                                 heads.clear();          // resetto la lista di heads :D
                             }
                         }
@@ -504,7 +504,53 @@ public class GameController {
         return counter;
     }
 
-    private void headLiminate(ItemCard head) {
+    private void headLiminate(ItemCard hot, ItemCard[][] slf) {
+
+        List<ItemCard> heads = new ArrayList<>();
+
+        //find the head in the shelf...
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (slf[i][j] != null)
+                    if (slf[i][j] == hot) { //casella di espansione trovata
+                        int ihead = i++;
+                        int jhead = j;
+                        if (ihead < 6)        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
+                            if (slf[ihead][jhead] != null)                                       // se rispettano le condizioni, sono head
+                                if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                    heads.add(slf[ihead][jhead]);
+
+                        ihead = i;
+                        jhead = j++;
+                        if (jhead < 5)
+                            if (slf[ihead][jhead] != null)
+                                if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                    heads.add(slf[ihead][jhead]);
+
+                        ihead = i--;
+                        jhead = j;
+                        if (ihead >= 0)
+                            if (slf[ihead][jhead] != null)
+                                if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                    heads.add(slf[ihead][jhead]);
+
+                        ihead = i;
+                        jhead = j--;
+                        if (jhead >= 0)
+                            if (slf[ihead][jhead] != null)
+                                if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                    heads.add(slf[ihead][jhead]);
+
+                        slf[i][j] = null;       // "elimino" la cella di partenza
+                        if (!heads.isEmpty()) {    //se ho trovato head, vuol dire che c'è la coppia, incremento il numero di coppie
+                            for (ItemCard h : heads)         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
+                                headLiminate(h, slf);
+                            heads.clear();          // resetto la lista di heads :D
+
+                        }
+                    }
+            }
+        }
     }
 
     private boolean hasToFix(Mask mask, int row, int column) {
