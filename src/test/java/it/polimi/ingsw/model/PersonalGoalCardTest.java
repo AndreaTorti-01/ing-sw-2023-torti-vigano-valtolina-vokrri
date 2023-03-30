@@ -1,12 +1,51 @@
 package it.polimi.ingsw.model;
 
 
+import it.polimi.ingsw.utils.Constants;
 import org.junit.jupiter.api.Test;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PersonalGoalCardTest {
+    @Test
+    void testPattern() {
+        for (int i = 0; i < Constants.numberOfPersonalGoalCardsTypes; i++) {
+            PersonalGoalCard currentPersonalGoalCard = new PersonalGoalCard(i);
+            ItemType[][] pattern = currentPersonalGoalCard.getPattern();
+
+            try {
+                // gets the pattern file corresponding to the given index
+                InputStream inputStream = getClass().getResourceAsStream(
+                        String.format("/personalGoalCards/PGC%d.txt", i)
+                );
+
+                // allows to read data from the obtained file
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                int row = 0;
+                String line = reader.readLine();
+                while (line != null) {
+                    for (int column = 0; column < line.length(); column++) {
+                        char currentChar = line.charAt(column);
+                        assertEquals(pattern[row][column], ItemType.getItemTypeFromAbbreviation(currentChar));
+                    }
+
+                    // goes to next line
+                    line = reader.readLine();
+                    row++;
+                }
+            } catch (IOException | NullPointerException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Test
     void testGetPattern0() {
         PersonalGoalCard personalGoalCard = new PersonalGoalCard(0);

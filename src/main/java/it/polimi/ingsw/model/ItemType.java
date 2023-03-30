@@ -20,6 +20,8 @@ public enum ItemType {
      * @return the ItemType
      */
     public static ItemType getItemTypeFromAbbreviation(char abbreviation) {
+        if (abbreviation == '*') return null;
+
         for (ItemType type : ItemType.values()) {
             if (type.toString().charAt(0) == abbreviation) return type;
         }

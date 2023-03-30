@@ -3,8 +3,10 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
 // Fabio Vokrri 29/03/2023
 // TODO: refactor checkPersonalGoalCardPattern method (DONE!)
@@ -82,62 +84,51 @@ public class GameController {
                 return false;
             }
 
-            // TODO: reimplement
-/*            case SIX_PAIRS: {
-                // non c'ho capito un cazzo :)
-                int numberOfPairs = 0;
-                for (ItemType type : ItemType.values()) {
-                    Mask testedMask = new Mask(shelf, type);
-                    numberOfPairs += numberOfPairsInMask(testedMask);
-                }
-                return numberOfPairs > 5;
-            }
-
- */
+            // TODO: refactor
             case SIX_PAIRS: {
                 List<ItemCard> heads = new ArrayList<>();   // le heads sarebbero le celle adiacenti capitooooooooooooooooooooooooooooooooooooo
                 ItemCard[][] slf = new ItemCard[6][];       // questa è una copia di shelf COPIA
                 int pairNum = 0;
 
-                for(int i = 0; i < shelf.getShelf().length; i++)       //la copia
+                for (int i = 0; i < shelf.getShelf().length; i++)       //la copia
                     slf[i] = shelf.getShelf()[i].clone();
 
-                for(int i = 0; i < 6 && pairNum < 6; i++){
-                    for(int j = 0; j < 5 && pairNum < 6; j++){
-                        if(slf[i][j] != null){       //se è nulla non la considero popo
+                for (int i = 0; i < 6 && pairNum < 6; i++) {
+                    for (int j = 0; j < 5 && pairNum < 6; j++) {
+                        if (slf[i][j] != null) {       //se è nulla non la considero popo
 
                             int ihead = i++;
                             int jhead = j;
-                            if(0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
-                                if(slf[ihead][jhead] != null)                                       // se rispettano le condizioni, sono head
-                                    if(slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                            if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
+                                if (slf[ihead][jhead] != null)                                       // se rispettano le condizioni, sono head
+                                    if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                         heads.add(slf[ihead][jhead]);
 
                             ihead = i;
                             jhead = j++;
-                            if(0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
-                                if(slf[ihead][jhead] != null)
-                                    if(slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                            if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
+                                if (slf[ihead][jhead] != null)
+                                    if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                         heads.add(slf[ihead][jhead]);
 
                             ihead = i--;
                             jhead = j;
-                            if(0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
-                                if(slf[ihead][jhead] != null)
-                                    if(slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                            if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
+                                if (slf[ihead][jhead] != null)
+                                    if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                         heads.add(slf[ihead][jhead]);
 
                             ihead = i;
                             jhead = j--;
-                            if(0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
-                                if(slf[ihead][jhead] != null)
-                                    if(slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                            if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
+                                if (slf[ihead][jhead] != null)
+                                    if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                         heads.add(slf[ihead][jhead]);
 
-                            if(!heads.isEmpty()){    //se ho trovato head, vuol dire che c'è la coppia, incremento il numero di coppie
+                            if (!heads.isEmpty()) {    //se ho trovato head, vuol dire che c'è la coppia, incremento il numero di coppie
                                 pairNum++;
                                 slf[i][j] = null;       // "elimino" la cella di partenza
-                                for(ItemCard h : heads)         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
+                                for (ItemCard h : heads)         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
                                     headLiminate(h);
                                 heads.clear();          // resetto la lista di heads :D
                             }
@@ -287,14 +278,15 @@ public class GameController {
                 return counter >= numberOfRowsToCheck;
             }
 
+            // Well Done!
             case EQUAL_CORNERS: {
                 ItemType firstCornerType = shelf.getCardAt(0, 0).getType();
-                return shelf.getCardAt(0, 4).getType().equals(firstCornerType) &&
-                        shelf.getCardAt(5, 4).getType().equals(firstCornerType) &&
-                        shelf.getCardAt(5, 0).getType().equals(firstCornerType);
+                return shelf.getCardAt(0, Constants.numberOfColumns - 1).getType().equals(firstCornerType) &&
+                        shelf.getCardAt(Constants.numberOfRows - 1, Constants.numberOfColumns - 1).getType().equals(firstCornerType) &&
+                        shelf.getCardAt(Constants.numberOfRows - 1, 0).getType().equals(firstCornerType);
             }
-            case FOUR_QUARTETS: {
 
+            case FOUR_QUARTETS: {
             }
 
             // Well Done!
@@ -362,22 +354,26 @@ public class GameController {
                 return counter == numberOfRowsToCheck;
             }
 
-            // TODO: to revise for better scalability
-            //      statically typed item types values
+            // Well Done!
             case EIGHT_EQUAL: {
-                int p = 0, b = 0, g = 0, f = 0, c = 0, t = 0;
-                for (int row = 0; row < Constants.numberOfRows; row++) {
-                    for (int column = 0; column < Constants.numberOfColumns; column++) {
-                        if (shelf.getCardAt(row, column).getType().equals(ItemType.BOOKS)) b++;
-                        else if (shelf.getCardAt(row, column).getType().equals(ItemType.PLANTS)) p++;
-                        else if (shelf.getCardAt(row, column).getType().equals(ItemType.GAMES)) g++;
-                        else if (shelf.getCardAt(row, column).getType().equals(ItemType.CATS)) c++;
-                        else if (shelf.getCardAt(row, column).getType().equals(ItemType.TROPHIES)) t++;
-                        else if (shelf.getCardAt(row, column).getType().equals(ItemType.FRAMES)) f++;
+                final int cardsToCheck = 8;
+
+                // for every type of itemCard checks if there are more than 8 cards with that type
+                for (ItemType currentType : ItemType.values()) {
+                    int counter = 0;
+                    for (int row = 0; row < Constants.numberOfRows; row++) {
+                        for (int column = 0; column < Constants.numberOfColumns; column++) {
+                            // if the card has the same current type increment counter
+                            if (shelf.getCardAt(row, column).getType().equals(currentType)) counter++;
+                            // if there are 8 cards with the same type return true
+                            if (counter == cardsToCheck) return true;
+                        }
                     }
                 }
-                return p > 7 || b > 7 || g > 7 || c > 7 || t > 7 || f > 7;
+                // if there are no more than 8 cards for every type return false
+                return false;
             }
+
             // TODO: refactor
             case STAIR: {
                 ItemCard[] increasing_stair = {
@@ -455,7 +451,8 @@ public class GameController {
         return counter;
     }
 
-    private void headLiminate(ItemCard head){}
+    private void headLiminate(ItemCard head) {
+    }
 
     private boolean hasToFix(Mask mask, int row, int column) {
         return (mask.matrixAdjacent[row][column - 1] != 0 && mask.matrixAdjacent[row - 1][column] != 0 && mask.matrixAdjacent[row][column - 1] != mask.matrixAdjacent[row - 1][column]) ||
@@ -475,7 +472,6 @@ public class GameController {
         if (small == 100) small = 0;
         return small;
     }
-
 
 
     private boolean hasAdjacent(Mask mask, int i, int j) {

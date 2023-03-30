@@ -49,4 +49,20 @@ public class Shelf extends GameObject {
             items[i][column] = item;
         }
     }
+
+    /**
+     * Returns the length of the specified column of the shelf
+     *
+     * @param column to calculate the length of
+     * @return length of the column
+     */
+    public int getColumnLength(int column) {
+        int length = 0;
+
+        for (int row = 0; row < Constants.numberOfRows; row++) {
+            if (items[row][column] != null) length++;
+        }
+
+        return length;
+    }
 }
