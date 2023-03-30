@@ -10,4 +10,5 @@ public class Constants {
     public static final int numberOfCardTypes = 6;
     public static final int numberOfCommonGoalCardsInGame = 2;
     public static final int numberOfPersonalGoalCardsTypes = 12;
+    public static final int boardSize = 9;
 }

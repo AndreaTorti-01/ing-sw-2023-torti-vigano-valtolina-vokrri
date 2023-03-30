@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Game {
-    // costante per future espansioni
     private final String[] players;
     private final Bag bag;
     private final Board board;

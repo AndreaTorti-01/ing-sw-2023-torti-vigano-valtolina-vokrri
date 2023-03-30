@@ -43,10 +43,10 @@ public class Shelf extends GameObject {
         if (items[0][column] != null)
             throw new RuntimeException("Column is full");
         else {
-            int i = Constants.numberOfColumns;
-            while (items[i][column] != null)
-                i--;
-            items[i][column] = item;
+            int row = Constants.numberOfRows;
+            while (items[row][column] != null)
+                row--;
+            items[row][column] = item;
         }
     }
 

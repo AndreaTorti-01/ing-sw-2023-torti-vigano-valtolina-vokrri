@@ -138,39 +138,61 @@ public class GameController {
                 return pairNum == 6;
             }
 
-
-            // TODO: refactor
+            // Well Done!
             case DIAGONAL_FIVE: {
-                int h = 0;
-                ItemType a = shelf.getCardAt(2, 2).getType();
-                ItemType b = shelf.getCardAt(3, 2).getType();
-                for (int i = -2; i < 3; i++) {
-                    if (a.equals(shelf.getCardAt(2 + i, 2 + i).getType())) {
-                        h++;
+                // the length of the diagonal to check
+                final int diagonalLength = 5;
+
+                // checks for diagonals from left to right
+                for (int row = 0; row < Constants.numberOfRows - diagonalLength + 1; row++) {
+                    for (int column = 0; column < Constants.numberOfColumns - diagonalLength + 1; column++) {
+                        ItemCard currentCard = shelf.getCardAt(row, column);
+
+                        // if there's no card in that position continue
+                        if (currentCard == null) continue;
+
+                        int counter = 0;
+                        while (counter < diagonalLength) {
+                            // checks if the cards in the diagonal have the same type as the currently selected card
+                            if (shelf.getCardAt(row + counter, column + counter).getType().equals(currentCard.getType())) {
+                                counter++;
+                            }
+                            // breaks the loop as soon as a card has different type from the one currently selected
+                            else break;
+                        }
+
+                        // if the counter has the same length of the diagonal,
+                        // it means all the cards in that diagonal have the same type and the pattern is satisfied
+                        if (counter == diagonalLength) return true;
                     }
                 }
-                if (h == 5) return true;
-                else h = 0;
-                for (int i = -2; i < 3; i++) {
-                    if (a.equals(shelf.getCardAt(2 - i, 2 - i).getType())) {
-                        h++;
+
+                // checks for diagonals from right to left
+                for (int row = Constants.numberOfRows - 1; row >= diagonalLength - 1; row--) {
+                    for (int column = Constants.numberOfColumns - 1; column >= diagonalLength - 1; column--) {
+                        ItemCard currentCard = shelf.getCardAt(row, column);
+
+                        // if there's no card in that position continue
+                        if (currentCard == null) continue;
+
+                        // checks if the cards in the diagonal have the same type as the currently selected card
+                        int counter = 0;
+                        while (counter < diagonalLength) {
+                            if (shelf.getCardAt(row - counter, column - counter).getType().equals(currentCard.getType())) {
+                                counter++;
+                            }
+                            // breaks the loop as soon as a card has different type from the one currently selected
+                            else break;
+                        }
+
+                        // if the counter has the same length of the diagonal,
+                        // it means all the cards in that diagonal have the same type and the pattern is satisfied
+                        if (counter == diagonalLength) return true;
                     }
                 }
-                if (h == 5) return true;
-                else h = 0;
-                for (int i = -2; i < 3; i++) {
-                    if (b.equals(shelf.getCardAt(3 + i, 2 + i).getType())) {
-                        h++;
-                    }
-                }
-                if (h == 5) return true;
-                else h = 0;
-                for (int i = -2; i < 3; i++) {
-                    if (b.equals(shelf.getCardAt(3 - i, 2 - i).getType())) {
-                        h++;
-                    }
-                }
-                return h == 5;
+
+                // if there are no cards with the same type in any of the diagonals the pattern is not satisfied
+                return false;
             }
 
             // TODO: refactor or reimplement
@@ -223,15 +245,19 @@ public class GameController {
 
                     Set<ItemType> typesInCurrentColumn = new HashSet<>();
                     for (int row = 0; row < Constants.numberOfRows; row++) {
-                        ItemType currentType = shelf.getCardAt(row, column).getType();
+                        ItemCard currentCard = shelf.getCardAt(row, column);
+
+                        // if there's no card in that position continue.
+                        // for security reasons
+                        if (currentCard == null) continue;
 
                         // if a card has a different type from the one already in the set and the set reached
                         // the maximum number of possible types skips that row
-                        if (!typesInCurrentColumn.contains(currentType) && typesInCurrentColumn.size() == maxNumberOfTypesInColumn) {
+                        if (!typesInCurrentColumn.contains(currentCard.getType()) && typesInCurrentColumn.size() == maxNumberOfTypesInColumn) {
                             // clears the types added to the set in order to check new column
                             typesInCurrentColumn.clear();
                             continue outer;
-                        } else typesInCurrentColumn.add(currentType);
+                        } else typesInCurrentColumn.add(currentCard.getType());
                     }
                     // if it reaches the end of the column, that column satisfies the required pattern
                     counter++;
@@ -260,15 +286,19 @@ public class GameController {
 
                     Set<ItemType> typesInCurrentRow = new HashSet<>();
                     for (int column = 0; column < Constants.numberOfColumns; column++) {
-                        ItemType currentType = shelf.getCardAt(row, column).getType();
+                        ItemCard currentCard = shelf.getCardAt(row, column);
+
+                        // if there's no card in that position continue.
+                        // for security reasons
+                        if (currentCard == null) continue;
 
                         // if a card has a different type from the one already in the set and the set reached
                         // the maximum number of possible types skips that row
-                        if (!typesInCurrentRow.contains(currentType) && typesInCurrentRow.size() == maxNumberOfTypesInRow) {
+                        if (!typesInCurrentRow.contains(currentCard.getType()) && typesInCurrentRow.size() == maxNumberOfTypesInRow) {
                             // clears the types added to the set in order to check new column
                             typesInCurrentRow.clear();
                             continue outer;
-                        } else typesInCurrentRow.add(currentType);
+                        } else typesInCurrentRow.add(currentCard.getType());
                     }
                     // if it reaches the end of the row, that row satisfies the required pattern
                     counter++;
@@ -293,13 +323,18 @@ public class GameController {
 
                     Set<ItemType> typesInCurrentColumn = new HashSet<>();
                     for (int row = 0; row < Constants.numberOfRows; row++) {
-                        ItemType currentType = shelf.getCardAt(row, column).getType();
+                        ItemCard currentCard = shelf.getCardAt(row, column);
+
+                        // if there's no card in that position continue.
+                        // for security reasons
+                        if (currentCard == null) continue;
+
                         // if a card has the same type of another one from the same column skip that column
-                        if (typesInCurrentColumn.contains(currentType)) {
+                        if (typesInCurrentColumn.contains(currentCard.getType())) {
                             // clears the types added to the set in order to check new column
                             typesInCurrentColumn.clear();
                             continue outer;
-                        } else typesInCurrentColumn.add(currentType);
+                        } else typesInCurrentColumn.add(currentCard.getType());
                     }
                     // if the set has all the different types of cards, increments counter
                     if (typesInCurrentColumn.size() == Constants.numberOfCardTypes) counter++;
@@ -327,13 +362,18 @@ public class GameController {
 
                     Set<ItemType> typesInCurrentColumn = new HashSet<>();
                     for (int column = 0; column < Constants.numberOfColumns; column++) {
-                        ItemType currentType = shelf.getCardAt(row, column).getType();
+                        ItemCard currentCard = shelf.getCardAt(row, column);
+
+                        // if there's no card in that position continue.
+                        // for security reasons
+                        if (currentCard == null) continue;
+
                         // if a card has the same type of another one from the same row skip that row
-                        if (typesInCurrentColumn.contains(currentType)) {
+                        if (typesInCurrentColumn.contains(currentCard.getType())) {
                             // clears the types added to the set in order to check new row
                             typesInCurrentColumn.clear();
                             continue outer;
-                        } else typesInCurrentColumn.add(currentType);
+                        } else typesInCurrentColumn.add(currentCard.getType());
                     }
                     // if the set has all the different types of cards except for one type, increments counter
                     if (typesInCurrentColumn.size() == Constants.numberOfCardTypes - 1) counter++;
@@ -345,10 +385,26 @@ public class GameController {
 
             // Well Done!
             case EQUAL_CORNERS: {
-                ItemType firstCornerType = shelf.getCardAt(0, 0).getType();
-                return shelf.getCardAt(0, Constants.numberOfColumns - 1).getType().equals(firstCornerType) &&
-                        shelf.getCardAt(Constants.numberOfRows - 1, Constants.numberOfColumns - 1).getType().equals(firstCornerType) &&
-                        shelf.getCardAt(Constants.numberOfRows - 1, 0).getType().equals(firstCornerType);
+                ItemCard firstCornerItemCard = shelf.getCardAt(0, 0);
+                // if there's no card in the first corner it's impossible to satisfy the pattern
+                if (firstCornerItemCard == null) return false;
+
+                ItemCard secondCornerItemCard = shelf.getCardAt(0, Constants.numberOfColumns - 1);
+                // if there's no card in the second corner it's impossible to satisfy the pattern
+                if (secondCornerItemCard == null) return false;
+
+                ItemCard thirdCornerItemCard = shelf.getCardAt(Constants.numberOfRows - 1, 0);
+                // if there's no card in the third corner it's impossible to satisfy the pattern
+                if (thirdCornerItemCard == null) return false;
+
+                ItemCard fourthCornerItemCard = shelf.getCardAt(Constants.numberOfRows - 1, Constants.numberOfColumns - 1);
+                // if there's no card in the fourth corner it's impossible to satisfy the pattern
+                if (fourthCornerItemCard == null) return false;
+
+                // the pattern is satisfied if and only if the four cards at the corner have the same type
+                return firstCornerItemCard.getType().equals(secondCornerItemCard.getType()) &&
+                        secondCornerItemCard.getType().equals(thirdCornerItemCard.getType()) &&
+                        thirdCornerItemCard.getType().equals(fourthCornerItemCard.getType());
             }
 
             // Well Done!
@@ -358,10 +414,16 @@ public class GameController {
                 // for every type of itemCard checks if there are more than 8 cards with that type
                 for (ItemType currentType : ItemType.values()) {
                     int counter = 0;
+
                     for (int row = 0; row < Constants.numberOfRows; row++) {
                         for (int column = 0; column < Constants.numberOfColumns; column++) {
+                            ItemCard currentCard = shelf.getCardAt(row, column);
+
+                            // if there's no card in that position continue.
+                            if (currentCard == null) continue;
+
                             // if the card has the same current type increment counter
-                            if (shelf.getCardAt(row, column).getType().equals(currentType)) counter++;
+                            if (currentCard.getType().equals(currentType)) counter++;
                             // if there are 8 cards with the same type return true
                             if (counter == cardsToCheck) return true;
                         }
