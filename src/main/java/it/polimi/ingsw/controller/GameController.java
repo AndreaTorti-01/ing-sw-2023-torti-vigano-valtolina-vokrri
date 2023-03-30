@@ -378,6 +378,7 @@ public class GameController {
                 }
                 return p > 7 || b > 7 || g > 7 || c > 7 || t > 7 || f > 7;
             }
+            // TODO: refactor
             case STAIR: {
                 ItemCard[] increasing_stair = {
                         shelf.getCardAt(5, 0),
@@ -419,8 +420,6 @@ public class GameController {
         }
         return false;
     }
-
-    //! CRISTIANO usa solo camelCase e non snake_case, per favore <3
 
     private int numberOfPairsInMask(Mask mask) {
         int count = 0, counter = 0, small = 0;

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Constants;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,11 +22,11 @@ public class PersonalGoalCard extends GameObject {
      * @throws IndexOutOfBoundsException when given an index outside the range 0-11.
      */
     public PersonalGoalCard(int index) {
-        if (index < 0 || index > 11)
-            throw new IndexOutOfBoundsException("provided index (" + index + ") is out of range 0 - 11");
+        if (index < 0 || index > Constants.numberOfPersonalGoalCardsTypes - 1)
+            throw new IndexOutOfBoundsException("provided index (" + index + ") is out of range 0-" + (Constants.numberOfPersonalGoalCardsTypes - 1));
 
-        // initializes the pattern to a null matrix of size 6x5
-        pattern = new ItemType[6][5];
+        // initializes the pattern to a null matrix
+        pattern = new ItemType[Constants.numberOfRows][Constants.numberOfColumns];
 
         try {
             // gets the pattern file corresponding to the given index
@@ -38,12 +40,12 @@ public class PersonalGoalCard extends GameObject {
             int row = 0;
             String line = reader.readLine();
             while (line != null) {
-                for (int col = 0; col < line.length(); col++) {
-                    char currentChar = line.charAt(col);
+                for (int column = 0; column < line.length(); column++) {
+                    char currentChar = line.charAt(column);
                     if (currentChar != '*') {
                         // gets the type of the ItemCard given the abbreviation found in the file
                         // and inserts it in the correct position of the matrix
-                        pattern[row][col] = ItemType.valueOf(
+                        pattern[row][column] = ItemType.valueOf(
                                 String.valueOf(ItemType.getItemTypeFromAbbreviation(currentChar))
                         );
                     }
@@ -62,7 +64,7 @@ public class PersonalGoalCard extends GameObject {
         return pattern;
     }
 
-    public ItemType getTypeAt(int row, int col) {
-        return pattern[row][col];
+    public ItemType getTypeAt(int row, int column) {
+        return pattern[row][column];
     }
 }

@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class Bag extends GameObject {
-    private final int maxCards = Constants.maxNumberOfCards;
+    private final int maxCards = Constants.maxNumberOfItemCards;
     private final Set<ItemCard> cardsInside;
 
     /**
@@ -16,7 +16,7 @@ public class Bag extends GameObject {
     public Bag() {
         cardsInside = new HashSet<>();
         for (ItemType type : ItemType.values()) {
-            for (int i = 0; i < Constants.numberOfCardWithSameType; i++) {
+            for (int i = 0; i < Constants.numberOfItemCardsWithSameType; i++) {
                 cardsInside.add(new ItemCard(type));
             }
         }

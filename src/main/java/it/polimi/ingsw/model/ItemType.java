@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.util.NoSuchElementException;
+
 public enum ItemType {
     CATS('C'),
     GAMES('G'),
@@ -18,14 +20,10 @@ public enum ItemType {
      * @return the ItemType
      */
     public static ItemType getItemTypeFromAbbreviation(char abbreviation) {
-        return switch (abbreviation) {
-            case 'C' -> ItemType.CATS;
-            case 'G' -> ItemType.GAMES;
-            case 'B' -> ItemType.BOOKS;
-            case 'F' -> ItemType.FRAMES;
-            case 'T' -> ItemType.TROPHIES;
-            default -> ItemType.PLANTS;
-        };
-    }
+        for (ItemType type : ItemType.values()) {
+            if (type.toString().charAt(0) == abbreviation) return type;
+        }
 
+        throw new NoSuchElementException("No item type found with the given abbreviation " + abbreviation);
+    }
 }

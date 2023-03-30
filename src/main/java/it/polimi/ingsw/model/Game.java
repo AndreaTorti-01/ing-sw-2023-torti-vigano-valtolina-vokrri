@@ -9,7 +9,6 @@ import java.util.Random;
 
 public class Game {
     // costante per future espansioni
-    private static final int NUMBER_OF_COMMON_GOAL_CARDS = 2;
     private final String[] players;
     private final Bag bag;
     private final Board board;
@@ -43,8 +42,8 @@ public class Game {
         System.arraycopy(playersNames, 0, players, 0, numberOfPlayers);
 
         // inizializzazione delle commonGoalCards
-        commonGoalCards = new CommonGoalCard[NUMBER_OF_COMMON_GOAL_CARDS];
-        for (int i = 0; i < NUMBER_OF_COMMON_GOAL_CARDS; i++) {
+        commonGoalCards = new CommonGoalCard[Constants.numberOfCommonGoalCardsInGame];
+        for (int i = 0; i < Constants.numberOfCommonGoalCardsInGame; i++) {
             commonGoalCards[i] = new CommonGoalCard(numberOfPlayers);
         }
 
@@ -52,7 +51,7 @@ public class Game {
         personalGoalCards = new PersonalGoalCard[numberOfPlayers];
         // lista utilizzata per evitare di avere due personalGoalCard con lo stesso indice e, quindi, dello stesso tipo.
         List<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < 12; i++) indexes.add(i);
+        for (int i = 0; i < Constants.numberOfPersonalGoalCardsTypes; i++) indexes.add(i);
         for (int i = 0; i < numberOfPlayers; i++) {
             int randomIndex = random.nextInt(0, indexes.size());
             // rimuove l'indice alla posizione randomIndex da indexes in modo che non si possa ripresentare
