@@ -72,12 +72,28 @@ public class GameController {
                 // which has "length" of one in every diagonal direction
                 for (int row = 1; row < Constants.numberOfRows - 1; row++) {
                     for (int column = 1; column < Constants.numberOfColumns - 1; column++) {
-                        ItemType type = shelf.getCardAt(row, column).getType();
-                        if (type != null &&
-                                type.equals(shelf.getCardAt(row - 1, column - 1).getType()) &&
-                                type.equals(shelf.getCardAt(row - 1, column + 1).getType()) &&
-                                type.equals(shelf.getCardAt(row + 1, column - 1).getType()) &&
-                                type.equals(shelf.getCardAt(row + 1, column + 1).getType())
+                        ItemCard centerCard = shelf.getCardAt(row, column);
+                        if (centerCard == null) continue;
+
+                        ItemType currentType = centerCard.getType();
+
+                        ItemCard leftUpperCard = shelf.getCardAt(row + 1, column - 1);
+                        if (leftUpperCard == null) continue;
+
+                        ItemCard leftLowerCard = shelf.getCardAt(row - 1, column - 1);
+                        if (leftLowerCard == null) continue;
+
+                        ItemCard rightUpperCard = shelf.getCardAt(row + 1, column + 1);
+                        if (rightUpperCard == null) continue;
+
+                        ItemCard rightLowerCard = shelf.getCardAt(row - 1, column + 1);
+                        if (rightLowerCard == null) continue;
+
+
+                        if (currentType.equals(leftUpperCard.getType()) &&
+                                currentType.equals(leftLowerCard.getType()) &&
+                                currentType.equals(rightUpperCard.getType()) &&
+                                currentType.equals(rightLowerCard.getType())
                         ) return true;
                     }
                 }
