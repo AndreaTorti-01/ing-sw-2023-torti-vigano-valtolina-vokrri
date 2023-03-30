@@ -138,7 +138,7 @@ public class GameController {
                 return pairNum == 6;
             }
 
-            // Well Done!
+            // TODO: da ricontrollare
             case DIAGONAL_FIVE: {
                 // the length of the diagonal to check
                 final int diagonalLength = 5;
@@ -151,10 +151,15 @@ public class GameController {
                         // if there's no card in that position continue
                         if (currentCard == null) continue;
 
-                        int counter = 0;
+                        // checks if the cards in the diagonal have the same type as the currently selected card
+                        int counter = 1; // already one card on the diagonal, the one selected
                         while (counter < diagonalLength) {
+                            ItemCard diagonalCard = shelf.getCardAt(row + counter, column + counter);
+                            // if there's no card in the diagonal break the loop and continue
+                            if (diagonalCard == null) break;
+
                             // checks if the cards in the diagonal have the same type as the currently selected card
-                            if (shelf.getCardAt(row + counter, column + counter).getType().equals(currentCard.getType())) {
+                            if (diagonalCard.getType().equals(currentCard.getType())) {
                                 counter++;
                             }
                             // breaks the loop as soon as a card has different type from the one currently selected
@@ -165,10 +170,8 @@ public class GameController {
                         // it means all the cards in that diagonal have the same type and the pattern is satisfied
                         if (counter == diagonalLength) return true;
                     }
-                }
 
-                // checks for diagonals from right to left
-                for (int row = Constants.numberOfRows - 1; row >= diagonalLength - 1; row--) {
+                    // checks for diagonals from right to left
                     for (int column = Constants.numberOfColumns - 1; column >= diagonalLength - 1; column--) {
                         ItemCard currentCard = shelf.getCardAt(row, column);
 
@@ -176,9 +179,13 @@ public class GameController {
                         if (currentCard == null) continue;
 
                         // checks if the cards in the diagonal have the same type as the currently selected card
-                        int counter = 0;
+                        int counter = 1; // already one card on the diagonal, the one selected
                         while (counter < diagonalLength) {
-                            if (shelf.getCardAt(row - counter, column - counter).getType().equals(currentCard.getType())) {
+                            ItemCard diagonalCard = shelf.getCardAt(row - counter, column - counter);
+                            // if there's no card in the diagonal break the loop and continue
+                            if (diagonalCard == null) break;
+
+                            if (diagonalCard.getType().equals(currentCard.getType())) {
                                 counter++;
                             }
                             // breaks the loop as soon as a card has different type from the one currently selected
