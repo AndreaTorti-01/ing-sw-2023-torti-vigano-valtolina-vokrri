@@ -117,30 +117,30 @@ public class GameController {
                     for (int j = 0; j < 5 && pairNum < 6; j++) {
                         if (slf[i][j] != null) {       //se è nulla non la considero popo
 
-                            int ihead = ++i;
+                            int ihead = i + 1;
                             int jhead = j;
-                            if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
+                            if ( ihead < 6 )        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
                                 if (slf[ihead][jhead] != null)                                       // se rispettano le condizioni, sono head
                                     if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                         heads.add(slf[ihead][jhead]);
 
                             ihead = i;
-                            jhead = ++j;
-                            if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
+                            jhead = j + 1;
+                            if ( jhead < 5 )
                                 if (slf[ihead][jhead] != null)
                                     if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                         heads.add(slf[ihead][jhead]);
 
-                            ihead = --i;
+                            ihead = i - 1;
                             jhead = j;
-                            if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
+                            if ( 0 <= ihead )
                                 if (slf[ihead][jhead] != null)
                                     if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                         heads.add(slf[ihead][jhead]);
 
                             ihead = i;
-                            jhead = --j;
-                            if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
+                            jhead = j - 1;
+                            if ( 0 <= jhead )
                                 if (slf[ihead][jhead] != null)
                                     if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                         heads.add(slf[ihead][jhead]);
@@ -506,7 +506,7 @@ public class GameController {
             for (int j = 0; j < 6; j++) {
                 if (slf[i][j] != null)
                     if (slf[i][j] == hot) { //casella di espansione trovata
-                        int ihead = i++;
+                        int ihead = i + 1;
                         int jhead = j;
                         if (ihead < 6)        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
                             if (slf[ihead][jhead] != null)                                       // se rispettano le condizioni, sono head
@@ -514,13 +514,13 @@ public class GameController {
                                     heads.add(slf[ihead][jhead]);
 
                         ihead = i;
-                        jhead = j++;
+                        jhead = j + 1;
                         if (jhead < 5)
                             if (slf[ihead][jhead] != null)
                                 if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                     heads.add(slf[ihead][jhead]);
 
-                        ihead = i--;
+                        ihead = i - 1;
                         jhead = j;
                         if (ihead >= 0)
                             if (slf[ihead][jhead] != null)
@@ -528,7 +528,7 @@ public class GameController {
                                     heads.add(slf[ihead][jhead]);
 
                         ihead = i;
-                        jhead = j--;
+                        jhead = j - 1;
                         if (jhead >= 0)
                             if (slf[ihead][jhead] != null)
                                 if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
