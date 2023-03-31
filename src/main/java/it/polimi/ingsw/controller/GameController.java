@@ -8,13 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-// Fabio Vokrri 29/03/2023
-// TODO: refactor checkPersonalGoalCardPattern method (DONE!)
-// TODO: refactor checkCommonGoalCardPattern method
-//          - refactor cross pattern checker (DONE!)
-//          - refactor six pairs pattern checker
-//          - refactor diagonal five pattern checker
-
 public class GameController {
 
     int currentPlayer;
@@ -50,8 +43,11 @@ public class GameController {
     private boolean checkPersonalGoalCardPattern(Shelf shelf, PersonalGoalCard personalGoalCard) {
         for (int row = 0; row < Constants.numberOfRows; row++) {
             for (int column = 0; column < Constants.numberOfColumns; column++) {
+                ItemCard currentCard = shelf.getCardAt(row, column);
                 ItemType checker = personalGoalCard.getTypeAt(row, column);
-                if (!shelf.getCardAt(row, column).getType().equals(checker)) return false;
+
+                if (currentCard != null && !currentCard.getType().equals(checker)) return false;
+                if (currentCard == null && checker != null) return false;
             }
         }
         return true;
@@ -72,24 +68,30 @@ public class GameController {
                 // which has "length" of one in every diagonal direction
                 for (int row = 1; row < Constants.numberOfRows - 1; row++) {
                     for (int column = 1; column < Constants.numberOfColumns - 1; column++) {
+
+                        // if center position is empty the pattern is not satisfied
                         ItemCard centerCard = shelf.getCardAt(row, column);
                         if (centerCard == null) continue;
 
                         ItemType currentType = centerCard.getType();
 
+                        // if left upper position is empty the pattern is not satisfied
                         ItemCard leftUpperCard = shelf.getCardAt(row + 1, column - 1);
                         if (leftUpperCard == null) continue;
 
+                        // if left lower position is empty the pattern is not satisfied
                         ItemCard leftLowerCard = shelf.getCardAt(row - 1, column - 1);
                         if (leftLowerCard == null) continue;
 
+                        // if right upper position is empty the pattern is not satisfied
                         ItemCard rightUpperCard = shelf.getCardAt(row + 1, column + 1);
                         if (rightUpperCard == null) continue;
 
+                        // if right lower position is empty the pattern is not satisfied
                         ItemCard rightLowerCard = shelf.getCardAt(row - 1, column + 1);
                         if (rightLowerCard == null) continue;
 
-
+                        // if all the cards in the cross have the same type, the pattern is satisfied
                         if (currentType.equals(leftUpperCard.getType()) &&
                                 currentType.equals(leftLowerCard.getType()) &&
                                 currentType.equals(rightUpperCard.getType()) &&
@@ -97,6 +99,8 @@ public class GameController {
                         ) return true;
                     }
                 }
+
+                // if no cross found
                 return false;
             }
 
@@ -113,7 +117,7 @@ public class GameController {
                     for (int j = 0; j < 5 && pairNum < 6; j++) {
                         if (slf[i][j] != null) {       //se è nulla non la considero popo
 
-                            int ihead = i++;
+                            int ihead = ++i;
                             int jhead = j;
                             if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
                                 if (slf[ihead][jhead] != null)                                       // se rispettano le condizioni, sono head
@@ -121,13 +125,13 @@ public class GameController {
                                         heads.add(slf[ihead][jhead]);
 
                             ihead = i;
-                            jhead = j++;
+                            jhead = ++j;
                             if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
                                 if (slf[ihead][jhead] != null)
                                     if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
                                         heads.add(slf[ihead][jhead]);
 
-                            ihead = i--;
+                            ihead = --i;
                             jhead = j;
                             if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
                                 if (slf[ihead][jhead] != null)
@@ -135,7 +139,7 @@ public class GameController {
                                         heads.add(slf[ihead][jhead]);
 
                             ihead = i;
-                            jhead = j--;
+                            jhead = --j;
                             if (0 <= ihead && ihead < 6 && 0 <= jhead && jhead < 5)
                                 if (slf[ihead][jhead] != null)
                                     if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
