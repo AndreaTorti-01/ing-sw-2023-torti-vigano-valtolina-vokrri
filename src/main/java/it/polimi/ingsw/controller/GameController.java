@@ -119,31 +119,23 @@ public class GameController {
 
                             int ihead = i + 1;
                             int jhead = j;
-                            if ( ihead < 6 )        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
-                                if (slf[ihead][jhead] != null)                                       // se rispettano le condizioni, sono head
-                                    if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                        heads.add(slf[ihead][jhead]);
+                            if (ihead < 6 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                heads.add(slf[ihead][jhead]);
 
                             ihead = i;
                             jhead = j + 1;
-                            if ( jhead < 5 )
-                                if (slf[ihead][jhead] != null)
-                                    if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                        heads.add(slf[ihead][jhead]);
+                            if (jhead < 5 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                heads.add(slf[ihead][jhead]);
 
                             ihead = i - 1;
                             jhead = j;
-                            if ( 0 <= ihead )
-                                if (slf[ihead][jhead] != null)
-                                    if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                        heads.add(slf[ihead][jhead]);
+                            if (0 <= ihead && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                heads.add(slf[ihead][jhead]);
 
                             ihead = i;
                             jhead = j - 1;
-                            if ( 0 <= jhead )
-                                if (slf[ihead][jhead] != null)
-                                    if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                        heads.add(slf[ihead][jhead]);
+                            if (0 <= jhead && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                heads.add(slf[ihead][jhead]);
 
                             if (!heads.isEmpty()) {    //se ho trovato head, vuol dire che c'è la coppia, incremento il numero di coppie
                                 pairNum++;
@@ -280,11 +272,9 @@ public class GameController {
 
                         // if a card has a different type from the one already in the set and the set reached
                         // the maximum number of possible types skips that row
-                        if (!typesInCurrentColumn.contains(currentCard.getType()) && typesInCurrentColumn.size() == maxNumberOfTypesInColumn) {
-                            // clears the types added to the set in order to check new column
-                            typesInCurrentColumn.clear();
+                        if (!typesInCurrentColumn.contains(currentCard.getType()) && typesInCurrentColumn.size() == maxNumberOfTypesInColumn)
                             continue outer;
-                        } else typesInCurrentColumn.add(currentCard.getType());
+                        typesInCurrentColumn.add(currentCard.getType());
                     }
                     // if it reaches the end of the column, that column satisfies the required pattern
                     counter++;
@@ -303,6 +293,7 @@ public class GameController {
 
                 outer:
                 for (int row = 0; row < Constants.numberOfRows && counter < numberOfRowsToCheck; row++) {
+
                     // if any position of the row is empty, is impossible to satisfy the required pattern,
                     // so skips to the next row
                     for (int column = 0; column < Constants.numberOfColumns; column++) {
@@ -317,15 +308,13 @@ public class GameController {
 
                         // if there's no card in that position continue.
                         // for security reasons
-                        if (currentCard == null) continue;
+                        if (currentCard == null) continue outer;
 
                         // if a card has a different type from the one already in the set and the set reached
                         // the maximum number of possible types skips that row
-                        if (!typesInCurrentRow.contains(currentCard.getType()) && typesInCurrentRow.size() == maxNumberOfTypesInRow) {
-                            // clears the types added to the set in order to check new column
-                            typesInCurrentRow.clear();
+                        if (!typesInCurrentRow.contains(currentCard.getType()) && typesInCurrentRow.size() == maxNumberOfTypesInRow)
                             continue outer;
-                        } else typesInCurrentRow.add(currentCard.getType());
+                        typesInCurrentRow.add(currentCard.getType());
                     }
                     // if it reaches the end of the row, that row satisfies the required pattern
                     counter++;
@@ -354,14 +343,11 @@ public class GameController {
 
                         // if there's no card in that position continue.
                         // for security reasons
-                        if (currentCard == null) continue;
+                        if (currentCard == null) continue outer;
 
                         // if a card has the same type of another one from the same column skip that column
-                        if (typesInCurrentColumn.contains(currentCard.getType())) {
-                            // clears the types added to the set in order to check new column
-                            typesInCurrentColumn.clear();
-                            continue outer;
-                        } else typesInCurrentColumn.add(currentCard.getType());
+                        if (typesInCurrentColumn.contains(currentCard.getType())) continue outer;
+                        typesInCurrentColumn.add(currentCard.getType());
                     }
                     // if the set has all the different types of cards, increments counter
                     if (typesInCurrentColumn.size() == Constants.numberOfCardTypes) counter++;
@@ -396,11 +382,8 @@ public class GameController {
                         if (currentCard == null) continue;
 
                         // if a card has the same type of another one from the same row skip that row
-                        if (typesInCurrentColumn.contains(currentCard.getType())) {
-                            // clears the types added to the set in order to check new row
-                            typesInCurrentColumn.clear();
-                            continue outer;
-                        } else typesInCurrentColumn.add(currentCard.getType());
+                        if (typesInCurrentColumn.contains(currentCard.getType())) continue outer;
+                        typesInCurrentColumn.add(currentCard.getType());
                     }
                     // if the set has all the different types of cards except for one type, increments counter
                     if (typesInCurrentColumn.size() == Constants.numberOfCardTypes - 1) counter++;
@@ -461,6 +444,7 @@ public class GameController {
             }
 
             case FOUR_QUARTETS: {
+
             }
 
             // TODO: reimplement
@@ -508,38 +492,29 @@ public class GameController {
                     if (slf[i][j] == hot) { //casella di espansione trovata
                         int ihead = i + 1;
                         int jhead = j;
-                        if (ihead < 6)        //ora guardo se le adiacenti 1) sono legali 2) non sono null 3) sono dello stesso tipo di carta
-                            if (slf[ihead][jhead] != null)                                       // se rispettano le condizioni, sono head
-                                if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                    heads.add(slf[ihead][jhead]);
+                        if (ihead < 6 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                            heads.add(slf[ihead][jhead]);
 
                         ihead = i;
                         jhead = j + 1;
-                        if (jhead < 5)
-                            if (slf[ihead][jhead] != null)
-                                if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                    heads.add(slf[ihead][jhead]);
+                        if (jhead < 5 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                            heads.add(slf[ihead][jhead]);
 
                         ihead = i - 1;
                         jhead = j;
-                        if (ihead >= 0)
-                            if (slf[ihead][jhead] != null)
-                                if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                    heads.add(slf[ihead][jhead]);
+                        if (ihead >= 0 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                            heads.add(slf[ihead][jhead]);
 
                         ihead = i;
                         jhead = j - 1;
-                        if (jhead >= 0)
-                            if (slf[ihead][jhead] != null)
-                                if (slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                    heads.add(slf[ihead][jhead]);
+                        if (jhead >= 0 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                            heads.add(slf[ihead][jhead]);
 
                         slf[i][j] = null;       // "elimino" la cella di partenza
                         if (!heads.isEmpty()) {    //se ho trovato head, vuol dire che c'è la coppia, incremento il numero di coppie
                             for (ItemCard h : heads)         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
                                 headLiminate(h, slf);
                             heads.clear();          // resetto la lista di heads :D
-
                         }
                     }
             }
