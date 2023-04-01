@@ -106,54 +106,43 @@ public class GameController {
             }
 
 
-            // TODO: refactor
+            // Well Done?
             case SIX_PAIRS -> {
-                List<ItemCard> heads = new ArrayList<>();   // heads = celle adiacenti
-                ItemCard[][] slf = new ItemCard[6][];       // copia di shelf
-                int pairNum = 0;
+                // the number of pairs to find
+                final int numberOfPairsToCheck = 6;
 
-                for (int i = 0; i < shelf.getShelf().length; i++)   // copio
-                    slf[i] = shelf.getShelf()[i].clone();
+                List<ItemCard> heads;
+                ItemCard[][] shelfCopy = shelf.getDeepCopy();
 
-                for (int i = 0; i < 6 && pairNum < 6; i++) {
-                    for (int j = 0; j < 5 && pairNum < 6; j++) {
-                        if (slf[i][j] != null) {
+                // number of pairs found
+                int pairCounter = 0;
+                for (int row = 0; row < numberOfRows && pairCounter < numberOfPairsToCheck; row++) {
+                    for (int column = 0; column < numberOfColumns && pairCounter < numberOfPairsToCheck; column++) {
+                        // if the current card is null, no pattern possible
+                        if (shelfCopy[row][column] == null) continue;
 
-                            int ihead = i + 1;
-                            int jhead = j;
-                            if (ihead < 6 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                heads.add(slf[ihead][jhead]);
+                        // retrieves the card on top, bottom, left and right
+                        heads = this.getHeads(shelfCopy, row, column);
 
-                            ihead = i;
-                            jhead = j + 1;
-                            if (jhead < 5 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                heads.add(slf[ihead][jhead]);
-
-                            ihead = i - 1;
-                            jhead = j;
-                            if (0 <= ihead && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                heads.add(slf[ihead][jhead]);
-
-                            ihead = i;
-                            jhead = j - 1;
-                            if (0 <= jhead && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                heads.add(slf[ihead][jhead]);
-
-                            if (!heads.isEmpty()) {    //se ho trovato head, vuol dire che c'è la coppia, incremento il numero di coppie
-                                pairNum++;
-                                slf[i][j] = null;       // "elimino" la cella di partenza
-                                for (ItemCard h : heads)         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
-                                    headLiminate(h, slf);
-                                heads.clear();          // resetto la lista di heads, la riuso per gli altri aggregati
+                        // if heads contains cards the shelf has a pair of that type
+                        if (!heads.isEmpty()) {
+                            pairCounter++;
+                            // removes the original card from the shelf copy
+                            shelfCopy[row][column] = null;
+                            // removes all the adjacent cards with the same type
+                            for (ItemCard head : heads) {
+                                headLiminate(shelfCopy, head);
                             }
                         }
                     }
                 }
-                return pairNum == 6;
+
+                // if the pattern is found the specified number of times,
+                // the pattern is satisfied
+                return pairCounter >= numberOfPairsToCheck;
             }
 
-
-            // TODO: da ricontrollare
+            // Well Done?
             case DIAGONAL_FIVE -> {
                 // the length of the diagonal to check
                 final int diagonalLength = 5;
@@ -217,13 +206,7 @@ public class GameController {
                 return false;
             }
 
-
-            // TODO: refactor or reimplement
-            /* Ho creato le classi maschera che ha un costruttore che genera una matrice maschera di 0/1 della shelf sulla base del tipo passato come parametro
-              e una classe quadrato con attributi le coordinate delle quattro tessere che lo formano. a qusto punto con un po' di for annidati per oogni itemtypes
-              creo la sua maschera e salvo su un set tutti i quadrati sulla maschera per poi con due cicli for che scorrono tutto il set cercare se ci sono due quadrati non
-              sovrapposti e nel caso ritornare true altrimenti false
-             */
+            // TODO: reimplement
             case TWO_SQUARES -> {
                 for (ItemType type : ItemType.values()) {
                     Mask testedMask = new Mask(shelf, type);
@@ -254,7 +237,6 @@ public class GameController {
                 }
                 return false;
             }
-
 
             // Well Done!
             case THREE_COLUMNS_MAX_THREE_TYPES -> {
@@ -288,7 +270,6 @@ public class GameController {
                 // if there are four or more columns that satisfy the pattern, return true
                 return counter >= numberOfColumnsToCheck;
             }
-
 
             // Well Done!
             case FOUR_LINES_MAX_THREE_TYPES -> {
@@ -330,7 +311,6 @@ public class GameController {
                 return counter >= numberOfRowsToCheck;
             }
 
-
             // Well Done!
             case TWO_RAINBOW_COLUMNS -> {
                 // counts the number of columns that have cards all with different types
@@ -363,7 +343,6 @@ public class GameController {
                 // if there are two columns that satisfy the pattern, return true
                 return counter == numberOfColumnsToCheck;
             }
-
 
             // Well Done!
             case TWO_RAINBOW_LINES -> {
@@ -401,7 +380,6 @@ public class GameController {
                 return counter == numberOfRowsToCheck;
             }
 
-
             // Well Done!
             case EQUAL_CORNERS -> {
                 ItemCard firstCornerItemCard = shelf.getCardAt(0, 0);
@@ -425,7 +403,6 @@ public class GameController {
                         secondCornerItemCard.getType().equals(thirdCornerItemCard.getType()) &&
                         thirdCornerItemCard.getType().equals(fourthCornerItemCard.getType());
             }
-
 
             // Well Done!
             case EIGHT_EQUAL -> {
@@ -452,64 +429,55 @@ public class GameController {
                 // if there are no more than 8 cards for every type return false
                 return false;
             }
+
+            // Well Done?
             case FOUR_QUARTETS -> {
-                List<ItemCard> heads = new ArrayList<>();   // heads = celle adiacenti
-                ItemCard[][] slf = new ItemCard[6][];       // copia di shelf
-                int aggSize = 0; //aggregate size
-                int aggNum = 0; // numero di aggregati da quattro celle
-                int tmp = 0;
+                // the number of quartets to find
+                final int numberOfQuartetsToCheck = 4;
+                // the number of adjacent cards with the same type
+                final int aggregationSize = 4;
 
-                for (int i = 0; i < shelf.getShelf().length; i++)   // copio
-                    slf[i] = shelf.getShelf()[i].clone();
+                List<ItemCard> heads;
+                ItemCard[][] shelfCopy = shelf.getDeepCopy();
 
-                for (int i = 0; i < 6 && aggNum < 4; i++) {
-                    for (int j = 0; j < 5 && aggNum < 4; j++) {
-                        if (slf[i][j] != null) {
+                int quartetsCounter = 0;
+                for (int row = 0; row < numberOfRows && quartetsCounter < numberOfQuartetsToCheck; row++) {
+                    for (int column = 0; column < numberOfColumns && quartetsCounter < numberOfQuartetsToCheck; column++) {
+                        // if the current card is null, no pattern possible
+                        if (shelfCopy[row][column] == null) continue;
 
-                            int ihead = i + 1;
-                            int jhead = j;
-                            if (ihead < 6 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                heads.add(slf[ihead][jhead]);
+                        // retrieves the card on top, bottom, left and right
+                        heads = this.getHeads(shelfCopy, row, column);
 
-                            ihead = i;
-                            jhead = j + 1;
-                            if (jhead < 5 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                heads.add(slf[ihead][jhead]);
-
-                            ihead = i - 1;
-                            jhead = j;
-                            if (0 <= ihead && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                heads.add(slf[ihead][jhead]);
-
-                            ihead = i;
-                            jhead = j - 1;
-                            if (0 <= jhead && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                                heads.add(slf[ihead][jhead]);
-
-                            if (!heads.isEmpty()) {    //se ho trovato head, valuto quanto è grande l'aggregato
-                                slf[i][j] = null;       // "elimino" la cella di partenza
-                                aggSize = 1 + heads.size();    //per ora so che l'aggregato contiene la cella di partenza e tutte le celle head
-                                for (ItemCard h : heads) {         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
-                                    tmp = headLiminate(h, slf);
-                                    aggSize = aggSize + tmp;
-                                }
-                                if (aggSize == 4)
-                                    aggNum++;   // se la size, comprese le celle adiacenti alle heads è 4, è un quartetto
-                                heads.clear();          // resetto la lista di heads, la riuso per gli altri aggregati
+                        if (!heads.isEmpty()) {
+                            // removes the original card from the shelf copy
+                            shelfCopy[row][column] = null;
+                            // calculates the number of adjacent cards with the same type
+                            // and removes them from the shelf copy
+                            int currentAggregationSize = 1 + heads.size();
+                            for (ItemCard head : heads) {
+                                currentAggregationSize += headLiminate(shelfCopy, head);
                             }
+
+                            // if the current aggregation of cards has the exact required size,
+                            // it found a quartet
+                            if (currentAggregationSize == aggregationSize)
+                                quartetsCounter++;
                         }
                     }
                 }
-                return aggNum == 4;  // se ho almeno 4 aggregati da 4 celle (esco dal for al quarto), ritorno true
-            }
 
+                // if the pattern is found the specified number of times,
+                // the pattern is satisfied
+                return quartetsCounter >= numberOfQuartetsToCheck;
+            }
 
             // Well Done?
             case STAIR -> {
                 // the length of the stair is at most equal to the number of columns or the number of rows
                 int stairLength = Math.min(numberOfColumns, numberOfRows);
 
-                // the expected height of the column for the first step of the stair
+                // the expected height of the column for the first step of the stair (which always has height of one)
                 int nextExpectedHeight = 1;
 
                 // checks for the stair pattern from left to right
@@ -552,50 +520,92 @@ public class GameController {
         return false;
     }
 
-    private int headLiminate(ItemCard hot, ItemCard[][] slf) {
+    /**
+     * Recursively removes all adjacent cards with the same type from the shelf copy
+     * and returns the number of them
+     *
+     * @param shelfCopy a deep copy of the shelf
+     * @param hotCard   the center card from where to delete all
+     * @return the number of adjacent cards with the same type
+     */
+    private int headLiminate(ItemCard[][] shelfCopy, ItemCard hotCard) {
+        List<ItemCard> heads;
+        int adjacentToHead = 0;
 
-        List<ItemCard> heads = new ArrayList<>();
-        int adjToHead = 0;
-        int tmp = 0;
+        // TODO: Un pochino inefficiente, si può migliorare?
+        // finds the hotCard in the shelf
+        for (int row = 0; row < numberOfRows; row++) {
+            for (int column = 0; column < numberOfColumns; column++) {
+                if (hotCard.equals(shelfCopy[row][column])) {
+                    // retrieves all the heads starting from the current position
+                    heads = this.getHeads(shelfCopy, row, column);
 
-        //find the head in the shelf...
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                if (slf[i][j] != null)
-                    if (slf[i][j] == hot) { //casella di espansione trovata
-
-                        int ihead = i + 1;
-                        int jhead = j;
-                        if (ihead < 6 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                            heads.add(slf[ihead][jhead]);
-
-                        ihead = i;
-                        jhead = j + 1;
-                        if (jhead < 5 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                            heads.add(slf[ihead][jhead]);
-
-                        ihead = i - 1;
-                        jhead = j;
-                        if (ihead >= 0 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                            heads.add(slf[ihead][jhead]);
-
-                        ihead = i;
-                        jhead = j - 1;
-                        if (jhead >= 0 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
-                            heads.add(slf[ihead][jhead]);
-
-                        slf[i][j] = null;       // "elimino" la cella di partenza
-                        if (!heads.isEmpty()) {    //se ho trovato head, vuol dire che c'è la coppia, incremento il numero di coppie
-                            for (ItemCard h : heads) {         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
-                                tmp = headLiminate(h, slf);
-                                adjToHead = adjToHead + tmp;
-                            }
-                            return heads.size() + adjToHead;
+                    // removes the current card from the shelf
+                    shelfCopy[row][column] = null;
+                    // removes all adjacent cards from the shelf
+                    if (!heads.isEmpty()) {
+                        for (ItemCard head : heads) {
+                            adjacentToHead += headLiminate(shelfCopy, head);
                         }
+                        // returns the number of all adjacent cards with the same type
+                        return heads.size() + adjacentToHead;
                     }
+                }
             }
         }
         return 0;
+    }
+
+    /**
+     * Retrieves all the adjacent cards with the same type as the one in the (row, column) position in the shelf
+     *
+     * @param shelfCopy a deep copy of the shelf
+     * @param row       the row of the current card
+     * @param column    the column of the current card
+     * @return a list of all adjacent cards with the same type
+     */
+    private ArrayList<ItemCard> getHeads(ItemCard[][] shelfCopy, int row, int column) {
+        ArrayList<ItemCard> heads = new ArrayList<>();
+        ItemCard currentCard = shelfCopy[row][column];
+
+        // retrieves the current card type
+        ItemType currentType;
+        if (currentCard == null) return heads;
+        else currentType = currentCard.getType();
+
+        // checks the upper card
+        // and inserts it in the list if it has the same type of the specified one
+        if (row + 1 < numberOfRows) {
+            ItemCard upperCard = shelfCopy[row + 1][column];
+            if (upperCard != null && currentType.equals(upperCard.getType()))
+                heads.add(upperCard);
+        }
+
+        // checks the right card
+        // and inserts it in the list if has the same type of the specified one
+        if (column + 1 < numberOfColumns) {
+            ItemCard rightCard = shelfCopy[row][column + 1];
+            if (rightCard != null && currentType.equals(rightCard.getType()))
+                heads.add(rightCard);
+        }
+
+        // checks the lower card
+        // and inserts it in the list if it has the same type of the specified one
+        if (row - 1 >= 0) {
+            ItemCard lowerCard = shelfCopy[row - 1][column];
+            if (lowerCard != null && currentType.equals(lowerCard.getType()))
+                heads.add(lowerCard);
+        }
+
+        // checks the left card
+        // and inserts it in the list if it has the same type of the specified one
+        if (column - 1 >= 0) {
+            ItemCard leftCard = shelfCopy[row][column - 1];
+            if (leftCard != null && currentType.equals(leftCard.getType()))
+                heads.add(leftCard);
+        }
+
+        return heads;
     }
 
     private static class Square {

@@ -24,12 +24,28 @@ public class Shelf extends GameObject {
     }
 
     /**
-     * Get the whole shelf
+     * Creates a copy of the current shelf and returns it
      *
      * @return ItemCard[][], the whole shelf
      */
-    public ItemCard[][] getShelf() {
-        return items;
+    public ItemCard[][] getDeepCopy() {
+        // initializes a new matrix of ItemCards
+        ItemCard[][] copy = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
+
+        for (int row = 0; row < Constants.numberOfRows; row++) {
+            for (int column = 0; column < Constants.numberOfColumns; column++) {
+                ItemCard currentCard = this.getCardAt(row, column);
+
+                if (currentCard == null) {
+                    copy[row][column] = null;
+                }
+                // creates a new ItemCard with the same type as the one currently selected
+                // and inserts it in the copy at the same position
+                else copy[row][column] = new ItemCard(currentCard.getType());
+            }
+        }
+
+        return copy;
     }
 
     /**
@@ -65,4 +81,6 @@ public class Shelf extends GameObject {
 
         return length;
     }
+
+
 }
