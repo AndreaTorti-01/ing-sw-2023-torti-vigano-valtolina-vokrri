@@ -64,7 +64,7 @@ public class GameController {
     private boolean checkCommonGoalCardPattern(Shelf shelf, CommonGoalCard commonGoalCard) {
         switch (commonGoalCard.getType()) {
             // well done!
-            case CROSS: {
+            case CROSS -> {
                 // starts from second column and second row because we start checking from the center of the cross,
                 // which has "length" of one in every diagonal direction
                 for (int row = 1; row < numberOfRows - 1; row++) {
@@ -105,8 +105,9 @@ public class GameController {
                 return false;
             }
 
+
             // TODO: refactor
-            case SIX_PAIRS: {
+            case SIX_PAIRS -> {
                 List<ItemCard> heads = new ArrayList<>();   // heads = celle adiacenti
                 ItemCard[][] slf = new ItemCard[6][];       // copia di shelf
                 int pairNum = 0;
@@ -151,8 +152,9 @@ public class GameController {
                 return pairNum == 6;
             }
 
+
             // TODO: da ricontrollare
-            case DIAGONAL_FIVE: {
+            case DIAGONAL_FIVE -> {
                 // the length of the diagonal to check
                 final int diagonalLength = 5;
 
@@ -215,13 +217,14 @@ public class GameController {
                 return false;
             }
 
+
             // TODO: refactor or reimplement
             /* Ho creato le classi maschera che ha un costruttore che genera una matrice maschera di 0/1 della shelf sulla base del tipo passato come parametro
               e una classe quadrato con attributi le coordinate delle quattro tessere che lo formano. a qusto punto con un po' di for annidati per oogni itemtypes
               creo la sua maschera e salvo su un set tutti i quadrati sulla maschera per poi con due cicli for che scorrono tutto il set cercare se ci sono due quadrati non
               sovrapposti e nel caso ritornare true altrimenti false
              */
-            case TWO_SQUARES: {
+            case TWO_SQUARES -> {
                 for (ItemType type : ItemType.values()) {
                     Mask testedMask = new Mask(shelf, type);
                     Set<Square> squares = new HashSet<>();
@@ -252,8 +255,9 @@ public class GameController {
                 return false;
             }
 
+
             // Well Done!
-            case THREE_COLUMNS_MAX_THREE_TYPES: {
+            case THREE_COLUMNS_MAX_THREE_TYPES -> {
                 // counts the number of columns that have a maximum of three different types of cards
                 int counter = 0;
                 final int numberOfColumnsToCheck = 3;
@@ -285,8 +289,9 @@ public class GameController {
                 return counter >= numberOfColumnsToCheck;
             }
 
+
             // Well Done!
-            case FOUR_LINES_MAX_THREE_TYPES: {
+            case FOUR_LINES_MAX_THREE_TYPES -> {
                 // counts the number of rows that have a maximum of three different types of cards
                 int counter = 0;
                 final int numberOfRowsToCheck = 4;
@@ -325,8 +330,9 @@ public class GameController {
                 return counter >= numberOfRowsToCheck;
             }
 
+
             // Well Done!
-            case TWO_RAINBOW_COLUMNS: {
+            case TWO_RAINBOW_COLUMNS -> {
                 // counts the number of columns that have cards all with different types
                 int counter = 0;
                 // two columns to check for the specified pattern
@@ -358,8 +364,9 @@ public class GameController {
                 return counter == numberOfColumnsToCheck;
             }
 
+
             // Well Done!
-            case TWO_RAINBOW_LINES: {
+            case TWO_RAINBOW_LINES -> {
                 // counts the number of lines that have cards all with different types
                 int counter = 0;
                 // two rows to check for the specified pattern
@@ -394,8 +401,9 @@ public class GameController {
                 return counter == numberOfRowsToCheck;
             }
 
+
             // Well Done!
-            case EQUAL_CORNERS: {
+            case EQUAL_CORNERS -> {
                 ItemCard firstCornerItemCard = shelf.getCardAt(0, 0);
                 // if there's no card in the first corner it's impossible to satisfy the pattern
                 if (firstCornerItemCard == null) return false;
@@ -418,8 +426,9 @@ public class GameController {
                         thirdCornerItemCard.getType().equals(fourthCornerItemCard.getType());
             }
 
+
             // Well Done!
-            case EIGHT_EQUAL: {
+            case EIGHT_EQUAL -> {
                 final int cardsToCheck = 8;
 
                 // for every type of itemCard checks if there are more than 8 cards with that type
@@ -443,8 +452,7 @@ public class GameController {
                 // if there are no more than 8 cards for every type return false
                 return false;
             }
-
-            case FOUR_QUARTETS: {
+            case FOUR_QUARTETS -> {
                 List<ItemCard> heads = new ArrayList<>();   // heads = celle adiacenti
                 ItemCard[][] slf = new ItemCard[6][];       // copia di shelf
                 int aggSize = 0; //aggregate size
@@ -495,10 +503,11 @@ public class GameController {
                 return aggNum == 4;  // se ho almeno 4 aggregati da 4 celle (esco dal for al quarto), ritorno true
             }
 
-            // TODO: reimplement
-            case STAIR: {
+
+            // Well Done?
+            case STAIR -> {
                 // the length of the stair is at most equal to the number of columns or the number of rows
-                int stairLength = Math.max(numberOfColumns, numberOfRows);
+                int stairLength = Math.min(numberOfColumns, numberOfRows);
 
                 // the expected height of the column for the first step of the stair
                 int nextExpectedHeight = 1;
