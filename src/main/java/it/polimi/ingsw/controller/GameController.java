@@ -1,12 +1,13 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static it.polimi.ingsw.utils.Constants.*;
 
 public class GameController {
 
@@ -41,8 +42,8 @@ public class GameController {
      * @return true if the pattern is satisfied, false otherwise
      */
     private boolean checkPersonalGoalCardPattern(Shelf shelf, PersonalGoalCard personalGoalCard) {
-        for (int row = 0; row < Constants.numberOfRows; row++) {
-            for (int column = 0; column < Constants.numberOfColumns; column++) {
+        for (int row = 0; row < numberOfRows; row++) {
+            for (int column = 0; column < numberOfColumns; column++) {
                 ItemCard currentCard = shelf.getCardAt(row, column);
                 ItemType checker = personalGoalCard.getTypeAt(row, column);
 
@@ -66,8 +67,8 @@ public class GameController {
             case CROSS: {
                 // starts from second column and second row because we start checking from the center of the cross,
                 // which has "length" of one in every diagonal direction
-                for (int row = 1; row < Constants.numberOfRows - 1; row++) {
-                    for (int column = 1; column < Constants.numberOfColumns - 1; column++) {
+                for (int row = 1; row < numberOfRows - 1; row++) {
+                    for (int column = 1; column < numberOfColumns - 1; column++) {
 
                         // if center position is empty the pattern is not satisfied
                         ItemCard centerCard = shelf.getCardAt(row, column);
@@ -156,8 +157,8 @@ public class GameController {
                 final int diagonalLength = 5;
 
                 // checks for diagonals from left to right
-                for (int row = 0; row < Constants.numberOfRows - diagonalLength + 1; row++) {
-                    for (int column = 0; column < Constants.numberOfColumns - diagonalLength + 1; column++) {
+                for (int row = 0; row < numberOfRows - diagonalLength + 1; row++) {
+                    for (int column = 0; column < numberOfColumns - diagonalLength + 1; column++) {
                         ItemCard currentCard = shelf.getCardAt(row, column);
 
                         // if there's no card in that position continue
@@ -184,7 +185,7 @@ public class GameController {
                     }
 
                     // checks for diagonals from right to left
-                    for (int column = Constants.numberOfColumns - 1; column >= diagonalLength - 1; column--) {
+                    for (int column = numberOfColumns - 1; column >= diagonalLength - 1; column--) {
                         ItemCard currentCard = shelf.getCardAt(row, column);
 
                         // if there's no card in that position continue
@@ -259,11 +260,11 @@ public class GameController {
                 final int maxNumberOfTypesInColumn = 3;
 
                 outer:
-                for (int column = 0; column < Constants.numberOfColumns && counter < numberOfColumnsToCheck; column++) {
+                for (int column = 0; column < numberOfColumns && counter < numberOfColumnsToCheck; column++) {
                     if (shelf.getCardAt(0, column) == null) continue;
 
                     Set<ItemType> typesInCurrentColumn = new HashSet<>();
-                    for (int row = 0; row < Constants.numberOfRows; row++) {
+                    for (int row = 0; row < numberOfRows; row++) {
                         ItemCard currentCard = shelf.getCardAt(row, column);
 
                         // if there's no card in that position continue.
@@ -292,18 +293,18 @@ public class GameController {
                 final int maxNumberOfTypesInRow = 3;
 
                 outer:
-                for (int row = 0; row < Constants.numberOfRows && counter < numberOfRowsToCheck; row++) {
+                for (int row = 0; row < numberOfRows && counter < numberOfRowsToCheck; row++) {
 
                     // if any position of the row is empty, is impossible to satisfy the required pattern,
                     // so skips to the next row
-                    for (int column = 0; column < Constants.numberOfColumns; column++) {
+                    for (int column = 0; column < numberOfColumns; column++) {
                         if (shelf.getCardAt(row, column) == null) {
                             continue outer;
                         }
                     }
 
                     Set<ItemType> typesInCurrentRow = new HashSet<>();
-                    for (int column = 0; column < Constants.numberOfColumns; column++) {
+                    for (int column = 0; column < numberOfColumns; column++) {
                         ItemCard currentCard = shelf.getCardAt(row, column);
 
                         // if there's no card in that position continue.
@@ -333,12 +334,12 @@ public class GameController {
 
                 // tag for efficiency
                 outer:
-                for (int column = 0; column < Constants.numberOfColumns && counter < numberOfColumnsToCheck; column++) {
+                for (int column = 0; column < numberOfColumns && counter < numberOfColumnsToCheck; column++) {
                     // if the first position of the column is empty, is impossible to have all the types of cards in that column
                     if (shelf.getCardAt(0, column) == null) continue;
 
                     Set<ItemType> typesInCurrentColumn = new HashSet<>();
-                    for (int row = 0; row < Constants.numberOfRows; row++) {
+                    for (int row = 0; row < numberOfRows; row++) {
                         ItemCard currentCard = shelf.getCardAt(row, column);
 
                         // if there's no card in that position continue.
@@ -350,7 +351,7 @@ public class GameController {
                         typesInCurrentColumn.add(currentCard.getType());
                     }
                     // if the set has all the different types of cards, increments counter
-                    if (typesInCurrentColumn.size() == Constants.numberOfCardTypes) counter++;
+                    if (typesInCurrentColumn.size() == numberOfCardTypes) counter++;
                 }
 
                 // if there are two columns that satisfy the pattern, return true
@@ -366,15 +367,15 @@ public class GameController {
 
                 // tag for efficiency
                 outer:
-                for (int row = 0; row < Constants.numberOfRows && counter < numberOfRowsToCheck; row++) {
+                for (int row = 0; row < numberOfRows && counter < numberOfRowsToCheck; row++) {
                     // if any position of the row is empty, is impossible to have all types of cards
                     // except one in that row
-                    for (int column = 0; column < Constants.numberOfColumns; column++) {
+                    for (int column = 0; column < numberOfColumns; column++) {
                         if (shelf.getCardAt(row, column) == null) continue outer;
                     }
 
                     Set<ItemType> typesInCurrentColumn = new HashSet<>();
-                    for (int column = 0; column < Constants.numberOfColumns; column++) {
+                    for (int column = 0; column < numberOfColumns; column++) {
                         ItemCard currentCard = shelf.getCardAt(row, column);
 
                         // if there's no card in that position continue.
@@ -386,7 +387,7 @@ public class GameController {
                         typesInCurrentColumn.add(currentCard.getType());
                     }
                     // if the set has all the different types of cards except for one type, increments counter
-                    if (typesInCurrentColumn.size() == Constants.numberOfCardTypes - 1) counter++;
+                    if (typesInCurrentColumn.size() == numberOfCardTypes - 1) counter++;
                 }
 
                 // if there are two rows that satisfy the pattern return true
@@ -399,15 +400,15 @@ public class GameController {
                 // if there's no card in the first corner it's impossible to satisfy the pattern
                 if (firstCornerItemCard == null) return false;
 
-                ItemCard secondCornerItemCard = shelf.getCardAt(0, Constants.numberOfColumns - 1);
+                ItemCard secondCornerItemCard = shelf.getCardAt(0, numberOfColumns - 1);
                 // if there's no card in the second corner it's impossible to satisfy the pattern
                 if (secondCornerItemCard == null) return false;
 
-                ItemCard thirdCornerItemCard = shelf.getCardAt(Constants.numberOfRows - 1, 0);
+                ItemCard thirdCornerItemCard = shelf.getCardAt(numberOfRows - 1, 0);
                 // if there's no card in the third corner it's impossible to satisfy the pattern
                 if (thirdCornerItemCard == null) return false;
 
-                ItemCard fourthCornerItemCard = shelf.getCardAt(Constants.numberOfRows - 1, Constants.numberOfColumns - 1);
+                ItemCard fourthCornerItemCard = shelf.getCardAt(numberOfRows - 1, numberOfColumns - 1);
                 // if there's no card in the fourth corner it's impossible to satisfy the pattern
                 if (fourthCornerItemCard == null) return false;
 
@@ -425,8 +426,8 @@ public class GameController {
                 for (ItemType currentType : ItemType.values()) {
                     int counter = 0;
 
-                    for (int row = 0; row < Constants.numberOfRows; row++) {
-                        for (int column = 0; column < Constants.numberOfColumns; column++) {
+                    for (int row = 0; row < numberOfRows; row++) {
+                        for (int column = 0; column < numberOfColumns; column++) {
                             ItemCard currentCard = shelf.getCardAt(row, column);
 
                             // if there's no card in that position continue.
@@ -484,7 +485,8 @@ public class GameController {
                                     tmp = headLiminate(h, slf);
                                     aggSize = aggSize + tmp;
                                 }
-                                if(aggSize == 4) aggNum++;   // se la size, comprese le celle adiacenti alle heads è 4, è un quartetto
+                                if (aggSize == 4)
+                                    aggNum++;   // se la size, comprese le celle adiacenti alle heads è 4, è un quartetto
                                 heads.clear();          // resetto la lista di heads, la riuso per gli altri aggregati
                             }
                         }
@@ -495,30 +497,44 @@ public class GameController {
 
             // TODO: reimplement
             case STAIR: {
-                // checks if the first column has length one, in order to determine if the pattern is increasing
-                boolean isIncreasing = shelf.getColumnLength(0) == 1;
-                // checks if the last column has length one, in order to determine if the pattern is decreasing
-                boolean isDecreasing = shelf.getColumnLength(Constants.numberOfColumns - 1) == 1;
+                // the length of the stair is at most equal to the number of columns or the number of rows
+                int stairLength = Math.max(numberOfColumns, numberOfRows);
 
-                if (isIncreasing) {
-                    // for every column checks if the height is one unit longer than the previous
-                    for (int column = 1; column < Constants.numberOfColumns; column++) {
-                        int previousColumnHeight = shelf.getColumnLength(column - 1);
-                        if (shelf.getColumnLength(column) != previousColumnHeight + 1) return false;
+                // the expected height of the column for the first step of the stair
+                int nextExpectedHeight = 1;
+
+                // checks for the stair pattern from left to right
+                for (int column = 0; column < numberOfColumns; column++) {
+                    // if the current step has the same height as the expected one,
+                    // increment the expected height for the next iteration
+                    if (shelf.getColumnLength(column) == nextExpectedHeight) {
+                        nextExpectedHeight++;
                     }
-                    // if the pattern is satisfied return true
-                    return true;
-                } else if (isDecreasing) {
-                    // fore every column starting from the end checks if the length is one unit longer than the previous
-                    for (int column = Constants.numberOfColumns - 2; column >= 0; column--) {
-                        int previousColumnHeight = shelf.getColumnLength(column + 1);
-                        if (shelf.getColumnLength(column) != previousColumnHeight + 1) return false;
-                    }
-                    // if the pattern is satisfied return true
-                    return true;
+                    // the current step has not the same height as the expected one,
+                    // so reset the counter to one
+                    else nextExpectedHeight = 1;
+
+                    // if it reaches the top of the stair, the pattern is satisfied
+                    if (nextExpectedHeight - 1 == stairLength) return true;
                 }
 
-                // if the pattern is not satisfied return false
+                nextExpectedHeight = 1;
+                // checks for the stair pattern from right to left
+                for (int column = numberOfColumns - 1; column >= 0; column--) {
+                    // if the current step has the same height as the expected one,
+                    // increment the expected height for the next iteration
+                    if (shelf.getColumnLength(column) == nextExpectedHeight) {
+                        nextExpectedHeight++;
+                    }
+                    // the current step has not the same height as the expected one,
+                    // so reset the counter to one
+                    else nextExpectedHeight = 1;
+
+                    // if it reaches the top of the stair, the pattern is satisfied
+                    if (nextExpectedHeight - 1 == stairLength) return true;
+                }
+
+                // if no stair pattern is found return false
                 return false;
             }
         }
