@@ -106,16 +106,16 @@ public class GameController {
 
             // TODO: refactor
             case SIX_PAIRS: {
-                List<ItemCard> heads = new ArrayList<>();   // le heads sarebbero le celle adiacenti capitooooooooooooooooooooooooooooooooooooo
-                ItemCard[][] slf = new ItemCard[6][];       // questa è una copia di shelf COPIA
+                List<ItemCard> heads = new ArrayList<>();   // heads = celle adiacenti
+                ItemCard[][] slf = new ItemCard[6][];       // copia di shelf
                 int pairNum = 0;
 
-                for (int i = 0; i < shelf.getShelf().length; i++)       //la copia
+                for (int i = 0; i < shelf.getShelf().length; i++)   // copio
                     slf[i] = shelf.getShelf()[i].clone();
 
                 for (int i = 0; i < 6 && pairNum < 6; i++) {
                     for (int j = 0; j < 5 && pairNum < 6; j++) {
-                        if (slf[i][j] != null) {       //se è nulla non la considero popo
+                        if (slf[i][j] != null) {
 
                             int ihead = i + 1;
                             int jhead = j;
@@ -142,7 +142,7 @@ public class GameController {
                                 slf[i][j] = null;       // "elimino" la cella di partenza
                                 for (ItemCard h : heads)         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
                                     headLiminate(h, slf);
-                                heads.clear();          // resetto la lista di heads :D
+                                heads.clear();          // resetto la lista di heads, la riuso per gli altri aggregati
                             }
                         }
                     }
@@ -444,7 +444,53 @@ public class GameController {
             }
 
             case FOUR_QUARTETS: {
+                List<ItemCard> heads = new ArrayList<>();   // heads = celle adiacenti
+                ItemCard[][] slf = new ItemCard[6][];       // copia di shelf
+                int aggSize = 0; //aggregate size
+                int aggNum = 0; // numero di aggregati da quattro celle
+                int tmp = 0;
 
+                for (int i = 0; i < shelf.getShelf().length; i++)   // copio
+                    slf[i] = shelf.getShelf()[i].clone();
+
+                for (int i = 0; i < 6 && aggNum < 4; i++) {
+                    for (int j = 0; j < 5 && aggNum < 4; j++) {
+                        if (slf[i][j] != null) {
+
+                            int ihead = i + 1;
+                            int jhead = j;
+                            if (ihead < 6 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                heads.add(slf[ihead][jhead]);
+
+                            ihead = i;
+                            jhead = j + 1;
+                            if (jhead < 5 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                heads.add(slf[ihead][jhead]);
+
+                            ihead = i - 1;
+                            jhead = j;
+                            if (0 <= ihead && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                heads.add(slf[ihead][jhead]);
+
+                            ihead = i;
+                            jhead = j - 1;
+                            if (0 <= jhead && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
+                                heads.add(slf[ihead][jhead]);
+
+                            if (!heads.isEmpty()) {    //se ho trovato head, valuto quanto è grande l'aggregato
+                                slf[i][j] = null;       // "elimino" la cella di partenza
+                                aggSize = 1 + heads.size();    //per ora so che l'aggregato contiene la cella di partenza e tutte le celle head
+                                for (ItemCard h : heads) {         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
+                                    tmp = headLiminate(h, slf);
+                                    aggSize = aggSize + tmp;
+                                }
+                                if(aggSize == 4) aggNum++;   // se la size, comprese le celle adiacenti alle heads è 4, è un quartetto
+                                heads.clear();          // resetto la lista di heads, la riuso per gli altri aggregati
+                            }
+                        }
+                    }
+                }
+                return aggNum == 4;  // se ho almeno 4 aggregati da 4 celle (esco dal for al quarto), ritorno true
             }
 
             // TODO: reimplement
@@ -481,15 +527,18 @@ public class GameController {
         return false;
     }
 
-    private void headLiminate(ItemCard hot, ItemCard[][] slf) {
+    private int headLiminate(ItemCard hot, ItemCard[][] slf) {
 
         List<ItemCard> heads = new ArrayList<>();
+        int adjToHead = 0;
+        int tmp = 0;
 
         //find the head in the shelf...
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 if (slf[i][j] != null)
                     if (slf[i][j] == hot) { //casella di espansione trovata
+
                         int ihead = i + 1;
                         int jhead = j;
                         if (ihead < 6 && slf[ihead][jhead] != null && slf[ihead][jhead].getType().equals(slf[i][j].getType()))
@@ -512,13 +561,16 @@ public class GameController {
 
                         slf[i][j] = null;       // "elimino" la cella di partenza
                         if (!heads.isEmpty()) {    //se ho trovato head, vuol dire che c'è la coppia, incremento il numero di coppie
-                            for (ItemCard h : heads)         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
-                                headLiminate(h, slf);
-                            heads.clear();          // resetto la lista di heads :D
+                            for (ItemCard h : heads) {         //autodistruzione di tutto l'aggregato di celle che contiene la coppia
+                                tmp = headLiminate(h, slf);
+                                adjToHead = adjToHead + tmp;
+                            }
+                            return heads.size() + adjToHead;
                         }
                     }
             }
         }
+        return 0;
     }
 
     private static class Square {
