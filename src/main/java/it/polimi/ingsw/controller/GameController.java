@@ -63,7 +63,7 @@ public class GameController {
      */
     private boolean checkCommonGoalCardPattern(Shelf shelf, CommonGoalCard commonGoalCard) {
         switch (commonGoalCard.getType()) {
-            // well done!
+            // Well Done!
             case CROSS -> {
                 // starts from second column and second row because we start checking from the center of the cross,
                 // which has "length" of one in every diagonal direction
@@ -104,7 +104,6 @@ public class GameController {
                 // if no cross found
                 return false;
             }
-
 
             // Well Done?
             case SIX_PAIRS -> {
@@ -206,7 +205,7 @@ public class GameController {
                 return false;
             }
 
-            // TODO: reimplement
+            // Well Done?
             case TWO_SQUARES -> {
 
                 int squaresNum = 0;
@@ -217,24 +216,25 @@ public class GameController {
                 int cornerNW;
                 ItemCard[][] shelfCopy = shelf.getDeepCopy();
 
-                for(int row = 0; row < numberOfRows - squaresDim; row++) {
-                    for(int column = 0; column < numberOfColumns - squaresDim; column++){
+                for (int row = 0; row < numberOfRows - squaresDim; row++) {
+                    for (int column = 0; column < numberOfColumns - squaresDim; column++) {
                         //if current card is null, there is no possible pattern
-                        if(shelfCopy[row][column] == null) continue;
+                        if (shelfCopy[row][column] == null) continue;
 
                         //else, i check if it's a square
                         validSquare = true;
-                        for(int r = row; r < row + squaresDim && validSquare; r++)
-                            for(int c = column; c < column + squaresDim && validSquare; c++)
+                        for (int r = row; r < row + squaresDim && validSquare; r++)
+                            for (int c = column; c < column + squaresDim && validSquare; c++)
                                 //if a tile has a different type than the NWcorner, the square is not valid
-                                if(shelfCopy[r][c].getType().equals(shelfCopy[row][column].getType())) validSquare = false;
+                                if (shelfCopy[r][c].getType().equals(shelfCopy[row][column].getType()))
+                                    validSquare = false;
 
-                        if(validSquare) {
+                        if (validSquare) {
                             //increase number of found squares
                             squaresNum++;
                             //have to eliminate the whole square to be sure not to superimpose two squares
-                            for(int r = row; r < row + squaresDim && validSquare; r++)
-                                for(int c = column; c < column + squaresDim && validSquare; c++)
+                            for (int r = row; r < row + squaresDim && validSquare; r++)
+                                for (int c = column; c < column + squaresDim && validSquare; c++)
                                     shelfCopy[r][c] = null;
                             return squaresNum == squaresToFind;
                         }
@@ -611,28 +611,5 @@ public class GameController {
         }
 
         return heads;
-    }
-
-    private static class Square {
-        int el1_x;
-        int el1_y;
-        int el2_x;
-        int el2_y;
-        int el3_x;
-        int el3_y;
-        int el4_x;
-        int el4_y;
-    }
-
-    private static class Mask {
-        int[][] matrixMask = new int[6][5];
-        int[][] matrixAdjacent = new int[6][5];
-
-        Mask(Shelf shelf, ItemType type) {
-            for (int i = 0; i < 6; i++) {
-                for (int j = 0; j < 5; j++)
-                    if (shelf.getCardAt(i, j).getType().equals(type)) this.matrixMask[i][j] = 1;
-            }
-        }
     }
 }
