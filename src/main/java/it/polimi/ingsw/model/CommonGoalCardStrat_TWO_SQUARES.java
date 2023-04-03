@@ -5,7 +5,7 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_TWO_SQUARES implements CommonGoalCardStrat {
     @Override
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         int squaresNum = 0;
         int squaresToFind = 2;
         int squaresDim = 2;

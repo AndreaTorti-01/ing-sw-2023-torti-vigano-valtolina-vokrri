@@ -5,7 +5,7 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_CROSS implements CommonGoalCardStrat {
     @Override
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         // starts from second column and second row because we start checking from the center of the cross,
         // which has "length" of one in every diagonal direction
         for (int row = 1; row < numberOfRows - 1; row++) {

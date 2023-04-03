@@ -5,7 +5,7 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_STAIR implements CommonGoalCardStrat {
     @Override
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         // the length of the stair is at most equal to the number of columns or the number of rows
         int stairLength = Math.min(numberOfColumns, numberOfRows);
 

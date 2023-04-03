@@ -7,7 +7,7 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_SIX_PAIRS implements CommonGoalCardStrat {
     @Override
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         // the number of pairs to find
         final int numberOfPairsToCheck = 6;
 

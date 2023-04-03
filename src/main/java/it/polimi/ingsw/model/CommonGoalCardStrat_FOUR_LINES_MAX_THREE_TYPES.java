@@ -8,7 +8,7 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_FOUR_LINES_MAX_THREE_TYPES implements CommonGoalCardStrat {
     @Override
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         // counts the number of rows that have a maximum of three different types of cards
         int counter = 0;
         final int numberOfRowsToCheck = 4;

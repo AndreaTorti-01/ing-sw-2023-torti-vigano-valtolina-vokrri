@@ -5,7 +5,7 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_DIAGONAL_FIVE implements CommonGoalCardStrat {
     @Override
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         // the length of the diagonal to check
         final int diagonalLength = 5;
 

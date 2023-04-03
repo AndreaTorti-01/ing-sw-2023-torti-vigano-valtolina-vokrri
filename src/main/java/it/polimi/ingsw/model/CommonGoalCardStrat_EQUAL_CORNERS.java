@@ -5,7 +5,7 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_EQUAL_CORNERS implements CommonGoalCardStrat {
     @Override
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         ItemCard firstCornerItemCard = shelf.getCardAt(0, 0);
         // if there's no card in the first corner it's impossible to satisfy the pattern
         if (firstCornerItemCard == null) return false;

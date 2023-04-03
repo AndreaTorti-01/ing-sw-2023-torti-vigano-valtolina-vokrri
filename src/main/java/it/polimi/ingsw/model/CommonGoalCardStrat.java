@@ -7,7 +7,8 @@ import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public interface CommonGoalCardStrat {
-    public boolean checkCard(Shelf shelf);
+    public boolean checkPattern(Shelf shelf);
+
     public CommonGoalCardType getType();
 
     /**

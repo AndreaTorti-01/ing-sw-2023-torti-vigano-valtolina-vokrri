@@ -68,7 +68,7 @@ public class CommonGoalCard extends GameObject {
     }
 
     public boolean checkCard(Shelf shelf) {
-        return randomStrat.checkCard(shelf);
+        return randomStrat.checkPattern(shelf);
     }
 
 }

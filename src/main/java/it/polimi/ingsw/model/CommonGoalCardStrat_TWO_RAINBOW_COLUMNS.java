@@ -7,7 +7,7 @@ import static it.polimi.ingsw.utils.Constants.*;
 
 public class CommonGoalCardStrat_TWO_RAINBOW_COLUMNS implements CommonGoalCardStrat {
     @Override
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         // counts the number of columns that have cards all with different types
         int counter = 0;
         // two columns to check for the specified pattern

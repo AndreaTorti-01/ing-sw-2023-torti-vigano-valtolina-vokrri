@@ -7,7 +7,7 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_FOUR_QUARTETS implements CommonGoalCardStrat {
     @Override
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         // the number of quartets to find
         final int numberOfQuartetsToCheck = 4;
         // the number of adjacent cards with the same type
