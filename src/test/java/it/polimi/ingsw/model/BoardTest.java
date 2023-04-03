@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Constants;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -9,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardTest {
 
     void printBoard(Board bd) {
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < Constants.boardSize; i++) {
             System.out.print("\n");
-            for (int j = 0; j < 9; j++) {
+            for (int j = 0; j < Constants.boardSize; j++) {
                 if (bd.isValid(i, j)) {
                     System.out.print("O ");
                 } else {

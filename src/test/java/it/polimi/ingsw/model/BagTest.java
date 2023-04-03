@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Constants;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -12,7 +13,7 @@ class BagTest {
     @Test
     void BagTest() {
         Bag bag1 = new Bag();
-        assertEquals(132, bag1.getCardsInside().size());
+        assertEquals(Constants.maxNumberOfItemCards, bag1.getCardsInside().size());
     }
 
     @Test
@@ -21,7 +22,7 @@ class BagTest {
         ItemCard ic;
 
         // initialize a set with all the possible item types
-        Set<ItemType> itemTypes = new HashSet<ItemType>();
+        Set<ItemType> itemTypes = new HashSet<>();
         for (ItemType it : ItemType.values()) {
             itemTypes.add(it);
         }
@@ -33,8 +34,8 @@ class BagTest {
         itemTypes.remove(extracted);
 
         // check that the bag contains 22 cards of each type except the one that was drawn
-        for (ItemType it: itemTypes) {
-            assertEquals(22, bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(it)).toList().size());
+        for (ItemType it : itemTypes) {
+            assertEquals(Constants.numberOfItemCardsWithSameType, bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(it)).toList().size());
         }
         assertEquals(21, bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(extracted)).toList().size());
 
@@ -133,7 +134,7 @@ class BagTest {
     }
 
     @Test
-    void randomtest() {
+    void randomTest() {
         ItemCard ic_6;
         Bag Bag3 = new Bag();
         for (int k = 0; k < 5; k++) {

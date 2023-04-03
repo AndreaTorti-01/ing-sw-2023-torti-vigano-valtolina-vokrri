@@ -101,11 +101,11 @@ public class Shelf extends GameObject {
      * @param item   the card to be inserted
      * @throws RuntimeException if the column is full
      */
-    public void insert(int column, ItemCard item) throws RuntimeException {
+    public void insert(int column, ItemCard item) throws IndexOutOfBoundsException {
         if (items[0][column] != null)
-            throw new RuntimeException("Column is full");
+            throw new IndexOutOfBoundsException("Cannot insert elements in a full column!");
         else {
-            int row = Constants.numberOfRows;
+            int row = Constants.numberOfRows - 1;
             while (items[row][column] != null)
                 row--;
             items[row][column] = item;

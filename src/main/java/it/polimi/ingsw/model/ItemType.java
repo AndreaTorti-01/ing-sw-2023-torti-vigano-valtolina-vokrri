@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 public enum ItemType {
     CATS('C'),
@@ -27,5 +28,18 @@ public enum ItemType {
         }
 
         throw new NoSuchElementException("No item type found with the given abbreviation " + abbreviation);
+    }
+
+    /**
+     * Returns a random value from the one in the enumeration.
+     * For Test purpose.
+     *
+     * @return a random value
+     */
+    public static ItemType getRandomItemType() {
+        final int numberOfItems = ItemType.values().length;
+        int randomIndex = new Random().nextInt(numberOfItems);
+
+        return ItemType.values()[randomIndex];
     }
 }

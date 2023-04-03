@@ -1,19 +1,62 @@
 package it.polimi.ingsw.model;
 
-import java.util.*;
+import java.util.List;
 
 public class Player {
-    int score;
-    List<CommonGoalCard> cgList = new ArrayList<>();
-    // possibilità dai aggiungere un attributo achieved direttamente alla card in questo modo. e metodo boolean IsAchieved()
-    List<PersonalGoalCard> pgList = new ArrayList<>();
-    // possibilità dai aggiungere un attributo achieved direttamente alla card in questo modo. e metodo boolean IsAchieved()
+    public static List<CommonGoalCard> commonGoalCards;
+    private final String name;
+    private final Shelf shelf;
+    private PersonalGoalCard personalGoalCard;
+    private boolean hasAchievedCommonGoalCard;
+    private boolean hasAchievedPersonalGoalCard;
+    private int score;
 
-    Shelf playerShelf = new Shelf();
+    public Player(String name) {
+        this.name = name;
+        this.shelf = new Shelf();
+        this.score = 0;
+        this.hasAchievedCommonGoalCard = false;
+        this.hasAchievedPersonalGoalCard = false;
+    }
 
-    public int getScore() { return score; }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public PersonalGoalCard getPersonalGoalCard() {
+        return this.personalGoalCard;
+    }
+
+    public void setPersonalGoalCard(PersonalGoalCard personalGoalCard) {
+        this.personalGoalCard = personalGoalCard;
+    }
 
     public Shelf getShelf() {
-        return playerShelf;
+        return this.shelf;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean hasAchievedCommonGoalCard() {
+        return hasAchievedCommonGoalCard;
+    }
+
+    public void setAchievedCommonGoalCard() {
+        this.hasAchievedCommonGoalCard = true;
+    }
+
+    public boolean hasAchievedPersonalGoalCard() {
+        return hasAchievedPersonalGoalCard;
+    }
+
+    public void setAchievedPersonalGoalCard() {
+        this.hasAchievedPersonalGoalCard = true;
     }
 }

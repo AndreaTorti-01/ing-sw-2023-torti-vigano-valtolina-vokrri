@@ -8,15 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Game {
-    private final String[] players;
+    private final Player[] players;
     private final Bag bag;
     private final Board board;
     private final CommonGoalCard[] commonGoalCards;
-    private final boolean[][] commonGoalCardsAchieved;
-    private final PersonalGoalCard[] personalGoalCards;
-    private final boolean[] personalGoalCardsAchieved;
-    private final Shelf[] shelves;
-    private final int[] scores;
 
     public Game(String... playersNames) throws IllegalArgumentException {
         int numberOfPlayers = playersNames.length;
@@ -26,10 +21,10 @@ public class Game {
                     "provided number of players (" + numberOfPlayers + ") is out of range " + Constants.minNumberOfPlayers + "-" + Constants.maxNumberOfPlayers
             );
 
-        Random random = new Random();
-
         // inizializzazione di una nuova bag
         bag = new Bag();
+
+        // inizializzazione di una nuova board
         try {
             board = new Board(numberOfPlayers);
         } catch (FileNotFoundException e) {
@@ -37,8 +32,10 @@ public class Game {
         }
 
         // inizializzazione dei players
-        players = new String[numberOfPlayers];
-        System.arraycopy(playersNames, 0, players, 0, numberOfPlayers);
+        players = new Player[numberOfPlayers];
+        for (int i = 0; i < numberOfPlayers; i++) {
+            players[i] = new Player(playersNames[i]);
+        }
 
         // inizializzazione delle commonGoalCards
         commonGoalCards = new CommonGoalCard[Constants.numberOfCommonGoalCardsInGame];
@@ -46,31 +43,13 @@ public class Game {
             commonGoalCards[i] = new CommonGoalCard(numberOfPlayers);
         }
 
-        commonGoalCardsAchieved = new boolean[numberOfPlayers][2];
-        personalGoalCards = new PersonalGoalCard[numberOfPlayers];
-        // lista utilizzata per evitare di avere due personalGoalCard con lo stesso indice e, quindi, dello stesso tipo.
-        List<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < Constants.numberOfPersonalGoalCardsTypes; i++) indexes.add(i);
+        PersonalGoalCard[] personalGoalCards = this.getRandomPersonalGoalCards();
         for (int i = 0; i < numberOfPlayers; i++) {
-            int randomIndex = random.nextInt(0, indexes.size());
-            // rimuove l'indice alla posizione randomIndex da indexes in modo che non si possa ripresentare
-            indexes.remove(randomIndex);
-            personalGoalCards[i] = new PersonalGoalCard(randomIndex);
+            players[i].setPersonalGoalCard(personalGoalCards[i]);
         }
-
-        personalGoalCardsAchieved = new boolean[numberOfPlayers];
-
-        // inizializza le shelf per ogni player
-        shelves = new Shelf[numberOfPlayers];
-        for (int i = 0; i < numberOfPlayers; i++) {
-            shelves[i] = new Shelf();
-        }
-
-        // inizializza gli score a zero per ogni player
-        scores = new int[numberOfPlayers];
     }
 
-    public String[] getPlayers() {
+    public Player[] getPlayers() {
         return players;
     }
 
@@ -87,27 +66,33 @@ public class Game {
         return commonGoalCards;
     }
 
-    public boolean[][] getCommonGoalCardsAchieved() {
-        return commonGoalCardsAchieved;
-    }
-
-    public PersonalGoalCard[] getPersonalGoalCards() {
-        return personalGoalCards;
-    }
-
-    public boolean[] getPersonalGoalCardsAchieved() {
-        return personalGoalCardsAchieved;
-    }
-
-    public Shelf[] getShelves() {
-        return shelves;
-    }
-
-    public int[] getScores() {
-        return scores;
-    }
-
     public int getNumberOfPlayers() {
         return players.length;
+    }
+
+    /**
+     * Creates and returns an array of random PersonalGoalCards
+     *
+     * @return array of random PersonalGoalCards
+     */
+    private PersonalGoalCard[] getRandomPersonalGoalCards() {
+        Random random = new Random();
+        int numberOfPlayers = this.getNumberOfPlayers();
+
+        // list of available indexes
+        List<Integer> indexes = new ArrayList<>();
+        for (int i = 0; i < Constants.numberOfPersonalGoalCardsTypes; i++) indexes.add(i);
+
+
+        PersonalGoalCard[] personalGoalCards = new PersonalGoalCard[numberOfPlayers];
+        for (int i = 0; i < numberOfPlayers; i++) {
+            int randomIndex = random.nextInt(0, indexes.size());
+            personalGoalCards[i] = new PersonalGoalCard(randomIndex);
+
+            // rimuove l'indice alla posizione randomIndex da indexes in modo che non si possa ripresentare
+            indexes.remove(randomIndex);
+        }
+
+        return personalGoalCards;
     }
 }
