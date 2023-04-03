@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfRows;
+
 public class PersonalGoalCard extends GameObject {
     private final ItemType[][] pattern;
 
@@ -62,6 +65,19 @@ public class PersonalGoalCard extends GameObject {
 
     public ItemType[][] getPattern() {
         return pattern;
+    }
+
+    public boolean checkPattern(Shelf shelf) {
+        for (int row = 0; row < numberOfRows; row++) {
+            for (int column = 0; column < numberOfColumns; column++) {
+                ItemCard currentCard = shelf.getCardAt(row, column);
+                ItemType checker = this.getTypeAt(row, column);
+
+                if (currentCard != null && !currentCard.getType().equals(checker)) return false;
+                if (currentCard == null && checker != null) return false;
+            }
+        }
+        return true;
     }
 
     public ItemType getTypeAt(int row, int column) {

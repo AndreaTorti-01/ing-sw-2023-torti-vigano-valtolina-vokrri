@@ -1,9 +1,8 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.*;
-
-import static it.polimi.ingsw.utils.Constants.numberOfColumns;
-import static it.polimi.ingsw.utils.Constants.numberOfRows;
+import it.polimi.ingsw.model.CommonGoalCard;
+import it.polimi.ingsw.model.PersonalGoalCard;
+import it.polimi.ingsw.model.Shelf;
 
 public class GameController {
 
@@ -38,16 +37,7 @@ public class GameController {
      * @return true if the pattern is satisfied, false otherwise
      */
     private boolean checkPersonalGoalCardPattern(Shelf shelf, PersonalGoalCard personalGoalCard) {
-        for (int row = 0; row < numberOfRows; row++) {
-            for (int column = 0; column < numberOfColumns; column++) {
-                ItemCard currentCard = shelf.getCardAt(row, column);
-                ItemType checker = personalGoalCard.getTypeAt(row, column);
-
-                if (currentCard != null && !currentCard.getType().equals(checker)) return false;
-                if (currentCard == null && checker != null) return false;
-            }
-        }
-        return true;
+        return personalGoalCard.checkPattern(shelf);
     }
 
     /**
