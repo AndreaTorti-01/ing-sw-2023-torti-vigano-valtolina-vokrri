@@ -1,0 +1,6 @@
+*****
+C****
+PC***
+FPC**
+GBCC*
+CFBGC
