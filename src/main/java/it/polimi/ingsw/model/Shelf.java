@@ -4,19 +4,44 @@ import it.polimi.ingsw.utils.Constants;
 
 public class Shelf extends GameObject {
     private final ItemCard[][] items;
+    private boolean isACopy;
 
     /**
      * The shelf is empty when instantiated. 0,0 is the top left corner
      */
     public Shelf() {
-        items = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
+        this.items = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
+        this.isACopy = false;
+    }
+
+    /**
+     * Creates a new Shelf based on the matrix of ItemCard passed as argument
+     *
+     * @param items a matrix of ItemCard that represents the shelf
+     */
+    public Shelf(ItemCard[][] items) {
+        // initializes items to a null matrix of
+        // Constants.numberOfRows rows and Constants.numberOfColumns columns
+        this();
+
+        // deep copies the elements from the matrix passed as argument to the constructor
+        for (int row = 0; row < Constants.numberOfRows; row++) {
+            for (int column = 0; column < Constants.numberOfColumns; column++) {
+                ItemCard currentCard = items[row][column];
+
+                if (currentCard == null) continue;
+                // creates a new itemCard with the same type as the one currently selected
+                // and inserts it in the current position of the new shelf
+                this.items[row][column] = new ItemCard(currentCard.getType());
+            }
+        }
     }
 
     /**
      * Get the card at the specified position
      *
-     * @param row    must be between 0 and 5
-     * @param column must be between 0 and 4
+     * @param row    must be between boundaries (specified in the Constants.java file)
+     * @param column must be between boundaries (specified in the Constants.java file)
      * @return ItemCard | null, depending on the presence of a card at the specified position
      */
     public ItemCard getCardAt(int row, int column) {
@@ -24,28 +49,49 @@ public class Shelf extends GameObject {
     }
 
     /**
+     * Sets the card at the specified position to the new specified value
+     * <p>
+     * <p>
+     * ************************************** <p>
+     * * USE ONLY FOR A CLONE OF THE SHELF! * <p>
+     * ************************************** <p>
+     *
+     * @param row     must be between boundaries (specified in the Constants.java file)
+     * @param column  must be between boundaries (specified in the Constants.java file)
+     * @param newCard the new value
+     */
+    public void setCardAt(int row, int column, ItemCard newCard) throws IllegalAccessError {
+        if (!this.isACopy) throw new IllegalAccessError("Cannot call this method on the original shelf!");
+        this.items[row][column] = newCard;
+    }
+
+    /**
      * Creates a copy of the current shelf and returns it
      *
-     * @return ItemCard[][], the whole shelf
+     * @return a copy of the current Shelf
      */
-    public ItemCard[][] getDeepCopy() {
-        // initializes a new matrix of ItemCards
-        ItemCard[][] copy = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
+    public Shelf getCopy() {
+        // initializes a new null matrix of ItemCards
+        ItemCard[][] itemCards = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
 
         for (int row = 0; row < Constants.numberOfRows; row++) {
             for (int column = 0; column < Constants.numberOfColumns; column++) {
                 ItemCard currentCard = this.getCardAt(row, column);
 
-                if (currentCard == null) {
-                    copy[row][column] = null;
-                }
+                // the matrix is already initialized to null
+                if (currentCard == null) continue;
+
                 // creates a new ItemCard with the same type as the one currently selected
-                // and inserts it in the copy at the same position
-                else copy[row][column] = new ItemCard(currentCard.getType());
+                // and inserts it in the itemCards at the same position
+                itemCards[row][column] = new ItemCard(currentCard.getType());
             }
         }
 
-        return copy;
+        // creates a new shelf with the same arrangement
+        Shelf shelfCopy = new Shelf(itemCards);
+        shelfCopy.isACopy = true; // !important
+
+        return shelfCopy;
     }
 
     /**
@@ -74,13 +120,10 @@ public class Shelf extends GameObject {
      */
     public int getColumnLength(int column) {
         int length = 0;
-
         for (int row = 0; row < Constants.numberOfRows; row++) {
             if (items[row][column] != null) length++;
         }
 
         return length;
     }
-
-
 }

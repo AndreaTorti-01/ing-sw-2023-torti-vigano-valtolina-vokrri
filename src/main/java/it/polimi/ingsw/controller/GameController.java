@@ -111,14 +111,14 @@ public class GameController {
                 final int numberOfPairsToCheck = 6;
 
                 List<ItemCard> heads;
-                ItemCard[][] shelfCopy = shelf.getDeepCopy();
+                Shelf shelfCopy = shelf.getCopy();
 
                 // number of pairs found
                 int pairCounter = 0;
                 for (int row = 0; row < numberOfRows && pairCounter < numberOfPairsToCheck; row++) {
                     for (int column = 0; column < numberOfColumns && pairCounter < numberOfPairsToCheck; column++) {
                         // if the current card is null, no pattern possible
-                        if (shelfCopy[row][column] == null) continue;
+                        if (shelfCopy.getCardAt(row, column) == null) continue;
 
                         // retrieves the card on top, bottom, left and right
                         heads = this.getHeads(shelfCopy, row, column);
@@ -127,7 +127,7 @@ public class GameController {
                         if (!heads.isEmpty()) {
                             pairCounter++;
                             // removes the original card from the shelf copy
-                            shelfCopy[row][column] = null;
+                            shelfCopy.setCardAt(row, column, null);
                             // removes all the adjacent cards with the same type
                             for (ItemCard head : heads) {
                                 headLiminate(shelfCopy, head);
@@ -214,28 +214,40 @@ public class GameController {
                 boolean validSquare;
                 //north-west corner of the potential square
                 int cornerNW;
-                ItemCard[][] shelfCopy = shelf.getDeepCopy();
+                Shelf shelfCopy = shelf.getCopy();
 
                 for (int row = 0; row < numberOfRows - squaresDim; row++) {
                     for (int column = 0; column < numberOfColumns - squaresDim; column++) {
+                        ItemCard currentCard = shelfCopy.getCardAt(row, column);
                         //if current card is null, there is no possible pattern
-                        if (shelfCopy[row][column] == null) continue;
+                        if (currentCard == null) continue;
 
                         //else, i check if it's a square
                         validSquare = true;
-                        for (int r = row; r < row + squaresDim && validSquare; r++)
-                            for (int c = column; c < column + squaresDim && validSquare; c++)
-                                //if a tile has a different type than the NWcorner, the square is not valid
-                                if (shelfCopy[r][c].getType().equals(shelfCopy[row][column].getType()))
+                        for (int r = row; r < row + squaresDim && validSquare; r++) {
+                            for (int c = column; c < column + squaresDim && validSquare; c++) {
+                                ItemCard currentSubCard = shelfCopy.getCardAt(r, c);
+
+                                // if one of the cards that could form the square is null
+                                // the square is not valid
+                                if (currentSubCard == null) {
                                     validSquare = false;
+                                    break;
+                                }
+
+                                //if a tile has a different type than the NWcorner, the square is not valid
+                                if (!currentSubCard.getType().equals(currentCard.getType()))
+                                    validSquare = false;
+                            }
+                        }
 
                         if (validSquare) {
                             //increase number of found squares
                             squaresNum++;
                             //have to eliminate the whole square to be sure not to superimpose two squares
-                            for (int r = row; r < row + squaresDim && validSquare; r++)
-                                for (int c = column; c < column + squaresDim && validSquare; c++)
-                                    shelfCopy[r][c] = null;
+                            for (int r = row; r < row + squaresDim; r++)
+                                for (int c = column; c < column + squaresDim; c++)
+                                    shelfCopy.setCardAt(r, c, null);
                             return squaresNum == squaresToFind;
                         }
                     }
@@ -443,20 +455,20 @@ public class GameController {
                 final int aggregationSize = 4;
 
                 List<ItemCard> heads;
-                ItemCard[][] shelfCopy = shelf.getDeepCopy();
+                Shelf shelfCopy = shelf.getCopy();
 
                 int quartetsCounter = 0;
                 for (int row = 0; row < numberOfRows && quartetsCounter < numberOfQuartetsToCheck; row++) {
                     for (int column = 0; column < numberOfColumns && quartetsCounter < numberOfQuartetsToCheck; column++) {
                         // if the current card is null, no pattern possible
-                        if (shelfCopy[row][column] == null) continue;
+                        if (shelfCopy.getCardAt(row, column) == null) continue;
 
                         // retrieves the card on top, bottom, left and right
                         heads = this.getHeads(shelfCopy, row, column);
 
                         if (!heads.isEmpty()) {
                             // removes the original card from the shelf copy
-                            shelfCopy[row][column] = null;
+                            shelfCopy.setCardAt(row, column, null);
                             // calculates the number of adjacent cards with the same type
                             // and removes them from the shelf copy
                             int currentAggregationSize = 1 + heads.size();
@@ -533,7 +545,7 @@ public class GameController {
      * @param hotCard   the center card from where to delete all
      * @return the number of adjacent cards with the same type
      */
-    private int headLiminate(ItemCard[][] shelfCopy, ItemCard hotCard) {
+    private int headLiminate(Shelf shelfCopy, ItemCard hotCard) {
         List<ItemCard> heads;
         int adjacentToHead = 0;
 
@@ -541,12 +553,12 @@ public class GameController {
         // finds the hotCard in the shelf
         for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < numberOfColumns; column++) {
-                if (hotCard.equals(shelfCopy[row][column])) {
+                if (hotCard.equals(shelfCopy.getCardAt(row, column))) {
                     // retrieves all the heads starting from the current position
                     heads = this.getHeads(shelfCopy, row, column);
 
                     // removes the current card from the shelf
-                    shelfCopy[row][column] = null;
+                    shelfCopy.setCardAt(row, column, null);
                     // removes all adjacent cards from the shelf
                     if (!heads.isEmpty()) {
                         for (ItemCard head : heads) {
@@ -569,9 +581,9 @@ public class GameController {
      * @param column    the column of the current card
      * @return a list of all adjacent cards with the same type
      */
-    private ArrayList<ItemCard> getHeads(ItemCard[][] shelfCopy, int row, int column) {
+    private ArrayList<ItemCard> getHeads(Shelf shelfCopy, int row, int column) {
         ArrayList<ItemCard> heads = new ArrayList<>();
-        ItemCard currentCard = shelfCopy[row][column];
+        ItemCard currentCard = shelfCopy.getCardAt(row, column);
 
         // retrieves the current card type
         ItemType currentType;
@@ -581,15 +593,15 @@ public class GameController {
         // checks the upper card
         // and inserts it in the list if it has the same type of the specified one
         if (row + 1 < numberOfRows) {
-            ItemCard upperCard = shelfCopy[row + 1][column];
+            ItemCard upperCard = shelfCopy.getCardAt(row + 1, column);
             if (upperCard != null && currentType.equals(upperCard.getType()))
                 heads.add(upperCard);
         }
 
         // checks the right card
-        // and inserts it in the list if has the same type of the specified one
+        // and inserts it in the list if it has the same type of the specified one
         if (column + 1 < numberOfColumns) {
-            ItemCard rightCard = shelfCopy[row][column + 1];
+            ItemCard rightCard = shelfCopy.getCardAt(row, column + 1);
             if (rightCard != null && currentType.equals(rightCard.getType()))
                 heads.add(rightCard);
         }
@@ -597,7 +609,7 @@ public class GameController {
         // checks the lower card
         // and inserts it in the list if it has the same type of the specified one
         if (row - 1 >= 0) {
-            ItemCard lowerCard = shelfCopy[row - 1][column];
+            ItemCard lowerCard = shelfCopy.getCardAt(row - 1, column);
             if (lowerCard != null && currentType.equals(lowerCard.getType()))
                 heads.add(lowerCard);
         }
@@ -605,7 +617,7 @@ public class GameController {
         // checks the left card
         // and inserts it in the list if it has the same type of the specified one
         if (column - 1 >= 0) {
-            ItemCard leftCard = shelfCopy[row][column - 1];
+            ItemCard leftCard = shelfCopy.getCardAt(row, column - 1);
             if (leftCard != null && currentType.equals(leftCard.getType()))
                 heads.add(leftCard);
         }
