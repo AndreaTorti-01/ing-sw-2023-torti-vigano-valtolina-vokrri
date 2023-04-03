@@ -111,7 +111,7 @@ di legato solo alla view, potrebbero non esserci problemi.
 
 ---
 
-### Cristiano vi spiega le sue terribili implementazioni dei sottocasi del metodo checkCommonGoalCardPattern in GameController - 29/03/23
+### Cristiano vi spiega le sue terribili implementazioni dei sottocasi del metodo checkCommonGoalCardPattern in GameController - 29 marzo
 
 > - SIX_PAIRS (probabilmente il più complesso di tutti ma a me piace)
 
@@ -148,7 +148,7 @@ controllando se almeno una di esse sia composta da elementi dello stesso tipo
 > - TWO_SQUARES (era bello ma da rifare)
 
 vi spiego al volo la specifica: i *GRUPPI* da 4 al contrario di come scritto sulle regole del gioco possono essere anche
-di tipi diversi sono solo le 4 tessere all'interno del singolo quuadrato che devono essere dello stesso tipo
+di tipi diversi sono solo le 4 tessere all'interno del singolo quadrato che devono essere dello stesso tipo
 e inoltre due quadrati di tipi diversi possono essere adiacenti mentre due quadrati dello stesso tipo no
 
 > - FOUR_LINES_MAX_THREE_TYPES (ancora da fare)
@@ -161,7 +161,7 @@ mooolto semplice controlla che gli elementi ai 4 angoli della shelf siano dello 
 
 > - TWO_RAINBOW_COLUMNS (fatto)
 
-controlla che esistano almeno due colonne con un elemento per ogni tipo creando un set con gli itemtype e rimovendo
+controlla che esistano almeno due colonne con un elemento per ogni tipo creando un set con gli itemtype e rimuovendo
 quelli incontrati controllando alla fine di averne rimossi 6 e refillando il set ogni volta che cambio colonna da
 controllare
 
@@ -171,7 +171,7 @@ stesso concetto del *TWO_RAINBOW_COLUMNS* ma implementato sulle righe
 
 > - THREE_COLUMNS_MAX_THREE_TYPES (da fare)
 
-> - EIGHT_EQUAL (fatto credo si possa fare più carioìno)
+> - EIGHT_EQUAL (fatto credo si possa fare più carino)
 
 io ho banalmente creato 6 contatori uno per tipo, scorro tutta la shelf incrementando i contatori e alla fine controllo
 se qualcuno è arrivato a 8
@@ -180,3 +180,22 @@ se qualcuno è arrivato a 8
 
 creato degli array in cui inserito tutte le celle che formano le scale e le corrispettive sopra
 e controllo che quelle sopra siano vuote e quelle che formano le scale piene
+
+---
+
+### Burro è tornato: 3 aprile
+
+A mente lucida, leggendo la review del nostro uml e anche il model inviatoci, capisco che il progetto può essere reso
+più object-oriented.
+
+### Il grande refactoring del model
+
+- Fabio sta implementando la classe **player** e facendo modifiche a **shelf**, che sposterà i possedimenti di ogni giocatore da **game** a **player**,
+  e contribuirà ad alleggerire **game**
+- Io mi occupo di spostare il codice di check delle CommonGoalCard in 12 classi separate, seguendo lo _Strategy
+  Pattern_, in modo da alleggerire il **gamecontroller**. Ho reso CommonGoalCardStrat come un'interfaccia che implementa
+  come "default default" (visibilità default, implementazioni default) alcuni metodi di utilità usati dagli altri
+  ragazzi.
+- Il context è CommonGoalCard, la Strategy è CommonGoalCardStrat, le concretes sono 12 classi, e Client è Game. Lascio
+  irrisolto al momento il problema di istanziare una strategia random da parte di Game per essere assegnata a
+  CommonGoalCard, e anche la riscrittura di test strutturati...

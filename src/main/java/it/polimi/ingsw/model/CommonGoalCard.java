@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public class CommonGoalCard extends GameObject {
     private final Stack<Integer> assignedPoints;
-    private final CommonGoalCardType type;
+    private CommonGoalCardStrat randomStrat;
 
     /**
      * Creates a new CommonGoalCard with a random type and a stack of points based on the number of players.
@@ -39,13 +39,10 @@ public class CommonGoalCard extends GameObject {
                 assignedPoints.push(8);
             }
         }
-
-        // assigns the card a random type
-        type = CommonGoalCardType.getRandomType();
     }
 
     public CommonGoalCardType getType() {
-        return type;
+        return randomStrat.getType();
     }
 
     /**
@@ -65,6 +62,15 @@ public class CommonGoalCard extends GameObject {
         if (assignedPoints.isEmpty()) return 0;
         return assignedPoints.pop();
     }
+
+    public void setRandomStrat(CommonGoalCardStrat randomStrat) {
+        this.randomStrat = randomStrat;
+    }
+
+    public boolean checkCard(Shelf shelf) {
+        return randomStrat.checkCard(shelf);
+    }
+
 }
 
 

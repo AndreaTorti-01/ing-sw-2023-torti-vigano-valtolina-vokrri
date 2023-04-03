@@ -7,18 +7,18 @@ import java.util.Arrays;
 import java.util.Random;
 
 public enum CommonGoalCardType {
-    SIX_PAIRS,
-    DIAGONAL_FIVE,
-    FOUR_QUARTETS,
-    FOUR_LINES_MAX_THREE_TYPES,
-    EQUAL_CORNERS,
-    TWO_RAINBOW_COLUMNS,
-    TWO_SQUARES,
-    TWO_RAINBOW_LINES,
-    THREE_COLUMNS_MAX_THREE_TYPES,
     CROSS,
+    DIAGONAL_FIVE,
     EIGHT_EQUAL,
-    STAIR;
+    EQUAL_CORNERS,
+    FOUR_LINES_MAX_THREE_TYPES,
+    FOUR_QUARTETS,
+    SIX_PAIRS,
+    STAIR,
+    THREE_COLUMNS_MAX_THREE_TYPES,
+    TWO_RAINBOW_COLUMNS,
+    TWO_RAINBOW_LINES,
+    TWO_SQUARES;
 
     private static final ArrayList<CommonGoalCardType> values = new ArrayList<>(
             Arrays.asList(CommonGoalCardType.values())
