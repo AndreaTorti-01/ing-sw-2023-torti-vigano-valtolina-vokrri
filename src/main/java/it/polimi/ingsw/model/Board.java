@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Constants;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +34,7 @@ public class Board extends GameObject {
         if (valid1 == null) throw new FileNotFoundException();
         // assign the valid matrix
         valid = valid1;
-        tile = new ItemCard[9][9];
+        tile = new ItemCard[Constants.boardSize][Constants.boardSize];
     }
 
     /**
