@@ -45,13 +45,10 @@ public class PersonalGoalCard extends GameObject {
             while (line != null) {
                 for (int column = 0; column < line.length(); column++) {
                     char currentChar = line.charAt(column);
-                    if (currentChar != '*') {
-                        // gets the type of the ItemCard given the abbreviation found in the file
-                        // and inserts it in the correct position of the matrix
-                        pattern[row][column] = ItemType.valueOf(
-                                String.valueOf(ItemType.getItemTypeFromAbbreviation(currentChar))
-                        );
-                    }
+
+                    // gets the type of the ItemCard given the abbreviation found in the file
+                    // and inserts it in the correct position of the matrix
+                    pattern[row][column] = ItemType.getItemTypeFromAbbreviation(currentChar);
                 }
 
                 // goes to next line
