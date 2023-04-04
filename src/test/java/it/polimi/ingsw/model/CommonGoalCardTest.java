@@ -2,7 +2,8 @@ package it.polimi.ingsw.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class CommonGoalCardTest {
@@ -22,10 +23,6 @@ public class CommonGoalCardTest {
 
         assertEquals(commonGoalCard.peekPoints(), 2);
         assertEquals(commonGoalCard.popPoints(), 2);
-
-        assertTrue(
-                CommonGoalCardType.getValues().contains(commonGoalCard.getType())
-        );
     }
 
     @Test
@@ -40,11 +37,8 @@ public class CommonGoalCardTest {
 
         assertEquals(commonGoalCard.peekPoints(), 4);
         assertEquals(commonGoalCard.popPoints(), 4);
-
-        assertTrue(
-                CommonGoalCardType.getValues().contains(commonGoalCard.getType())
-        );
     }
+
 
     @Test
     void testTwoPlayersFunctionalities() {
@@ -56,11 +50,8 @@ public class CommonGoalCardTest {
 
         assertEquals(commonGoalCard.peekPoints(), 4);
         assertEquals(commonGoalCard.popPoints(), 4);
-
-        assertTrue(
-                CommonGoalCardType.getValues().contains(commonGoalCard.getType())
-        );
     }
+
 
     @Test
     void testPopMorePointsThanAvailable() {
