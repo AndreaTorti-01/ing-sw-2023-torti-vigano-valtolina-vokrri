@@ -47,7 +47,7 @@ public class CommonGoalCardStrat_DIAGONAL_FIVE implements CommonGoalCardStrat {
                 // checks if the cards in the diagonal have the same type as the currently selected card
                 int counter = 1; // already one card on the diagonal, the one selected
                 while (counter < diagonalLength) {
-                    ItemCard diagonalCard = shelf.getCardAt(row - counter, column - counter);
+                    ItemCard diagonalCard = shelf.getCardAt(row + counter, column - counter);
                     // if there's no card in the diagonal break the loop and continue
                     if (diagonalCard == null) break;
 
