@@ -1,6 +1,6 @@
-*****
-*****
-*****
-*****
-*****
-*****
+BBBB*
+GCGC*
+BBGBB
+BBCBB
+GCGCG
+BBBBC
