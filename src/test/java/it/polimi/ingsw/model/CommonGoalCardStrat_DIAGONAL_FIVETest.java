@@ -17,8 +17,8 @@ class CommonGoalCardStrat_DIAGONAL_FIVETest {
 
         for (int i = 0; i < numberOfTests; i++) {
             String fileName;
-            if (i + 1 < 10) fileName = String.format(folderName + "/TEST_FALSE_0%d" + fileExtension, i + 1);
-            else fileName = String.format(folderName + "/TEST_FALSE_%d" + fileExtension, i + 1);
+            if (i + 1 < 10) fileName = String.format(folderName + "TEST_FALSE_0%d" + fileExtension, i + 1);
+            else fileName = String.format(folderName + "TEST_FALSE_%d" + fileExtension, i + 1);
 
             Shelf shelf = FileUtils.getShelfFromFile(fileName);
 

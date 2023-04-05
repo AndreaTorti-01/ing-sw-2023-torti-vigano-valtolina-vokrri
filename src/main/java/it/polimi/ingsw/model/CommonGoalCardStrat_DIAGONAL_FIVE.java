@@ -24,7 +24,7 @@ public class CommonGoalCardStrat_DIAGONAL_FIVE implements CommonGoalCardStrat {
                     // if there's no card in the diagonal break the loop and continue
                     if (diagonalCard == null) break;
 
-                    // checks if the cards in the diagonal have the same type as the currently selected card
+                    // checks if the cards in the diagonal has the same type as the currently selected card
                     if (diagonalCard.getType().equals(currentCard.getType())) {
                         counter++;
                     }
@@ -51,6 +51,7 @@ public class CommonGoalCardStrat_DIAGONAL_FIVE implements CommonGoalCardStrat {
                     // if there's no card in the diagonal break the loop and continue
                     if (diagonalCard == null) break;
 
+                    // checks if the cards in the diagonal has the same type as the currently selected card
                     if (diagonalCard.getType().equals(currentCard.getType())) {
                         counter++;
                     }
