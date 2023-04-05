@@ -23,6 +23,9 @@ public interface CommonGoalCardStrat {
         List<ItemCard> heads;
         int adjacentToHead = 0;
 
+        if(hotCard == null)
+            return 0;
+
         // TODO: Un pochino inefficiente, si può migliorare?
         // finds the hotCard in the shelf
         for (int row = 0; row < numberOfRows; row++) {
