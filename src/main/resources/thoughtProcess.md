@@ -147,17 +147,11 @@ controllando se almeno una di esse sia composta da elementi dello stesso tipo
 
 > - TWO_SQUARES (era bello ma da rifare)
 
-vi spiego al volo la specifica: i *GRUPPI* da 4 al contrario di come scritto sulle regole del gioco possono essere anche
-di tipi diversi sono solo le 4 tessere all'interno del singolo quadrato che devono essere dello stesso tipo
-e inoltre due quadrati di tipi diversi possono essere adiacenti mentre due quadrati dello stesso tipo no
-
 > - FOUR_LINES_MAX_THREE_TYPES (ancora da fare)
 
 > - EQUAL_CORNERS (fatto)
 
 mooolto semplice controlla che gli elementi ai 4 angoli della shelf siano dello stesso tipo
-
-> - FOUR_QUARTETS (ancora da fare)
 
 > - TWO_RAINBOW_COLUMNS (fatto)
 
@@ -190,7 +184,8 @@ più object-oriented.
 
 ### Il grande refactoring del model
 
-- Fabio sta implementando la classe **player** e facendo modifiche a **shelf**, che sposterà i possedimenti di ogni giocatore da **game** a **player**,
+- Fabio sta implementando la classe **player** e facendo modifiche a **shelf**, che sposterà i possedimenti di ogni
+  giocatore da **game** a **player**,
   e contribuirà ad alleggerire **game**
 - Io mi occupo di spostare il codice di check delle CommonGoalCard in 12 classi separate, seguendo lo _Strategy
   Pattern_, in modo da alleggerire il **gamecontroller**. Ho reso CommonGoalCardStrat come un'interfaccia che implementa
@@ -199,3 +194,6 @@ più object-oriented.
 - Il context è CommonGoalCard, la Strategy è CommonGoalCardStrat, le concretes sono 12 classi, e Client è Game. Lascio
   irrisolto al momento il problema di istanziare una strategia random da parte di Game per essere assegnata a
   CommonGoalCard, e anche la riscrittura di test strutturati...
+- **Il giorno dopo** (4 aprile) ho istanziato la strategia random in game tramite l'uso di Class.forName e .newInstance
+  e l'ho passata a CommonGoalCard, rimane da scrivere il test. Finalmente è chiaro come raggruppare gli algoritmi delle
+  commongoalcards.

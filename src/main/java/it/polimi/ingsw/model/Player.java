@@ -3,6 +3,10 @@ package it.polimi.ingsw.model;
 import java.util.List;
 
 public class Player {
+<<<<<<< Updated upstream
+=======
+    // public static List<CommonGoalCard> commonGoalCards;
+>>>>>>> Stashed changes
     private final String name;
     private final Shelf shelf;
     private PersonalGoalCard personalGoalCard;

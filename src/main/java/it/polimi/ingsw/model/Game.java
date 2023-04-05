@@ -39,8 +39,33 @@ public class Game {
 
         // inizializzazione delle commonGoalCards
         commonGoalCards = new CommonGoalCard[Constants.numberOfCommonGoalCardsInGame];
+
+        // creo un array di due numeri randomici diversi tra 0 e 11 (inefficient...)
+        List<Integer> randomNumbers = new ArrayList<>();
         for (int i = 0; i < Constants.numberOfCommonGoalCardsInGame; i++) {
+            int random;
+            do {
+                random = new Random().nextInt(Constants.CommonGoalTypes.length);
+            } while (randomNumbers.contains(random));
+            randomNumbers.add(random);
+        }
+
+        for (int i = 0; i < Constants.numberOfCommonGoalCardsInGame; i++) {
+            // scelgo uno dei randomNumbers per generare il nome di classe e lo elimino
+            String className = "CommonGoalCardStrat_" + Constants.CommonGoalTypes[randomNumbers.get(0)];
+            randomNumbers.remove(0);
+
+            // istanzio la commongoalcard
             commonGoalCards[i] = new CommonGoalCard(numberOfPlayers);
+
+            // istanzio la strategia e la imposto
+            try {
+                Class<?> clazz = Class.forName(className);
+                commonGoalCards[i].setStrat((CommonGoalCardStrat) clazz.newInstance());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+
         }
 
         PersonalGoalCard[] personalGoalCards = this.getRandomPersonalGoalCards();
