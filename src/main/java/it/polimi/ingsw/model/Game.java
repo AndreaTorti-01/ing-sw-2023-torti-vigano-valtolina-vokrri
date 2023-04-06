@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Game {
-    private final Player[] players;
+    private final ArrayList<Player> players;
     private final Bag bag;
     private final Board board;
     private final CommonGoalCard[] commonGoalCards;
@@ -32,9 +32,9 @@ public class Game {
         }
 
         // inizializzazione dei players
-        players = new Player[numberOfPlayers];
-        for (int i = 0; i < numberOfPlayers; i++) {
-            players[i] = new Player(playersNames[i]);
+        players = new ArrayList<>(numberOfPlayers);
+        for (String playersName : playersNames) {
+            players.add(new Player(playersName));
         }
 
         // inizializzazione delle commonGoalCards
@@ -70,11 +70,11 @@ public class Game {
 
         PersonalGoalCard[] personalGoalCards = this.getRandomPersonalGoalCards();
         for (int i = 0; i < numberOfPlayers; i++) {
-            players[i].setPersonalGoalCard(personalGoalCards[i]);
+            players.get(i).setPersonalGoalCard(personalGoalCards[i]);
         }
     }
 
-    public Player[] getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
 
@@ -92,7 +92,7 @@ public class Game {
     }
 
     public int getNumberOfPlayers() {
-        return players.length;
+        return players.size();
     }
 
     /**
