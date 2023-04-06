@@ -1,123 +1,156 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.utils.Constants;
-
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static it.polimi.ingsw.utils.Constants.*;
+
 public class Game {
     private final ArrayList<Player> players;
     private final Bag bag;
     private final Board board;
-    private final CommonGoalCard[] commonGoalCards;
+    private final ArrayList<CommonGoalCard> commonGoalCards;
 
     public Game(String... playersNames) throws IllegalArgumentException {
         int numberOfPlayers = playersNames.length;
 
-        if (numberOfPlayers < Constants.minNumberOfPlayers || numberOfPlayers > Constants.maxNumberOfPlayers)
+        if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
             throw new IllegalArgumentException(
-                    "provided number of players (" + numberOfPlayers + ") is out of range " + Constants.minNumberOfPlayers + "-" + Constants.maxNumberOfPlayers
+                    "provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers
             );
 
-        // inizializzazione di una nuova bag
+        // initialization of a new Bag
         bag = new Bag();
 
-        // inizializzazione di una nuova board
+        // initialization of a new Board
         try {
             board = new Board(numberOfPlayers);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        // inizializzazione dei players
-        players = new ArrayList<>(numberOfPlayers);
-        for (String playersName : playersNames) {
-            players.add(new Player(playersName));
-        }
+        // initialization of the players and corresponding personal goal cards
+        players = this.initPlayers(playersNames);
 
-        // inizializzazione delle commonGoalCards
-        commonGoalCards = new CommonGoalCard[Constants.numberOfCommonGoalCardsInGame];
+        // initialization of the common goal cards
+        commonGoalCards = this.getRandomCommonGoalCards();
 
-        // creo un array di due numeri randomici diversi tra 0 e 11 (inefficient...)
-        List<Integer> randomNumbers = new ArrayList<>();
-        for (int i = 0; i < Constants.numberOfCommonGoalCardsInGame; i++) {
-            int random;
-            do {
-                random = new Random().nextInt(Constants.CommonGoalTypes.length);
-            } while (randomNumbers.contains(random));
-            randomNumbers.add(random);
-        }
 
-        for (int i = 0; i < Constants.numberOfCommonGoalCardsInGame; i++) {
-            // scelgo uno dei randomNumbers per generare il nome di classe e lo elimino
-            String className = "CommonGoalCardStrat_" + Constants.CommonGoalTypes[randomNumbers.get(0)];
-            randomNumbers.remove(0);
-
-            // istanzio la commongoalcard
-            commonGoalCards[i] = new CommonGoalCard(numberOfPlayers);
-
-            // istanzio la strategia e la imposto
-            try {
-                Class<?> clazz = Class.forName(className);
-                commonGoalCards[i].setStrat((CommonGoalCardStrat) clazz.newInstance());
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-
-        PersonalGoalCard[] personalGoalCards = this.getRandomPersonalGoalCards();
-        for (int i = 0; i < numberOfPlayers; i++) {
-            players.get(i).setPersonalGoalCard(personalGoalCards[i]);
-        }
     }
 
+    /**
+     * @return the players
+     */
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
+    /**
+     * @return the bag
+     */
     public Bag getBag() {
         return bag;
     }
 
-    // implementazione che non astrae board, e quindi rende gli oggetti di gioco trasparenti a controller
+    /**
+     * @return the board
+     */
     public Board getBoard() {
         return board;
     }
 
-    public CommonGoalCard[] getCommonGoalCards() {
+    /**
+     * @return the common goal cards
+     */
+    public ArrayList<CommonGoalCard> getCommonGoalCards() {
         return commonGoalCards;
     }
 
+    /**
+     * @return the number of players
+     */
     public int getNumberOfPlayers() {
         return players.size();
     }
 
     /**
-     * Creates and returns an array of random PersonalGoalCards
+     * Creates and return an arraylist of players,
+     * giving each of them a random PersonalGoalCard
      *
-     * @return array of random PersonalGoalCards
+     * @param playerNames an array containing the name of each player
+     * @return an arraylist of players
      */
-    private PersonalGoalCard[] getRandomPersonalGoalCards() {
+    private ArrayList<Player> initPlayers(String[] playerNames) {
         Random random = new Random();
-        int numberOfPlayers = this.getNumberOfPlayers();
+        ArrayList<Player> players = new ArrayList<>(playerNames.length);
 
-        // list of available indexes
-        List<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < Constants.numberOfPersonalGoalCardsTypes; i++) indexes.add(i);
+        // initializes a list of available indexes
+        List<Integer> indexes = this.getIndexes(numberOfPersonalGoalCardsTypes);
 
-
-        PersonalGoalCard[] personalGoalCards = new PersonalGoalCard[numberOfPlayers];
-        for (int i = 0; i < numberOfPlayers; i++) {
+        // for each player name, instantiates a new Player and gives him a random personal goal card
+        for (String playerName : playerNames) {
+            // chooses and removes a random index from the array of indexes in order not to have duplicates
             int randomIndex = random.nextInt(0, indexes.size());
-            personalGoalCards[i] = new PersonalGoalCard(randomIndex);
-
-            // rimuove l'indice alla posizione randomIndex da indexes in modo che non si possa ripresentare
             indexes.remove(randomIndex);
+
+            PersonalGoalCard currentPersonalGoalCard = new PersonalGoalCard(randomIndex);
+            Player player = new Player(playerName);
+
+            // gives to the player the corresponding personal goal card
+            player.setPersonalGoalCard(currentPersonalGoalCard);
+
+            // adds the newly created player to the list
+            players.add(player);
         }
 
-        return personalGoalCards;
+        return players;
+    }
+
+    /**
+     * @return an arraylist of random CommonGoalCard
+     */
+    private ArrayList<CommonGoalCard> getRandomCommonGoalCards() {
+        int numberOfPlayers = this.getNumberOfPlayers();
+        ArrayList<CommonGoalCard> commonGoalCards = new ArrayList<>(numberOfCommonGoalCardsInGame);
+
+        // initializes an array of indexes, then used to get two random indexes without duplicates
+        ArrayList<Integer> indexes = this.getIndexes(CommonGoalTypes.length);
+
+        for (int i = 0; i < numberOfCommonGoalCardsInGame; i++) {
+            // chooses and removes a random index from the indexes array in order not to have duplicates
+            int randomIndex = new Random().nextInt(0, indexes.size());
+            indexes.remove(randomIndex);
+
+            CommonGoalCard currentCommonGoalCard = new CommonGoalCard(numberOfPlayers);
+
+            // instantiates the strategy from the given name, selected from the ones available,
+            // and gives it to the current common goal card.
+            String className = "CommonGoalCardStrat_" + CommonGoalTypes[randomIndex];
+            try {
+                Class<?> strategy = Class.forName(className);
+                currentCommonGoalCard.setStrat((CommonGoalCardStrat) strategy.newInstance());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+
+            // adds the newly created common goal card to the list
+            commonGoalCards.add(new CommonGoalCard(numberOfPlayers));
+        }
+
+        return commonGoalCards;
+    }
+
+    /**
+     * @param bound the upper bound (excluded)
+     * @return an array list with all indexes in range 0 (included) - bound (excluded)
+     */
+    private ArrayList<Integer> getIndexes(int bound) {
+        // initializes an arrayList that contains all indexes in range 0-bound
+        ArrayList<Integer> indexes = new ArrayList<>(bound);
+        for (int i = 0; i < bound; i++) indexes.add(i);
+
+        return indexes;
     }
 }

@@ -9,6 +9,26 @@ public class CommonGoalCardStrat_STAIR implements CommonGoalCardStrat {
         // the length of the stair is at most equal to the number of columns or the number of rows
         int stairLength = Math.min(numberOfColumns, numberOfRows);
 
+        // the stair can have the first step of height grater than one. So, for every iteration,
+        // it removes the bottom part of the stair and checks for a step of height one,
+        // from where to start searching for the pattern.
+        //
+        // Example of what it checks:
+        // first iteration (row == 0):
+        // C * * * *
+        // B C * * *
+        // B B C * *
+        // B B B C *
+        // B B B B C
+        // B B B B B <- starts to check from this row
+        //
+        // second iteration (row == 1):
+        // C * * * *
+        // B C * * *
+        // B B C * *
+        // B B B C *
+        // B B B B C <- starts to check from this row
+        // B B B B B <- it's like it does not exist
         for (int row = 0; row < stairLength; row++) {
             // the expected height of the column for the first step of the stair (which always has height of one)
             int nextExpectedHeight = 1;
@@ -44,7 +64,6 @@ public class CommonGoalCardStrat_STAIR implements CommonGoalCardStrat {
                 if (nextExpectedHeight - 1 == stairLength) return true;
             }
         }
-
 
         // if no stair pattern is found return false
         return false;
