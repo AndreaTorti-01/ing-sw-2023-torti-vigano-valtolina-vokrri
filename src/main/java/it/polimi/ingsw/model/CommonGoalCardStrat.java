@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +18,14 @@ public interface CommonGoalCardStrat {
      * and returns the number of them
      *
      * @param shelfCopy a deep copy of the shelf
-     * @param hotCard   the center card from where to delete all
+     * @param hotCard   the center card from where to delete all the adjacent ones
      * @return the number of adjacent cards with the same type
      */
     default int headLiminate(Shelf shelfCopy, ItemCard hotCard) {
         List<ItemCard> heads;
         int adjacentToHead = 0;
 
-        if(hotCard == null)
+        if (hotCard == null)
             return 0;
 
         // TODO: Un pochino inefficiente, si può migliorare?
@@ -54,8 +56,8 @@ public interface CommonGoalCardStrat {
      * Retrieves all the adjacent cards with the same type as the one in the (row, column) position in the shelf
      *
      * @param shelfCopy a deep copy of the shelf
-     * @param row       the row of the current card
-     * @param column    the column of the current card
+     * @param row       must be between boundaries (specified in the {@link Constants} file)
+     * @param column    must be between boundaries (specified in the {@link Constants} file)
      * @return a list of all adjacent cards with the same type
      */
     default ArrayList<ItemCard> getHeads(Shelf shelfCopy, int row, int column) {

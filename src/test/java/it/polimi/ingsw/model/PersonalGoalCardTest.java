@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class PersonalGoalCardTest {
     @Test
     void testPattern() {
-        for (int i = 0; i < Constants.numberOfPersonalGoalCardsTypes; i++) {
+        for (int i = 0; i < Constants.numberOfPersonalGoalCardTypes; i++) {
             PersonalGoalCard currentPersonalGoalCard = new PersonalGoalCard(i);
             ItemType[][] pattern = currentPersonalGoalCard.getPattern();
 

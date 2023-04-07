@@ -2,12 +2,19 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.Constants;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class Shelf extends GameObject {
     private final ItemCard[][] items;
     private boolean isACopy;
 
     /**
-     * The shelf is empty when instantiated. 0,0 is the top left corner
+     * Creates a new empty Shelf.
+     * <p>
+     * The (0, 0) position is the top left corner.
      */
     public Shelf() {
         this.items = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
@@ -38,10 +45,49 @@ public class Shelf extends GameObject {
     }
 
     /**
+     * Creates a new Shelf from the given file containing a representation of an ItemCards matrix
+     *
+     * @param fileName the name of the file containing a matrix of ItemCards
+     */
+    public Shelf(String fileName) {
+        // initializes items to a null matrix of
+        // Constants.numberOfRows rows and Constants.numberOfColumns columns
+        this();
+
+        try {
+            InputStream inputStream = this.getClass().getResourceAsStream(fileName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            int row = 0;
+            String line = reader.readLine();
+            while (line != null) {
+                for (int column = 0; column < line.length(); column++) {
+                    char currentChar = line.charAt(column);
+                    if (currentChar == '*') continue;
+
+                    // gets the type of the ItemCard given the abbreviation found in the file
+                    // and inserts it in the correct position of the matrix
+                    this.items[row][column] = new ItemCard(
+                            ItemType.getItemTypeFromAbbreviation(currentChar)
+                    );
+                }
+
+                // goes to next line
+                line = reader.readLine();
+                row++;
+            }
+        } catch (IOException | NullPointerException e) {
+            throw new RuntimeException(e);
+        }
+
+        this.isACopy = false;
+    }
+
+    /**
      * Get the card at the specified position
      *
-     * @param row    must be between boundaries (specified in the Constants.java file)
-     * @param column must be between boundaries (specified in the Constants.java file)
+     * @param row    must be between boundaries (specified in the {@link Constants} file)
+     * @param column must be between boundaries (specified in the {@link Constants} file)
      * @return ItemCard | null, depending on the presence of a card at the specified position
      */
     public ItemCard getCardAt(int row, int column) {
@@ -53,12 +99,12 @@ public class Shelf extends GameObject {
      * <p>
      * <p>
      * ************************************** <p>
-     * * USE ONLY FOR A CLONE OF THE SHELF! * <p>
+     * * USE ONLY ON A CLONE OF THE SHELF! * <p>
      * ************************************** <p>
      *
-     * @param row     must be between boundaries (specified in the Constants.java file)
-     * @param column  must be between boundaries (specified in the Constants.java file)
-     * @param newCard the new value
+     * @param row     must be between boundaries (specified in the {@link Constants} file)
+     * @param column  must be between boundaries (specified in the {@link Constants} file)
+     * @param newCard the new value assigned to the specified position
      */
     public void setCardAt(int row, int column, ItemCard newCard) throws IllegalAccessError {
         if (!this.isACopy) throw new IllegalAccessError("Cannot call this method on the original shelf!");
@@ -66,9 +112,7 @@ public class Shelf extends GameObject {
     }
 
     /**
-     * Creates a copy of the current shelf and returns it
-     *
-     * @return a copy of the current Shelf
+     * @return a deep copy of the current Shelf
      */
     public Shelf getCopy() {
         // initializes a new null matrix of ItemCards
@@ -95,9 +139,9 @@ public class Shelf extends GameObject {
     }
 
     /**
-     * Insert a card in the shelf from the top (0,0 is the top left corner)
+     * Inserts the given ItemCard in the first available row of the shelf from the top
      *
-     * @param column must be between 0 and 4
+     * @param column must be between boundaries (specified in the {@link Constants} file)
      * @param item   the card to be inserted
      * @throws RuntimeException if the column is full
      */
@@ -113,10 +157,8 @@ public class Shelf extends GameObject {
     }
 
     /**
-     * Returns the length of the specified column of the shelf
-     *
-     * @param column to calculate the length of
-     * @return length of the column
+     * @param column must be between boundaries (specified in the {@link Constants} file)
+     * @return length of the given column
      */
     public int getColumnLength(int column) {
         int length = 0;

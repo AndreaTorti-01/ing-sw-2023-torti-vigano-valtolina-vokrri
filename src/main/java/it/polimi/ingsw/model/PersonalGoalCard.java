@@ -25,8 +25,8 @@ public class PersonalGoalCard extends GameObject {
      * @throws IndexOutOfBoundsException when given an index outside the range 0-11.
      */
     public PersonalGoalCard(int index) {
-        if (index < 0 || index > Constants.numberOfPersonalGoalCardsTypes - 1)
-            throw new IndexOutOfBoundsException("provided index (" + index + ") is out of range 0-" + (Constants.numberOfPersonalGoalCardsTypes - 1));
+        if (index < 0 || index > Constants.numberOfPersonalGoalCardTypes - 1)
+            throw new IndexOutOfBoundsException("provided index (" + index + ") is out of range 0-" + (Constants.numberOfPersonalGoalCardTypes - 1));
 
         // initializes the pattern to a null matrix
         pattern = new ItemType[Constants.numberOfRows][Constants.numberOfColumns];

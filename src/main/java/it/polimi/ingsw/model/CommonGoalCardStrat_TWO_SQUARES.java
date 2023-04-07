@@ -38,9 +38,9 @@ public class CommonGoalCardStrat_TWO_SQUARES implements CommonGoalCardStrat {
                     }
                 }
                 //i check if the square if fully isolated ( by nulls, by outOfBound cells, or different type cells)
-                for(int outerRow = row - 1; outerRow < row + squaresDim + 2; outerRow++){
-                    for(int outerCol = column - 1; outerCol < column + squaresDim + 2; outerCol++){
-                        if((outerCol == column - 1 || outerCol == column +squaresDim + 1 || outerRow == row - 1 || outerRow == row + squaresDim + 1)
+                for (int outerRow = row - 1; outerRow < row + squaresDim + 2; outerRow++) {
+                    for (int outerCol = column - 1; outerCol < column + squaresDim + 2; outerCol++) {
+                        if ((outerCol == column - 1 || outerCol == column + squaresDim + 1 || outerRow == row - 1 || outerRow == row + squaresDim + 1)
                                 //faccio un controllo solo sul perimetro esterno al quadrato
                                 // se le celle del perimetro esterno non sono illegali, non sono nulle, ma sono dello stesso tipo della cella iniziale, non è valido
                                 && !(outerCol < 0 || outerCol == numberOfColumns) && !(outerRow < 0 || outerRow == numberOfRows) &&

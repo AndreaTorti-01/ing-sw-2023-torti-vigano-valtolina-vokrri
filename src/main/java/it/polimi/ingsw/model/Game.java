@@ -87,7 +87,7 @@ public class Game {
         ArrayList<Player> players = new ArrayList<>(playerNames.length);
 
         // initializes a list of available indexes
-        List<Integer> indexes = this.getIndexes(numberOfPersonalGoalCardsTypes);
+        List<Integer> indexes = this.getIndexes(numberOfPersonalGoalCardTypes);
 
         // for each player name, instantiates a new Player and gives him a random personal goal card
         for (String playerName : playerNames) {
@@ -116,7 +116,7 @@ public class Game {
         ArrayList<CommonGoalCard> commonGoalCards = new ArrayList<>(numberOfCommonGoalCardsInGame);
 
         // initializes an array of indexes, then used to get two random indexes without duplicates
-        ArrayList<Integer> indexes = this.getIndexes(CommonGoalTypes.length);
+        ArrayList<Integer> indexes = this.getIndexes(CommonGoalCardTypes.length);
 
         for (int i = 0; i < numberOfCommonGoalCardsInGame; i++) {
             // chooses and removes a random index from the indexes array in order not to have duplicates
@@ -127,10 +127,10 @@ public class Game {
 
             // instantiates the strategy from the given name, selected from the ones available,
             // and gives it to the current common goal card.
-            String className = "CommonGoalCardStrat_" + CommonGoalTypes[randomIndex];
+            String className = "CommonGoalCardStrat_" + CommonGoalCardTypes[randomIndex];
             try {
                 Class<?> strategy = Class.forName(className);
-                currentCommonGoalCard.setStrat((CommonGoalCardStrat) strategy.newInstance());
+                currentCommonGoalCard.setStrategy((CommonGoalCardStrat) strategy.newInstance());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

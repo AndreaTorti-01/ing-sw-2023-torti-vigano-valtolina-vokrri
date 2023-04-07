@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,7 +19,7 @@ class CommonGoalCardStrat_SIX_PAIRSTest {
             if (i + 1 < 10) fileName = String.format(folderName + "/TEST_FALSE_0%d" + fileExtension, i + 1);
             else fileName = String.format(folderName + "/TEST_FALSE_%d" + fileExtension, i + 1);
 
-            Shelf shelf = FileUtils.getShelfFromFile(fileName);
+            Shelf shelf = new Shelf(fileName);
 
             assertFalse(commonGoalCardStrat.checkPattern(shelf));
         }
@@ -30,7 +29,7 @@ class CommonGoalCardStrat_SIX_PAIRSTest {
             if (i + 1 < 10) fileName = String.format(folderName + "TEST_TRUE_0%d" + fileExtension, i + 1);
             else fileName = String.format(folderName + "TEST_TRUE_%d" + fileExtension, i + 1);
 
-            Shelf shelf = FileUtils.getShelfFromFile(fileName);
+            Shelf shelf = new Shelf(fileName);
 
             assertTrue(commonGoalCardStrat.checkPattern(shelf));
         }

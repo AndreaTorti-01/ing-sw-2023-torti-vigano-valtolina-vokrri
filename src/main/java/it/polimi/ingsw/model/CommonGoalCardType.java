@@ -36,6 +36,6 @@ public enum CommonGoalCardType {
     public static CommonGoalCardType getRandomType() {
         // can return the same type multiple times.
         // the controller will take care of destroying duplicates
-        return values.get(new Random().nextInt(Constants.numberOfCardTypes));
+        return values.get(new Random().nextInt(Constants.numberOfItemCardTypes));
     }
 }
