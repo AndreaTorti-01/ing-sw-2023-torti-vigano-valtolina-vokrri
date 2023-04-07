@@ -88,7 +88,7 @@ public class Game {
         ArrayList<Player> players = new ArrayList<>(playerNames.length);
 
         // initializes a list of available indexes
-        List<Integer> indexes = this.getIndexes(numberOfPersonalGoalCardsTypes);
+        List<Integer> indexes = this.getIndexes(numberOfPersonalGoalCardTypes);
 
         // for each player name, instantiates a new Player and gives him a random personal goal card
         for (String playerName : playerNames) {
@@ -131,7 +131,7 @@ public class Game {
             String className = "CommonGoalCardStrat_" + CommonGoalCardType.values()[randomIndex].toString();
             try {
                 Class<?> strategy = Class.forName(className);
-                currentCommonGoalCard.setStrat((CommonGoalCardStrat) strategy.newInstance());
+                currentCommonGoalCard.setStrategy((CommonGoalCardStrat) strategy.newInstance());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

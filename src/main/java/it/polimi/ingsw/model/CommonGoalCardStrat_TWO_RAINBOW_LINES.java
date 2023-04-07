@@ -35,7 +35,7 @@ public class CommonGoalCardStrat_TWO_RAINBOW_LINES implements CommonGoalCardStra
                 typesInCurrentColumn.add(currentCard.getType());
             }
             // if the set has all the different types of cards except for one type, increments counter
-            if (typesInCurrentColumn.size() == numberOfCardTypes - 1) counter++;
+            if (typesInCurrentColumn.size() == numberOfItemCardTypes - 1) counter++;
         }
 
         // if there are two rows that satisfy the pattern return true

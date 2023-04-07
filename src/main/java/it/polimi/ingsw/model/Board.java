@@ -15,7 +15,7 @@ public class Board extends GameObject {
      * The file is read through the object loader ObjectInputStream
      *
      * @param numberOfPlayers is the number of players: needed to choose the board layout
-     * @throws FileNotFoundException if the number of players is not between 2 and 4
+     * @throws FileNotFoundException if the number of players is not between boundaries (specified in the {@link Constants} file)
      */
     public Board(int numberOfPlayers) throws FileNotFoundException {
         // deferred valid assignment because of multiple try/catches
@@ -38,8 +38,8 @@ public class Board extends GameObject {
     }
 
     /**
-     * @param row
-     * @param column
+     * @param row    must be between boundaries (specified in the {@link Constants} file)
+     * @param column must be between boundaries (specified in the {@link Constants} file)
      * @return true or false depending on the validity of the selected tile in the current game
      */
     public boolean isValid(int row, int column) {
@@ -48,8 +48,8 @@ public class Board extends GameObject {
 
     /**
      * @param tile   may be ItemCard or null
-     * @param row    must be valid
-     * @param column must be valid
+     * @param row    must be between boundaries (specified in the {@link Constants} file)
+     * @param column must be between boundaries (specified in the {@link Constants} file)
      * @throws ArrayIndexOutOfBoundsException if (row,column) is not a valid position
      */
     public void setTile(ItemCard tile, int row, int column) throws ArrayIndexOutOfBoundsException {
@@ -60,8 +60,8 @@ public class Board extends GameObject {
     }
 
     /**
-     * @param row    must be valid
-     * @param column must be valid
+     * @param row    must be between boundaries (specified in the {@link Constants} file)
+     * @param column must be between boundaries (specified in the {@link Constants} file)
      * @return the card on the selected tile, without removing it, or null if the tile is empty
      * @throws ArrayIndexOutOfBoundsException if (row,column) is not a valid position
      */
@@ -73,8 +73,8 @@ public class Board extends GameObject {
     }
 
     /**
-     * @param row    must be valid
-     * @param column must be valid
+     * @param row    must be between boundaries (specified in the {@link Constants} file)
+     * @param column must be between boundaries (specified in the {@link Constants} file)
      * @return the card on the selected tile, removing it, or null if the tile is empty
      * @throws NullPointerException           if the tile is already empty
      * @throws ArrayIndexOutOfBoundsException if (row,column) is not a valid position

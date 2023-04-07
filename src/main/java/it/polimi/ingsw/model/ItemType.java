@@ -15,10 +15,8 @@ public enum ItemType {
     }
 
     /**
-     * Return the ItemType from the abbreviation
-     *
      * @param abbreviation the abbreviation of the ItemType
-     * @return the ItemType
+     * @return the ItemType given its abbreviation
      */
     public static ItemType getItemTypeFromAbbreviation(char abbreviation) {
         if (abbreviation == '*') return null;
@@ -31,10 +29,9 @@ public enum ItemType {
     }
 
     /**
-     * Returns a random value from the one in the enumeration.
-     * For Test purpose.
+     * FOR TEST PURPOSE!
      *
-     * @return a random value
+     * @return a random value from the one in the enumeration.
      */
     public static ItemType getRandomItemType() {
         final int numberOfItems = ItemType.values().length;

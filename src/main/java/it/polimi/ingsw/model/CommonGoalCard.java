@@ -64,14 +64,13 @@ public class CommonGoalCard extends GameObject {
     }
 
     /**
-     * sets the strategy for this card
-     * @param strat
+     * @param strategy the strategy to set for the card
      */
-    public void setStrat(CommonGoalCardStrat strat) {
-        this.strat = strat;
+    public void setStrategy(CommonGoalCardStrat strategy) {
+        this.strat = strategy;
     }
 
-    public boolean checkCard(Shelf shelf) {
+    public boolean checkPattern(Shelf shelf) {
         return strat.checkPattern(shelf);
     }
 

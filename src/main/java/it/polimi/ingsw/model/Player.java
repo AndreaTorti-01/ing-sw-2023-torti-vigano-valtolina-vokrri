@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 public class Player {
-    // public static List<CommonGoalCard> commonGoalCards;
     private final String name;
     private final Shelf shelf;
     private PersonalGoalCard personalGoalCard;

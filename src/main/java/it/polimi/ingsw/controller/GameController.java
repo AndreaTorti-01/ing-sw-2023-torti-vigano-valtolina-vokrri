@@ -48,6 +48,6 @@ public class GameController {
      * @return true if the pattern is satisfied, false otherwise
      */
     private boolean checkCommonGoalCardPattern(Shelf shelf, CommonGoalCard commonGoalCard) {
-        return commonGoalCard.checkCard(shelf);
+        return commonGoalCard.checkPattern(shelf);
     }
 }

@@ -45,7 +45,7 @@ public class CommonGoalCardStrat_RAINBOW implements CommonGoalCardStrat {
                 typesInCurrentColumn.add(currentCard.getType());
             }
             // if the set has all the different types of cards, increments counter
-            if (typesInCurrentColumn.size() == numberOfCardTypes) counter++;
+            if (typesInCurrentColumn.size() == numberOfItemCardTypes) counter++;
         }
 
         // if there are two columns that satisfy the pattern, return true
