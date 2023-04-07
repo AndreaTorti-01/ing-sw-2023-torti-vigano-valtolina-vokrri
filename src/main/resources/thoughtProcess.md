@@ -197,3 +197,20 @@ più object-oriented.
 - **Il giorno dopo** (4 aprile) ho istanziato la strategia random in game tramite l'uso di Class.forName e .newInstance
   e l'ho passata a CommonGoalCard, rimane da scrivere il test. Finalmente è chiaro come raggruppare gli algoritmi delle
   commongoalcards.
+
+## Gli algoritmi delle common goal card vengono riscritti da capo
+
+Finalmente si decide di ricominciare a scrivere gli algoritmi a partire dall'idea di trovare pattern ricorrenti: Stair,
+Cross, Diagonal_Five, Equal_Corners e Two_Squares vengono riuniti sotto classe **SHAPE**, e la *shape* da ricercare
+viene salvata sotto un file .txt codificato come segue:
+
+```
+width height
+SHAPE_MATRIX
+mirror_hor num_of_shapes
+```
+
+L'algoritmo è debitamente commentato, non verrà rispiegato qui, la classe Shape è un record ed è stato rimosso l'elenco
+di CGCs da constants...
+
+Sto pensando di rimuovere getValues da CommonGoalCardType per ridondanza... anche GameObject lol

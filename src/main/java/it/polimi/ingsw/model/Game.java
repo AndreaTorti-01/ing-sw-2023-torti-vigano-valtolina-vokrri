@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import it.polimi.ingsw.utils.Constants.*;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
@@ -116,7 +117,7 @@ public class Game {
         ArrayList<CommonGoalCard> commonGoalCards = new ArrayList<>(numberOfCommonGoalCardsInGame);
 
         // initializes an array of indexes, then used to get two random indexes without duplicates
-        ArrayList<Integer> indexes = this.getIndexes(CommonGoalTypes.length);
+        ArrayList<Integer> indexes = this.getIndexes(numberOfCardTypes);
 
         for (int i = 0; i < numberOfCommonGoalCardsInGame; i++) {
             // chooses and removes a random index from the indexes array in order not to have duplicates
@@ -127,7 +128,7 @@ public class Game {
 
             // instantiates the strategy from the given name, selected from the ones available,
             // and gives it to the current common goal card.
-            String className = "CommonGoalCardStrat_" + CommonGoalTypes[randomIndex];
+            String className = "CommonGoalCardStrat_" + CommonGoalCardType.values()[randomIndex].toString();
             try {
                 Class<?> strategy = Class.forName(className);
                 currentCommonGoalCard.setStrat((CommonGoalCardStrat) strategy.newInstance());

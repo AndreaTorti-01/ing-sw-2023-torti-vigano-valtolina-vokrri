@@ -24,6 +24,7 @@ public enum CommonGoalCardType {
             Arrays.asList(CommonGoalCardType.values())
     );
 
+    // TODO: remove?
     public static ArrayList<CommonGoalCardType> getValues() {
         return values;
     }

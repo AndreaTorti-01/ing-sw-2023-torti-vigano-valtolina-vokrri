@@ -126,4 +126,12 @@ public class Shelf extends GameObject {
 
         return length;
     }
+
+    public int width() {
+        return Constants.numberOfColumns;
+    }
+
+    public int height() {
+        return Constants.numberOfRows;
+    }
 }

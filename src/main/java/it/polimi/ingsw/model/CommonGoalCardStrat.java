@@ -23,8 +23,7 @@ public interface CommonGoalCardStrat {
         List<ItemCard> heads;
         int adjacentToHead = 0;
 
-        if(hotCard == null)
-            return 0;
+        if (hotCard == null) return 0;
 
         // TODO: Un pochino inefficiente, si può migliorare?
         // finds the hotCard in the shelf
@@ -71,32 +70,28 @@ public interface CommonGoalCardStrat {
         // and inserts it in the list if it has the same type of the specified one
         if (row + 1 < numberOfRows) {
             ItemCard upperCard = shelfCopy.getCardAt(row + 1, column);
-            if (upperCard != null && currentType.equals(upperCard.getType()))
-                heads.add(upperCard);
+            if (upperCard != null && currentType.equals(upperCard.getType())) heads.add(upperCard);
         }
 
         // checks the right card
         // and inserts it in the list if it has the same type of the specified one
         if (column + 1 < numberOfColumns) {
             ItemCard rightCard = shelfCopy.getCardAt(row, column + 1);
-            if (rightCard != null && currentType.equals(rightCard.getType()))
-                heads.add(rightCard);
+            if (rightCard != null && currentType.equals(rightCard.getType())) heads.add(rightCard);
         }
 
         // checks the lower card
         // and inserts it in the list if it has the same type of the specified one
         if (row - 1 >= 0) {
             ItemCard lowerCard = shelfCopy.getCardAt(row - 1, column);
-            if (lowerCard != null && currentType.equals(lowerCard.getType()))
-                heads.add(lowerCard);
+            if (lowerCard != null && currentType.equals(lowerCard.getType())) heads.add(lowerCard);
         }
 
         // checks the left card
         // and inserts it in the list if it has the same type of the specified one
         if (column - 1 >= 0) {
             ItemCard leftCard = shelfCopy.getCardAt(row, column - 1);
-            if (leftCard != null && currentType.equals(leftCard.getType()))
-                heads.add(leftCard);
+            if (leftCard != null && currentType.equals(leftCard.getType())) heads.add(leftCard);
         }
 
         return heads;
