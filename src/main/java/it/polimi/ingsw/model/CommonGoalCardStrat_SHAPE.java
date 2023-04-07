@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static it.polimi.ingsw.utils.Constants.numberOfCardTypes;
+import static it.polimi.ingsw.utils.Constants.numberOfItemCardTypes;
 
 
 public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
@@ -29,7 +29,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         int found_shapes = 0;
 
         // loop through the 1 shelf masks through ItemType.values()
-        for (int cardType = 0; cardType < numberOfCardTypes; cardType++) {
+        for (int cardType = 0; cardType < numberOfItemCardTypes; cardType++) {
 
             // create the shelf mask
             boolean[][] masked_shelf = new boolean[shelf.height()][shelf.width()];
@@ -61,7 +61,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
             Shape inv_shape = new Shape(shape.width(), shape.height(), inv_matrix, true, shape.num_of_shapes());
 
             // do the same for the inverted matrix
-            for (int cardType = 0; cardType < numberOfCardTypes; cardType++) {
+            for (int cardType = 0; cardType < numberOfItemCardTypes; cardType++) {
 
                 // create the shelf mask
                 boolean[][] masked_shelf = new boolean[shelf.height()][shelf.width()];
