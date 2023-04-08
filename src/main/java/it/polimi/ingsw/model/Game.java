@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import it.polimi.ingsw.utils.Constants.*;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
@@ -117,7 +116,7 @@ public class Game {
         ArrayList<CommonGoalCard> commonGoalCards = new ArrayList<>(numberOfCommonGoalCardsInGame);
 
         // initializes an array of indexes, then used to get two random indexes without duplicates
-        ArrayList<Integer> indexes = this.getIndexes(numberOfCardTypes);
+        ArrayList<Integer> indexes = this.getIndexes(numberOfItemCardTypes);
 
         for (int i = 0; i < numberOfCommonGoalCardsInGame; i++) {
             // chooses and removes a random index from the indexes array in order not to have duplicates
