@@ -10,7 +10,7 @@ public class CommonGoalCardStrat_AGGREGATE implements CommonGoalCardStrat {
     private final int aggregateSize;
     private final CommonGoalCardType type;
 
-    public CommonGoalCardStrat_AGGREGATE (CommonGoalCardType cardType){
+    public CommonGoalCardStrat_AGGREGATE (CommonGoalCardType cardType) throws RuntimeException{
         type = cardType;
         if(cardType.equals(CommonGoalCardType.SIX_PAIRS)){
             aggregatesToFind = 6;
@@ -18,7 +18,7 @@ public class CommonGoalCardStrat_AGGREGATE implements CommonGoalCardStrat {
         } else if (cardType.equals(CommonGoalCardType.FOUR_QUARTETS)) {
             aggregatesToFind = 4;
             aggregateSize = 4;
-        }throw new RuntimeException("WRONG COMMONCARD TYPE");
+        }else throw new RuntimeException("WRONG COMMONCARD TYPE");
     }
 
     public boolean checkPattern(Shelf shelf) {
