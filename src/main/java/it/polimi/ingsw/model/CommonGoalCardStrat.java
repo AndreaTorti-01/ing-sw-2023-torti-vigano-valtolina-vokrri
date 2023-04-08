@@ -27,7 +27,6 @@ public interface CommonGoalCardStrat {
 
         if (hotCard == null) return 0;
 
-        // TODO: Un pochino inefficiente, si può migliorare?
         // finds the hotCard in the shelf
         for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < numberOfColumns; column++) {
@@ -40,7 +39,7 @@ public interface CommonGoalCardStrat {
                     // removes all adjacent cards from the shelf
                     if (!heads.isEmpty()) {
                         for (ItemCard head : heads) {
-                            adjacentToHead += headLiminate(shelfCopy, head);
+                            adjacentToHead = adjacentToHead + headLiminate(shelfCopy, head);
                         }
                         // returns the number of all adjacent cards with the same type
                         return heads.size() + adjacentToHead;
