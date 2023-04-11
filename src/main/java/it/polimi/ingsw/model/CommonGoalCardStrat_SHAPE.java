@@ -60,7 +60,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
             // create the inverted shape
             Shape inv_shape = new Shape(shape.width(), shape.height(), inv_matrix, true, shape.num_of_shapes());
 
-            // do the same for the inverted matrix
+            // do the same for the inverted shape
             for (int cardType = 0; cardType < numberOfItemCardTypes; cardType++) {
 
                 // create the shelf mask
