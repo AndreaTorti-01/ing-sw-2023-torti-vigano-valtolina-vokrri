@@ -214,3 +214,50 @@ L'algoritmo è debitamente commentato, non verrà rispiegato qui, la classe Shap
 di CGCs da constants...
 
 Sto pensando di rimuovere getValues da CommonGoalCardType per ridondanza... anche GameObject lol
+
+---
+
+### PRIMISSIMA BOZZA DEL CONTROLLER
+
+>COSE DA DECIDERE:
+> capire se la gestione delle iscrizioni dei giocatori alla partita e la creazione della board viene gestita dal client o 
+> controller
+
+- Prima di ogni turno:
+
+   _ identificare il giocatore del turno corrente e stabilire se sia o meno l'ultimo turno da giocare
+
+- Durante il turno:
+
+   _ stabilire le tessere prendibili (sia sulla base della board che della shelf del giocatore in turno)
+   
+   _ giocatore seleziona le tessere
+
+   _ le tessere vengono rimosse dalla board
+
+   _ stabilire le colonne della shelf del giocatore corrente in cui si possono inserire le tessere scelte
+
+   _ il giocatore sceglie la colonna e le tessere vengono inserite in quest'ultima
+
+   _ invocazione metodi check common goal card
+
+   _ in caso di CgC raggiunto aggiornare punteggi
+
+- Alla fine di ogni turno:
+
+  _ controllare se qualcuno ha riempito completamente la board
+
+  _ controllare se era l'ultimo turno
+
+  _ controllare se bisogna refillare la board e nel caso refillarla
+
+- Se stabilito che era l'ultimo turno:
+
+  _ assegnare i punteggi contando PersonalGoalCard, primo a finire, CommonGoalCard, points adjacent
+
+  _ decretare vincitore/podio
+
+
+
+
+
