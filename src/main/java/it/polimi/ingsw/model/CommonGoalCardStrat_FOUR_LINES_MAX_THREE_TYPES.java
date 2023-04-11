@@ -35,9 +35,9 @@ public class CommonGoalCardStrat_FOUR_LINES_MAX_THREE_TYPES implements CommonGoa
 
                 // if a card has a different type from the one already in the set and the set reached
                 // the maximum number of possible types skips that row
-                if (!typesInCurrentRow.contains(currentCard.getType()) && typesInCurrentRow.size() == maxNumberOfTypesInRow)
+                if (!typesInCurrentRow.contains(currentCard.type()) && typesInCurrentRow.size() == maxNumberOfTypesInRow)
                     continue outer;
-                typesInCurrentRow.add(currentCard.getType());
+                typesInCurrentRow.add(currentCard.type());
             }
             // if it reaches the end of the row, that row satisfies the required pattern
             counter++;

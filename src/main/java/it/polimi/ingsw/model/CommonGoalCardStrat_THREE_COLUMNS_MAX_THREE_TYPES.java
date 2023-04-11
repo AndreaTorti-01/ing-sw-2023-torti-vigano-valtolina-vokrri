@@ -28,9 +28,9 @@ public class CommonGoalCardStrat_THREE_COLUMNS_MAX_THREE_TYPES implements Common
 
                 // if a card has a different type from the one already in the set and the set reached
                 // the maximum number of possible types skips that row
-                if (!typesInCurrentColumn.contains(currentCard.getType()) && typesInCurrentColumn.size() == maxNumberOfTypesInColumn)
+                if (!typesInCurrentColumn.contains(currentCard.type()) && typesInCurrentColumn.size() == maxNumberOfTypesInColumn)
                     continue outer;
-                typesInCurrentColumn.add(currentCard.getType());
+                typesInCurrentColumn.add(currentCard.type());
             }
             // if it reaches the end of the column, that column satisfies the required pattern
             counter++;

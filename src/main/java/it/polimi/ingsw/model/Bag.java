@@ -10,7 +10,7 @@ import java.util.Set;
 import static it.polimi.ingsw.utils.Constants.maxNumberOfItemCards;
 import static it.polimi.ingsw.utils.Constants.numberOfItemCardsWithSameType;
 
-public class Bag extends GameObject {
+public class Bag {
     private final int maxCards = maxNumberOfItemCards;
     private final Set<ItemCard> cardsInside;
 

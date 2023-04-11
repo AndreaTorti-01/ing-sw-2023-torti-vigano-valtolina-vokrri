@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
-public class PersonalGoalCard extends GameObject {
+public class PersonalGoalCard {
     private final ItemType[][] pattern;
 
     /**
@@ -70,7 +70,7 @@ public class PersonalGoalCard extends GameObject {
                 ItemCard currentCard = shelf.getCardAt(row, column);
                 ItemType checker = this.getTypeAt(row, column);
 
-                if (currentCard != null && !currentCard.getType().equals(checker)) return false;
+                if (currentCard != null && !currentCard.type().equals(checker)) return false;
                 if (currentCard == null && checker != null) return false;
             }
         }

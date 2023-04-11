@@ -4,7 +4,7 @@ import it.polimi.ingsw.utils.Constants;
 
 import java.util.Stack;
 
-public class CommonGoalCard extends GameObject {
+public class CommonGoalCard {
     private final Stack<Integer> assignedPoints;
     private CommonGoalCardStrat strat;
 

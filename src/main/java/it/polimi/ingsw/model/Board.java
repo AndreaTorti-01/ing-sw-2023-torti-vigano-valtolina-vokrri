@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
-public class Board extends GameObject {
+public class Board {
     private final boolean[][] valid;
     private final ItemCard[][] tile;
 

@@ -33,7 +33,7 @@ public class CommonGoalCardStrat_TWO_SQUARES implements CommonGoalCardStrat {
                         }
 
                         //if a tile has a different type than the NWcorner, the square is not valid
-                        if (!currentSubCard.getType().equals(currentCard.getType()))
+                        if (!currentSubCard.type().equals(currentCard.type()))
                             validSquare = false;
                     }
                 }
@@ -44,7 +44,7 @@ public class CommonGoalCardStrat_TWO_SQUARES implements CommonGoalCardStrat {
                                 //faccio un controllo solo sul perimetro esterno al quadrato
                                 // se le celle del perimetro esterno non sono illegali, non sono nulle, ma sono dello stesso tipo della cella iniziale, non è valido
                                 && !(outerCol < 0 || outerCol == numberOfColumns) && !(outerRow < 0 || outerRow == numberOfRows) &&
-                                shelfCopy.getCardAt(outerRow, outerCol) != null && shelfCopy.getCardAt(outerRow, outerCol).getType().equals(shelfCopy.getCardAt(row, column).getType()))
+                                shelfCopy.getCardAt(outerRow, outerCol) != null && shelfCopy.getCardAt(outerRow, outerCol).type().equals(shelfCopy.getCardAt(row, column).type()))
                             validSquare = false;
                     }
                 }

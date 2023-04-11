@@ -35,7 +35,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
             boolean[][] masked_shelf = new boolean[shelf.height()][shelf.width()];
             for (int j = 0; j < shelf.height(); j++) {
                 for (int k = 0; k < shelf.width(); k++) {
-                    if (shelf.getCardAt(j, k) != null && shelf.getCardAt(j, k).getType().equals(ItemType.values()[cardType])) {
+                    if (shelf.getCardAt(j, k) != null && shelf.getCardAt(j, k).type().equals(ItemType.values()[cardType])) {
                         masked_shelf[j][k] = true;
                     }
                 }
@@ -67,7 +67,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                 boolean[][] masked_shelf = new boolean[shelf.height()][shelf.width()];
                 for (int j = 0; j < shelf.height(); j++) {
                     for (int k = 0; k < shelf.width(); k++) {
-                        if (shelf.getCardAt(j, k) != null && shelf.getCardAt(j, k).getType().equals(ItemType.values()[cardType])) {
+                        if (shelf.getCardAt(j, k) != null && shelf.getCardAt(j, k).type().equals(ItemType.values()[cardType])) {
                             masked_shelf[j][k] = true;
                         }
                     }

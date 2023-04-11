@@ -28,8 +28,8 @@ public class CommonGoalCardStrat_TWO_RAINBOW_COLUMNS implements CommonGoalCardSt
                 if (currentCard == null) continue outer;
 
                 // if a card has the same type of another one from the same column skip that column
-                if (typesInCurrentColumn.contains(currentCard.getType())) continue outer;
-                typesInCurrentColumn.add(currentCard.getType());
+                if (typesInCurrentColumn.contains(currentCard.type())) continue outer;
+                typesInCurrentColumn.add(currentCard.type());
             }
             // if the set has all the different types of cards, increments counter
             if (typesInCurrentColumn.size() == numberOfItemCardTypes) counter++;

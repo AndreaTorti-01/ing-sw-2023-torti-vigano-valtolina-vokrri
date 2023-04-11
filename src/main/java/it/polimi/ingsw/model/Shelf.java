@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class Shelf extends GameObject {
+public class Shelf {
     private final ItemCard[][] items;
     private boolean isACopy;
 
@@ -39,7 +39,7 @@ public class Shelf extends GameObject {
                 if (currentCard == null) continue;
                 // creates a new itemCard with the same type as the one currently selected
                 // and inserts it in the current position of the new shelf
-                this.items[row][column] = new ItemCard(currentCard.getType());
+                this.items[row][column] = new ItemCard(currentCard.type());
             }
         }
     }
@@ -127,7 +127,7 @@ public class Shelf extends GameObject {
 
                 // creates a new ItemCard with the same type as the one currently selected
                 // and inserts it in the itemCards at the same position
-                itemCards[row][column] = new ItemCard(currentCard.getType());
+                itemCards[row][column] = new ItemCard(currentCard.type());
             }
         }
 
