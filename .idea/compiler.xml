@@ -9,8 +9,5 @@
         <module name="softeng-gc33" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ing-sw-2023-torti-vigano-valtolina-vokrri" target="19" />
-    </bytecodeTargetLevel>
   </component>
 </project>

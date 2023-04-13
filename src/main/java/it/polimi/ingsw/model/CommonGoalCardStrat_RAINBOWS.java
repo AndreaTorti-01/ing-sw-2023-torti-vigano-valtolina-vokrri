@@ -12,7 +12,7 @@ public class CommonGoalCardStrat_RAINBOWS implements CommonGoalCardStrat{
     private final int numOfColsToFind; // number of rainbow columns
     private final CommonGoalCardType type;
 
-    public CommonGoalCardStrat_RAINBOWS (CommonGoalCardType cardType){
+    public CommonGoalCardStrat_RAINBOWS (CommonGoalCardType cardType) throws RuntimeException{
         type = cardType;
         if(cardType.equals(CommonGoalCardType.TWO_RAINBOW_COLUMNS)){
             numOfColsToFind = 2;
