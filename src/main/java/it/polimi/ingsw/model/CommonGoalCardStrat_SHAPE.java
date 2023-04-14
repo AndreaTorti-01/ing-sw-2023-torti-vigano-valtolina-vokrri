@@ -50,7 +50,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
 
         if (shape.mirror_hor()) {
             // generate the inverted matrix
-            boolean[][] inv_matrix = new boolean[shape.height()][shape.width()];
+            int[][] inv_matrix = new int[shape.height()][shape.width()];
             for (int j = 0; j < shape.height(); j++) {
                 for (int k = 0; k < shape.width(); k++) {
                     inv_matrix[j][k] = shape.matrix()[j][shape.width() - k - 1];
@@ -106,7 +106,8 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                         j_shelf = j_shape_start + j_shape;
 
                         // check if the shelf mask is invalidated by the shape
-                        if (shape.matrix()[i_shape][j_shape] && !masked_shelf[i_shelf][j_shelf]) {
+                        if ((shape.matrix()[i_shape][j_shape] == 1 && !masked_shelf[i_shelf][j_shelf])
+                                || (shape.matrix()[i_shape][j_shape] == 2 && masked_shelf[i_shelf][j_shelf])) {
                             // if the shelf mask is invalidated, the loop breaks
                             invalid = true;
                             break outerloop;
@@ -121,14 +122,12 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                         for (j_shape = 0; j_shape < shape.width(); j_shape++) {
                             i_shelf = i_shape_start + i_shape;
                             j_shelf = j_shape_start + j_shape;
-                            if (shape.matrix()[i_shape][j_shape]) {
+                            if (shape.matrix()[i_shape][j_shape] == 1) {
                                 masked_shelf[i_shelf][j_shelf] = false;
                             }
                         }
                     }
                 }
-
-
             }
         }
         return found_shapes;
@@ -148,7 +147,6 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         InputStream inputStream = CommonGoalCardStrat_SHAPE.class.getResourceAsStream("/shapes/" + fileName + ".txt");
         sc = new BufferedReader(new InputStreamReader(inputStream));
 
-
         // load width and height
         int width = sc.read() - 48;
         sc.read(); // skip the space
@@ -156,13 +154,13 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         sc.readLine(); // skip the newline
 
         // create the matrix
-        boolean[][] matrix = new boolean[height][width];
+        int[][] matrix = new int[height][width];
 
         // load the shape
         for (int i = 0; i < height; i++) {
             String line = sc.readLine();
             for (int j = 0; j < width; j++) {
-                matrix[i][j] = line.charAt(j) == '1';
+                matrix[i][j] = line.charAt(j) - 48;
             }
         }
 
