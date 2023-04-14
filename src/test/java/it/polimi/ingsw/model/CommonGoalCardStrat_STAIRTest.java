@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class CommonGoalCardStrat_TWO_SQUARESTest {
-    String folderName = "/shelvesForTesting/testForTWO_SQUARES/";
+class CommonGoalCardStrat_STAIRTest {
+    String folderName = "/shelvesForTesting/testForSTAIR/";
     String fileExtension = ".txt";
     int numberOfTests = 10;
 
     @Test
     void testCheckPatternMethod() {
-        CommonGoalCardStrat_TWO_SQUARES commonGoalCardStrat = new CommonGoalCardStrat_TWO_SQUARES();
+        CommonGoalCardStrat_STAIR commonGoalCardStrat = new CommonGoalCardStrat_STAIR();
 
         for (int i = 0; i < numberOfTests; i++) {
             String fileName;
@@ -34,4 +34,5 @@ class CommonGoalCardStrat_TWO_SQUARESTest {
             assertTrue(commonGoalCardStrat.checkPattern(shelf));
         }
     }
+
 }
