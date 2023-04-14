@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -123,20 +124,20 @@ public class Game {
             int randomIndex = new Random().nextInt(0, indexes.size());
             indexes.remove(randomIndex);
 
+            // creates the common goal card
             CommonGoalCard currentCommonGoalCard = new CommonGoalCard(numberOfPlayers);
 
-            // instantiates the strategy from the given name, selected from the ones available,
-            // and gives it to the current common goal card.
-            String className = "CommonGoalCardStrat_" + CommonGoalCardType.values()[randomIndex].toString();
-            try {
-                Class<?> strategy = Class.forName(className);
-                currentCommonGoalCard.setStrategy((CommonGoalCardStrat) strategy.newInstance());
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+            // gets a random type
+            CommonGoalCardType randomType = CommonGoalCardType.values()[randomIndex];
+
+            // gets the strategy from the type
+            CommonGoalCardStrat randomStrat = CommonGoalCardType.getStrategyFromType(randomType);
+
+            // sets the strategy to the common goal card
+            currentCommonGoalCard.setStrategy(randomStrat);
 
             // adds the newly created common goal card to the list
-            commonGoalCards.add(new CommonGoalCard(numberOfPlayers));
+            commonGoalCards.add(currentCommonGoalCard);
         }
 
         return commonGoalCards;

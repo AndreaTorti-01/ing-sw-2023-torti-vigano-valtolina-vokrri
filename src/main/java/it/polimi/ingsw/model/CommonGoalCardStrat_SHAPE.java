@@ -87,7 +87,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
 
     private int checkPatternsNumber(boolean[][] masked_shelf, Shape shape) {
         int found_shapes = 0;
-        int i_shelf, j_shelf, i_shape, j_shape, i_shape_start, j_shape_start;
+        int i_shelf = 0, j_shelf = 0, i_shape, j_shape, i_shape_start, j_shape_start;
 
         // loop through the shape possible positions
         for (i_shape_start = 0; i_shape_start < masked_shelf.length - shape.height() + 1; i_shape_start++) {
@@ -106,11 +106,45 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                         j_shelf = j_shape_start + j_shape;
 
                         // check if the shelf mask is invalidated by the shape
-                        if ((shape.matrix()[i_shape][j_shape] == 1 && !masked_shelf[i_shelf][j_shelf])
-                                || (shape.matrix()[i_shape][j_shape] == 2 && masked_shelf[i_shelf][j_shelf])) {
+                        if (shape.matrix()[i_shape][j_shape] == 1 && !masked_shelf[i_shelf][j_shelf]) {
                             // if the shelf mask is invalidated, the loop breaks
                             invalid = true;
                             break outerloop;
+                        }
+                    }
+                }
+
+                sidesCheck:
+                // tries to invalidate the shelf mask in the case of two_squares
+                if (shape.num_of_shapes() == 2 && !invalid) {
+                    i_shelf = i_shape_start;
+                    j_shelf = j_shape_start;
+                    // check top side
+                    if (i_shelf > 0) {
+                        if (masked_shelf[i_shelf - 1][j_shelf] || masked_shelf[i_shelf - 1][j_shelf + 1]) {
+                            invalid = true;
+                            break sidesCheck;
+                        }
+                    }
+                    // check right side
+                    if (j_shelf < masked_shelf[0].length - 2) {
+                        if (masked_shelf[i_shelf][j_shelf + 2] || masked_shelf[i_shelf + 1][j_shelf + 2]) {
+                            invalid = true;
+                            break sidesCheck;
+                        }
+                    }
+                    // check bottom side
+                    if (i_shelf < masked_shelf.length - 2) {
+                        if (masked_shelf[i_shelf + 2][j_shelf] || masked_shelf[i_shelf + 2][j_shelf + 1]) {
+                            invalid = true;
+                            break sidesCheck;
+                        }
+                    }
+                    // check left side
+                    if (j_shelf > 0) {
+                        if (masked_shelf[i_shelf][j_shelf - 1] || masked_shelf[i_shelf + 1][j_shelf - 1]) {
+                            invalid = true;
+                            break sidesCheck;
                         }
                     }
                 }

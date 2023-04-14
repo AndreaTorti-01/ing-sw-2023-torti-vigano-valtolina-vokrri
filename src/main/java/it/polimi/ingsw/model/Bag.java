@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.exceptions.EmptyBagException;
 import it.polimi.ingsw.utils.Constants;
 
 import java.util.HashSet;
@@ -36,10 +35,9 @@ public class Bag {
 
     /**
      * @return a random ItemCard from the bag, if not empty
-     * @throws EmptyBagException if the bag has no cards inside
      */
-    public ItemCard drawCard() throws EmptyBagException {
-        if (cardsInside.size() == 0) throw new EmptyBagException("Cannot draw cards from empty bag!");
+    public ItemCard drawCard() {
+        if (cardsInside.size() == 0) return null;
 
         ItemCard itemCard = cardsInside.stream().skip(
                 new Random().nextInt(cardsInside.size())
