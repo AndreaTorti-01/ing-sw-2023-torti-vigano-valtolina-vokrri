@@ -10,6 +10,7 @@ import static it.polimi.ingsw.utils.Constants.*;
 
 public class Game {
     private final ArrayList<Player> players;
+    private final Player currentPlayer;
     private final Bag bag;
     private final Board board;
     private final ArrayList<CommonGoalCard> commonGoalCards;
@@ -38,7 +39,15 @@ public class Game {
         // initialization of the common goal cards
         commonGoalCards = this.getRandomCommonGoalCards();
 
+        currentPlayer = players.get(0);
 
+
+    }
+    /**
+     * @return the currentPlayer
+     */
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     /**
