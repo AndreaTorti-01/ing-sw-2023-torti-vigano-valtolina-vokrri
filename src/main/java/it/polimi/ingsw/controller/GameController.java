@@ -16,7 +16,7 @@ public class GameController {
         throw new UnsupportedOperationException();
     }
 
-    public void takeCard(int i, int j) {
+    public void takeCard(boolean[][] choices) {
         throw new UnsupportedOperationException();
     }
 

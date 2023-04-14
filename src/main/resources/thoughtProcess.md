@@ -259,11 +259,5 @@ Sto pensando di rimuovere getValues da CommonGoalCardType per ridondanza... anch
 
 
 
-**IMPORTANTE**
-
-tutti quei metodi che osservano il model senza modificarlo sono da mettere nella view (selezione tessere prendibili, colonne in cui è possibile inserire tessere)
-non esiste loop di gioco, ik controller in quanto observer si attiva quando riceve notifica di avvenuta modifica sulla view(mossa giocatore, spostamento tessere) dando inizio al turno e in sequenza spostando le tessere e  inserendole nella shelf, invocando il metodo commongoalcard e conseguente aggiornamento punteggio
-e tutte le operazioni di fine turno scritte sopra
-
 
 
