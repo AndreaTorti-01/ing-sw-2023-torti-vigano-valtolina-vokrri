@@ -24,6 +24,7 @@ public class CommonGoalCardStrat_RAINBOWS implements CommonGoalCardStrat{
     }
 
     public boolean checkPattern(Shelf slf){
+        //can check both rainbow lines or columns , or even overlapped ones (x row + y col)
         int foundCols = 0;
         int foundRows = 0;
         List<ItemType> types = new ArrayList<>();
