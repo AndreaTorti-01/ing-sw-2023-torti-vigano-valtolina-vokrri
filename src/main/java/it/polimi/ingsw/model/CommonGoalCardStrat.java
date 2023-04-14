@@ -9,9 +9,9 @@ import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public interface CommonGoalCardStrat {
-    boolean checkPattern(Shelf shelf);
+    public boolean checkPattern(Shelf shelf);
 
-    CommonGoalCardType getType();
+    public CommonGoalCardType getType();
 
     /**
      * Recursively removes all adjacent cards with the same type from the shelf copy
