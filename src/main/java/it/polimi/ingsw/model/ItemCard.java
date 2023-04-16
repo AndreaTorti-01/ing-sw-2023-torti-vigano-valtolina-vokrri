@@ -10,4 +10,9 @@ public final class ItemCard {
     public ItemType type() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return type.getAbbreviation();
+    }
 }

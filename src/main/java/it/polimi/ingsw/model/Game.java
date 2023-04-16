@@ -1,48 +1,21 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Observable;
+
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
-public class Game {
-    private final ArrayList<Player> players;
-    private final Player currentPlayer;
-    private final Bag bag;
-    private final Board board;
-    private final ArrayList<CommonGoalCard> commonGoalCards;
+public class Game extends Observable<String> {
+    private ArrayList<CommonGoalCard> commonGoalCards;
+    private ArrayList<Player> players;
+    private Player currentPlayer;
+    private Bag bag;
+    private Board board;
 
-    public Game(String... playersNames) throws IllegalArgumentException {
-        int numberOfPlayers = playersNames.length;
-
-        if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
-            throw new IllegalArgumentException(
-                    "provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers
-            );
-
-        // initialization of a new Bag
-        bag = new Bag();
-
-        // initialization of a new Board
-        try {
-            board = new Board(numberOfPlayers);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        // initialization of the players and corresponding personal goal cards
-        players = this.initPlayers(playersNames);
-
-        // initialization of the common goal cards
-        commonGoalCards = this.getRandomCommonGoalCards();
-
-        currentPlayer = players.get(0);
-
-
-    }
     /**
      * @return the currentPlayer
      */
@@ -55,6 +28,37 @@ public class Game {
      */
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    /**
+     * This method initializes all the model elements too
+     *
+     * @param playerNames
+     * @throws IllegalArgumentException
+     */
+    public void setPlayers(String... playerNames) throws IllegalArgumentException {
+        // initialization of a new Bag
+        bag = new Bag();
+
+        int numberOfPlayers = playerNames.length;
+
+        if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
+            throw new IllegalArgumentException(
+                    "provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers
+            );
+        // initialization of a new Board
+        try {
+            board = new Board(numberOfPlayers);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // initialization of the players and corresponding personal goal cards
+        players = this.initPlayers(playerNames);
+
+        // initialization of the common goal cards
+        commonGoalCards = this.getRandomCommonGoalCards();
+
+        currentPlayer = players.get(0);
     }
 
     /**

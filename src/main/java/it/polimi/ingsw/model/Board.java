@@ -93,4 +93,37 @@ public class Board {
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        String returnString = "";
+
+        for (int i = 0; i < Constants.boardSize; i++) {
+            for (int j = 0; j < Constants.boardSize; j++) {
+                if (isValid(i, j)) {
+                    ItemCard card = peekCard(i, j);
+                    if (card != null)
+                        returnString += card + " ";
+                    else
+                        returnString += "* ";
+                } else {
+                    returnString += "- ";
+                }
+
+            }
+            returnString += "\n";
+        }
+
+        return returnString;
+    }
+
+    // TODO keep?
+    public boolean[][] getValidMatrix() {
+        return valid;
+    }
+
+    // TODO keep?
+    public ItemCard[][] getTileMatrix() {
+        return tile;
+    }
 }

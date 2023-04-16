@@ -39,4 +39,8 @@ public enum ItemType {
 
         return ItemType.values()[randomIndex];
     }
+
+    public String getAbbreviation() {
+        return String.valueOf(this.toString().charAt(0));
+    }
 }

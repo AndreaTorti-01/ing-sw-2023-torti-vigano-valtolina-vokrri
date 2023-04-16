@@ -111,6 +111,11 @@ public class Shelf {
         this.items[row][column] = newCard;
     }
 
+    // TODO keep?
+    public ItemCard[][] getItemsMatrix() {
+        return items;
+    }
+
     /**
      * @return a deep copy of the current Shelf
      */
@@ -175,5 +180,20 @@ public class Shelf {
 
     public int height() {
         return Constants.numberOfRows;
+    }
+
+    @Override
+    public String toString() {
+        String returnString = new String();
+
+        for (int j = 0; j < this.height(); j++) {
+            for (int k = 0; k < this.width(); k++) {
+                if (this.getCardAt(j, k) == null) returnString += "* ";
+                else returnString += this.getCardAt(j, k).toString() + " ";
+            }
+            returnString += "\n";
+        }
+
+        return returnString;
     }
 }

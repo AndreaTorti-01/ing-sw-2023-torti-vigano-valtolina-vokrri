@@ -9,20 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
 
-    void printBoard(Board bd) {
-        for (int i = 0; i < Constants.boardSize; i++) {
-            System.out.print("\n");
-            for (int j = 0; j < Constants.boardSize; j++) {
-                if (bd.isValid(i, j)) {
-                    System.out.print("O ");
-                } else {
-                    System.out.print("- ");
-                }
-
-            }
-        }
-    }
-
     @Test
     void boardTest() {
         assertThrows(Exception.class, () -> {
@@ -72,13 +58,6 @@ class BoardTest {
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
             board4.isValid(9, 0);
         });
-
-        // print
-        printBoard(board2);
-        System.out.println();
-        printBoard(board3);
-        System.out.println();
-        printBoard(board4);
     }
 
     @Test
@@ -139,5 +118,18 @@ class BoardTest {
         assertThrows(NullPointerException.class, () -> {
             board.popCard(4, 3);
         });
+    }
+
+    @Test
+    void toStringTest() {
+        Board board;
+        try {
+            board = new Board(4);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        board.setTile(new ItemCard(ItemType.CATS), 5, 5);
+        board.setTile(new ItemCard(ItemType.BOOKS), 4, 5);
+        System.out.println(board);
     }
 }

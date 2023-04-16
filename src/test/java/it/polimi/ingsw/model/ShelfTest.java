@@ -161,4 +161,23 @@ class ShelfTest {
         return shelf;
     }
 
+    @Test
+    public void toStringTest() {
+        Shelf shelf = new Shelf();
+        for (int column = 0; column < Constants.numberOfColumns; column++) {
+            for (int row = 0; row < Constants.numberOfRows; row++) {
+                // creates a random itemCard
+                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType());
+
+                // inserts it in the shelf
+                shelf.insert(column, randomItemCard);
+            }
+        }
+        Shelf copy = shelf.getCopy();
+        copy.setCardAt(3, 3, null);
+        copy.setCardAt(2, 3, null);
+
+        System.out.println(copy);
+    }
+
 }

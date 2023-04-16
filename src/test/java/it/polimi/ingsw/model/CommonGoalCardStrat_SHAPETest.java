@@ -10,18 +10,6 @@ class CommonGoalCardStrat_SHAPETest {
     String fileExtension = ".txt";
     int numberOfTests = 10;
 
-    private void print_shelf(Shelf shelf) {
-        // print shelf for debug like a matrix
-        for (int j = 0; j < shelf.height(); j++) {
-            for (int k = 0; k < shelf.width(); k++) {
-                if (shelf.getCardAt(j, k) == null) System.out.print("*");
-                else System.out.print(shelf.getCardAt(j, k).type().ordinal());
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
     @Test
     void checkPattern_EQUAL_CORNERS() {
         String folderName = "/shelvesForTesting/testForEQUAL_CORNERS/";

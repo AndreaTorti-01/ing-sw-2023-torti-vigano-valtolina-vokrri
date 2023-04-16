@@ -3,8 +3,10 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.CommonGoalCard;
 import it.polimi.ingsw.model.PersonalGoalCard;
 import it.polimi.ingsw.model.Shelf;
+import it.polimi.ingsw.utils.Observer;
+import it.polimi.ingsw.view.Tui;
 
-public class GameController {
+public class GameController implements Observer<Tui, String> {
 
     int currentPlayer;
 
@@ -12,16 +14,7 @@ public class GameController {
         throw new UnsupportedOperationException();
     }
 
-    public boolean[][] getTakeableCards() {
-        throw new UnsupportedOperationException();
-    }
-
     public void takeCard(boolean[][] choices) {
-        throw new UnsupportedOperationException();
-    }
-
-    // restituisce matrice di carte prelevabili in quel turno sia per correttezza a livello della board che della shelf del player giocante
-    public boolean[] getValidColumns() {
         throw new UnsupportedOperationException();
     }
 
@@ -49,5 +42,11 @@ public class GameController {
      */
     private boolean checkCommonGoalCardPattern(Shelf shelf, CommonGoalCard commonGoalCard) {
         return commonGoalCard.checkPattern(shelf);
+    }
+
+
+    @Override
+    public void update(Tui o, String arg) {
+
     }
 }
