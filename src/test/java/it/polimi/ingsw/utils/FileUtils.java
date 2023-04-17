@@ -26,7 +26,7 @@ public class FileUtils {
 
                     // gets the type of the ItemCard given the abbreviation found in the file
                     // and inserts it in the correct position of the matrix
-                    pattern[row][column] = new ItemCard(ItemType.getItemTypeFromAbbreviation(currentChar));
+                    pattern[row][column] = new ItemCard(ItemType.getItemTypeFromAbbreviation(currentChar), 0);
                 }
 
                 // goes to next line

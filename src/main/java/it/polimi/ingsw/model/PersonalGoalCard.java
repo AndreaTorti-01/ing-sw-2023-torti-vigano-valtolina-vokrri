@@ -34,7 +34,7 @@ public class PersonalGoalCard {
         try {
             // gets the pattern file corresponding to the given index
             InputStream inputStream = getClass().getResourceAsStream(
-                    String.format("/personalGoalCards/PGC%d.txt", index)
+                    String.format("/personalGoalCards/%dPGC.txt", index)
             );
 
             // allows to read data from the obtained file

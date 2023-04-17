@@ -39,7 +39,7 @@ public class Shelf {
                 if (currentCard == null) continue;
                 // creates a new itemCard with the same type as the one currently selected
                 // and inserts it in the current position of the new shelf
-                this.items[row][column] = new ItemCard(currentCard.type());
+                this.items[row][column] = new ItemCard(currentCard.type(), 0);
             }
         }
     }
@@ -68,8 +68,8 @@ public class Shelf {
                     // gets the type of the ItemCard given the abbreviation found in the file
                     // and inserts it in the correct position of the matrix
                     this.items[row][column] = new ItemCard(
-                            ItemType.getItemTypeFromAbbreviation(currentChar)
-                    );
+                            ItemType.getItemTypeFromAbbreviation(currentChar),
+                            0);
                 }
 
                 // goes to next line
@@ -132,7 +132,7 @@ public class Shelf {
 
                 // creates a new ItemCard with the same type as the one currently selected
                 // and inserts it in the itemCards at the same position
-                itemCards[row][column] = new ItemCard(currentCard.type());
+                itemCards[row][column] = new ItemCard(currentCard.type(), 0);
             }
         }
 

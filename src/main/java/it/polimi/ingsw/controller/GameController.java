@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.CommonGoalCard;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PersonalGoalCard;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.utils.Observer;
@@ -9,6 +10,14 @@ import it.polimi.ingsw.view.Tui;
 public class GameController implements Observer<Tui, String> {
 
     int currentPlayer;
+    Game model;
+    Tui view;
+
+    public GameController(Game model, Tui view) {
+        this.model = model;
+        this.view = view;
+        view.addObserver(this);
+    }
 
     public void playTurn() {
         throw new UnsupportedOperationException();
