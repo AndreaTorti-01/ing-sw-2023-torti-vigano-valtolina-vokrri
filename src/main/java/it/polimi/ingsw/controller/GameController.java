@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.model.CommonGoalCard;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PersonalGoalCard;
@@ -7,7 +8,7 @@ import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.utils.Observer;
 import it.polimi.ingsw.view.Tui;
 
-public class GameController implements Observer<Tui, String> {
+public class GameController implements Observer<Tui, Message> {
 
     int currentPlayer;
     Game model;
@@ -55,7 +56,7 @@ public class GameController implements Observer<Tui, String> {
 
 
     @Override
-    public void update(Tui o, String arg) {
-
+    public void update(Tui o, Message message) {
+        if ()
     }
 }
