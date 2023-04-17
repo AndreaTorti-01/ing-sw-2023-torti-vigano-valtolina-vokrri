@@ -174,22 +174,14 @@ public class Shelf {
         return length;
     }
 
-    public int width() {
-        return Constants.numberOfColumns;
-    }
-
-    public int height() {
-        return Constants.numberOfRows;
-    }
-
     @Override
     public String toString() {
         String returnString = new String();
 
-        for (int j = 0; j < this.height(); j++) {
-            for (int k = 0; k < this.width(); k++) {
-                if (this.getCardAt(j, k) == null) returnString += "* ";
-                else returnString += this.getCardAt(j, k).toString() + " ";
+        for (int i = 0; i < Constants.numberOfRows; i++) {
+            for (int j = 0; j < Constants.numberOfColumns; j++) {
+                if (this.getCardAt(i, j) == null) returnString += "* ";
+                else returnString += this.getCardAt(i, j).toString() + " ";
             }
             returnString += "\n";
         }

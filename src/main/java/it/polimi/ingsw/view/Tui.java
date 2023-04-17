@@ -1,15 +1,18 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.messages.AddPlayerMessage;
+import it.polimi.ingsw.messages.Message;
+import it.polimi.ingsw.messages.TurnPlayedMessage;
 import it.polimi.ingsw.model.GameView;
+import it.polimi.ingsw.model.ItemCard;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.utils.Observer;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import java.util.Scanner;
-
-public class Tui extends Observable<String> implements Observer<GameView, String>, Runnable {
+public class Tui extends Observable<Message> implements Observer<GameView, Message>, Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -19,32 +22,84 @@ public class Tui extends Observable<String> implements Observer<GameView, String
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
+
     @Override
     public void run() {
         // Ask the names of players
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> players= new ArrayList<String>();
+        ArrayList<String> players = new ArrayList<String>();
 
         //starts the game
         // Clear the console screen
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
-        players = askNames();
 
-        while (true) {
-            // Game loop
+    }
+
+    private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
+        String printString = "";
+
+        printString += "---------------------\n";
+        for (int i = 0; i < Constants.boardSize; i++) {
+            printString += "| ";
+            for (int j = 0; j < Constants.boardSize; j++) {
+                if (boardValid[i][j]) {
+                    ItemCard card = board[i][j];
+                    if (card != null)
+                        printString += card + " ";
+                    else
+                        printString += "* ";
+                } else {
+                    printString += "- ";
+                }
+
+            }
+            printString += "|\n";
         }
+        printString += "---------------------";
+
+        System.out.print(printString);
     }
 
-    private void printBoard() {
-        // Print the board
+    private void printShelf(ItemCard[][] shelfOf) {
+        String printString = "";
+
+        for (int i = 0; i < Constants.numberOfRows; i++) {
+            printString += "| ";
+            for (int j = 0; j < Constants.numberOfColumns; j++) {
+                if (shelfOf[i][j] != null) printString += shelfOf[i][j].toString() + " ";
+                else printString += "* ";
+            }
+            printString += "|\n";
+        }
+        printString += "------------";
+
+        System.out.print(printString);
     }
-    private void printShelf() {
-        // Print the shelf
-    }
-    private void printGameStatus(){
+
+    private void printGameStatus(GameView gw) {
         // Print the game status, including the main board and the shelves
+
+        // Print the active player name
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + gw.getCurrentPlayer().getName() + ANSI_PURPLE + "  <<" + ANSI_RESET);
+
+        // Print the board
+        printBoard(gw.getBoard(), gw.getBoardValid());
+
+        // Print the shelf of the active player
+        printShelf(gw.getShelfOf(gw.getCurrentPlayer()));
+
+        // Print the bag status
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "BAG: " + ANSI_YELLOW + gw.isBagEmpty() + ANSI_PURPLE + "  <<" + ANSI_RESET);
+
+        // Print the common goal cards type and points on top of the stack
+        for (int i = 0; i < gw.getCommonGoalCards().size(); i++) {
+            System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL " + i + ": " + ANSI_YELLOW + gw.getCommonGoalCards().get(i).getType() + " " + gw.getCommonGoalCards().get(i).peekPoints() + ANSI_PURPLE + "  <<" + ANSI_RESET);
+        }
+
+        // Print the personal goal card pattern
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL: " + ANSI_YELLOW + gw.getCurrentPlayer().getPersonalGoalCard() + ANSI_PURPLE + "  <<" + ANSI_RESET);
     }
 
     private void printLoadingScreen() {
@@ -61,6 +116,7 @@ public class Tui extends Observable<String> implements Observer<GameView, String
         // Print an error message
         System.out.println(ANSI_RED + error + ANSI_RESET);
     }
+
     private ArrayList<String> askNames() {
         // Ask the names of the players
         String name;
@@ -71,19 +127,18 @@ public class Tui extends Observable<String> implements Observer<GameView, String
 
         System.out.print("[Player 1]:  ");
         name = askPlayerName();
-        setChanged();
-        notifyObservers("name " + name);
+        setChangedAndNotifyObservers(new AddPlayerMessage(name));
 
         int i = 2;
         boolean done = false;
 
-        while(!done && i <= 4){
+        while (!done && i <= 4) {
             //ask for other players
 
             System.out.print("[Player " + i + " ]:  ");
             name = askPlayerName();
             setChanged();
-            notifyObservers("name " + name);
+            notifyObservers(new AddPlayerMessage(name));
 
             System.out.print("Do you want to add another player?");
             done = !askBoolean();
@@ -92,6 +147,7 @@ public class Tui extends Observable<String> implements Observer<GameView, String
         // no number of player required
         return players;
     }
+
     private String askPlayerName() {
         // Ask the name of the player
         Scanner in = new Scanner(System.in);
@@ -117,7 +173,7 @@ public class Tui extends Observable<String> implements Observer<GameView, String
         return Integer.parseInt(in.next());
     }
 
-    private boolean askBoolean(){
+    private boolean askBoolean() {
         Scanner in = new Scanner(System.in);
         System.out.print("  >>  (y/n)");
 
@@ -133,8 +189,18 @@ public class Tui extends Observable<String> implements Observer<GameView, String
             }
         }
     }
-    @Override
-    public void update(GameView o, String arg) {
 
+    @Override
+    public void update(GameView gw, Message msg) {
+        if (msg instanceof TurnPlayedMessage) {
+            // Update the game view
+            // Print the game status
+            printGameStatus(gw);
+        }
+    }
+
+    private void setChangedAndNotifyObservers(Message msg) {
+        setChanged();
+        notifyObservers(msg);
     }
 }

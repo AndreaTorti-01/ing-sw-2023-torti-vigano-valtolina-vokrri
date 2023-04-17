@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static it.polimi.ingsw.utils.Constants.numberOfItemCardTypes;
+import static it.polimi.ingsw.utils.Constants.*;
 
 
 public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
@@ -32,9 +32,9 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         for (int cardType = 0; cardType < numberOfItemCardTypes; cardType++) {
 
             // create the shelf mask
-            boolean[][] masked_shelf = new boolean[shelf.height()][shelf.width()];
-            for (int j = 0; j < shelf.height(); j++) {
-                for (int k = 0; k < shelf.width(); k++) {
+            boolean[][] masked_shelf = new boolean[numberOfRows][numberOfColumns];
+            for (int j = 0; j < numberOfRows; j++) {
+                for (int k = 0; k < numberOfColumns; k++) {
                     if (shelf.getCardAt(j, k) != null && shelf.getCardAt(j, k).type().equals(ItemType.values()[cardType])) {
                         masked_shelf[j][k] = true;
                     }
@@ -64,9 +64,9 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
             for (int cardType = 0; cardType < numberOfItemCardTypes; cardType++) {
 
                 // create the shelf mask
-                boolean[][] masked_shelf = new boolean[shelf.height()][shelf.width()];
-                for (int j = 0; j < shelf.height(); j++) {
-                    for (int k = 0; k < shelf.width(); k++) {
+                boolean[][] masked_shelf = new boolean[numberOfRows][numberOfColumns];
+                for (int j = 0; j < numberOfRows; j++) {
+                    for (int k = 0; k < numberOfColumns; k++) {
                         if (shelf.getCardAt(j, k) != null && shelf.getCardAt(j, k).type().equals(ItemType.values()[cardType])) {
                             masked_shelf[j][k] = true;
                         }

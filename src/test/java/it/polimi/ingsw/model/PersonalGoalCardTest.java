@@ -202,4 +202,10 @@ class PersonalGoalCardTest {
                 () -> new PersonalGoalCard(12)
         );
     }
+
+    @Test
+    void testToString() {
+        PersonalGoalCard personalGoalCard = new PersonalGoalCard(1);
+        System.out.println(personalGoalCard);
+    }
 }

@@ -1,49 +1,75 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.utils.Observer;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class GameView extends Observable<String> implements Observer<Game, String> {
-    private final Game model;
+public class GameView extends Observable<Message> implements Observer<Game, Message> {
+    private final ItemCard[][] board;
+    private final boolean[][] boardValid;
+    private final ArrayList<CommonGoalCard> commonGoalCards;
+    private final ArrayList<Player> players;
+    private final Player currentPlayer;
+    private final boolean isBagEmpty;
+    private final boolean isGameEnded;
 
-    @Override
-    public void update(Game o, String arg) {
-        setChanged();
-        notifyObservers(arg);
-    }
-
-    public GameView (Game model) {
+    public GameView(Game model) {
         if (model == null) throw new IllegalArgumentException();
-        this.model = model;
+
+        this.board = model.getBoard().getTileMatrix();
+        this.boardValid = model.getBoard().getValidMatrix();
+
+        this.commonGoalCards = model.getCommonGoalCards();
+
+        this.players = model.getPlayers();
+        this.currentPlayer = model.getCurrentPlayer();
+
+        this.isBagEmpty = model.getBag().getCardsInside().size() == 0;
+
+        this.isGameEnded = model.isGameEnded();
+
         model.addObserver(this);
     }
 
-    // TODO return board or what?
+    @Override
+    public void update(Game o, Message msg) {
+        setChanged();
+        notifyObservers(msg);
+    }
+
     public ItemCard[][] getBoard() {
-        return model.getBoard().getTileMatrix();
+        return board;
     }
 
-    // TODO return board or what?
     public boolean[][] getBoardValid() {
-        return model.getBoard().getValidMatrix();
+        return boardValid;
     }
 
-    // TODO return shelf?
-    public ItemCard[][] getShelf() {
-        return model.getCurrentPlayer().getShelf().getItemsMatrix();
+    public ItemCard[][] getShelfOf(Player player) {
+        return players.get(players.indexOf(player)).getShelf().getItemsMatrix();
     }
 
-    // TODO same as above: has setter methods
     public ArrayList<CommonGoalCard> getCommonGoalCards() {
-        return model.getCommonGoalCards();
+        return commonGoalCards;
     }
 
     public Player getCurrentPlayer() {
-        return model.getCurrentPlayer();
+        return currentPlayer;
     }
 
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
 
+    public boolean isBagEmpty() {
+        return isBagEmpty;
+    }
+
+    public boolean isGameEnded() {
+        return isGameEnded;
+    }
 
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.utils.Observable;
 
 import java.io.FileNotFoundException;
@@ -9,12 +10,13 @@ import java.util.Random;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
-public class Game extends Observable<String> {
+public class Game extends Observable<Message> {
     private ArrayList<CommonGoalCard> commonGoalCards;
     private ArrayList<Player> players;
     private Player currentPlayer;
     private Bag bag;
     private Board board;
+    private boolean gameEnded;
 
     /**
      * @return the currentPlayer
@@ -59,6 +61,8 @@ public class Game extends Observable<String> {
         commonGoalCards = this.getRandomCommonGoalCards();
 
         currentPlayer = players.get(0);
+
+        gameEnded = false;
     }
 
     /**
@@ -166,5 +170,18 @@ public class Game extends Observable<String> {
         for (int i = 0; i < bound; i++) indexes.add(i);
 
         return indexes;
+    }
+
+    private void setChangedAndNotifyObservers(Message msg) {
+        setChanged();
+        notifyObservers(msg);
+    }
+
+    public boolean isGameEnded() {
+        return gameEnded;
+    }
+
+    public void setGameHasEnded() {
+        this.gameEnded = true;
     }
 }

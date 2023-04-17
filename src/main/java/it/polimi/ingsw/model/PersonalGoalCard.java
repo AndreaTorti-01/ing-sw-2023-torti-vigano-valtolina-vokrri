@@ -80,4 +80,19 @@ public class PersonalGoalCard {
     public ItemType getTypeAt(int row, int column) {
         return pattern[row][column];
     }
+
+    @Override
+    public String toString() {
+        String returnString = "";
+
+        for (int i = 0; i < numberOfRows; i++) {
+            for (int j = 0; j < numberOfColumns; j++) {
+                if (this.getTypeAt(i, j) == null) returnString += "* ";
+                else returnString += this.getTypeAt(i, j).getAbbreviation() + " ";
+            }
+            returnString += "\n";
+        }
+
+        return returnString;
+    }
 }
