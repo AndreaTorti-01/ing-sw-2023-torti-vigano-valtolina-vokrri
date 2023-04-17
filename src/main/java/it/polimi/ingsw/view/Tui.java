@@ -3,6 +3,8 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.GameView;
 import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.utils.Observer;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import java.util.Scanner;
@@ -21,16 +23,14 @@ public class Tui extends Observable<String> implements Observer<GameView, String
     public void run() {
         // Ask the names of players
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Insert the number of players: ");
-        int nPlayers = scanner.nextInt();
+        ArrayList<String> players= new ArrayList<String>();
 
-        for (int i = 0; i < nPlayers; i++) {
-            System.out.print("[Player" + i + "]:  ");
-            String name = askPlayerName();
+        //starts the game
+        // Clear the console screen
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
 
-            setChanged();
-            notifyObservers("name " + name);
-        }
+        players = askNames();
 
         while (true) {
             // Game loop
@@ -51,19 +51,51 @@ public class Tui extends Observable<String> implements Observer<GameView, String
         // Print the loading screen, asking for player names etc...
     }
 
-    private void printEndScreen() {
+    private void printEndScreen(String winnerName) {
         // Print the end screen, showing the winner
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  GAME OVER  <<");
+        System.out.println(ANSI_YELLOW + "\t\t\t\t\t  >>  WINNER: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
     }
 
     private void printError(String error) {
         // Print an error message
         System.out.println(ANSI_RED + error + ANSI_RESET);
     }
+    private ArrayList<String> askNames() {
+        // Ask the names of the players
+        String name;
+        ArrayList<String> players = new ArrayList<String>();
 
+
+        System.out.println("Insert Player Names:");
+
+        System.out.print("[Player 1]:  ");
+        name = askPlayerName();
+        setChanged();
+        notifyObservers("name " + name);
+
+        int i = 2;
+        boolean done = false;
+
+        while(!done && i <= 4){
+            //ask for other players
+
+            System.out.print("[Player " + i + " ]:  ");
+            name = askPlayerName();
+            setChanged();
+            notifyObservers("name " + name);
+
+            System.out.print("Do you want to add another player?");
+            done = !askBoolean();
+            i = i + 1;
+        }
+        // no number of player required
+        return players;
+    }
     private String askPlayerName() {
         // Ask the name of the player
         Scanner in = new Scanner(System.in);
-        System.out.println("  >>  Enter player name:");
+        System.out.println("  >>  Enter name:");
         return in.nextLine();
     }
 
@@ -87,7 +119,7 @@ public class Tui extends Observable<String> implements Observer<GameView, String
 
     private boolean askBoolean(){
         Scanner in = new Scanner(System.in);
-        System.out.println("  >>  (y/n)");
+        System.out.print("  >>  (y/n)");
 
         while (true) {
             String input = in.nextLine();
@@ -97,7 +129,7 @@ public class Tui extends Observable<String> implements Observer<GameView, String
             } else if (c == 'n') {
                 return false;
             } else {
-                System.out.println("  >>  Please enter a valid input  (y/n)  <<");
+                printError("Please enter a valid input  (y/n)");
             }
         }
     }
