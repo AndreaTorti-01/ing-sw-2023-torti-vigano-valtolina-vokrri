@@ -23,9 +23,11 @@ public class Tui extends Observable<String> implements Observer<GameView, String
         Scanner scanner = new Scanner(System.in);
         System.out.println("Insert the number of players: ");
         int nPlayers = scanner.nextInt();
+
         for (int i = 0; i < nPlayers; i++) {
-            System.out.println("Insert the name of player " + i + ": ");
-            String name = scanner.next();
+            System.out.print("[Player" + i + "]:  ");
+            String name = askPlayerName();
+
             setChanged();
             notifyObservers("name " + name);
         }
@@ -61,7 +63,7 @@ public class Tui extends Observable<String> implements Observer<GameView, String
     private String askPlayerName() {
         // Ask the name of the player
         Scanner in = new Scanner(System.in);
-        System.out.println("  >>  Type the new player name:");
+        System.out.println("  >>  Enter player name:");
         return in.nextLine();
     }
 
