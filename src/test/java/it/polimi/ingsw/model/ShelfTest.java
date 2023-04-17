@@ -27,7 +27,7 @@ class ShelfTest {
         for (int row = 0; row < Constants.numberOfRows; row++) {
             for (int column = 0; column < Constants.numberOfColumns; column++) {
                 // creates a random itemCard
-                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType());
+                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
 
                 // inserts it in the matrix
                 itemCards[row][column] = randomItemCard;
@@ -82,7 +82,7 @@ class ShelfTest {
                 final int finalColumn = column;
 
                 // creates a random itemCard
-                final ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType());
+                final ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
 
                 // shelf is the original, so it should not be able to use the setCardAt method
                 assertThrows(
@@ -108,7 +108,7 @@ class ShelfTest {
             final int finalColumn = column;
 
             // creates a random itemCard
-            ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType());
+            ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
 
             // should not insert elements in a full column
             assertThrows(
@@ -151,7 +151,7 @@ class ShelfTest {
         for (int column = 0; column < Constants.numberOfColumns; column++) {
             for (int row = 0; row < Constants.numberOfRows; row++) {
                 // creates a random itemCard
-                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType());
+                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
 
                 // inserts it in the shelf
                 shelf.insert(column, randomItemCard);
@@ -167,7 +167,7 @@ class ShelfTest {
         for (int column = 0; column < Constants.numberOfColumns; column++) {
             for (int row = 0; row < Constants.numberOfRows; row++) {
                 // creates a random itemCard
-                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType());
+                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
 
                 // inserts it in the shelf
                 shelf.insert(column, randomItemCard);

@@ -5,6 +5,8 @@ import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.utils.Observer;
 import java.util.Scanner;
 
+import java.util.Scanner;
+
 public class Tui extends Observable<String> implements Observer<GameView, String>, Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -18,6 +20,15 @@ public class Tui extends Observable<String> implements Observer<GameView, String
     @Override
     public void run() {
         // Ask the names of players
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Insert the number of players: ");
+        int nPlayers = scanner.nextInt();
+        for (int i = 0; i < nPlayers; i++) {
+            System.out.println("Insert the name of player " + i + ": ");
+            String name = scanner.next();
+            setChanged();
+            notifyObservers("name " + name);
+        }
 
         while (true) {
             // Game loop

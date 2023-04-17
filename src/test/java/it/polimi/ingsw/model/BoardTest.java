@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.utils.Constants;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -63,7 +62,7 @@ class BoardTest {
     @Test
     void setTileTest() {
         Board board;
-        ItemCard itemCard = new ItemCard(ItemType.CATS);
+        ItemCard itemCard = new ItemCard(ItemType.CATS, 0);
         try {
             board = new Board(4);
         } catch (FileNotFoundException e) {
@@ -81,7 +80,7 @@ class BoardTest {
     void peekCardTest() {
         // setup
         Board board;
-        ItemCard itemCard = new ItemCard(ItemType.BOOKS);
+        ItemCard itemCard = new ItemCard(ItemType.BOOKS, 0);
         try {
             board = new Board(4);
         } catch (FileNotFoundException e) {
@@ -102,7 +101,7 @@ class BoardTest {
     void popCardTest() {
         // setup
         Board board;
-        ItemCard itemCard = new ItemCard(ItemType.CATS);
+        ItemCard itemCard = new ItemCard(ItemType.CATS, 0);
         try {
             board = new Board(4);
         } catch (FileNotFoundException e) {
@@ -128,8 +127,8 @@ class BoardTest {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        board.setTile(new ItemCard(ItemType.CATS), 5, 5);
-        board.setTile(new ItemCard(ItemType.BOOKS), 4, 5);
+        board.setTile(new ItemCard(ItemType.CATS, 0), 5, 5);
+        board.setTile(new ItemCard(ItemType.BOOKS, 0), 4, 5);
         System.out.println(board);
     }
 }
