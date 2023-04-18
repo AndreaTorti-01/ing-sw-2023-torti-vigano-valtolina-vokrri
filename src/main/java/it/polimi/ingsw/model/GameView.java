@@ -1,13 +1,11 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.utils.Observer;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class GameView extends Observable implements Observer{
+public class GameView extends Observable implements Observer {
     private final ItemCard[][] board;
     private final boolean[][] boardValid;
     private final ArrayList<CommonGoalCard> commonGoalCards;
@@ -32,11 +30,6 @@ public class GameView extends Observable implements Observer{
         this.isGameEnded = model.isGameEnded();
 
         model.addObserver(this);
-    }
-
-    @Override
-    public void update() {
-        throw new UnsupportedOperationException();
     }
 
     public ItemCard[][] getBoard() {
@@ -71,4 +64,8 @@ public class GameView extends Observable implements Observer{
         return isGameEnded;
     }
 
+    @Override
+    public void update(Object message) {
+
+    }
 }

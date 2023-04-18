@@ -1,8 +1,5 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.messages.AddPlayerMessage;
-import it.polimi.ingsw.messages.Message;
-import it.polimi.ingsw.messages.TurnPlayedMessage;
 import it.polimi.ingsw.model.GameView;
 import it.polimi.ingsw.model.ItemCard;
 import it.polimi.ingsw.utils.Constants;
@@ -177,12 +174,8 @@ public class Tui extends Observable implements Observer, Runnable {
     }
 
     @Override
-    public void update() {
+    public void update(Object message) {
         throw new UnsupportedOperationException();
     }
 
-    private void setChangedAndNotifyObservers(Message msg) {
-        setChanged();
-        notifyObservers(msg);
-    }
 }

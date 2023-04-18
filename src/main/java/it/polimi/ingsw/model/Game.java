@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.utils.Observable;
 
 import java.io.FileNotFoundException;
@@ -45,9 +44,7 @@ public class Game extends Observable {
         int numberOfPlayers = playerNames.length;
 
         if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
-            throw new IllegalArgumentException(
-                    "provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers
-            );
+            throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers);
         // initialization of a new Board
         try {
             board = new Board(numberOfPlayers);
@@ -141,17 +138,14 @@ public class Game extends Observable {
             int randomIndex = new Random().nextInt(0, indexes.size());
             indexes.remove(randomIndex);
 
-            // creates the common goal card
-            CommonGoalCard currentCommonGoalCard = new CommonGoalCard(numberOfPlayers);
-
             // gets a random type
             CommonGoalCardType randomType = CommonGoalCardType.values()[randomIndex];
 
             // gets the strategy from the type
             CommonGoalCardStrat randomStrat = CommonGoalCardType.getStrategyFromType(randomType);
 
-            // sets the strategy to the common goal card
-            currentCommonGoalCard.setStrategy(randomStrat);
+            // creates the common goal card
+            CommonGoalCard currentCommonGoalCard = new CommonGoalCard(numberOfPlayers, randomStrat);
 
             // adds the newly created common goal card to the list
             commonGoalCards.add(currentCommonGoalCard);
@@ -170,11 +164,6 @@ public class Game extends Observable {
         for (int i = 0; i < bound; i++) indexes.add(i);
 
         return indexes;
-    }
-
-    private void setChangedAndNotifyObservers(Message msg) {
-        setChanged();
-        notifyObservers(msg);
     }
 
     public boolean isGameEnded() {

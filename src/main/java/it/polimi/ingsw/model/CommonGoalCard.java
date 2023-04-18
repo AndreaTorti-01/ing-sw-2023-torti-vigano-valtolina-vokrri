@@ -6,14 +6,14 @@ import java.util.Stack;
 
 public class CommonGoalCard {
     private final Stack<Integer> assignedPoints;
-    private CommonGoalCardStrat strat;
+    private final CommonGoalCardStrat strat;
 
     /**
      * Creates a new CommonGoalCard with a random type and a stack of points based on the number of players.
      *
      * @param numberOfPlayers the number of players in the game in order to create the stack accordingly, must be in range 2-4
      */
-    public CommonGoalCard(int numberOfPlayers) {
+    public CommonGoalCard(int numberOfPlayers, CommonGoalCardStrat strat) {
         if (numberOfPlayers < Constants.minNumberOfPlayers || numberOfPlayers > Constants.maxNumberOfPlayers)
             throw new IllegalArgumentException(
                     "provided number of players (" + numberOfPlayers + ") is out of range " + Constants.minNumberOfPlayers + "-" + Constants.maxNumberOfPlayers
@@ -39,6 +39,8 @@ public class CommonGoalCard {
                 assignedPoints.push(8);
             }
         }
+
+        this.strat = strat;
     }
 
     public CommonGoalCardType getType() {
@@ -61,13 +63,6 @@ public class CommonGoalCard {
         // if stack is empty all previous available points were taken and thus there's no more points to take.
         if (assignedPoints.isEmpty()) return 0;
         return assignedPoints.pop();
-    }
-
-    /**
-     * @param strategy the strategy to set for the card
-     */
-    public void setStrategy(CommonGoalCardStrat strategy) {
-        this.strat = strategy;
     }
 
     public boolean checkPattern(Shelf shelf) {

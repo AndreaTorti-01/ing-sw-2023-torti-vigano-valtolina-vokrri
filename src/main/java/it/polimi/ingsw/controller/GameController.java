@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.model.CommonGoalCard;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PersonalGoalCard;
@@ -56,7 +55,7 @@ public class GameController implements Observer{
 
 
     @Override
-    public void update() {
+    public void update(Object message) {
         throw new UnsupportedOperationException();
     }
 }
