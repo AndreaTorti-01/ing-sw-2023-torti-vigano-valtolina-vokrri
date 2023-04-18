@@ -23,6 +23,8 @@ public class Tui extends Observable<Message> implements Observer<GameView, Messa
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
+    int playerNumber = 0;
+
     @Override
     public void run() {
         // Ask the names of players
@@ -33,6 +35,9 @@ public class Tui extends Observable<Message> implements Observer<GameView, Messa
         // Clear the console screen
         System.out.print("\033[H\033[2J");
         System.out.flush();
+
+        printLoadingScreen();
+        askNames();
 
 
     }
@@ -103,7 +108,15 @@ public class Tui extends Observable<Message> implements Observer<GameView, Messa
     }
 
     private void printLoadingScreen() {
-        // Print the loading screen, asking for player names etc...
+        // Print the loading screen
+        System.out.println(ANSI_YELLOW + "\t\t\t\t\t  >>  WELCOME TO  <<" + ANSI_RESET);
+        System.out.println(ANSI_YELLOW + "\t\t\t\t\t  >>  MY SHELFIE  <<" + ANSI_RESET);
+        System.out.println(ANSI_CYAN + "\n \n \n \t\t\t\t\t  developed by gc-33" + ANSI_RESET);
+        System.out.println(ANSI_CYAN + "\n \t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
+        System.out.print("\n\n Press any ENTER to continue: ->  ");
+
+        Scanner in = new Scanner(System.in);
+        String check = in.next(); //only to be sure that a key (enter) is pressed
     }
 
     private void printEndScreen(String winnerName) {
@@ -145,6 +158,7 @@ public class Tui extends Observable<Message> implements Observer<GameView, Messa
             i = i + 1;
         }
         // no number of player required
+        this.playerNumber = players.size();
         return players;
     }
 
