@@ -10,7 +10,7 @@ import java.util.Random;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
-public class Game extends Observable<Message> {
+public class Game extends Observable {
     private ArrayList<CommonGoalCard> commonGoalCards;
     private ArrayList<Player> players;
     private Player currentPlayer;

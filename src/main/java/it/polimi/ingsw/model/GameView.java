@@ -7,7 +7,7 @@ import it.polimi.ingsw.utils.Observer;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class GameView extends Observable<Message> implements Observer<Game, Message> {
+public class GameView extends Observable implements Observer{
     private final ItemCard[][] board;
     private final boolean[][] boardValid;
     private final ArrayList<CommonGoalCard> commonGoalCards;
@@ -35,9 +35,8 @@ public class GameView extends Observable<Message> implements Observer<Game, Mess
     }
 
     @Override
-    public void update(Game o, Message msg) {
-        setChanged();
-        notifyObservers(msg);
+    public void update() {
+        throw new UnsupportedOperationException();
     }
 
     public ItemCard[][] getBoard() {

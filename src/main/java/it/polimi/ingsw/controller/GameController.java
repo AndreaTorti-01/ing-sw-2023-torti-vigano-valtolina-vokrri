@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.utils.Observer;
 import it.polimi.ingsw.view.Tui;
 
-public class GameController implements Observer<Tui, Message> {
+public class GameController implements Observer{
 
     int currentPlayer;
     Game model;
@@ -56,7 +56,7 @@ public class GameController implements Observer<Tui, Message> {
 
 
     @Override
-    public void update(Tui o, Message message) {
-        if ()
+    public void update() {
+        throw new UnsupportedOperationException();
     }
 }

@@ -12,7 +12,7 @@ import it.polimi.ingsw.utils.Observer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Tui extends Observable<Message> implements Observer<GameView, Message>, Runnable {
+public class Tui extends Observable implements Observer, Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -37,9 +37,6 @@ public class Tui extends Observable<Message> implements Observer<GameView, Messa
         System.out.flush();
 
         printLoadingScreen();
-        askNames();
-
-
     }
 
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
@@ -107,65 +104,40 @@ public class Tui extends Observable<Message> implements Observer<GameView, Messa
         System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL: " + ANSI_YELLOW + gw.getCurrentPlayer().getPersonalGoalCard() + ANSI_PURPLE + "  <<" + ANSI_RESET);
     }
 
-    private void printLoadingScreen() {
+    public void printLoadingScreen() {
         // Print the loading screen
-        System.out.println(ANSI_YELLOW + "\t\t\t\t\t  >>  WELCOME TO  <<" + ANSI_RESET);
-        System.out.println(ANSI_YELLOW + "\t\t\t\t\t  >>  MY SHELFIE  <<" + ANSI_RESET);
-        System.out.println(ANSI_CYAN + "\n \n \n \t\t\t\t\t  developed by gc-33" + ANSI_RESET);
+        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t  >>  WELCOME TO  <<" + ANSI_RESET);
+        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t  >>  MY SHELFIE  <<" + ANSI_RESET);
+        System.out.println(ANSI_CYAN + "\n \n \n \t\t\t\t\t\t\t  developed by gc-33" + ANSI_RESET);
         System.out.println(ANSI_CYAN + "\n \t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
-        System.out.print("\n\n Press any ENTER to continue: ->  ");
+        System.out.print("\n\n");
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t  >>  Press ENTER to start  <<" + ANSI_RESET);
 
         Scanner in = new Scanner(System.in);
-        String check = in.next(); //only to be sure that a key (enter) is pressed
+        String check = in.nextLine(); //only to be sure that a key (enter) is pressed
     }
 
-    private void printEndScreen(String winnerName) {
+    public void printEndScreen(String winnerName) {
         // Print the end screen, showing the winner
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  GAME OVER  <<");
-        System.out.println(ANSI_YELLOW + "\t\t\t\t\t  >>  WINNER: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t  >>  GAME OVER  <<");
+        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t  >>  WINNER: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
+
+        System.out.print("\n\n");
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t  >>  Press ENTER to restart  <<" + ANSI_RESET);
+
+        Scanner in = new Scanner(System.in);
+        String check = in.nextLine(); //only to be sure that a key (enter) is pressed
     }
 
-    private void printError(String error) {
+    void printError(String error) {
         // Print an error message
         System.out.println(ANSI_RED + error + ANSI_RESET);
-    }
-
-    private ArrayList<String> askNames() {
-        // Ask the names of the players
-        String name;
-        ArrayList<String> players = new ArrayList<String>();
-
-
-        System.out.println("Insert Player Names:");
-
-        System.out.print("[Player 1]:  ");
-        name = askPlayerName();
-        setChangedAndNotifyObservers(new AddPlayerMessage(name));
-
-        int i = 2;
-        boolean done = false;
-
-        while (!done && i <= 4) {
-            //ask for other players
-
-            System.out.print("[Player " + i + " ]:  ");
-            name = askPlayerName();
-            setChanged();
-            notifyObservers(new AddPlayerMessage(name));
-
-            System.out.print("Do you want to add another player?");
-            done = !askBoolean();
-            i = i + 1;
-        }
-        // no number of player required
-        this.playerNumber = players.size();
-        return players;
     }
 
     private String askPlayerName() {
         // Ask the name of the player
         Scanner in = new Scanner(System.in);
-        System.out.println("  >>  Enter name:");
+        System.out.println("  >>  Enter your name:  ");
         return in.nextLine();
     }
 
@@ -205,12 +177,8 @@ public class Tui extends Observable<Message> implements Observer<GameView, Messa
     }
 
     @Override
-    public void update(GameView gw, Message msg) {
-        if (msg instanceof TurnPlayedMessage) {
-            // Update the game view
-            // Print the game status
-            printGameStatus(gw);
-        }
+    public void update() {
+        throw new UnsupportedOperationException();
     }
 
     private void setChangedAndNotifyObservers(Message msg) {
