@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfRows;
+
 public class Shelf {
     private final ItemCard[][] items;
     private boolean isACopy;
@@ -17,7 +20,7 @@ public class Shelf {
      * The (0, 0) position is the top left corner.
      */
     public Shelf() {
-        this.items = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
+        this.items = new ItemCard[numberOfRows][numberOfColumns];
         this.isACopy = false;
     }
 
@@ -32,8 +35,8 @@ public class Shelf {
         this();
 
         // deep copies the elements from the matrix passed as argument to the constructor
-        for (int row = 0; row < Constants.numberOfRows; row++) {
-            for (int column = 0; column < Constants.numberOfColumns; column++) {
+        for (int row = 0; row < numberOfRows; row++) {
+            for (int column = 0; column < numberOfColumns; column++) {
                 ItemCard currentCard = items[row][column];
 
                 if (currentCard == null) continue;
@@ -121,10 +124,10 @@ public class Shelf {
      */
     public Shelf getCopy() {
         // initializes a new null matrix of ItemCards
-        ItemCard[][] itemCards = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
+        ItemCard[][] itemCards = new ItemCard[numberOfRows][numberOfColumns];
 
-        for (int row = 0; row < Constants.numberOfRows; row++) {
-            for (int column = 0; column < Constants.numberOfColumns; column++) {
+        for (int row = 0; row < numberOfRows; row++) {
+            for (int column = 0; column < numberOfColumns; column++) {
                 ItemCard currentCard = this.getCardAt(row, column);
 
                 // the matrix is already initialized to null
@@ -154,7 +157,7 @@ public class Shelf {
         if (items[0][column] != null)
             throw new IndexOutOfBoundsException("Cannot insert elements in a full column!");
         else {
-            int row = Constants.numberOfRows - 1;
+            int row = numberOfRows - 1;
             while (items[row][column] != null)
                 row--;
             items[row][column] = item;
@@ -167,7 +170,7 @@ public class Shelf {
      */
     public int getColumnLength(int column) {
         int length = 0;
-        for (int row = 0; row < Constants.numberOfRows; row++) {
+        for (int row = 0; row < numberOfRows; row++) {
             if (items[row][column] != null) length++;
         }
 
@@ -176,16 +179,16 @@ public class Shelf {
 
     @Override
     public String toString() {
-        String returnString = new String();
+        StringBuilder output = new StringBuilder();
 
-        for (int i = 0; i < Constants.numberOfRows; i++) {
-            for (int j = 0; j < Constants.numberOfColumns; j++) {
-                if (this.getCardAt(i, j) == null) returnString += "* ";
-                else returnString += this.getCardAt(i, j).toString() + " ";
+        for (int row = 0; row < numberOfRows; row++) {
+            for (int column = 0; column < numberOfColumns; column++) {
+                if (this.getCardAt(row, column) == null) output.append("* ");
+                else output.append(this.getCardAt(row, column).toString()).append(" ");
             }
-            returnString += "\n";
+            output.append("\n");
         }
 
-        return returnString;
+        return output.toString();
     }
 }

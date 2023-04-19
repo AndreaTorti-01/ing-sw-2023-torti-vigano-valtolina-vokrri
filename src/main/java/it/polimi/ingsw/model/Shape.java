@@ -4,7 +4,7 @@ public record Shape(
         int width,
         int height,
         int[][] matrix,
-        boolean mirror_hor,
-        int num_of_shapes
+        boolean mirror,
+        int numberOfShapes
 ) {
 }

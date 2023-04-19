@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
+import static it.polimi.ingsw.utils.Constants.boardSize;
+
 public class Board {
     private final boolean[][] valid;
     private final ItemCard[][] tile;
@@ -34,7 +36,7 @@ public class Board {
         if (valid1 == null) throw new FileNotFoundException();
         // assign the valid matrix
         valid = valid1;
-        tile = new ItemCard[Constants.boardSize][Constants.boardSize];
+        tile = new ItemCard[boardSize][boardSize];
     }
 
     /**
@@ -96,25 +98,21 @@ public class Board {
 
     @Override
     public String toString() {
-        String returnString = "";
+        StringBuilder output = new StringBuilder();
 
-        for (int i = 0; i < Constants.boardSize; i++) {
-            for (int j = 0; j < Constants.boardSize; j++) {
-                if (isValid(i, j)) {
-                    ItemCard card = peekCard(i, j);
-                    if (card != null)
-                        returnString += card + " ";
-                    else
-                        returnString += "* ";
-                } else {
-                    returnString += "- ";
-                }
+        for (int row = 0; row < boardSize; row++) {
+            for (int column = 0; column < boardSize; column++) {
+                if (isValid(row, column)) {
+                    ItemCard card = peekCard(row, column);
+                    if (card != null) output.append(card).append(" ");
+                    else output.append("* ");
+                } else output.append("- ");
 
             }
-            returnString += "\n";
+            output.append("\n");
         }
 
-        return returnString;
+        return output.toString();
     }
 
     // TODO keep?

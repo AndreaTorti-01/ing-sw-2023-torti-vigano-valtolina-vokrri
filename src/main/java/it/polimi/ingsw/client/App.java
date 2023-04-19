@@ -12,5 +12,6 @@ public class App {
         GameController controller = new GameController(model, view);
 
         view.run();
+
     }
 }

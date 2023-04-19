@@ -43,12 +43,12 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
 
             found_shapes += checkPatternsNumber(masked_shelf, shape); // breaks masked shelf!
 
-            if (found_shapes >= shape.num_of_shapes()) {
+            if (found_shapes >= shape.numberOfShapes()) {
                 return true;
             }
         }
 
-        if (shape.mirror_hor()) {
+        if (shape.mirror()) {
             // generate the inverted matrix
             int[][] inv_matrix = new int[shape.height()][shape.width()];
             for (int j = 0; j < shape.height(); j++) {
@@ -58,7 +58,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
             }
 
             // create the inverted shape
-            Shape inv_shape = new Shape(shape.width(), shape.height(), inv_matrix, true, shape.num_of_shapes());
+            Shape inv_shape = new Shape(shape.width(), shape.height(), inv_matrix, true, shape.numberOfShapes());
 
             // do the same for the inverted shape
             for (int cardType = 0; cardType < numberOfItemCardTypes; cardType++) {
@@ -75,7 +75,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
 
                 found_shapes += checkPatternsNumber(masked_shelf, inv_shape); // breaks masked shelf!
 
-                if (found_shapes >= shape.num_of_shapes()) {
+                if (found_shapes >= shape.numberOfShapes()) {
                     return true;
                 }
             }
@@ -116,7 +116,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
 
                 sidesCheck:
                 // tries to invalidate the shelf mask in the case of two_squares
-                if (shape.num_of_shapes() == 2 && !invalid) {
+                if (shape.numberOfShapes() == 2 && !invalid) {
                     i_shelf = i_shape_start;
                     j_shelf = j_shape_start;
                     // check top side

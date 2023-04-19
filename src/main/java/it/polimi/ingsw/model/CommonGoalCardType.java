@@ -42,21 +42,15 @@ public enum CommonGoalCardType {
 
     // mapping from the type to the corresponding class
     public static CommonGoalCardStrat getStrategyFromType(CommonGoalCardType type) {
-        switch (type) {
-            case CROSS, DIAGONAL_FIVE, TWO_SQUARES, EQUAL_CORNERS:
-                return new CommonGoalCardStrat_SHAPE(type);
-            case EIGHT_EQUAL:
-                return new CommonGoalCardStrat_EIGHT_EQUAL();
-            case FOUR_LINES_MAX_THREE_TYPES, THREE_COLUMNS_MAX_THREE_TYPES:
-                return new CommonGoalCardStrat_MAX_THREE_TYPES(type);
-            case FOUR_QUARTETS, SIX_PAIRS:
-                return new CommonGoalCardStrat_AGGREGATE(type);
-            case STAIR:
-                return new CommonGoalCardStrat_STAIR();
-            case TWO_RAINBOW_COLUMNS, TWO_RAINBOW_LINES:
-                return new CommonGoalCardStrat_RAINBOWS(type);
-            default:
-                throw new IllegalArgumentException("invalid type");
-        }
+        return switch (type) {
+            case CROSS, DIAGONAL_FIVE, TWO_SQUARES, EQUAL_CORNERS -> new CommonGoalCardStrat_SHAPE(type);
+            case EIGHT_EQUAL -> new CommonGoalCardStrat_EIGHT_EQUAL();
+            case FOUR_LINES_MAX_THREE_TYPES, THREE_COLUMNS_MAX_THREE_TYPES ->
+                    new CommonGoalCardStrat_MAX_THREE_TYPES(type);
+            case FOUR_QUARTETS, SIX_PAIRS -> new CommonGoalCardStrat_AGGREGATE(type);
+            case STAIR -> new CommonGoalCardStrat_STAIR();
+            case TWO_RAINBOW_COLUMNS, TWO_RAINBOW_LINES -> new CommonGoalCardStrat_RAINBOWS(type);
+            default -> throw new IllegalArgumentException("invalid type");
+        };
     }
 }
