@@ -25,9 +25,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
 
     @Override
     public boolean checkPattern(Shelf shelf) {
-
-        int i_shelf, j_shelf, i_shape, j_shape, i_shape_start, j_shape_start;
-        int found_shapes = 0;
+        int shapesFound = 0;
 
         for (ItemType type : ItemType.values()) {
             // create the shelf mask
@@ -39,9 +37,9 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                 }
             }
 
-            found_shapes += checkPatternsNumber(maskedShelf, shape); // breaks masked shelf!
+            shapesFound += checkPatternsNumber(maskedShelf, shape); // breaks masked shelf!
 
-            if (found_shapes >= shape.numberOfShapes()) return true;
+            if (shapesFound >= shape.numberOfShapes()) return true;
         }
 
         if (shape.mirror()) {
@@ -67,9 +65,9 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                     }
                 }
 
-                found_shapes += checkPatternsNumber(maskedShelf, invertedShape); // breaks masked shelf!
+                shapesFound += checkPatternsNumber(maskedShelf, invertedShape); // breaks masked shelf!
 
-                if (found_shapes >= shape.numberOfShapes()) return true;
+                if (shapesFound >= shape.numberOfShapes()) return true;
             }
         }
 
@@ -87,7 +85,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                 // as soon as a shelf mask is invalid, the loop breaks
                 boolean invalid = false;
 
-                outerloop:
+                outerLoop:
                 // loop through shape
                 for (shapeRow = 0; shapeRow < shape.height(); shapeRow++) {
                     for (shapeColumn = 0; shapeColumn < shape.width(); shapeColumn++) {
@@ -100,7 +98,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                         if (shape.matrix()[shapeRow][shapeColumn] == 1 && !maskedShelf[row][column]) {
                             // if the shelf mask is invalidated, the loop breaks
                             invalid = true;
-                            break outerloop;
+                            break outerLoop;
                         }
                     }
                 }
@@ -192,10 +190,10 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         // load the mirror flag
         boolean mirror = sc.read() == '1';
         sc.read(); // skip the space
-        int num_of_shapes = sc.read() - 48;
+        int numberOfShapes = sc.read() - 48;
 
         // create the shape
-        Shape shape = new Shape(width, height, matrix, mirror, num_of_shapes);
+        Shape shape = new Shape(width, height, matrix, mirror, numberOfShapes);
 
         // close the file and return the shape
         sc.close();
