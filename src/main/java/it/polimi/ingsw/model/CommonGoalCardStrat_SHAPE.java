@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static it.polimi.ingsw.utils.Constants.*;
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 
 public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
@@ -28,85 +29,75 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         int i_shelf, j_shelf, i_shape, j_shape, i_shape_start, j_shape_start;
         int found_shapes = 0;
 
-        // loop through the 1 shelf masks through ItemType.values()
-        for (int cardType = 0; cardType < numberOfItemCardTypes; cardType++) {
-
+        for (ItemType type : ItemType.values()) {
             // create the shelf mask
-            boolean[][] masked_shelf = new boolean[numberOfRows][numberOfColumns];
-            for (int j = 0; j < numberOfRows; j++) {
-                for (int k = 0; k < numberOfColumns; k++) {
-                    if (shelf.getCardAt(j, k) != null && shelf.getCardAt(j, k).type().equals(ItemType.values()[cardType])) {
-                        masked_shelf[j][k] = true;
-                    }
+            boolean[][] maskedShelf = new boolean[numberOfRows][numberOfColumns];
+            for (int row = 0; row < numberOfRows; row++) {
+                for (int column = 0; column < numberOfColumns; column++) {
+                    if (shelf.getCardAt(row, column) != null && shelf.getCardAt(row, column).getType().equals(type))
+                        maskedShelf[row][column] = true;
                 }
             }
 
-            found_shapes += checkPatternsNumber(masked_shelf, shape); // breaks masked shelf!
+            found_shapes += checkPatternsNumber(maskedShelf, shape); // breaks masked shelf!
 
-            if (found_shapes >= shape.numberOfShapes()) {
-                return true;
-            }
+            if (found_shapes >= shape.numberOfShapes()) return true;
         }
 
         if (shape.mirror()) {
             // generate the inverted matrix
-            int[][] inv_matrix = new int[shape.height()][shape.width()];
-            for (int j = 0; j < shape.height(); j++) {
-                for (int k = 0; k < shape.width(); k++) {
-                    inv_matrix[j][k] = shape.matrix()[j][shape.width() - k - 1];
+            int[][] invertedMatrix = new int[shape.height()][shape.width()];
+            for (int row = 0; row < shape.height(); row++) {
+                for (int column = 0; column < shape.width(); column++) {
+                    invertedMatrix[row][column] = shape.matrix()[row][shape.width() - column - 1];
                 }
             }
 
             // create the inverted shape
-            Shape inv_shape = new Shape(shape.width(), shape.height(), inv_matrix, true, shape.numberOfShapes());
+            Shape invertedShape = new Shape(shape.width(), shape.height(), invertedMatrix, true, shape.numberOfShapes());
 
             // do the same for the inverted shape
-            for (int cardType = 0; cardType < numberOfItemCardTypes; cardType++) {
-
+            for (ItemType type : ItemType.values()) {
                 // create the shelf mask
-                boolean[][] masked_shelf = new boolean[numberOfRows][numberOfColumns];
+                boolean[][] maskedShelf = new boolean[numberOfRows][numberOfColumns];
                 for (int j = 0; j < numberOfRows; j++) {
                     for (int k = 0; k < numberOfColumns; k++) {
-                        if (shelf.getCardAt(j, k) != null && shelf.getCardAt(j, k).type().equals(ItemType.values()[cardType])) {
-                            masked_shelf[j][k] = true;
-                        }
+                        if (shelf.getCardAt(j, k) != null && shelf.getCardAt(j, k).getType().equals(type))
+                            maskedShelf[j][k] = true;
                     }
                 }
 
-                found_shapes += checkPatternsNumber(masked_shelf, inv_shape); // breaks masked shelf!
+                found_shapes += checkPatternsNumber(maskedShelf, invertedShape); // breaks masked shelf!
 
-                if (found_shapes >= shape.numberOfShapes()) {
-                    return true;
-                }
+                if (found_shapes >= shape.numberOfShapes()) return true;
             }
-
         }
 
         return false;
     }
 
-    private int checkPatternsNumber(boolean[][] masked_shelf, Shape shape) {
-        int found_shapes = 0;
-        int i_shelf = 0, j_shelf = 0, i_shape, j_shape, i_shape_start, j_shape_start;
+    private int checkPatternsNumber(boolean[][] maskedShelf, Shape shape) {
+        int shapesFound = 0;
+        int row, column, shapeRow, shapeColumn, startingRow, startingColumn;
 
         // loop through the shape possible positions
-        for (i_shape_start = 0; i_shape_start < masked_shelf.length - shape.height() + 1; i_shape_start++) {
-            for (j_shape_start = 0; j_shape_start < masked_shelf[0].length - shape.width() + 1; j_shape_start++) {
+        for (startingRow = 0; startingRow < maskedShelf.length - shape.height() + 1; startingRow++) {
+            for (startingColumn = 0; startingColumn < maskedShelf[0].length - shape.width() + 1; startingColumn++) {
 
                 // as soon as a shelf mask is invalid, the loop breaks
                 boolean invalid = false;
 
                 outerloop:
                 // loop through shape
-                for (i_shape = 0; i_shape < shape.height(); i_shape++) {
-                    for (j_shape = 0; j_shape < shape.width(); j_shape++) {
+                for (shapeRow = 0; shapeRow < shape.height(); shapeRow++) {
+                    for (shapeColumn = 0; shapeColumn < shape.width(); shapeColumn++) {
 
                         // get the position of the shape in the shelf
-                        i_shelf = i_shape_start + i_shape;
-                        j_shelf = j_shape_start + j_shape;
+                        row = startingRow + shapeRow;
+                        column = startingColumn + shapeColumn;
 
                         // check if the shelf mask is invalidated by the shape
-                        if (shape.matrix()[i_shape][j_shape] == 1 && !masked_shelf[i_shelf][j_shelf]) {
+                        if (shape.matrix()[shapeRow][shapeColumn] == 1 && !maskedShelf[row][column]) {
                             // if the shelf mask is invalidated, the loop breaks
                             invalid = true;
                             break outerloop;
@@ -117,32 +108,32 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                 sidesCheck:
                 // tries to invalidate the shelf mask in the case of two_squares
                 if (shape.numberOfShapes() == 2 && !invalid) {
-                    i_shelf = i_shape_start;
-                    j_shelf = j_shape_start;
+                    row = startingRow;
+                    column = startingColumn;
                     // check top side
-                    if (i_shelf > 0) {
-                        if (masked_shelf[i_shelf - 1][j_shelf] || masked_shelf[i_shelf - 1][j_shelf + 1]) {
+                    if (row > 0) {
+                        if (maskedShelf[row - 1][column] || maskedShelf[row - 1][column + 1]) {
                             invalid = true;
                             break sidesCheck;
                         }
                     }
                     // check right side
-                    if (j_shelf < masked_shelf[0].length - 2) {
-                        if (masked_shelf[i_shelf][j_shelf + 2] || masked_shelf[i_shelf + 1][j_shelf + 2]) {
+                    if (column < maskedShelf[0].length - 2) {
+                        if (maskedShelf[row][column + 2] || maskedShelf[row + 1][column + 2]) {
                             invalid = true;
                             break sidesCheck;
                         }
                     }
                     // check bottom side
-                    if (i_shelf < masked_shelf.length - 2) {
-                        if (masked_shelf[i_shelf + 2][j_shelf] || masked_shelf[i_shelf + 2][j_shelf + 1]) {
+                    if (row < maskedShelf.length - 2) {
+                        if (maskedShelf[row + 2][column] || maskedShelf[row + 2][column + 1]) {
                             invalid = true;
                             break sidesCheck;
                         }
                     }
                     // check left side
-                    if (j_shelf > 0) {
-                        if (masked_shelf[i_shelf][j_shelf - 1] || masked_shelf[i_shelf + 1][j_shelf - 1]) {
+                    if (column > 0) {
+                        if (maskedShelf[row][column - 1] || maskedShelf[row + 1][column - 1]) {
                             invalid = true;
                             break sidesCheck;
                         }
@@ -150,21 +141,21 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
                 }
 
                 if (!invalid) {
-                    found_shapes++;
+                    shapesFound++;
                     // delete the shape from the shelf mask at the current position
-                    for (i_shape = 0; i_shape < shape.height(); i_shape++) {
-                        for (j_shape = 0; j_shape < shape.width(); j_shape++) {
-                            i_shelf = i_shape_start + i_shape;
-                            j_shelf = j_shape_start + j_shape;
-                            if (shape.matrix()[i_shape][j_shape] == 1) {
-                                masked_shelf[i_shelf][j_shelf] = false;
+                    for (shapeRow = 0; shapeRow < shape.height(); shapeRow++) {
+                        for (shapeColumn = 0; shapeColumn < shape.width(); shapeColumn++) {
+                            row = startingRow + shapeRow;
+                            column = startingColumn + shapeColumn;
+                            if (shape.matrix()[shapeRow][shapeColumn] == 1) {
+                                maskedShelf[row][column] = false;
                             }
                         }
                     }
                 }
             }
         }
-        return found_shapes;
+        return shapesFound;
     }
 
     @Override
@@ -191,20 +182,20 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         int[][] matrix = new int[height][width];
 
         // load the shape
-        for (int i = 0; i < height; i++) {
+        for (int row = 0; row < height; row++) {
             String line = sc.readLine();
-            for (int j = 0; j < width; j++) {
-                matrix[i][j] = line.charAt(j) - 48;
+            for (int column = 0; column < width; column++) {
+                matrix[row][column] = line.charAt(column) - 48;
             }
         }
 
         // load the mirror flag
-        boolean mirror_hor = sc.read() == '1';
+        boolean mirror = sc.read() == '1';
         sc.read(); // skip the space
         int num_of_shapes = sc.read() - 48;
 
         // create the shape
-        Shape shape = new Shape(width, height, matrix, mirror_hor, num_of_shapes);
+        Shape shape = new Shape(width, height, matrix, mirror, num_of_shapes);
 
         // close the file and return the shape
         sc.close();

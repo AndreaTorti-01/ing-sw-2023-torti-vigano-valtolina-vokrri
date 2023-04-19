@@ -29,15 +29,15 @@ class BagTest {
 
         // draw 1 card and check that the size of the bag is 131, then remove the type of the card from the set
         ic = bag.drawCard();
-        ItemType extracted = ic.type();
+        ItemType extracted = ic.getType();
         assertEquals(131, bag.getCardsInside().size());
         itemTypes.remove(extracted);
 
         // check that the bag contains 22 cards of each type except the one that was drawn
         for (ItemType it : itemTypes) {
-            assertEquals(Constants.numberOfItemCardsWithSameType, bag.getCardsInside().stream().filter(itemCard -> itemCard.type().equals(it)).toList().size());
+            assertEquals(Constants.numberOfItemCardsWithSameType, bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(it)).toList().size());
         }
-        assertEquals(21, bag.getCardsInside().stream().filter(itemCard -> itemCard.type().equals(extracted)).toList().size());
+        assertEquals(21, bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(extracted)).toList().size());
 
         // TODO accorciare (fatto, sopra)
         /*
@@ -139,7 +139,7 @@ class BagTest {
         Bag Bag3 = new Bag();
         for (int k = 0; k < 5; k++) {
             ic_6 = Bag3.drawCard();
-            System.out.println(ic_6.type());
+            System.out.println(ic_6.getType());
         }
 
     }

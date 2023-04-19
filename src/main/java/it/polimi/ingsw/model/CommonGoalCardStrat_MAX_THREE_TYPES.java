@@ -54,9 +54,9 @@ public class CommonGoalCardStrat_MAX_THREE_TYPES implements CommonGoalCardStrat 
 
                 // if a card has a different type from the one already in the set and the set reached
                 // the maximum number of possible types skips that row
-                if (!typesInCurrentRow.contains(currentCard.type()) && typesInCurrentRow.size() == maxNumberOfTypes)
+                if (!typesInCurrentRow.contains(currentCard.getType()) && typesInCurrentRow.size() == maxNumberOfTypes)
                     continue outer;
-                typesInCurrentRow.add(currentCard.type());
+                typesInCurrentRow.add(currentCard.getType());
             }
             // if it reaches the end of the row, that row satisfies the required pattern
             counterOfLines++;
@@ -76,9 +76,9 @@ public class CommonGoalCardStrat_MAX_THREE_TYPES implements CommonGoalCardStrat 
 
                 // if a card has a different type from the one already in the set and the set reached
                 // the maximum number of possible types skips that row
-                if (!typesInCurrentColumn.contains(currentCard.type()) && typesInCurrentColumn.size() == maxNumberOfTypes)
+                if (!typesInCurrentColumn.contains(currentCard.getType()) && typesInCurrentColumn.size() == maxNumberOfTypes)
                     continue outer1;
-                typesInCurrentColumn.add(currentCard.type());
+                typesInCurrentColumn.add(currentCard.getType());
             }
             // if it reaches the end of the column, that column satisfies the required pattern
             counterOfColumns++;

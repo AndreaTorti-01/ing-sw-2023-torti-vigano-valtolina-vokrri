@@ -10,7 +10,7 @@ class ItemCardTest {
     void testItemCard() {
         for (ItemType type : ItemType.values()) {
             ItemCard currentItemCard = new ItemCard(type, 2);
-            assertEquals(currentItemCard.type(), type);
+            assertEquals(currentItemCard.getType(), type);
             assertEquals(currentItemCard.getSprite(), 2);
         }
     }

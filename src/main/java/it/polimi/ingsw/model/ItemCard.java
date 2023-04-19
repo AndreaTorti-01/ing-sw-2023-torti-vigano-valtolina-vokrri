@@ -5,7 +5,7 @@ public final class ItemCard {
     private final int sprite;
 
     /**
-     * @param type  the type of the item card, passed as an enum value
+     * @param type   the type of the item card, passed as an enum value
      * @param sprite must be between 0 and 2
      */
     public ItemCard(ItemType type, int sprite) {
@@ -15,7 +15,7 @@ public final class ItemCard {
         this.sprite = sprite;
     }
 
-    public ItemType type() {
+    public ItemType getType() {
         return type;
     }
 

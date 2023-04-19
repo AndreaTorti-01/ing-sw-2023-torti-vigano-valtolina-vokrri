@@ -20,7 +20,7 @@ public class CommonGoalCardStrat_EIGHT_EQUAL implements CommonGoalCardStrat {
                     if (currentCard == null) continue;
 
                     // if the card has the same current type increment counter
-                    if (currentCard.type().equals(currentType)) counter++;
+                    if (currentCard.getType().equals(currentType)) counter++;
                     // if there are 8 cards with the same type return true
                     if (counter == cardsToCheck) return true;
                 }

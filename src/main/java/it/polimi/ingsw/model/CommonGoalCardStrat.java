@@ -65,34 +65,34 @@ public interface CommonGoalCardStrat {
         // retrieves the current card type
         ItemType currentType;
         if (currentCard == null) return heads;
-        else currentType = currentCard.type();
+        else currentType = currentCard.getType();
 
         // checks the upper card
         // and inserts it in the list if it has the same type of the specified one
         if (row + 1 < numberOfRows) {
             ItemCard upperCard = shelfCopy.getCardAt(row + 1, column);
-            if (upperCard != null && currentType.equals(upperCard.type())) heads.add(upperCard);
+            if (upperCard != null && currentType.equals(upperCard.getType())) heads.add(upperCard);
         }
 
         // checks the right card
         // and inserts it in the list if it has the same type of the specified one
         if (column + 1 < numberOfColumns) {
             ItemCard rightCard = shelfCopy.getCardAt(row, column + 1);
-            if (rightCard != null && currentType.equals(rightCard.type())) heads.add(rightCard);
+            if (rightCard != null && currentType.equals(rightCard.getType())) heads.add(rightCard);
         }
 
         // checks the lower card
         // and inserts it in the list if it has the same type of the specified one
         if (row - 1 >= 0) {
             ItemCard lowerCard = shelfCopy.getCardAt(row - 1, column);
-            if (lowerCard != null && currentType.equals(lowerCard.type())) heads.add(lowerCard);
+            if (lowerCard != null && currentType.equals(lowerCard.getType())) heads.add(lowerCard);
         }
 
         // checks the left card
         // and inserts it in the list if it has the same type of the specified one
         if (column - 1 >= 0) {
             ItemCard leftCard = shelfCopy.getCardAt(row, column - 1);
-            if (leftCard != null && currentType.equals(leftCard.type())) heads.add(leftCard);
+            if (leftCard != null && currentType.equals(leftCard.getType())) heads.add(leftCard);
         }
 
         return heads;

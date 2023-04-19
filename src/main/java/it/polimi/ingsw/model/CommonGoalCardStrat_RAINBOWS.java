@@ -33,8 +33,8 @@ public class CommonGoalCardStrat_RAINBOWS implements CommonGoalCardStrat {
             boolean validRow = true;
 
             for (int j = 0; j < numberOfColumns && validRow; j++) {
-                if (slf.getCardAt(i, j) != null && !types.contains(slf.getCardAt(i, j).type()))
-                    types.add(slf.getCardAt(i, j).type());
+                if (slf.getCardAt(i, j) != null && !types.contains(slf.getCardAt(i, j).getType()))
+                    types.add(slf.getCardAt(i, j).getType());
                 else
                     validRow = false;
             }
@@ -48,8 +48,8 @@ public class CommonGoalCardStrat_RAINBOWS implements CommonGoalCardStrat {
             boolean validCol = true;
 
             for (int i = 0; i < numberOfRows && validCol; i++) {
-                if (slf.getCardAt(i, j) != null && !types.contains(slf.getCardAt(i, j).type()))
-                    types.add(slf.getCardAt(i, j).type());
+                if (slf.getCardAt(i, j) != null && !types.contains(slf.getCardAt(i, j).getType()))
+                    types.add(slf.getCardAt(i, j).getType());
                 else
                     validCol = false;
             }

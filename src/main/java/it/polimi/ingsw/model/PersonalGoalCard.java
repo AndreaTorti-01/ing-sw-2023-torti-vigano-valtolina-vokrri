@@ -70,7 +70,7 @@ public class PersonalGoalCard {
                 ItemCard currentCard = shelf.getCardAt(row, column);
                 ItemType checker = this.getTypeAt(row, column);
 
-                if (currentCard != null && !currentCard.type().equals(checker)) return false;
+                if (currentCard != null && !currentCard.getType().equals(checker)) return false;
                 if (currentCard == null && checker != null) return false;
             }
         }

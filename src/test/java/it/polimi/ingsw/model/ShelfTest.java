@@ -46,7 +46,7 @@ class ShelfTest {
 
                 // the items in the shelf are not the same as the ones in the matrix,
                 // but the type should be
-                assertEquals(shelf.getCardAt(row, column).type(), itemCards[row][column].type());
+                assertEquals(shelf.getCardAt(row, column).getType(), itemCards[row][column].getType());
             }
         }
 
@@ -135,7 +135,7 @@ class ShelfTest {
 
                 // the itemCards inside the shelves are NOT the same,
                 // but the type should be
-                assertEquals(actual.type(), expected.type());
+                assertEquals(actual.getType(), expected.getType());
             }
         }
     }
