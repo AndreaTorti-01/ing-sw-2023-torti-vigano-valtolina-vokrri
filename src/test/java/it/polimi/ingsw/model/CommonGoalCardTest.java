@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,9 +12,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CommonGoalCardTest {
 
+    private CommonGoalCardStrat randomStrat;
+
+    @BeforeEach
+    void createRandomStrategy() {
+        CommonGoalCardType randomType = CommonGoalCardType.values()[new Random().nextInt(0, 12)];
+        randomStrat = CommonGoalCardType.getStrategyFromType(randomType);
+    }
+
+
     @Test
     void testFourPlayersFunctionalities() {
-        CommonGoalCard commonGoalCard = new CommonGoalCard(4);
+        CommonGoalCard commonGoalCard = new CommonGoalCard(4, randomStrat);
 
         assertEquals(commonGoalCard.peekPoints(), 8);
         assertEquals(commonGoalCard.popPoints(), 8);
@@ -27,7 +40,7 @@ public class CommonGoalCardTest {
 
     @Test
     void testThreePlayersFunctionalities() {
-        CommonGoalCard commonGoalCard = new CommonGoalCard(3);
+        CommonGoalCard commonGoalCard = new CommonGoalCard(3, randomStrat);
 
         assertEquals(commonGoalCard.peekPoints(), 8);
         assertEquals(commonGoalCard.popPoints(), 8);
@@ -42,7 +55,7 @@ public class CommonGoalCardTest {
 
     @Test
     void testTwoPlayersFunctionalities() {
-        CommonGoalCard commonGoalCard = new CommonGoalCard(2);
+        CommonGoalCard commonGoalCard = new CommonGoalCard(2, randomStrat);
 
 
         assertEquals(commonGoalCard.peekPoints(), 8);
@@ -55,7 +68,7 @@ public class CommonGoalCardTest {
 
     @Test
     void testPopMorePointsThanAvailable() {
-        CommonGoalCard commonGoalCard = new CommonGoalCard(4);
+        CommonGoalCard commonGoalCard = new CommonGoalCard(4, randomStrat);
 
         // pops all available points
         for (int i = 0; i < 4; i++)
@@ -66,7 +79,7 @@ public class CommonGoalCardTest {
 
     @Test
     void testPeekMorePointsThanAvailable() {
-        CommonGoalCard commonGoalCard = new CommonGoalCard(4);
+        CommonGoalCard commonGoalCard = new CommonGoalCard(4, randomStrat);
 
         // pops all available points
         for (int i = 0; i < 4; i++)
@@ -79,12 +92,12 @@ public class CommonGoalCardTest {
     void testIllegalNumberOfPlayers() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new CommonGoalCard(5)
+                () -> new CommonGoalCard(5, randomStrat)
         );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new CommonGoalCard(1)
+                () -> new CommonGoalCard(1, randomStrat)
         );
     }
 }

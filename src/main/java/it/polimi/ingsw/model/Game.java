@@ -135,11 +135,10 @@ public class Game extends Observable {
 
         for (int i = 0; i < numberOfCommonGoalCardsInGame; i++) {
             // chooses and removes a random index from the indexes array in order not to have duplicates
-            int randomIndex = new Random().nextInt(0, indexes.size());
-            indexes.remove(randomIndex);
+            int randomTypeIndex = indexes.remove(new Random().nextInt(0, indexes.size()));
 
             // gets a random type
-            CommonGoalCardType randomType = CommonGoalCardType.values()[randomIndex];
+            CommonGoalCardType randomType = CommonGoalCardType.values()[randomTypeIndex];
 
             // gets the strategy from the type
             CommonGoalCardStrat randomStrat = CommonGoalCardType.getStrategyFromType(randomType);
