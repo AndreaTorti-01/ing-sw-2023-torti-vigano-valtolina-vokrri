@@ -24,7 +24,6 @@ public class CommonGoalCardStrat_MAX_THREE_TYPES implements CommonGoalCardStrat 
         } else if (cardType.equals(CommonGoalCardType.THREE_COLUMNS_MAX_THREE_TYPES)) {
             numberOfColumnsToCheck = 3;
             numberOfLinesToCheck = 0;
-
         } else throw new RuntimeException("WRONG COMMONCARD TYPE");
     }
 

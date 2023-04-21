@@ -7,8 +7,7 @@ import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.utils.Observer;
 import it.polimi.ingsw.view.Tui;
 
-public class GameController implements Observer{
-
+public class GameController implements Observer {
     int currentPlayer;
     Game model;
     Tui view;
@@ -51,11 +50,5 @@ public class GameController implements Observer{
      */
     private boolean checkCommonGoalCardPattern(Shelf shelf, CommonGoalCard commonGoalCard) {
         return commonGoalCard.checkPattern(shelf);
-    }
-
-
-    @Override
-    public void update(Object message) {
-        throw new UnsupportedOperationException();
     }
 }

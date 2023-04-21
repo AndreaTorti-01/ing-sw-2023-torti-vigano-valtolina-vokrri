@@ -37,68 +37,68 @@ public class Tui extends Observable implements Observer, Runnable {
     }
 
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
-        String printString = "";
+        StringBuilder output = new StringBuilder();
 
-        printString += "---------------------\n";
+        output.append("---------------------\n");
         for (int i = 0; i < Constants.boardSize; i++) {
-            printString += "| ";
+            output.append("| ");
             for (int j = 0; j < Constants.boardSize; j++) {
                 if (boardValid[i][j]) {
                     ItemCard card = board[i][j];
                     if (card != null)
-                        printString += card + " ";
+                        output.append(card).append(" ");
                     else
-                        printString += "* ";
+                        output.append("* ");
                 } else {
-                    printString += "- ";
+                    output.append("- ");
                 }
 
             }
-            printString += "|\n";
+            output.append("|\n");
         }
-        printString += "---------------------";
+        output.append("---------------------");
 
-        System.out.print(printString);
+        System.out.print(output.toString());
     }
 
-    private void printShelf(ItemCard[][] shelfOf) {
-        String printString = "";
+    private void printShelf(ItemCard[][] shelf) {
+        StringBuilder output = new StringBuilder();
 
         for (int i = 0; i < Constants.numberOfRows; i++) {
-            printString += "| ";
+            output.append("| ");
             for (int j = 0; j < Constants.numberOfColumns; j++) {
-                if (shelfOf[i][j] != null) printString += shelfOf[i][j].toString() + " ";
-                else printString += "* ";
+                if (shelf[i][j] != null) output.append(shelf[i][j].toString()).append(" ");
+                else output.append("* ");
             }
-            printString += "|\n";
+            output.append("|\n");
         }
-        printString += "------------";
+        output.append("------------");
 
-        System.out.print(printString);
+        System.out.print(output.toString());
     }
 
-    private void printGameStatus(GameView gw) {
+    private void printGameStatus(GameView gameView) {
         // Print the game status, including the main board and the shelves
 
         // Print the active player name
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + gw.getCurrentPlayer().getName() + ANSI_PURPLE + "  <<" + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + gameView.getCurrentPlayer().getName() + ANSI_PURPLE + "  <<" + ANSI_RESET);
 
         // Print the board
-        printBoard(gw.getBoard(), gw.getBoardValid());
+        printBoard(gameView.getBoard(), gameView.getBoardValid());
 
         // Print the shelf of the active player
-        printShelf(gw.getShelfOf(gw.getCurrentPlayer()));
+        printShelf(gameView.getShelfOf(gameView.getCurrentPlayer()));
 
         // Print the bag status
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "BAG: " + ANSI_YELLOW + gw.isBagEmpty() + ANSI_PURPLE + "  <<" + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "BAG: " + ANSI_YELLOW + gameView.isBagEmpty() + ANSI_PURPLE + "  <<" + ANSI_RESET);
 
         // Print the common goal cards type and points on top of the stack
-        for (int i = 0; i < gw.getCommonGoalCards().size(); i++) {
-            System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL " + i + ": " + ANSI_YELLOW + gw.getCommonGoalCards().get(i).getType() + " " + gw.getCommonGoalCards().get(i).peekPoints() + ANSI_PURPLE + "  <<" + ANSI_RESET);
+        for (int i = 0; i < gameView.getCommonGoalCards().size(); i++) {
+            System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL " + i + ": " + ANSI_YELLOW + gameView.getCommonGoalCards().get(i).getType() + " " + gameView.getCommonGoalCards().get(i).peekPoints() + ANSI_PURPLE + "  <<" + ANSI_RESET);
         }
 
         // Print the personal goal card pattern
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL: " + ANSI_YELLOW + gw.getCurrentPlayer().getPersonalGoalCard() + ANSI_PURPLE + "  <<" + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL: " + ANSI_YELLOW + gameView.getCurrentPlayer().getPersonalGoalCard() + ANSI_PURPLE + "  <<" + ANSI_RESET);
     }
 
     public void printLoadingScreen() {
@@ -172,10 +172,4 @@ public class Tui extends Observable implements Observer, Runnable {
             }
         }
     }
-
-    @Override
-    public void update(Object message) {
-        throw new UnsupportedOperationException();
-    }
-
 }

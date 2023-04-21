@@ -3,25 +3,22 @@ package it.polimi.ingsw.utils;
 import java.util.Vector;
 
 public abstract class Observable {
-    private final Vector<Observer> obs;
+    private final Vector<Observer> observers;
 
     public Observable() {
-        obs = new Vector<>();
+        observers = new Vector<>();
     }
 
     public synchronized void addObserver(Observer o) {
         if (o == null) throw new NullPointerException();
-        if (!obs.contains(o)) obs.addElement(o);
-
+        if (!observers.contains(o)) observers.addElement(o);
     }
 
     public synchronized void deleteObserver(Object o) {
-        obs.removeElement(o);
+        observers.removeElement(o);
     }
 
     public void notifyObservers(Object message) {
-
-        for (Observer o : obs) o.update(message);
-
+        for (Observer o : observers) o.update(message);
     }
 }

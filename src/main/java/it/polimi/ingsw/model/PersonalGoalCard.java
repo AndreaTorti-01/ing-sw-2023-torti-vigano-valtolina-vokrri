@@ -83,16 +83,16 @@ public class PersonalGoalCard {
 
     @Override
     public String toString() {
-        String returnString = "";
+        StringBuilder output = new StringBuilder();
 
         for (int i = 0; i < numberOfRows; i++) {
             for (int j = 0; j < numberOfColumns; j++) {
-                if (this.getTypeAt(i, j) == null) returnString += "* ";
-                else returnString += this.getTypeAt(i, j).getAbbreviation() + " ";
+                if (this.getTypeAt(i, j) == null) output.append("* ");
+                else output.append(this.getTypeAt(i, j).getAbbreviation()).append(" ");
             }
-            returnString += "\n";
+            output.append("\n");
         }
 
-        return returnString;
+        return output.toString();
     }
 }

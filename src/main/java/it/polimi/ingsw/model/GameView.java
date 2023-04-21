@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.utils.Observable;
-import it.polimi.ingsw.utils.Observer;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameView extends Observable implements Observer {
+public class GameView implements Serializable {
     private final ItemCard[][] board;
     private final boolean[][] boardValid;
     private final ArrayList<CommonGoalCard> commonGoalCards;
@@ -29,7 +27,7 @@ public class GameView extends Observable implements Observer {
 
         this.isGameEnded = model.isGameEnded();
 
-        model.addObserver(this);
+        // model.addObserver(this);
     }
 
     public ItemCard[][] getBoard() {
@@ -62,10 +60,5 @@ public class GameView extends Observable implements Observer {
 
     public boolean isGameEnded() {
         return isGameEnded;
-    }
-
-    @Override
-    public void update(Object message) {
-
     }
 }
