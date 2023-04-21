@@ -1,4 +1,9 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.commonGoalCardStrats;
+
+import it.polimi.ingsw.model.CommonGoalCardStrat;
+import it.polimi.ingsw.model.ItemCard;
+import it.polimi.ingsw.model.ItemType;
+import it.polimi.ingsw.model.Shelf;
 
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;

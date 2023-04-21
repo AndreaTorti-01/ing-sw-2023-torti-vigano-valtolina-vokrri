@@ -1,8 +1,11 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.commonGoalCardStrats.CommonGoalCardStrat_AGGREGATE;
+import it.polimi.ingsw.model.commonGoalCardStrats.CommonGoalCardType;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CommonGoalCardStrat_AGGREGATETest {
 

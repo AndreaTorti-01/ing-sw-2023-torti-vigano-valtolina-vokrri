@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.commonGoalCardStrats.CommonGoalCardType;
 import it.polimi.ingsw.utils.Constants;
 
 import java.util.ArrayList;

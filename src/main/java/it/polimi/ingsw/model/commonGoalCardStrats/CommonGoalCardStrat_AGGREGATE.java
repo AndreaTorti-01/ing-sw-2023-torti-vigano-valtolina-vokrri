@@ -1,4 +1,8 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.commonGoalCardStrats;
+
+import it.polimi.ingsw.model.CommonGoalCardStrat;
+import it.polimi.ingsw.model.ItemCard;
+import it.polimi.ingsw.model.Shelf;
 
 import java.util.List;
 
