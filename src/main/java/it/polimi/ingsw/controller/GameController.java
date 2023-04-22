@@ -1,21 +1,20 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.CommonGoalCard;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PersonalGoalCard;
 import it.polimi.ingsw.model.Shelf;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
+import it.polimi.ingsw.network.client.RmiClient;
 import it.polimi.ingsw.utils.Observer;
-import it.polimi.ingsw.view.Tui;
 
 public class GameController implements Observer {
     int currentPlayer;
     Game model;
-    Tui view;
+    RmiClient client;
 
-    public GameController(Game model, Tui view) {
+    public GameController(Game model, RmiClient client) {
         this.model = model;
-        this.view = view;
-        view.addObserver(this);
+        this.client = client;
     }
 
     public void playTurn() {

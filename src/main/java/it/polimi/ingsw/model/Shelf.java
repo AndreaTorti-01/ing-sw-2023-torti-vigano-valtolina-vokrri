@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.ItemCards.ItemCard;
+import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.utils.Constants;
 
 import java.io.BufferedReader;
@@ -72,7 +74,8 @@ public class Shelf {
                     // and inserts it in the correct position of the matrix
                     this.items[row][column] = new ItemCard(
                             ItemType.getItemTypeFromAbbreviation(currentChar),
-                            0);
+                            0
+                    );
                 }
 
                 // goes to next line

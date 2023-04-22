@@ -1,9 +1,15 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.ItemCards.ItemCard;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class GameView implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final ItemCard[][] board;
     private final boolean[][] boardValid;
     private final ArrayList<CommonGoalCard> commonGoalCards;
@@ -17,17 +23,11 @@ public class GameView implements Serializable {
 
         this.board = model.getBoard().getTileMatrix();
         this.boardValid = model.getBoard().getValidMatrix();
-
         this.commonGoalCards = model.getCommonGoalCards();
-
         this.players = model.getPlayers();
         this.currentPlayer = model.getCurrentPlayer();
-
         this.isBagEmpty = model.getBag().getCardsInside().size() == 0;
-
         this.isGameEnded = model.isGameEnded();
-
-        // model.addObserver(this);
     }
 
     public ItemCard[][] getBoard() {

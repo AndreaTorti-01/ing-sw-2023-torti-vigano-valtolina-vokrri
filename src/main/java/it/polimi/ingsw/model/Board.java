@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.utils.Constants;
 
 import java.io.FileNotFoundException;

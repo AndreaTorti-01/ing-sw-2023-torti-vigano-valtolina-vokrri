@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.ItemCards.ItemType;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

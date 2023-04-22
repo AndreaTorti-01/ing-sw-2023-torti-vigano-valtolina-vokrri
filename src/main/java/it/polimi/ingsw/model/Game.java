@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.commonGoalCardStrats.CommonGoalCardType;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import it.polimi.ingsw.utils.Observable;
 
 import java.io.FileNotFoundException;
@@ -19,26 +21,12 @@ public class Game extends Observable {
     private boolean gameEnded;
 
     /**
-     * @return the currentPlayer
-     */
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    /**
-     * @return the players
-     */
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
-
-    /**
      * This method initializes all the model elements too
      *
-     * @param playerNames
+     * @param playerNames the name of the players
      * @throws IllegalArgumentException
      */
-    public void setPlayers(String... playerNames) throws IllegalArgumentException {
+    public void initGame(String... playerNames) throws IllegalArgumentException {
         // initialization of a new Bag
         bag = new Bag();
 
@@ -57,38 +45,8 @@ public class Game extends Observable {
 
         // initialization of the common goal cards
         commonGoalCards = this.getRandomCommonGoalCards();
-
         currentPlayer = players.get(0);
-
         gameEnded = false;
-    }
-
-    /**
-     * @return the bag
-     */
-    public Bag getBag() {
-        return bag;
-    }
-
-    /**
-     * @return the board
-     */
-    public Board getBoard() {
-        return board;
-    }
-
-    /**
-     * @return the common goal cards
-     */
-    public ArrayList<CommonGoalCard> getCommonGoalCards() {
-        return commonGoalCards;
-    }
-
-    /**
-     * @return the number of players
-     */
-    public int getNumberOfPlayers() {
-        return players.size();
     }
 
     /**
@@ -124,8 +82,51 @@ public class Game extends Observable {
         return players;
     }
 
+
     /**
-     * @return an arraylist of random CommonGoalCard
+     * @return the players
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    /**
+     * @return the currentPlayer
+     */
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    /**
+     * @return the number of players
+     */
+    public int getNumberOfPlayers() {
+        return players.size();
+    }
+
+    /**
+     * @return the bag
+     */
+    public Bag getBag() {
+        return bag;
+    }
+
+    /**
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
+     * @return the common goal cards
+     */
+    public ArrayList<CommonGoalCard> getCommonGoalCards() {
+        return commonGoalCards;
+    }
+
+    /**
+     * @return an arraylist of random CommonGoalCards.
      */
     private ArrayList<CommonGoalCard> getRandomCommonGoalCards() {
         int numberOfPlayers = this.getNumberOfPlayers();
@@ -166,10 +167,16 @@ public class Game extends Observable {
         return indexes;
     }
 
+    /**
+     * @return true if the game is ended, false otherwise
+     */
     public boolean isGameEnded() {
         return gameEnded;
     }
 
+    /**
+     * sets the game to ended
+     */
     public void setGameHasEnded() {
         this.gameEnded = true;
     }

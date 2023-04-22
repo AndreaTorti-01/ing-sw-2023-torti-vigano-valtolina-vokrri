@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.commonGoalCardStrats.CommonGoalCardStrat_RAINBOWS;
-import it.polimi.ingsw.model.commonGoalCardStrats.CommonGoalCardType;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat_RAINBOWS;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

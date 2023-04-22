@@ -10,8 +10,11 @@ public abstract class Observable {
     }
 
     public synchronized void addObserver(Observer o) {
-        if (o == null) throw new NullPointerException();
-        if (!observers.contains(o)) observers.addElement(o);
+        if (o == null)
+            throw new NullPointerException();
+        if (!observers.contains(o)) {
+            observers.addElement(o);
+        }
     }
 
     public synchronized void deleteObserver(Object o) {

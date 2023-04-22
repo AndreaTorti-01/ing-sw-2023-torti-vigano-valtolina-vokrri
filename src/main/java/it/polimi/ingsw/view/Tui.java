@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.GameView;
-import it.polimi.ingsw.model.ItemCard;
+import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.utils.Observer;
@@ -171,5 +171,9 @@ public class Tui extends Observable implements Observer, Runnable {
                 printError("Please enter a valid input  (y/n)");
             }
         }
+    }
+
+    public void update(GameView gameView) {
+
     }
 }

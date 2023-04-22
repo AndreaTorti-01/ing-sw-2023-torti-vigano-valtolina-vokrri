@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.ItemCards;
 
 import java.util.NoSuchElementException;
 import java.util.Random;

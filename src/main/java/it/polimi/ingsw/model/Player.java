@@ -16,7 +16,6 @@ public class Player {
         this.hasAchievedPersonalGoalCard = false;
     }
 
-
     public int getScore() {
         return score;
     }

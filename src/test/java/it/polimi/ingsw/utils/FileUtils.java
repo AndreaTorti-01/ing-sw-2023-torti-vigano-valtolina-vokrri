@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.model.ItemCard;
-import it.polimi.ingsw.model.ItemType;
+import it.polimi.ingsw.model.ItemCards.ItemCard;
+import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Shelf;
 
 import java.io.BufferedReader;

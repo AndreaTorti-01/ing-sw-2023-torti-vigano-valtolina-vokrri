@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.commonGoalCardStrats.CommonGoalCardType;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
