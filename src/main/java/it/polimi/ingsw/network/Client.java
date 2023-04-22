@@ -23,8 +23,8 @@ public class Client extends Observable implements Observer, Runnable {
             while (true) {
                 // ask the user if he wants to send string or int
                 Scanner keybd = new Scanner(System.in);
-                System.out.println("Do you want to send a String or an Int?");
-                String choice = keybd.nextLine();
+                System.out.println("Do you want to send a String or an Int? (s/i)");
+                String choice = keybd.nextLine().toLowerCase();
                 if (choice.equals("s")) {
                     System.out.println("Enter a string:");
                     String s = keybd.nextLine();
