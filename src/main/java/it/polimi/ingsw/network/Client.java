@@ -9,6 +9,7 @@ public interface Client extends Observer {
      */
     void disconnect();
 
+
     /**
      * Notifies the client of a change in the model
      *

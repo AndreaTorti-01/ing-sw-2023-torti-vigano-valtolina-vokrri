@@ -1,10 +1,13 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameView;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.utils.Observer;
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -21,7 +24,6 @@ public class Tui extends Observable implements Observer, Runnable {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     int playerNumber = 0;
-
     @Override
     public void run() {
         // Ask the names of players
@@ -36,6 +38,15 @@ public class Tui extends Observable implements Observer, Runnable {
         printLoadingScreen();
     }
 
+    private void peekCards(GameView gameView) {
+        System.out.println("Enter up to 3 cards to peek (separated by a space): ");
+        Scanner scanner = new Scanner(System.in);
+
+        int maxCards = 0;
+        for(int i = 0; i < numberOfRows && maxCards < 3; i++)
+            for(int j = 0; j < numberOfColumns && maxCards < 3; j++)
+                if(gameView.getBoardValid()[i][j] && gameView.getBoard()[i][j] != null )  maxCards = maxCards + 1;
+    }
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
         StringBuilder output = new StringBuilder();
 
