@@ -25,7 +25,6 @@ public class Tui extends Observable implements Observer, Runnable {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     int playerNumber = 0;
-    GameView gameView; // current state of the game model, sent to server as an object by client side
     public void run() {
         // Ask the names of players
         Scanner scanner = new Scanner(System.in);
