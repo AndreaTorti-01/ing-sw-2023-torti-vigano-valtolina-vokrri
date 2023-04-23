@@ -10,6 +10,7 @@ import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Tui extends Observable implements Observer, Runnable {
@@ -24,7 +25,7 @@ public class Tui extends Observable implements Observer, Runnable {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     int playerNumber = 0;
-    @Override
+    GameView gameView; // current state of the game model, sent to server as an object by client side
     public void run() {
         // Ask the names of players
         Scanner scanner = new Scanner(System.in);
@@ -38,14 +39,56 @@ public class Tui extends Observable implements Observer, Runnable {
         printLoadingScreen();
     }
 
-    private void peekCards(GameView gameView) {
-        System.out.println("Enter up to 3 cards to peek (separated by a space): ");
+    private void pickCards(GameView gameView) {
+
+        // TODO: 23/04/2023 AGGIUNGERE UPDATE A OBSERVER
+
         Scanner scanner = new Scanner(System.in);
+        List<ItemCard> picked = new ArrayList<ItemCard>();
 
         int maxCards = 0;
         for(int i = 0; i < numberOfRows && maxCards < 3; i++)
             for(int j = 0; j < numberOfColumns && maxCards < 3; j++)
                 if(gameView.getBoardValid()[i][j] && gameView.getBoard()[i][j] != null )  maxCards = maxCards + 1;
+
+        System.out.println("You can peek " + maxCards + " cards from the board");
+        int i = 0;
+        while(i < maxCards) {
+            System.out.print("Card " + (i+1) + "-> enter ROW number:  ");
+            int row = scanner.nextInt();
+            System.out.print("Card " + (i+1) + "-> enter COLUMN number:  ");
+            int column = scanner.nextInt();
+
+            if(isTakeable(gameView, row, column) && !picked.contains(gameView.getBoard()[row][column])) {
+                System.out.println("Card " + row + column + " is valid");
+                picked.add(gameView.getBoard()[row][column]);
+                i++;
+            }
+            else
+                System.out.println("Card " + row + column + " is already taken or out of bounds!");
+
+            if(i < maxCards) {
+                System.out.print("do you want to peek another card?");
+                boolean choice = askBoolean();
+                if (!choice) break;
+            }
+        }
+    }
+
+    private boolean isTakeable(GameView gameView, int row, int column) {
+        boolean free = false;
+
+        if(row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns)
+            return false;
+
+        if(row == 0 || row == numberOfRows - 1)
+            free = true;
+        else if(column == 0 || column == numberOfColumns - 1)
+            free = true;
+        else if(gameView.getBoard()[row - 1][column] == null || gameView.getBoard()[row + 1][column] == null || gameView.getBoard()[row][column - 1] == null || gameView.getBoard()[row][column + 1] == null)
+            free = true;
+
+        return gameView.getBoardValid()[row][column] && gameView.getBoard()[row][column] != null && free;
     }
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
         StringBuilder output = new StringBuilder();
