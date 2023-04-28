@@ -45,21 +45,48 @@ public class Tui extends Observable implements Observer, Runnable {
         Scanner scanner = new Scanner(System.in);
         List<ItemCard> picked = new ArrayList<ItemCard>();
 
-        int maxCards = 0;
-        for(int i = 0; i < numberOfRows && maxCards < 3; i++)
-            for(int j = 0; j < numberOfColumns && maxCards < 3; j++)
-                if(gameView.getBoardValid()[i][j] && gameView.getBoard()[i][j] != null )  maxCards = maxCards + 1;
-
-        System.out.println("You can peek " + maxCards + " cards from the board");
+        System.out.println("You can peek cards from the board");
         int i = 0;
-        while(i < maxCards) {
+        int maxCards = 3;
+        boolean useCol = false;
+        boolean useRow = false;
+        int firstRow = 0;
+        int firstCol = 0;
+        boolean valid = true;
+
+        while(i <= maxCards) {
+
             System.out.print("Card " + (i+1) + "-> enter ROW number:  ");
             int row = scanner.nextInt();
             System.out.print("Card " + (i+1) + "-> enter COLUMN number:  ");
             int column = scanner.nextInt();
 
-            if(isTakeable(gameView, row, column) && !picked.contains(gameView.getBoard()[row][column])) {
+            if(!isTakeable(gameView, row, column)) valid = false;
+
+            if(picked.contains(gameView.getBoard()[row][column])) valid = false;
+
+            if((useCol && column != firstCol) || (useRow && row != firstRow)) valid = false;
+
+            if(picked.size() == 1) { //contains the first one
+                if(row != firstRow && column != firstCol) valid = false;
+                if(isAdiacent(row, column, firstRow, firstCol)){
+                    useCol = column == firstCol;
+                    useRow = row == firstRow;
+                }
+            }
+
+            if(picked.size() == 2) {
+                if(useCol && column != firstCol) valid = false;
+                if(useRow && row != firstRow) valid = false;
+                if(!isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, picked.get(1).get)) valid = false;
+            }
+
+            if(valid) {
                 System.out.println("Card " + row + column + " is valid");
+                if(picked.size() == 0){
+                    firstCol = column;
+                    firstRow = row;
+                }
                 picked.add(gameView.getBoard()[row][column]);
                 i++;
             }
@@ -67,11 +94,18 @@ public class Tui extends Observable implements Observer, Runnable {
                 System.out.println("Card " + row + column + " is already taken or out of bounds!");
 
             if(i < maxCards) {
-                System.out.print("do you want to peek another card?");
+                System.out.println("You can pick " + (maxCards - i) + " more cards");
+                System.out.print("do you want to pick another one?");
                 boolean choice = askBoolean();
                 if (!choice) break;
             }
         }
+    }
+
+    private boolean isAdiacent(int row, int column, int row2, int column2) {
+        if(row == row2 && (column == column2 + 1 || column == column2 - 1)) return true;
+        if(column == column2 && (row == row2 + 1 || row == row2 - 1)) return true;
+        return false;
     }
 
     private boolean isTakeable(GameView gameView, int row, int column) {
@@ -89,6 +123,7 @@ public class Tui extends Observable implements Observer, Runnable {
 
         return gameView.getBoardValid()[row][column] && gameView.getBoard()[row][column] != null && free;
     }
+
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
         StringBuilder output = new StringBuilder();
 
