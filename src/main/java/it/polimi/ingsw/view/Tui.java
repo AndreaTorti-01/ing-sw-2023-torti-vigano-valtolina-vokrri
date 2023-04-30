@@ -52,7 +52,8 @@ public class Tui extends Observable implements Observer, Runnable {
         boolean useRow = false;
         int firstRow = 0;
         int firstCol = 0;
-        boolean valid = true;
+        int secondRC = 0;
+        boolean valid;
 
         while(i <= maxCards) {
 
@@ -60,25 +61,29 @@ public class Tui extends Observable implements Observer, Runnable {
             int row = scanner.nextInt();
             System.out.print("Card " + (i+1) + "-> enter COLUMN number:  ");
             int column = scanner.nextInt();
+            valid = true;
 
             if(!isTakeable(gameView, row, column)) valid = false;
 
-            if(picked.contains(gameView.getBoard()[row][column])) valid = false;
+            if(valid && picked.contains(gameView.getBoard()[row][column])) valid = false;
 
-            if((useCol && column != firstCol) || (useRow && row != firstRow)) valid = false;
+            if(valid && ((useCol && column != firstCol) || (useRow && row != firstRow))) valid = false;
 
-            if(picked.size() == 1) { //contains the first one
+            if(valid && picked.size() == 1) { //contains the first one
                 if(row != firstRow && column != firstCol) valid = false;
                 if(isAdiacent(row, column, firstRow, firstCol)){
                     useCol = column == firstCol;
                     useRow = row == firstRow;
                 }
+                if(useCol) secondRC = firstRow; // Col known, row unknown
+                else secondRC = firstCol; // Row known, col unknown
             }
 
-            if(picked.size() == 2) {
+            if(valid && picked.size() == 2) {
                 if(useCol && column != firstCol) valid = false;
                 if(useRow && row != firstRow) valid = false;
-                if(!isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, picked.get(1).get)) valid = false;
+                if(useRow && !isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, firstRow, secondRC)) valid = false;
+                if(useCol && !isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, secondRC, firstCol)) valid = false;
             }
 
             if(valid) {
@@ -91,7 +96,7 @@ public class Tui extends Observable implements Observer, Runnable {
                 i++;
             }
             else
-                System.out.println("Card " + row + column + " is already taken or out of bounds!");
+                printError("Card " + row + column + " is not valid!");
 
             if(i < maxCards) {
                 System.out.println("You can pick " + (maxCards - i) + " more cards");
