@@ -7,27 +7,16 @@ import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.client.RmiClient;
 import it.polimi.ingsw.utils.Observer;
 
-public class GameController implements Observer {
+public class GameController {
     int currentPlayer;
-    Game model;
-    RmiClient client;
+    private Game model;
+    private RmiClient client;
 
     public GameController(Game model, RmiClient client) {
         this.model = model;
         this.client = client;
     }
 
-    public void playTurn() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void takeCard(boolean[][] choices) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void insertCard(int column) {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * This method checks if the pattern of the personal goal card is satisfied

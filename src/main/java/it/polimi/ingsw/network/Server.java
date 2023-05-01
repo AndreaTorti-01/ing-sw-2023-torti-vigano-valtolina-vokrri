@@ -1,48 +1,55 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.utils.Observer;
+import it.polimi.ingsw.network.client.ClientHandler;
 
-import java.rmi.RemoteException;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-public interface Server extends Observer {
-    /**
-     * Adds the client to the server.
-     *
-     * @param client the client to register.
-     * @throws RemoteException in case the communication over the network fails.
-     */
-    void addClient(Client client) throws RemoteException;
+public class Server extends Thread {
+    private List<Lobby> lobbies;
+    private ServerSocket serverSocket;
 
-    /**
-     * Removes the specified client.
-     *
-     * @param client the client to remove.
-     * @throws RemoteException in case the communication over the network fails.
-     */
-    void removeClient(Client client) throws RemoteException;
+    public void server() {
+        try {
+            this.serverSocket = new ServerSocket(8888);
 
-    /**
-     * Handles the disconnection of a client.
-     *
-     * @param client the client that disconnected.
-     * @throws RemoteException in case the communication over the network fails.
-     */
-    void onClientDisconnection(Client client) throws RemoteException;
-
-    /**
-     * Handles the received message from the client and forwards it to the GameController.
-     *
-     * @param message the information to forward.
-     * @throws RemoteException in case the communication over the network fails.
-     */
-    void forwardMessage(Object message) throws RemoteException;
-
-    /**
-     * Notifies the server tha a client has interacted.
-     *
-     * @param client the client that generated the interaction.
-     * @throws RemoteException in case the communication over the network fails.
-     */
-    default void update(Client client) throws RemoteException {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    public void run() {
+        Socket s;
+        while (true) {
+            s = new Socket();
+            try {
+
+                s = this.serverSocket.accept();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        boolean freeLobbyFound = false;
+
+        ClientHandler ch = new ClientHandler(s);
+
+        for (Lobby l : lobbies) {
+            if (l.isGameStarted() == false) {
+                l.clientHandlers.add(ch);
+                freeLobbyFound = true;
+                break;
+            }
+
+        }
+        if (!freeLobbyFound) {
+            Lobby l = new Lobby();
+            l.clientHandlers.add(ch);
+            lobbies.add(l);
+        }
+    }
+
 }
+
+
+
