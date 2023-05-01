@@ -4,17 +4,18 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PersonalGoalCard;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
-import it.polimi.ingsw.network.client.RmiClient;
-import it.polimi.ingsw.utils.Observer;
+import it.polimi.ingsw.network.serializable.MoveMsg;
 
 public class GameController {
     int currentPlayer;
     private Game model;
-    private RmiClient client;
 
-    public GameController(Game model, RmiClient client) {
+    public GameController(Game model) {
         this.model = model;
-        this.client = client;
+    }
+
+    public void makeMove(MoveMsg move) {
+
     }
 
 

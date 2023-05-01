@@ -3,21 +3,35 @@ package it.polimi.ingsw.network.serializable;
 import java.io.Serial;
 import java.io.Serializable;
 
-public final class ChatMsg implements Serializable {
-
+public class ChatMsg implements Serializable {
     @Serial
-    private static final long serialVersionUID = 3783938319635665538L;
-    private int destPlayer;
-    private int sourcePlayer;
-    private boolean isMsgPublic;
+    private static final long serialVersionUID = 1L;
+    private final int destPlayer;
+    private final int sourcePlayer;
+    private final boolean isMsgPublic;
 
-    private String message;
+    private final String message;
 
-    private void ChatMsg(int destPlayer,int sourcePlayer, boolean isMsgPublic, String message){
-        this.destPlayer= destPlayer;
-        this.sourcePlayer=sourcePlayer;
-        this.isMsgPublic=isMsgPublic;
-        this.message=message;
+    public ChatMsg(int destPlayer, int sourcePlayer, boolean isMsgPublic, String message) {
+        this.destPlayer = destPlayer;
+        this.sourcePlayer = sourcePlayer;
+        this.isMsgPublic = isMsgPublic;
+        this.message = message;
     }
 
+    public int getDestPlayer() {
+        return destPlayer;
+    }
+
+    public int getSourcePlayer() {
+        return sourcePlayer;
+    }
+
+    public boolean isMsgPublic() {
+        return isMsgPublic;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }
