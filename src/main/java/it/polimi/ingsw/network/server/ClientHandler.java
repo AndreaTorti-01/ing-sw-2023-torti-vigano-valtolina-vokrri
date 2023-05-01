@@ -1,11 +1,13 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.utils.Observable;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ClientHandler {
+public class ClientHandler extends Observable {
     private final Socket socket;
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
