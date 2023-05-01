@@ -1,17 +1,17 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameView;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.utils.Observer;
-import static it.polimi.ingsw.utils.Constants.numberOfColumns;
-import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class Tui extends Observable implements Observer, Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -25,6 +25,7 @@ public class Tui extends Observable implements Observer, Runnable {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     int playerNumber = 0;
+
     public void run() {
         // Ask the names of players
         Scanner scanner = new Scanner(System.in);
@@ -55,50 +56,51 @@ public class Tui extends Observable implements Observer, Runnable {
         int secondRC = 0;
         boolean valid;
 
-        while(i <= maxCards) {
+        while (i <= maxCards) {
 
-            System.out.print("Card " + (i+1) + "-> enter ROW number:  ");
+            System.out.print("Card " + (i + 1) + "-> enter ROW number:  ");
             int row = scanner.nextInt();
-            System.out.print("Card " + (i+1) + "-> enter COLUMN number:  ");
+            System.out.print("Card " + (i + 1) + "-> enter COLUMN number:  ");
             int column = scanner.nextInt();
             valid = true;
 
-            if(!isTakeable(gameView, row, column)) valid = false;
+            if (!isTakeable(gameView, row, column)) valid = false;
 
-            if(valid && picked.contains(gameView.getBoard()[row][column])) valid = false;
+            if (valid && picked.contains(gameView.getBoard()[row][column])) valid = false;
 
-            if(valid && ((useCol && column != firstCol) || (useRow && row != firstRow))) valid = false;
+            if (valid && ((useCol && column != firstCol) || (useRow && row != firstRow))) valid = false;
 
-            if(valid && picked.size() == 1) { //contains the first one
-                if(row != firstRow && column != firstCol) valid = false;
-                if(isAdiacent(row, column, firstRow, firstCol)){
+            if (valid && picked.size() == 1) { //contains the first one
+                if (row != firstRow && column != firstCol) valid = false;
+                if (isAdjacent(row, column, firstRow, firstCol)) {
                     useCol = column == firstCol;
                     useRow = row == firstRow;
                 }
-                if(useCol) secondRC = firstRow; // Col known, row unknown
+                if (useCol) secondRC = firstRow; // Col known, row unknown
                 else secondRC = firstCol; // Row known, col unknown
             }
 
-            if(valid && picked.size() == 2) {
-                if(useCol && column != firstCol) valid = false;
-                if(useRow && row != firstRow) valid = false;
-                if(useRow && !isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, firstRow, secondRC)) valid = false;
-                if(useCol && !isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, secondRC, firstCol)) valid = false;
+            if (valid && picked.size() == 2) {
+                if (useCol && column != firstCol) valid = false;
+                if (useRow && row != firstRow) valid = false;
+                if (useRow && !isAdjacent(row, column, firstRow, firstCol) && !isAdjacent(row, column, firstRow, secondRC))
+                    valid = false;
+                if (useCol && !isAdjacent(row, column, firstRow, firstCol) && !isAdjacent(row, column, secondRC, firstCol))
+                    valid = false;
             }
 
-            if(valid) {
+            if (valid) {
                 System.out.println("Card " + row + column + " is valid");
-                if(picked.size() == 0){
+                if (picked.size() == 0) {
                     firstCol = column;
                     firstRow = row;
                 }
                 picked.add(gameView.getBoard()[row][column]);
                 i++;
-            }
-            else
+            } else
                 printError("Card " + row + column + " is not valid!");
 
-            if(i < maxCards) {
+            if (i < maxCards) {
                 System.out.println("You can pick " + (maxCards - i) + " more cards");
                 System.out.print("do you want to pick another one?");
                 boolean choice = askBoolean();
@@ -107,23 +109,23 @@ public class Tui extends Observable implements Observer, Runnable {
         }
     }
 
-    private boolean isAdiacent(int row, int column, int row2, int column2) {
-        if(row == row2 && (column == column2 + 1 || column == column2 - 1)) return true;
-        if(column == column2 && (row == row2 + 1 || row == row2 - 1)) return true;
+    private boolean isAdjacent(int row, int column, int row2, int column2) {
+        if (row == row2 && (column == column2 + 1 || column == column2 - 1)) return true;
+        if (column == column2 && (row == row2 + 1 || row == row2 - 1)) return true;
         return false;
     }
 
     private boolean isTakeable(GameView gameView, int row, int column) {
         boolean free = false;
 
-        if(row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns)
+        if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns)
             return false;
 
-        if(row == 0 || row == numberOfRows - 1)
+        if (row == 0 || row == numberOfRows - 1)
             free = true;
-        else if(column == 0 || column == numberOfColumns - 1)
+        else if (column == 0 || column == numberOfColumns - 1)
             free = true;
-        else if(gameView.getBoard()[row - 1][column] == null || gameView.getBoard()[row + 1][column] == null || gameView.getBoard()[row][column - 1] == null || gameView.getBoard()[row][column + 1] == null)
+        else if (gameView.getBoard()[row - 1][column] == null || gameView.getBoard()[row + 1][column] == null || gameView.getBoard()[row][column - 1] == null || gameView.getBoard()[row][column + 1] == null)
             free = true;
 
         return gameView.getBoardValid()[row][column] && gameView.getBoard()[row][column] != null && free;
@@ -170,7 +172,7 @@ public class Tui extends Observable implements Observer, Runnable {
         System.out.print(output.toString());
     }
 
-    private void printGameStatus(GameView gameView) {
+    public void printGameStatus(GameView gameView) {
         // Print the game status, including the main board and the shelves
 
         // Print the active player name
@@ -264,9 +266,5 @@ public class Tui extends Observable implements Observer, Runnable {
                 printError("Please enter a valid input  (y/n)");
             }
         }
-    }
-
-    public void update(GameView gameView) {
-
     }
 }

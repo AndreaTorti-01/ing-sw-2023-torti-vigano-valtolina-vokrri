@@ -6,11 +6,12 @@ import it.polimi.ingsw.model.Game;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Server extends Thread {
     private final ServerSocket serverSocket;
-    private List<Lobby> lobbies;
+    private final List<Lobby> lobbies = new ArrayList<>();
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -47,10 +48,7 @@ public class Server extends Thread {
                 lobbies.add(l);
             }
         }
-
-
     }
-
 }
 
 

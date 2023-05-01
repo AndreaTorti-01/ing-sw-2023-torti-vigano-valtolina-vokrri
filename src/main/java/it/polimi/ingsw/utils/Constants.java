@@ -11,4 +11,6 @@ public class Constants {
     public static final int numberOfCommonGoalCardsInGame = 2;
     public static final int numberOfPersonalGoalCardTypes = 12;
     public static final int boardSize = 9;
+    public static final String serverIpAddress = "127.0.0.1";
+    public static final int serverPort = 8888;
 }

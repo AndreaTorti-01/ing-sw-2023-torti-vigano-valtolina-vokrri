@@ -18,7 +18,7 @@ public class Game extends Observable {
     private Player currentPlayer;
     private Bag bag;
     private Board board;
-    private boolean gameEnded;
+    private boolean isGameEnded;
 
     /**
      * This method initializes all the model elements too
@@ -46,7 +46,10 @@ public class Game extends Observable {
         // initialization of the common goal cards
         commonGoalCards = this.getRandomCommonGoalCards();
         currentPlayer = players.get(0);
-        gameEnded = false;
+        isGameEnded = false;
+
+        // notifies listeners of the changes
+        notifyObservers(new GameView(this));
     }
 
     /**
@@ -78,6 +81,9 @@ public class Game extends Observable {
             // adds the newly created player to the list
             players.add(player);
         }
+
+        // notifies listeners of the changes
+        notifyObservers(new GameView(this));
 
         return players;
     }
@@ -171,13 +177,16 @@ public class Game extends Observable {
      * @return true if the game is ended, false otherwise
      */
     public boolean isGameEnded() {
-        return gameEnded;
+        return isGameEnded;
     }
 
     /**
      * sets the game to ended
      */
-    public void setGameHasEnded() {
-        this.gameEnded = true;
+    public void endGame() {
+        this.isGameEnded = true;
+
+        // notifies listeners of the changes
+        notifyObservers(new GameView(this));
     }
 }
