@@ -1,17 +1,20 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.GameView;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.network.serializable.MoveMsg;
+import it.polimi.ingsw.network.serializable.RegisterMSG;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.utils.Observer;
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import static it.polimi.ingsw.utils.Constants.numberOfColumns;
-import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class Tui extends Observable implements Observer, Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -24,31 +27,35 @@ public class Tui extends Observable implements Observer, Runnable {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
-    int playerNumber = 0;
-
+    String playerName;
+    Player me = null;
     public void run() {
-        // Ask the names of players
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> players = new ArrayList<String>();
 
-        //starts the game
-        // Clear the console screen
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
 
+        //asks the player name
+        System.out.println("Insert your name: ");
+        playerName = scanner.nextLine();
+        notifyObservers(new RegisterMSG(playerName));
+
+        clearScreen();
         printLoadingScreen();
     }
 
+    private void clearScreen() {
+        // Clear the console screen
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
     private void pickCards(GameView gameView) {
-
-        // TODO: 23/04/2023 AGGIUNGERE UPDATE A OBSERVER
-
         Scanner scanner = new Scanner(System.in);
         List<ItemCard> picked = new ArrayList<ItemCard>();
+        List<List<Integer>> pickedCoords = new ArrayList<List<Integer>>();
+        MoveMsg msg;
 
         System.out.println("You can peek cards from the board");
-        int i = 0;
-        int maxCards = 3;
+        int count = 0;
         boolean useCol = false;
         boolean useRow = false;
         int firstRow = 0;
@@ -56,76 +63,116 @@ public class Tui extends Observable implements Observer, Runnable {
         int secondRC = 0;
         boolean valid;
 
-        while (i <= maxCards) {
+        //defining the maximum takeable card number
 
-            System.out.print("Card " + (i + 1) + "-> enter ROW number:  ");
+        int maxCards = 0;
+        int[] freeSlotsNumber = new int[numberOfColumns];
+
+
+        for(Player p : gameView.getPlayers())
+            if(p.getName().equals(playerName)) {
+                me = p;
+                break;
+            }
+        if(me == null) throw new NullPointerException();
+
+        for(int j = 0; j < numberOfColumns && maxCards < 3; j++) {
+            int freeSlots = 0;
+            for(int i = 0; i < numberOfRows && freeSlots < 3; i++) {
+                if(gameView.getShelfOf(me)[i][j] == null) freeSlots++;
+                if(freeSlots > maxCards) maxCards = freeSlots;
+                freeSlotsNumber[j] = freeSlots;
+            };
+        }
+
+        //asking for card coordinates
+
+        System.out.println("You can take up to " + maxCards + " cards");
+
+        while(count <= maxCards) {
+            System.out.print("Card " + (count+1) + "-> enter ROW number:  ");
             int row = scanner.nextInt();
-            System.out.print("Card " + (i + 1) + "-> enter COLUMN number:  ");
+            System.out.print("Card " + (count+1) + "-> enter COLUMN number:  ");
             int column = scanner.nextInt();
-            valid = true;
 
-            if (!isTakeable(gameView, row, column)) valid = false;
+            //checking coordinate and card validity
 
-            if (valid && picked.contains(gameView.getBoard()[row][column])) valid = false;
+            valid = isTakeable(gameView, row, column);
 
-            if (valid && ((useCol && column != firstCol) || (useRow && row != firstRow))) valid = false;
+            if(valid && picked.contains(gameView.getBoard()[row][column])) valid = false;
 
-            if (valid && picked.size() == 1) { //contains the first one
-                if (row != firstRow && column != firstCol) valid = false;
-                if (isAdjacent(row, column, firstRow, firstCol)) {
+            if(valid && ((useCol && column != firstCol) || (useRow && row != firstRow))) valid = false;
+
+            if(valid && picked.size() == 1) { //only contains the first one, will have to define if to use row or col straight line
+                if(row != firstRow && column != firstCol) valid = false;
+                if(isAdiacent(row, column, firstRow, firstCol)){
                     useCol = column == firstCol;
                     useRow = row == firstRow;
                 }
-                if (useCol) secondRC = firstRow; // Col known, row unknown
-                else secondRC = firstCol; // Row known, col unknown
+                if(useCol) secondRC = firstRow; // Col known, row unknown. we only have to know the Row coordinate of the seconda card to check future adjacent card's constraints
+                else secondRC = firstCol; // Row known, col unknown, same as previous
             }
 
-            if (valid && picked.size() == 2) {
-                if (useCol && column != firstCol) valid = false;
-                if (useRow && row != firstRow) valid = false;
-                if (useRow && !isAdjacent(row, column, firstRow, firstCol) && !isAdjacent(row, column, firstRow, secondRC))
-                    valid = false;
-                if (useCol && !isAdjacent(row, column, firstRow, firstCol) && !isAdjacent(row, column, secondRC, firstCol))
-                    valid = false;
+            if(valid && picked.size() == 2) {
+                if(useCol && column != firstCol) valid = false; //must be in line
+                if(useRow && row != firstRow) valid = false;
+                if(useRow && !isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, firstRow, secondRC)) valid = false; //must even be adjacent to the first or second card
+                if(useCol && !isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, secondRC, firstCol)) valid = false;
             }
 
-            if (valid) {
-                System.out.println("Card " + row + column + " is valid");
-                if (picked.size() == 0) {
+            if(valid) {
+                if(picked.size() == 0){
                     firstCol = column;
                     firstRow = row;
                 }
                 picked.add(gameView.getBoard()[row][column]);
-                i++;
-            } else
+                ArrayList<Integer> coords = new ArrayList<Integer>();
+                coords.add(row);
+                coords.add(column);
+                pickedCoords.add(coords);
+                count++;
+            }
+            else
                 printError("Card " + row + column + " is not valid!");
 
-            if (i < maxCards) {
-                System.out.println("You can pick " + (maxCards - i) + " more cards");
+            if(count < maxCards) {
+                System.out.println("You can pick " + (maxCards - count) + " more cards");
                 System.out.print("do you want to pick another one?");
                 boolean choice = askBoolean();
                 if (!choice) break;
             }
         }
+
+        int shelfCol;
+        System.out.println("You can put the cards in your shelf! choose a column: ");
+        do{
+            shelfCol = scanner.nextInt();
+            if(shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column number");
+            else if(picked.size() > freeSlotsNumber[shelfCol]) printError("Not enough free slots in this column");
+        }while(picked.size() > freeSlotsNumber[shelfCol]);
+
+        msg = new MoveMsg(pickedCoords, shelfCol);
+
+        notifyObservers(msg);
     }
 
-    private boolean isAdjacent(int row, int column, int row2, int column2) {
-        if (row == row2 && (column == column2 + 1 || column == column2 - 1)) return true;
-        if (column == column2 && (row == row2 + 1 || row == row2 - 1)) return true;
+    private boolean isAdiacent(int row, int column, int row2, int column2) {
+        if(row == row2 && (column == column2 + 1 || column == column2 - 1)) return true;
+        if(column == column2 && (row == row2 + 1 || row == row2 - 1)) return true;
         return false;
     }
 
     private boolean isTakeable(GameView gameView, int row, int column) {
         boolean free = false;
 
-        if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns)
+        if(row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns)
             return false;
 
-        if (row == 0 || row == numberOfRows - 1)
+        if(row == 0 || row == numberOfRows - 1)
             free = true;
-        else if (column == 0 || column == numberOfColumns - 1)
+        else if(column == 0 || column == numberOfColumns - 1)
             free = true;
-        else if (gameView.getBoard()[row - 1][column] == null || gameView.getBoard()[row + 1][column] == null || gameView.getBoard()[row][column - 1] == null || gameView.getBoard()[row][column + 1] == null)
+        else if(gameView.getBoard()[row - 1][column] == null || gameView.getBoard()[row + 1][column] == null || gameView.getBoard()[row][column - 1] == null || gameView.getBoard()[row][column + 1] == null)
             free = true;
 
         return gameView.getBoardValid()[row][column] && gameView.getBoard()[row][column] != null && free;
@@ -172,8 +219,9 @@ public class Tui extends Observable implements Observer, Runnable {
         System.out.print(output.toString());
     }
 
-    public void printGameStatus(GameView gameView) {
+    private void printGameStatus(GameView gameView) {
         // Print the game status, including the main board and the shelves
+        clearScreen();
 
         // Print the active player name
         System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + gameView.getCurrentPlayer().getName() + ANSI_PURPLE + "  <<" + ANSI_RESET);
@@ -198,6 +246,7 @@ public class Tui extends Observable implements Observer, Runnable {
 
     public void printLoadingScreen() {
         // Print the loading screen
+        clearScreen();
         System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t  >>  WELCOME TO  <<" + ANSI_RESET);
         System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t  >>  MY SHELFIE  <<" + ANSI_RESET);
         System.out.println(ANSI_CYAN + "\n \n \n \t\t\t\t\t\t\t  developed by gc-33" + ANSI_RESET);
@@ -211,6 +260,7 @@ public class Tui extends Observable implements Observer, Runnable {
 
     public void printEndScreen(String winnerName) {
         // Print the end screen, showing the winner
+        clearScreen();
         System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t  >>  GAME OVER  <<");
         System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t  >>  WINNER: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
 
