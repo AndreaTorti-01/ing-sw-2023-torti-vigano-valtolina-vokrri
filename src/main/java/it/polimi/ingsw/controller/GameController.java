@@ -1,21 +1,28 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.PersonalGoalCard;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 
+import java.util.List;
+
 public class GameController {
+    private final Game model;
     int currentPlayer;
-    private Game model;
 
     public GameController(Game model) {
         this.model = model;
     }
 
     public void makeMove(MoveMsg move) {
-
+        ItemCard card;
+        for (List coords : move.getPickedCards()) {
+            card = model.getBoard().popCard((int) coords.get(0), (int) coords.get(1));
+            model.getCurrentPlayer().getShelf().insert(move.getColumn(), card);
+        }
     }
 
 

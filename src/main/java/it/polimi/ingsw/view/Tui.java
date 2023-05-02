@@ -1,10 +1,9 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.GameView;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.network.serializable.GameView;
 import it.polimi.ingsw.network.serializable.MoveMsg;
-import it.polimi.ingsw.network.serializable.RegisterMSG;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Observable;
 
@@ -24,16 +23,16 @@ public class Tui extends Observable implements RunnableView {
         //asks the player name
         System.out.println("Insert your name: ");
         playerName = scanner.nextLine();
-        notifyObservers(new RegisterMSG(playerName));
+        notifyObservers(playerName);
 
         clearScreen();
         printLoadingScreen();
 
         // the tui is updated automatically using updateView
-        
+
         // while true loop
-            // waits for user input, if it is user turn
-            // sends input to Client
+        // waits for user input, if it is user turn
+        // sends input to Client
     }
 
     @Override
