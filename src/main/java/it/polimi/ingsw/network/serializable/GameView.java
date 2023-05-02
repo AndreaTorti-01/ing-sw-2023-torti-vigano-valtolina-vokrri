@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.serializable;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
@@ -18,7 +19,7 @@ public class GameView implements Serializable {
     private final ArrayList<Player> players;
     private final Player currentPlayer;
     private final boolean isBagEmpty;
-    private final boolean isGameEnded;
+    private final GameStatus status;
 
     public GameView(Game model) {
         if (model == null) throw new IllegalArgumentException();
@@ -29,7 +30,7 @@ public class GameView implements Serializable {
         this.players = model.getPlayers();
         this.currentPlayer = model.getCurrentPlayer();
         this.isBagEmpty = model.getBag().getCardsInside().size() == 0;
-        this.isGameEnded = model.isGameEnded();
+        this.status = model.getGameStatus();
     }
 
     public ItemCard[][] getBoard() {
@@ -60,7 +61,8 @@ public class GameView implements Serializable {
         return isBagEmpty;
     }
 
-    public boolean isGameEnded() {
-        return isGameEnded;
+    public GameStatus getGameStatus() {
+        return this.status;
     }
+
 }

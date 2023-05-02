@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.serializable.GameView;
@@ -15,7 +16,8 @@ import static it.polimi.ingsw.utils.Constants.*;
 
 public class Tui extends Observable implements RunnableView {
     String playerName;
-    Player me = null;
+    Player me;
+    GameView modelView;
 
     public void run() {
         Scanner scanner = new Scanner(System.in);
@@ -26,7 +28,6 @@ public class Tui extends Observable implements RunnableView {
         notifyObservers(playerName);
 
         clearScreen();
-        printWaitingScreen();
 
         // the tui is updated automatically using updateView
 
@@ -34,20 +35,23 @@ public class Tui extends Observable implements RunnableView {
         // waits for user input, if it is user turn
         // sends input to Client
 
-        //noinspection InfiniteLoopStatement
         while (true) {
-            
+
+            if (modelView.getGameStatus() == GameStatus.waiting) {
+                // TODO: recuperare nome del winner
+                printWaitingScreen();
+            } else if (modelView.getGameStatus() == GameStatus.started) {
+                printGameStatus(modelView);
+            } else {
+                printEndScreen("Fabio");
+            }
+
         }
     }
 
     @Override
     public void updateView(GameView modelView) {
-        if (modelView.isGameEnded()) {
-            // TODO: recuperare nome del winner
-            printEndScreen("Fabio");
-        } else {
-            printGameStatus(modelView);
-        }
+        this.modelView = modelView;
     }
 
     private void clearScreen() {
@@ -265,6 +269,7 @@ public class Tui extends Observable implements RunnableView {
     }
 
     private void printWaitingScreen() {
+        /// TODO: unire waiting screen e loading screen in un'unica schermata
         System.out.println("Waiting for other players...");
     }
 
