@@ -7,12 +7,12 @@ public class ChatMsg implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private final int destPlayer;
-    private final int sourcePlayer;
+    private final String sourcePlayer;
     private final boolean isMsgPublic;
 
     private final String message;
 
-    public ChatMsg(int destPlayer, int sourcePlayer, boolean isMsgPublic, String message) {
+    public ChatMsg(int destPlayer, String sourcePlayer, boolean isMsgPublic, String message) {
         this.destPlayer = destPlayer;
         this.sourcePlayer = sourcePlayer;
         this.isMsgPublic = isMsgPublic;
@@ -23,7 +23,7 @@ public class ChatMsg implements Serializable {
         return destPlayer;
     }
 
-    public int getSourcePlayer() {
+    public String getSourcePlayer() {
         return sourcePlayer;
     }
 

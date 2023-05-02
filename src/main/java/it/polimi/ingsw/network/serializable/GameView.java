@@ -1,6 +1,8 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.network.serializable;
 
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 
 import java.io.Serial;

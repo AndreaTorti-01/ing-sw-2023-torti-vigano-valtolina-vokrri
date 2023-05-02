@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.GameController;
-import it.polimi.ingsw.model.GameView;
 import it.polimi.ingsw.network.serializable.ChatMsg;
+import it.polimi.ingsw.network.serializable.GameView;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observer;
 

@@ -1,9 +1,10 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.model.GameView;
 import it.polimi.ingsw.network.serializable.ChatMsg;
+import it.polimi.ingsw.network.serializable.GameView;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observer;
+import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.Tui;
 
 import java.io.IOException;
@@ -14,11 +15,9 @@ import java.net.Socket;
 public class Client extends Thread implements Observer {
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
-    private final Socket clientSocket;
-    private final Tui view;
+    private final RunnableView view;
 
     public Client(Socket socket) {
-        this.clientSocket = socket;
         this.view = new Tui();
 
         try {
@@ -45,13 +44,21 @@ public class Client extends Thread implements Observer {
         }
     }
 
+    public void update(String message) {
+        try {
+            outputStream.writeObject(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void run() {
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
                 GameView modelView = (GameView) inputStream.readObject();
-                view.printGameStatus(modelView);
+                view.updateView(modelView);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

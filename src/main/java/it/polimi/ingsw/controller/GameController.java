@@ -10,8 +10,8 @@ import it.polimi.ingsw.network.serializable.MoveMsg;
 import java.util.List;
 
 public class GameController {
+    private final Game model;
     int currentPlayer;
-    private Game model;
 
     public GameController(Game model) {
         this.model = model;
