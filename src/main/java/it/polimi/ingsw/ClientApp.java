@@ -33,17 +33,15 @@ public class ClientApp {
          *
          *  }
          */
-
         client = createClient();
-        client.start();
+        client.run();
 
     }
 
     private static Client createClient() {
         try {
-            return new Client(
-                    new Socket(Constants.serverIpAddress, Constants.serverPort)
-            );
+            Socket sck = new Socket(Constants.serverIpAddress, Constants.serverPort);
+            return new Client(sck);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

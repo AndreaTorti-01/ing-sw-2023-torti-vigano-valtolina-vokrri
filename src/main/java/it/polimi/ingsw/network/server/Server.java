@@ -25,7 +25,9 @@ public class Server extends Thread {
             s = new Socket();
             // accept a new connection
             try {
+                System.err.println("accepting client...");
                 s = this.serverSocket.accept();
+                System.err.println("accepted client...");
             } catch (IOException e) {
                 e.printStackTrace();
             }

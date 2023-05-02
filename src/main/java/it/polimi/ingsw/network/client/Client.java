@@ -12,7 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Client extends Thread implements Observer {
+public class Client implements Observer {
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
     private final RunnableView view;
@@ -21,8 +21,8 @@ public class Client extends Thread implements Observer {
         this.view = new Tui();
 
         try {
-            this.inputStream = new ObjectInputStream(socket.getInputStream());
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+            this.inputStream = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,16 +52,17 @@ public class Client extends Thread implements Observer {
         }
     }
 
-    @Override
     public void run() {
-        //noinspection InfiniteLoopStatement
-        while (true) {
+        GameView modelView;
+        new Thread(view).start();
+
+        do {
             try {
-                GameView modelView = (GameView) inputStream.readObject();
+                modelView = (GameView) inputStream.readObject();
                 view.updateView(modelView);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-        }
+        } while (!modelView.isGameEnded());
     }
 }
