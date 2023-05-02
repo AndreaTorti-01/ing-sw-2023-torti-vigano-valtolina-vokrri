@@ -26,18 +26,28 @@ public class Tui extends Observable implements RunnableView {
         notifyObservers(playerName);
 
         clearScreen();
-        printLoadingScreen();
+        printWaitingScreen();
 
         // the tui is updated automatically using updateView
 
         // while true loop
         // waits for user input, if it is user turn
         // sends input to Client
+
+        //noinspection InfiniteLoopStatement
+        while (true) {
+            
+        }
     }
 
     @Override
     public void updateView(GameView modelView) {
-
+        if (modelView.isGameEnded()) {
+            // TODO: recuperare nome del winner
+            printEndScreen("Fabio");
+        } else {
+            printGameStatus(modelView);
+        }
     }
 
     private void clearScreen() {
@@ -62,7 +72,6 @@ public class Tui extends Observable implements RunnableView {
         boolean valid;
 
         //defining the maximum takeable card number
-
         int maxCards = 0;
         int[] freeSlotsNumber = new int[numberOfColumns];
 
@@ -84,7 +93,6 @@ public class Tui extends Observable implements RunnableView {
         }
 
         //asking for card coordinates
-
         System.out.println("You can take up to " + maxCards + " cards");
 
         while (count <= maxCards) {
@@ -94,7 +102,6 @@ public class Tui extends Observable implements RunnableView {
             int column = scanner.nextInt();
 
             //checking coordinate and card validity
-
             valid = isTakeable(gameView, row, column);
 
             if (valid && picked.contains(gameView.getBoard()[row][column])) valid = false;
@@ -103,7 +110,7 @@ public class Tui extends Observable implements RunnableView {
 
             if (valid && picked.size() == 1) { //only contains the first one, will have to define if to use row or col straight line
                 if (row != firstRow && column != firstCol) valid = false;
-                if (isAdiacent(row, column, firstRow, firstCol)) {
+                if (isAdjacent(row, column, firstRow, firstCol)) {
                     useCol = column == firstCol;
                     useRow = row == firstRow;
                 }
@@ -115,9 +122,9 @@ public class Tui extends Observable implements RunnableView {
             if (valid && picked.size() == 2) {
                 if (useCol && column != firstCol) valid = false; //must be in line
                 if (useRow && row != firstRow) valid = false;
-                if (useRow && !isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, firstRow, secondRC))
+                if (useRow && !isAdjacent(row, column, firstRow, firstCol) && !isAdjacent(row, column, firstRow, secondRC))
                     valid = false; //must even be adjacent to the first or second card
-                if (useCol && !isAdiacent(row, column, firstRow, firstCol) && !isAdiacent(row, column, secondRC, firstCol))
+                if (useCol && !isAdjacent(row, column, firstRow, firstCol) && !isAdjacent(row, column, secondRC, firstCol))
                     valid = false;
             }
 
@@ -156,7 +163,7 @@ public class Tui extends Observable implements RunnableView {
         notifyObservers(msg);
     }
 
-    private boolean isAdiacent(int row, int column, int row2, int column2) {
+    private boolean isAdjacent(int row, int column, int row2, int column2) {
         if (row == row2 && (column == column2 + 1 || column == column2 - 1)) return true;
         return column == column2 && (row == row2 + 1 || row == row2 - 1);
     }
@@ -255,6 +262,10 @@ public class Tui extends Observable implements RunnableView {
 
         Scanner in = new Scanner(System.in);
         String check = in.nextLine(); //only to be sure that a key (enter) is pressed
+    }
+
+    private void printWaitingScreen() {
+        System.out.println("Waiting for other players...");
     }
 
     private void printEndScreen(String winnerName) {

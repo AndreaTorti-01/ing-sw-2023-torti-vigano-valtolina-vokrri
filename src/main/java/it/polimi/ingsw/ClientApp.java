@@ -8,8 +8,6 @@ import java.net.Socket;
 
 public class ClientApp {
 
-    private static Client client;
-
     public static void main(String[] args) {
         /* QUESTO CODICE SERVIRA PIÙ AVANTI
          *  boolean isTerminalApp = false;
@@ -33,15 +31,13 @@ public class ClientApp {
          *
          *  }
          */
-        client = createClient();
+        Client client = createClient();
         client.run();
-
     }
 
     private static Client createClient() {
         try {
-            Socket sck = new Socket(Constants.serverIpAddress, Constants.serverPort);
-            return new Client(sck);
+            return new Client(new Socket(Constants.serverIpAddress, Constants.serverPort));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
