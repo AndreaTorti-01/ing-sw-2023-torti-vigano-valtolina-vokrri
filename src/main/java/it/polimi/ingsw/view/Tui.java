@@ -29,12 +29,9 @@ public class Tui extends Observable implements RunnableView {
 
         clearScreen();
 
-        // the tui is updated automatically using updateView
-
         // while true loop
         // waits for user input, if it is user turn
         // sends input to Client
-
         while (true) {
 
             if (modelView.getGameStatus() == GameStatus.waiting) {
@@ -42,8 +39,14 @@ public class Tui extends Observable implements RunnableView {
                 printWaitingScreen();
             } else if (modelView.getGameStatus() == GameStatus.started) {
                 printGameStatus(modelView);
+                //checking if it's my turn
+                if(modelView.getCurrentPlayer().getName().equals(playerName))
+                    // pickCards automatically sends updates to client (the message contains the chosen cards' coordinates)
+                    pickCards(modelView);
+
+                System.out.println("press c to enter the game chat");
             } else {
-                printEndScreen("Fabio");
+                printEndScreen(modelView.getWinner().getName());
             }
 
         }
@@ -254,7 +257,7 @@ public class Tui extends Observable implements RunnableView {
         System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL: " + ANSI_YELLOW + gameView.getCurrentPlayer().getPersonalGoalCard() + ANSI_PURPLE + "  <<" + ANSI_RESET);
     }
 
-    private void printLoadingScreen() {
+    private void printWaitingScreen() {
         // Print the loading screen
         clearScreen();
         System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t  >>  WELCOME TO  <<" + ANSI_RESET);
@@ -263,14 +266,11 @@ public class Tui extends Observable implements RunnableView {
         System.out.println(ANSI_CYAN + "\n \t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
         System.out.print("\n\n");
         System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t  >>  Press ENTER to start  <<" + ANSI_RESET);
+        System.out.print("\n\n");
+        System.out.println("\t\t\t\t\t\t Waiting for other players...");
 
         Scanner in = new Scanner(System.in);
         String check = in.nextLine(); //only to be sure that a key (enter) is pressed
-    }
-
-    private void printWaitingScreen() {
-        /// TODO: unire waiting screen e loading screen in un'unica schermata
-        System.out.println("Waiting for other players...");
     }
 
     private void printEndScreen(String winnerName) {

@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.PersonalGoalCard;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.MoveMsg;
@@ -46,5 +47,17 @@ public class GameController {
      */
     private boolean checkCommonGoalCardPattern(Shelf shelf, CommonGoalCard commonGoalCard) {
         return commonGoalCard.checkPattern(shelf);
+    }
+
+    private void calculateWinner() {
+        Player winner = null;
+        int maxScore = 0;
+        for (Player player : model.getPlayers()) {
+            if (player.getScore() > maxScore) {
+                maxScore = player.getScore();
+                winner = player;
+            }
+        }
+        model.setWinner(winner);
     }
 }

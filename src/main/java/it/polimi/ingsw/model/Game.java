@@ -20,6 +20,7 @@ public class Game extends Observable {
     private Bag bag;
     private Board board;
     private GameStatus status;
+    private Player winner;
 
     public Game() {
         this.status = GameStatus.waiting;
@@ -32,6 +33,7 @@ public class Game extends Observable {
      * @param playerNames the name of the players
      * @throws IllegalArgumentException
      */
+
     public void initGame(String... playerNames) throws IllegalArgumentException {
         // initialization of a new Bag
         bag = new Bag();
@@ -58,6 +60,13 @@ public class Game extends Observable {
         notifyObservers(new GameView(this));
     }
 
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
     /**
      * Creates and return an arraylist of players,
      * giving each of them a random PersonalGoalCard

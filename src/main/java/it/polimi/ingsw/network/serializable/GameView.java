@@ -20,7 +20,7 @@ public class GameView implements Serializable {
     private final Player currentPlayer;
     private final boolean isBagEmpty;
     private final GameStatus status;
-
+    private final Player winner;
     public GameView(Game model) {
         if (model == null) throw new IllegalArgumentException();
 
@@ -31,6 +31,7 @@ public class GameView implements Serializable {
         this.currentPlayer = model.getCurrentPlayer();
         this.isBagEmpty = model.getBag().getCardsInside().size() == 0;
         this.status = model.getGameStatus();
+        this.winner = model.getWinner();
     }
 
     public ItemCard[][] getBoard() {
@@ -63,6 +64,10 @@ public class GameView implements Serializable {
 
     public GameStatus getGameStatus() {
         return this.status;
+    }
+
+    public Player getWinner() {
+        return this.winner;
     }
 
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameView;
 import it.polimi.ingsw.network.serializable.MoveMsg;
@@ -63,6 +64,6 @@ public class Client implements Observer {
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-        } while (!modelView.isGameEnded());
+        } while (!modelView.getGameStatus().equals(GameStatus.ended));
     }
 }
