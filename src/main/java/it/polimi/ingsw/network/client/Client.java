@@ -12,14 +12,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Objects;
 
-public class Client implements Observer {
+public class Client implements Observer, Runnable {
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
     private final RunnableView view;
 
     public Client(Socket socket) {
-        this.view = new Tui();
+        this.view = new Tui(this);
 
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -53,8 +54,9 @@ public class Client implements Observer {
         }
     }
 
+    @Override
     public void run() {
-        GameView modelView;
+        GameView modelView = null;
         new Thread(view).start();
 
         do {
@@ -62,8 +64,8 @@ public class Client implements Observer {
                 modelView = (GameView) inputStream.readObject();
                 view.updateView(modelView);
             } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
+                System.err.println(e.getMessage());
             }
-        } while (!modelView.getGameStatus().equals(GameStatus.ended));
+        } while (!Objects.requireNonNull(modelView).getGameStatus().equals(GameStatus.ended));
     }
 }

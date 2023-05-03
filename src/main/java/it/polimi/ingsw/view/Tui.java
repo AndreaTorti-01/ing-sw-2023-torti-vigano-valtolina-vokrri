@@ -3,9 +3,9 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.serializable.GameView;
 import it.polimi.ingsw.network.serializable.MoveMsg;
-import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Observable;
 
 import java.io.IOException;
@@ -15,11 +15,20 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import static it.polimi.ingsw.utils.Constants.*;
+
 public class Tui extends Observable implements RunnableView {
     String playerName;
     Player me;
     GameView modelView;
 
+    public Tui() {
+    }
+
+    public Tui(Client client) {
+        this.addObserver(client);
+    }
+
+    @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
 
@@ -41,8 +50,7 @@ public class Tui extends Observable implements RunnableView {
             } else if (modelView.getGameStatus() == GameStatus.started) {
                 printGameStatus();
                 //checking if it's my turn
-                if(modelView.getCurrentPlayer().getName().equals(playerName))
-                    pickCards();
+                if (modelView.getCurrentPlayer().getName().equals(playerName)) pickCards();
                 //pickcards automatically calls the notifyObservers method with move message
                 //TODO: if we develop the game chat, its method will take place here!
             } else {
@@ -52,11 +60,16 @@ public class Tui extends Observable implements RunnableView {
         }
     }
 
+    @Override
+    public void updateView(GameView modelView) {
+        this.modelView = modelView;
+    }
+
     //#######################################################################################################################################
     //##################################################   FUNCTIONS   ######################################################################
     //#######################################################################################################################################
 
-    public void ScreenOutTest() {
+    private void ScreenOutTest() {
         System.out.println("ScreenOutTest");
         //printBoard(new ItemCard[9][9], new boolean[9][9]);
         printEndScreen("Diego");
@@ -65,22 +78,16 @@ public class Tui extends Observable implements RunnableView {
         clearConsole();
     }
 
-    public static void clearConsole() {
+    private void clearConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
         try {
             if (System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            else
-                Runtime.getRuntime().exec("clear");
-        } catch (IOException | InterruptedException ex) {}
+            else Runtime.getRuntime().exec("clear");
+        } catch (IOException | InterruptedException ex) {
+        }
     }
-
-    @Override
-    public void updateView(GameView modelView) {
-        this.modelView = modelView;
-    }
-
 
     private void pickCards() {
         Scanner scanner = new Scanner(System.in);
@@ -165,8 +172,7 @@ public class Tui extends Observable implements RunnableView {
                 coords.add(column);
                 pickedCoords.add(coords);
                 count++;
-            } else
-                printError("Card " + row + column + " is not valid!");
+            } else printError("Card " + row + column + " is not valid!");
 
             if (count < maxCards) {
                 System.out.println("You can pick " + (maxCards - count) + " more cards");
@@ -197,13 +203,10 @@ public class Tui extends Observable implements RunnableView {
     private boolean isTakeable(GameView gameView, int row, int column) {
         boolean free = false;
 
-        if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns)
-            return false;
+        if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns) return false;
 
-        if (row == 0 || row == numberOfRows - 1)
-            free = true;
-        else if (column == 0 || column == numberOfColumns - 1)
-            free = true;
+        if (row == 0 || row == numberOfRows - 1) free = true;
+        else if (column == 0 || column == numberOfColumns - 1) free = true;
         else if (gameView.getBoard()[row - 1][column] == null || gameView.getBoard()[row + 1][column] == null || gameView.getBoard()[row][column - 1] == null || gameView.getBoard()[row][column + 1] == null)
             free = true;
 
@@ -223,16 +226,12 @@ public class Tui extends Observable implements RunnableView {
         System.out.println("\n\n");
     }
 
-    private void printSeparee(){
-        System.out.println(
-                ANSI_YELLOW + "\n\n" +
-                "\t\t\t\t╔══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╗\n"+
-                "\t\t\t\t╚══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╝"
-                + ANSI_RESET + "\n\n");
+    private void printSeparee() {
+        System.out.println(ANSI_YELLOW + "\n\n" + "\t\t\t\t╔══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╗\n" + "\t\t\t\t╚══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╝" + ANSI_RESET + "\n\n");
     }
+
     private void printWaitingScreen() {
         int iter = 0;
-
 
 
         //clear the console screen
@@ -241,20 +240,14 @@ public class Tui extends Observable implements RunnableView {
 
         System.out.println("\n" + ANSI_YELLOW +
 
-                "\t\t\t\t\t\t\t\t\t\t\t\t█   █ █▀▀ █   █▀▀ █▀▀█ █▀▄▀█ █▀▀ 　 ▀▀█▀▀ █▀▀█\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t\t█ █ █ █▀▀ █   █   █  █ █ ▀ █ █▀▀ 　   █   █  █\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t\t█▄▀▄█ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀   ▀ ▀▀▀ 　   █   ▀▀▀▀\n\n\n");
+                "\t\t\t\t\t\t\t\t\t\t\t\t█   █ █▀▀ █   █▀▀ █▀▀█ █▀▄▀█ █▀▀ 　 ▀▀█▀▀ █▀▀█\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█ █ █ █▀▀ █   █   █  █ █ ▀ █ █▀▀ 　   █   █  █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▄▀▄█ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀   ▀ ▀▀▀ 　   █   ▀▀▀▀\n\n\n");
 
         printMyShelfie();
 
         System.out.println("\n\n\n" + ANSI_CYAN + "\n \n \n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  developed by gc-33" + ANSI_RESET);
         System.out.println(ANSI_CYAN + "\n \t\t\t\t\t\t\t\t\t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
 
-        System.out.print(
-                "\n\n\n" +
-                        "\t\t\t\t█   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █▀▀█ 　 █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█ 　 █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀\n" +
-                        "\t\t\t\t█ █ █ █▄▄█ █   █   █ █  █ █ ▀█ 　 █▀▀ █  █ █▄▄▀ 　 █  █   █   █▀▀█ █▀▀ █▄▄▀ 　 █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█\n" +
-                        "\t\t\t\t█▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀");
+        System.out.print("\n\n\n" + "\t\t\t\t█   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █▀▀█ 　 █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█ 　 █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀\n" + "\t\t\t\t█ █ █ █▄▄█ █   █   █ █  █ █ ▀█ 　 █▀▀ █  █ █▄▄▀ 　 █  █   █   █▀▀█ █▀▀ █▄▄▀ 　 █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█\n" + "\t\t\t\t█▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀");
         while (modelView.getGameStatus().equals(GameStatus.waiting)) {
             //waits 500 milliseconds
             try {
@@ -263,10 +256,10 @@ public class Tui extends Observable implements RunnableView {
                 e.printStackTrace();
             }
 
-            if(iter == 0){
+            if (iter == 0) {
                 System.out.print(ANSI_YELLOW + "   ▄");
                 iter = 1;
-            }else if (iter == 1) {
+            } else if (iter == 1) {
                 System.out.print(ANSI_RED + "   ▄");
                 iter = 2;
             } else if (iter == 2) {
@@ -279,15 +272,11 @@ public class Tui extends Observable implements RunnableView {
         }
 
     }
-    private void printMyShelfie(){
-        System.out.println(
-                ANSI_YELLOW + "\t\t\t\t\t\t\t\t███╗   ███╗" + ANSI_PURPLE + "██╗   ██╗  " + ANSI_GREEN + " ██████╗" + ANSI_CYAN + "██╗  ██╗" + ANSI_RED + "███████╗" + ANSI_YELLOW + "██╗     " + ANSI_PURPLE + "███████╗" + ANSI_GREEN + "██╗" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" +
-                ANSI_YELLOW + "\t\t\t\t\t\t\t\t████╗ ████║" + ANSI_PURPLE + "╚██╗ ██╔╝  " + ANSI_GREEN + "██╔════╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "██╔════╝" + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔════╝" + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔════╝  " + ANSI_RED + "██║\n" +
-                ANSI_YELLOW + "\t\t\t\t\t\t\t\t██╔████╔██║" + ANSI_PURPLE + " ╚████╔╝   " + ANSI_GREEN + "╚█████╗ " + ANSI_CYAN + "███████║" + ANSI_RED + "█████╗  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "█████╗  " + ANSI_GREEN + "██║" + ANSI_CYAN + "█████╗    " + ANSI_RED + "██║\n" +
-                ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║╚██╔╝██║" + ANSI_PURPLE + "  ╚██╔╝    " + ANSI_GREEN + " ╚═══██╗" + ANSI_CYAN + "██╔══██║" + ANSI_RED + "██╔══╝  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔══╝  " + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔══╝    " + ANSI_RED + "╚═╝\n" +
-                ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║ ╚═╝ ██║" + ANSI_PURPLE + "   ██║     " + ANSI_GREEN + "██████╔╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "███████╗" + ANSI_YELLOW + "███████╗" + ANSI_PURPLE + "██║     " + ANSI_GREEN + "██║" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" +
-                ANSI_YELLOW + "\t\t\t\t\t\t\t\t╚═╝     ╚═╝" + ANSI_PURPLE + "   ╚═╝     " + ANSI_GREEN + "╚═════╝ " + ANSI_CYAN + "╚═╝  ╚═╝" + ANSI_RED + "╚══════╝" + ANSI_YELLOW + "╚══════╝" + ANSI_PURPLE + "╚═╝     " + ANSI_GREEN + "╚═╝" + ANSI_CYAN + "╚══════╝  " + ANSI_RED + "╚═╝" + ANSI_RESET);
+
+    private void printMyShelfie() {
+        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t███╗   ███╗" + ANSI_PURPLE + "██╗   ██╗  " + ANSI_GREEN + " ██████╗" + ANSI_CYAN + "██╗  ██╗" + ANSI_RED + "███████╗" + ANSI_YELLOW + "██╗     " + ANSI_PURPLE + "███████╗" + ANSI_GREEN + "██╗" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t████╗ ████║" + ANSI_PURPLE + "╚██╗ ██╔╝  " + ANSI_GREEN + "██╔════╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "██╔════╝" + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔════╝" + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔════╝  " + ANSI_RED + "██║\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t██╔████╔██║" + ANSI_PURPLE + " ╚████╔╝   " + ANSI_GREEN + "╚█████╗ " + ANSI_CYAN + "███████║" + ANSI_RED + "█████╗  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "█████╗  " + ANSI_GREEN + "██║" + ANSI_CYAN + "█████╗    " + ANSI_RED + "██║\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║╚██╔╝██║" + ANSI_PURPLE + "  ╚██╔╝    " + ANSI_GREEN + " ╚═══██╗" + ANSI_CYAN + "██╔══██║" + ANSI_RED + "██╔══╝  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔══╝  " + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔══╝    " + ANSI_RED + "╚═╝\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║ ╚═╝ ██║" + ANSI_PURPLE + "   ██║     " + ANSI_GREEN + "██████╔╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "███████╗" + ANSI_YELLOW + "███████╗" + ANSI_PURPLE + "██║     " + ANSI_GREEN + "██║" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t╚═╝     ╚═╝" + ANSI_PURPLE + "   ╚═╝     " + ANSI_GREEN + "╚═════╝ " + ANSI_CYAN + "╚═╝  ╚═╝" + ANSI_RED + "╚══════╝" + ANSI_YELLOW + "╚══════╝" + ANSI_PURPLE + "╚═╝     " + ANSI_GREEN + "╚═╝" + ANSI_CYAN + "╚══════╝  " + ANSI_RED + "╚═╝" + ANSI_RESET);
     }
+
     private void printEndScreen(String winnerName) {
         // Print the end screen, showing the winner
         int iteration = 0;
@@ -295,9 +284,7 @@ public class Tui extends Observable implements RunnableView {
         clearConsole();
         printMyShelfie();
         printSeparee();
-        System.out.println(ANSI_PURPLE +
-                "\t\t\t\t\t\t\t\t\t\t\t\t█▀▀ ▄▀█ █▀▄▀█ █▀▀   █▀█ █ █ █▀▀ █▀█   █\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t\t█▄█ █▀█ █ ▀ █ ██▄   █▄█ ▀▄▀ ██▄ █▀▄   ▄\n");
+        System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t\t\t\t\t\t█▀▀ ▄▀█ █▀▄▀█ █▀▀   █▀█ █ █ █▀▀ █▀█   █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▄█ █▀█ █ ▀ █ ██▄   █▄█ ▀▄▀ ██▄ █▀▄   ▄\n");
         System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t  >>  THE WINNER IS: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
 
         printSeparee();
@@ -314,6 +301,7 @@ public class Tui extends Observable implements RunnableView {
         System.out.println("  >>  Enter your name:  ");
         return in.nextLine();
     }
+
     private boolean askBoolean() {
         Scanner in = new Scanner(System.in);
         System.out.print("  >>  (y/n)");
@@ -331,49 +319,55 @@ public class Tui extends Observable implements RunnableView {
         }
     }
 
-    private void printCat(){
-        System.out.print(ANSI_GREEN + " █C█ " + ANSI_RESET+"║");
+    private void printCat() {
+        System.out.print(ANSI_GREEN + " █C█ " + ANSI_RESET + "║");
     }
-    private void printBook(){
-        System.out.print(ANSI_WHITE + " █B█ "+ ANSI_RESET+"║");
+
+    private void printBook() {
+        System.out.print(ANSI_WHITE + " █B█ " + ANSI_RESET + "║");
     }
-    private void printGame(){
-        System.out.print(ANSI_YELLOW + " █G█ "+ ANSI_RESET);
+
+    private void printGame() {
+        System.out.print(ANSI_YELLOW + " █G█ " + ANSI_RESET);
     }
-    private void printPlant(){
-        System.out.print(ANSI_PURPLE + " █P█ "+ ANSI_RESET+"║");
+
+    private void printPlant() {
+        System.out.print(ANSI_PURPLE + " █P█ " + ANSI_RESET + "║");
     }
-    private void printTrophies(){
-        System.out.print(ANSI_CYAN + " █T█ "+ ANSI_RESET+"║");
+
+    private void printTrophies() {
+        System.out.print(ANSI_CYAN + " █T█ " + ANSI_RESET + "║");
     }
-    private void printFrame(){
-        System.out.print(ANSI_BLUE + " █F█ "+ ANSI_RESET+"║");
+
+    private void printFrame() {
+        System.out.print(ANSI_BLUE + " █F█ " + ANSI_RESET + "║");
     }
-    private void printEmpty(){
-        System.out.print("     "+ ANSI_RESET+"║");
+
+    private void printEmpty() {
+        System.out.print("     " + ANSI_RESET + "║");
     }
-    private void printInvalid(){
-        System.out.print(ANSI_GREY + " ░░░ "+ ANSI_RESET+"║");
+
+    private void printInvalid() {
+        System.out.print(ANSI_GREY + " ░░░ " + ANSI_RESET + "║");
     }
 
 
-    private void printShelves(){
+    private void printShelves() {
         int numOfPlayers = modelView.getPlayers().size();
 
-        for(Player p : modelView.getPlayers())
+        for (Player p : modelView.getPlayers())
             System.out.print("\t\t\t\t\t\t" + p.getName());
 
-        for(int nop = 0; nop < numOfPlayers; nop++)
+        for (int nop = 0; nop < numOfPlayers; nop++)
             System.out.print("\t\t\t╔═════╦═════╦═════╦═════╦═════╗");
 
         System.out.print("\n");
-        for(int i = 0; i < numberOfRows; i++){
-            for(Player p : modelView.getPlayers()){
+        for (int i = 0; i < numberOfRows; i++) {
+            for (Player p : modelView.getPlayers()) {
                 System.out.print("\t\t\t║");
-                for(int j = 0; j < numberOfColumns; j++){
-                    if(modelView.getShelfOf(p)[i][j] == null)
-                        printEmpty();
-                    else{
+                for (int j = 0; j < numberOfColumns; j++) {
+                    if (modelView.getShelfOf(p)[i][j] == null) printEmpty();
+                    else {
                         switch (modelView.getShelfOf(p)[i][j].getType()) {
                             case CATS -> printCat();
                             case BOOKS -> printBook();
@@ -387,7 +381,7 @@ public class Tui extends Observable implements RunnableView {
             }
             System.out.print(" " + i + "\n");
         }
-        for(int nop = 0; nop < numOfPlayers; nop++) {
+        for (int nop = 0; nop < numOfPlayers; nop++) {
             System.out.print("\t\t\t╚═════╩═════╩═════╩═════╩═════╝");
             System.out.print("\n");
             System.out.print("\t\t\t   0     1     2     3     4");
@@ -395,21 +389,20 @@ public class Tui extends Observable implements RunnableView {
         }
 
 
-
     }
+
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
 
         int boardSize = 9;
         System.out.print("\t\t\t\t\t\t\t\t\t\t\t╔═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╗\n");
 
-        for(int i = 0; i < boardSize; i++){
+        for (int i = 0; i < boardSize; i++) {
             System.out.print("\t\t\t\t\t\t\t\t\t\t\t║");
-            for(int j = 0; j  < boardSize; j++){
-                if(!boardValid[i][j]) {
+            for (int j = 0; j < boardSize; j++) {
+                if (!boardValid[i][j]) {
                     printInvalid();
-                } else if(board[i][j] == null)
-                    printEmpty();
-                else{
+                } else if (board[i][j] == null) printEmpty();
+                else {
                     switch (board[i][j].getType()) {
                         case CATS -> printCat();
                         case BOOKS -> printBook();
@@ -421,7 +414,7 @@ public class Tui extends Observable implements RunnableView {
                 }
             }
             System.out.print(" " + i + "\n");
-            if(i != boardSize-1)
+            if (i != boardSize - 1)
                 System.out.println("\t\t\t\t\t\t\t\t\t\t\t╠═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╣");
         }
         System.out.println("\t\t\t\t\t\t\t\t\t\t\t╚═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╝");

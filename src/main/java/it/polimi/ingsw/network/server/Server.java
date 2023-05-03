@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server extends Thread {
+public class Server implements Runnable {
     private final ServerSocket serverSocket;
     private final List<Lobby> lobbies = new ArrayList<>();
 
@@ -37,6 +37,7 @@ public class Server extends Thread {
             for (Lobby l : lobbies) {
                 if (!l.isGameStarted()) {
                     l.addClientHandler(clientHandler);
+                    clientHandler.addObserver(l);
                     freeLobbyFound = true;
                     break;
                 }
@@ -48,6 +49,7 @@ public class Server extends Thread {
                 Lobby l = new Lobby(controller);
                 l.addClientHandler(clientHandler);
                 lobbies.add(l);
+                model.addObserver(l);
             }
         }
     }

@@ -24,7 +24,7 @@ public class Game extends Observable {
 
     public Game() {
         this.status = GameStatus.waiting;
-        notifyObservers(new GameView(this));
+        // notifyObservers(new GameView(this));
     }
 
     /**
