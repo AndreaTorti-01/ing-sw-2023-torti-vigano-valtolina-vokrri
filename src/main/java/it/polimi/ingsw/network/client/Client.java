@@ -65,6 +65,6 @@ public class Client implements Observer, Runnable {
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println(e.getMessage());
             }
-        } while (modelView.getGameStatus().equals(GameStatus.ended));
+        } while (modelView.getGameStatus().equals(GameStatus.ENDED));
     }
 }

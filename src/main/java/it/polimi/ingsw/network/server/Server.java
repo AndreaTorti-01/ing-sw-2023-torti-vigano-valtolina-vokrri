@@ -40,7 +40,9 @@ public class Server implements Runnable {
                 if (!l.isGameStarted()) {
                     l.addClientHandler(clientHandler);
                     clientHandler.addObserver(l);
+
                     freeLobbyFound = true;
+                    new Thread(clientHandler).start();
                     break;
                 }
             }
@@ -50,10 +52,12 @@ public class Server implements Runnable {
                 GameController controller = new GameController(model);
                 Lobby l = new Lobby(controller);
                 lobbies.add(l);
+                model.addObserver(l);
+
                 l.addClientHandler(clientHandler);
                 clientHandler.addObserver(l);
-                model.addObserver(l);
-                model.notifyObservers(new GameView(model));
+
+                new Thread(clientHandler).start();
             }
         }
     }

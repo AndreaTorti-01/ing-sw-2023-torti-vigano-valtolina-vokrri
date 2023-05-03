@@ -14,16 +14,16 @@ import java.util.Random;
 import static it.polimi.ingsw.utils.Constants.*;
 
 public class Game extends Observable {
-    private ArrayList<CommonGoalCard> commonGoalCards;
-    private ArrayList<Player> players;
+    private List<CommonGoalCard> commonGoalCards;
+    private List<Player> players;
     private Player currentPlayer;
-    private Bag bag;
+    private final Bag bag;
     private Board board;
     private GameStatus status;
     private Player winner;
 
     public Game() {
-        this.status = GameStatus.waiting;
+        this.status = GameStatus.WAITING;
         this.bag = new Bag();
     }
 
@@ -54,7 +54,7 @@ public class Game extends Observable {
         // initialization of the common goal cards
         commonGoalCards = this.getRandomCommonGoalCards();
         currentPlayer = players.get(0);
-        status = GameStatus.started;
+        status = GameStatus.STARTED;
 
         // notifies listeners of the changes
         notifyObservers(new GameView(this));
@@ -75,11 +75,13 @@ public class Game extends Observable {
      * @param playerNames an array containing the name of each player
      * @return an arraylist of players
      */
-    private ArrayList<Player> initPlayers(List<String> playerNames) {
+    private List<Player> initPlayers(List<String> playerNames) {
         Random random = new Random();
 
         // initializes a list of available indexes
         List<Integer> indexes = this.getIndexes(numberOfPersonalGoalCardTypes);
+
+        players = new ArrayList<>();
 
         // for each player name, instantiates a new Player and gives him a random personal goal card
         for (String playerName : playerNames) {
@@ -97,9 +99,6 @@ public class Game extends Observable {
             players.add(player);
         }
 
-        // notifies listeners of the changes
-        notifyObservers(new GameView(this));
-
         return players;
     }
 
@@ -107,7 +106,7 @@ public class Game extends Observable {
     /**
      * @return the players
      */
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -142,7 +141,7 @@ public class Game extends Observable {
     /**
      * @return the common goal cards
      */
-    public ArrayList<CommonGoalCard> getCommonGoalCards() {
+    public List<CommonGoalCard> getCommonGoalCards() {
         return commonGoalCards;
     }
 
@@ -199,7 +198,7 @@ public class Game extends Observable {
      * sets the game to ended
      */
     public void endGame() {
-        this.status = GameStatus.ended;
+        this.status = GameStatus.ENDED;
 
         // notifies listeners of the changes
         notifyObservers(new GameView(this));

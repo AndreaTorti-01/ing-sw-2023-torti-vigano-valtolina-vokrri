@@ -8,15 +8,15 @@ import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 public class GameView implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private final ItemCard[][] board;
     private final boolean[][] boardValid;
-    private final ArrayList<CommonGoalCard> commonGoalCards;
-    private final ArrayList<Player> players;
+    private final List<CommonGoalCard> commonGoalCards;
+    private final List<Player> players;
     private final Player currentPlayer;
     private final boolean isBagEmpty;
     private final GameStatus status;
@@ -32,7 +32,7 @@ public class GameView implements Serializable {
             board = null;
             boardValid = null;
         }
-        
+
         this.commonGoalCards = model.getCommonGoalCards();
         this.players = model.getPlayers();
         this.currentPlayer = model.getCurrentPlayer();
@@ -53,7 +53,7 @@ public class GameView implements Serializable {
         return players.get(players.indexOf(player)).getShelf().getItemsMatrix();
     }
 
-    public ArrayList<CommonGoalCard> getCommonGoalCards() {
+    public List<CommonGoalCard> getCommonGoalCards() {
         return commonGoalCards;
     }
 
@@ -61,7 +61,7 @@ public class GameView implements Serializable {
         return currentPlayer;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 

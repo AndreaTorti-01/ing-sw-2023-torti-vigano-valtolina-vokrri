@@ -36,7 +36,9 @@ public class ClientHandler extends Observable implements Runnable {
     public void run() {
         do {
             try {
+                System.err.println("waiting for messages...");
                 Object msg = inputStream.readObject();
+                System.err.println("message arrived");
                 switch (msg.getClass().getSimpleName()) {
                     case "MoveMsg" -> notifyObservers((MoveMsg) msg);
                     case "ChatMsg" -> notifyObservers((ChatMsg) msg);
