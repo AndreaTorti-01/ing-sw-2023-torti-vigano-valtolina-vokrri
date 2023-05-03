@@ -35,10 +35,10 @@ public class Game extends Observable {
      * @throws IllegalArgumentException
      */
 
-    public void initGame(String... playerNames) throws IllegalArgumentException {
+    public void startGame(List<String> playerNames) throws IllegalArgumentException {
 
 
-        int numberOfPlayers = playerNames.length;
+        int numberOfPlayers = playerNames.size();
 
         if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
             throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers);
@@ -75,9 +75,8 @@ public class Game extends Observable {
      * @param playerNames an array containing the name of each player
      * @return an arraylist of players
      */
-    private ArrayList<Player> initPlayers(String[] playerNames) {
+    private ArrayList<Player> initPlayers(List<String> playerNames) {
         Random random = new Random();
-        ArrayList<Player> players = new ArrayList<>(playerNames.length);
 
         // initializes a list of available indexes
         List<Integer> indexes = this.getIndexes(numberOfPersonalGoalCardTypes);

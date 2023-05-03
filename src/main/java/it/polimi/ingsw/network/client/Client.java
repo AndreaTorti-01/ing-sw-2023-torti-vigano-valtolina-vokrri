@@ -45,9 +45,9 @@ public class Client implements Observer, Runnable {
         }
     }
 
-    public void update(String message) {
+    public void update(String playerName) {
         try {
-            outputStream.writeObject(message);
+            outputStream.writeObject(playerName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

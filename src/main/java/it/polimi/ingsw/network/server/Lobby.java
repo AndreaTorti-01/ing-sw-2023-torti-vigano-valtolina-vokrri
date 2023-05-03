@@ -44,4 +44,9 @@ public class Lobby implements Observer {
     public void update(MoveMsg moveMsg) {
         controller.makeMove(moveMsg);
     }
+
+    public void update(String playerName) {
+        System.err.println("added player " + playerName);
+        controller.addPlayer(playerName);
+    }
 }
