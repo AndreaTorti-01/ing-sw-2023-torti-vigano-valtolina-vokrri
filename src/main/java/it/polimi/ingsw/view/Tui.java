@@ -8,12 +8,13 @@ import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.Observable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import static it.polimi.ingsw.utils.Constants.*;
-
 public class Tui extends Observable implements RunnableView {
     String playerName;
     Player me;
@@ -23,11 +24,10 @@ public class Tui extends Observable implements RunnableView {
         Scanner scanner = new Scanner(System.in);
 
         //asks the player name
-        System.out.println("Insert your name: ");
-        playerName = scanner.nextLine();
+        playerName = askPlayerName();
         notifyObservers(playerName);
 
-        clearScreen();
+        clearConsole();
 
         // while true loop
         // waits for user input, if it is user turn
@@ -35,16 +35,16 @@ public class Tui extends Observable implements RunnableView {
         while (true) {
 
             if (modelView.getGameStatus() == GameStatus.waiting) {
-                // TODO: recuperare nome del winner
                 printWaitingScreen();
+                //doesn't return until the game is still in waiting status
+
             } else if (modelView.getGameStatus() == GameStatus.started) {
-                printGameStatus(modelView);
+                printGameStatus();
                 //checking if it's my turn
                 if(modelView.getCurrentPlayer().getName().equals(playerName))
-                    // pickCards automatically sends updates to client (the message contains the chosen cards' coordinates)
-                    pickCards(modelView);
-
-                System.out.println("press c to enter the game chat");
+                    pickCards();
+                //pickcards automatically calls the notifyObservers method with move message
+                //TODO: if we develop the game chat, its method will take place here!
             } else {
                 printEndScreen(modelView.getWinner().getName());
             }
@@ -52,18 +52,37 @@ public class Tui extends Observable implements RunnableView {
         }
     }
 
+    //#######################################################################################################################################
+    //##################################################   FUNCTIONS   ######################################################################
+    //#######################################################################################################################################
+
+    public void ScreenOutTest() {
+        System.out.println("ScreenOutTest");
+        //printBoard(new ItemCard[9][9], new boolean[9][9]);
+        printEndScreen("Diego");
+
+        //printWaitingScreen();
+        clearConsole();
+    }
+
+    public static void clearConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        try {
+            if (System.getProperty("os.name").contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        } catch (IOException | InterruptedException ex) {}
+    }
+
     @Override
     public void updateView(GameView modelView) {
         this.modelView = modelView;
     }
 
-    private void clearScreen() {
-        // Clear the console screen
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
 
-    private void pickCards(GameView gameView) {
+    private void pickCards() {
         Scanner scanner = new Scanner(System.in);
         List<ItemCard> picked = new ArrayList<ItemCard>();
         List<List<Integer>> pickedCoords = new ArrayList<List<Integer>>();
@@ -83,7 +102,7 @@ public class Tui extends Observable implements RunnableView {
         int[] freeSlotsNumber = new int[numberOfColumns];
 
 
-        for (Player p : gameView.getPlayers())
+        for (Player p : modelView.getPlayers())
             if (p.getName().equals(playerName)) {
                 me = p;
                 break;
@@ -93,7 +112,7 @@ public class Tui extends Observable implements RunnableView {
         for (int j = 0; j < numberOfColumns && maxCards < 3; j++) {
             int freeSlots = 0;
             for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
-                if (gameView.getShelfOf(me)[i][j] == null) freeSlots++;
+                if (modelView.getShelfOf(me)[i][j] == null) freeSlots++;
                 if (freeSlots > maxCards) maxCards = freeSlots;
                 freeSlotsNumber[j] = freeSlots;
             }
@@ -109,9 +128,9 @@ public class Tui extends Observable implements RunnableView {
             int column = scanner.nextInt();
 
             //checking coordinate and card validity
-            valid = isTakeable(gameView, row, column);
+            valid = isTakeable(modelView, row, column);
 
-            if (valid && picked.contains(gameView.getBoard()[row][column])) valid = false;
+            if (valid && picked.contains(modelView.getBoard()[row][column])) valid = false;
 
             if (valid && ((useCol && column != firstCol) || (useRow && row != firstRow))) valid = false;
 
@@ -140,7 +159,7 @@ public class Tui extends Observable implements RunnableView {
                     firstCol = column;
                     firstRow = row;
                 }
-                picked.add(gameView.getBoard()[row][column]);
+                picked.add(modelView.getBoard()[row][column]);
                 ArrayList<Integer> coords = new ArrayList<Integer>();
                 coords.add(row);
                 coords.add(column);
@@ -191,99 +210,97 @@ public class Tui extends Observable implements RunnableView {
         return gameView.getBoardValid()[row][column] && gameView.getBoard()[row][column] != null && free;
     }
 
-    private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
-        StringBuilder output = new StringBuilder();
-
-        output.append("---------------------\n");
-        for (int i = 0; i < Constants.boardSize; i++) {
-            output.append("| ");
-            for (int j = 0; j < Constants.boardSize; j++) {
-                if (boardValid[i][j]) {
-                    ItemCard card = board[i][j];
-                    if (card != null)
-                        output.append(card).append(" ");
-                    else
-                        output.append("* ");
-                } else {
-                    output.append("- ");
-                }
-
-            }
-            output.append("|\n");
-        }
-        output.append("---------------------");
-
-        System.out.print(output);
-    }
-
-    private void printShelf(ItemCard[][] shelf) {
-        StringBuilder output = new StringBuilder();
-
-        for (int i = 0; i < Constants.numberOfRows; i++) {
-            output.append("| ");
-            for (int j = 0; j < Constants.numberOfColumns; j++) {
-                if (shelf[i][j] != null) output.append(shelf[i][j].toString()).append(" ");
-                else output.append("* ");
-            }
-            output.append("|\n");
-        }
-        output.append("------------");
-
-        System.out.print(output);
-    }
-
-    private void printGameStatus(GameView gameView) {
+    private void printGameStatus() {
         // Print the game status, including the main board and the shelves
-        clearScreen();
+        clearConsole();
 
-        // Print the active player name
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + gameView.getCurrentPlayer().getName() + ANSI_PURPLE + "  <<" + ANSI_RESET);
+        printMyShelfie();
 
-        // Print the board
-        printBoard(gameView.getBoard(), gameView.getBoardValid());
+        System.out.println("\n\n");
+        printBoard(modelView.getBoard(), modelView.getBoardValid());
+        System.out.println("\n\n");
+        printShelves();
+        System.out.println("\n\n");
+    }
 
-        // Print the shelf of the active player
-        printShelf(gameView.getShelfOf(gameView.getCurrentPlayer()));
+    private void printSeparee(){
+        System.out.println(
+                ANSI_YELLOW + "\n\n" +
+                "\t\t\t\t╔══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╗\n"+
+                "\t\t\t\t╚══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╝"
+                + ANSI_RESET + "\n\n");
+    }
+    private void printWaitingScreen() {
+        int iter = 0;
 
-        // Print the bag status
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "BAG: " + ANSI_YELLOW + gameView.isBagEmpty() + ANSI_PURPLE + "  <<" + ANSI_RESET);
 
-        // Print the common goal cards type and points on top of the stack
-        for (int i = 0; i < gameView.getCommonGoalCards().size(); i++) {
-            System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL " + i + ": " + ANSI_YELLOW + gameView.getCommonGoalCards().get(i).getType() + " " + gameView.getCommonGoalCards().get(i).peekPoints() + ANSI_PURPLE + "  <<" + ANSI_RESET);
+
+        //clear the console screen
+        clearConsole();
+
+
+        System.out.println("\n" + ANSI_YELLOW +
+
+                "\t\t\t\t\t\t\t\t\t\t\t\t█   █ █▀▀ █   █▀▀ █▀▀█ █▀▄▀█ █▀▀ 　 ▀▀█▀▀ █▀▀█\n" +
+                "\t\t\t\t\t\t\t\t\t\t\t\t█ █ █ █▀▀ █   █   █  █ █ ▀ █ █▀▀ 　   █   █  █\n" +
+                "\t\t\t\t\t\t\t\t\t\t\t\t█▄▀▄█ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀   ▀ ▀▀▀ 　   █   ▀▀▀▀\n\n\n");
+
+        printMyShelfie();
+
+        System.out.println("\n\n\n" + ANSI_CYAN + "\n \n \n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  developed by gc-33" + ANSI_RESET);
+        System.out.println(ANSI_CYAN + "\n \t\t\t\t\t\t\t\t\t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
+
+        System.out.print(
+                "\n\n\n" +
+                        "\t\t\t\t█   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █▀▀█ 　 █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█ 　 █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀\n" +
+                        "\t\t\t\t█ █ █ █▄▄█ █   █   █ █  █ █ ▀█ 　 █▀▀ █  █ █▄▄▀ 　 █  █   █   █▀▀█ █▀▀ █▄▄▀ 　 █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█\n" +
+                        "\t\t\t\t█▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀");
+        while (modelView.getGameStatus().equals(GameStatus.waiting)) {
+            //waits 500 milliseconds
+            try {
+                TimeUnit.MILLISECONDS.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if(iter == 0){
+                System.out.print(ANSI_YELLOW + "   ▄");
+                iter = 1;
+            }else if (iter == 1) {
+                System.out.print(ANSI_RED + "   ▄");
+                iter = 2;
+            } else if (iter == 2) {
+                System.out.print(ANSI_CYAN + "   ▄");
+                iter = 3;
+            } else {
+                System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b");
+                iter = 0;
+            }
         }
 
-        // Print the personal goal card pattern
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t  >>  " + ANSI_GREEN + "GOAL: " + ANSI_YELLOW + gameView.getCurrentPlayer().getPersonalGoalCard() + ANSI_PURPLE + "  <<" + ANSI_RESET);
     }
-
-    private void printWaitingScreen() {
-        // Print the loading screen
-        clearScreen();
-        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t  >>  WELCOME TO  <<" + ANSI_RESET);
-        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t  >>  MY SHELFIE  <<" + ANSI_RESET);
-        System.out.println(ANSI_CYAN + "\n \n \n \t\t\t\t\t\t\t  developed by gc-33" + ANSI_RESET);
-        System.out.println(ANSI_CYAN + "\n \t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
-        System.out.print("\n\n");
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t  >>  Press ENTER to start  <<" + ANSI_RESET);
-        System.out.print("\n\n");
-        System.out.println("\t\t\t\t\t\t Waiting for other players...");
-
-        Scanner in = new Scanner(System.in);
-        String check = in.nextLine(); //only to be sure that a key (enter) is pressed
+    private void printMyShelfie(){
+        System.out.println(
+                ANSI_YELLOW + "\t\t\t\t\t\t\t\t███╗   ███╗" + ANSI_PURPLE + "██╗   ██╗  " + ANSI_GREEN + " ██████╗" + ANSI_CYAN + "██╗  ██╗" + ANSI_RED + "███████╗" + ANSI_YELLOW + "██╗     " + ANSI_PURPLE + "███████╗" + ANSI_GREEN + "██╗" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" +
+                ANSI_YELLOW + "\t\t\t\t\t\t\t\t████╗ ████║" + ANSI_PURPLE + "╚██╗ ██╔╝  " + ANSI_GREEN + "██╔════╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "██╔════╝" + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔════╝" + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔════╝  " + ANSI_RED + "██║\n" +
+                ANSI_YELLOW + "\t\t\t\t\t\t\t\t██╔████╔██║" + ANSI_PURPLE + " ╚████╔╝   " + ANSI_GREEN + "╚█████╗ " + ANSI_CYAN + "███████║" + ANSI_RED + "█████╗  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "█████╗  " + ANSI_GREEN + "██║" + ANSI_CYAN + "█████╗    " + ANSI_RED + "██║\n" +
+                ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║╚██╔╝██║" + ANSI_PURPLE + "  ╚██╔╝    " + ANSI_GREEN + " ╚═══██╗" + ANSI_CYAN + "██╔══██║" + ANSI_RED + "██╔══╝  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔══╝  " + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔══╝    " + ANSI_RED + "╚═╝\n" +
+                ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║ ╚═╝ ██║" + ANSI_PURPLE + "   ██║     " + ANSI_GREEN + "██████╔╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "███████╗" + ANSI_YELLOW + "███████╗" + ANSI_PURPLE + "██║     " + ANSI_GREEN + "██║" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" +
+                ANSI_YELLOW + "\t\t\t\t\t\t\t\t╚═╝     ╚═╝" + ANSI_PURPLE + "   ╚═╝     " + ANSI_GREEN + "╚═════╝ " + ANSI_CYAN + "╚═╝  ╚═╝" + ANSI_RED + "╚══════╝" + ANSI_YELLOW + "╚══════╝" + ANSI_PURPLE + "╚═╝     " + ANSI_GREEN + "╚═╝" + ANSI_CYAN + "╚══════╝  " + ANSI_RED + "╚═╝" + ANSI_RESET);
     }
-
     private void printEndScreen(String winnerName) {
         // Print the end screen, showing the winner
-        clearScreen();
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t  >>  GAME OVER  <<");
-        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t  >>  WINNER: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
+        int iteration = 0;
 
-        System.out.print("\n\n");
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t  >>  Press ENTER to restart  <<" + ANSI_RESET);
+        clearConsole();
+        printMyShelfie();
+        printSeparee();
+        System.out.println(ANSI_PURPLE +
+                "\t\t\t\t\t\t\t\t\t\t\t\t█▀▀ ▄▀█ █▀▄▀█ █▀▀   █▀█ █ █ █▀▀ █▀█   █\n" +
+                "\t\t\t\t\t\t\t\t\t\t\t\t█▄█ █▀█ █ ▀ █ ██▄   █▄█ ▀▄▀ ██▄ █▀▄   ▄\n");
+        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t  >>  THE WINNER IS: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
 
-        Scanner in = new Scanner(System.in);
-        String check = in.nextLine(); //only to be sure that a key (enter) is pressed
+        printSeparee();
     }
 
     private void printError(String error) {
@@ -297,25 +314,6 @@ public class Tui extends Observable implements RunnableView {
         System.out.println("  >>  Enter your name:  ");
         return in.nextLine();
     }
-
-    private int[] askPlayerChoice() {
-        // Ask the player to choose a card
-        int[] coordinates = new int[2];
-        Scanner in = new Scanner(System.in);
-        System.out.println("  >>  Type the row number:");
-        coordinates[0] = Integer.parseInt(in.next());
-        System.out.println("  >>  Type the column number:");
-        coordinates[1] = Integer.parseInt(in.next());
-        return coordinates;
-    }
-
-    private int askPlayerInsertion() {
-        // Ask the player to insert a card
-        Scanner in = new Scanner(System.in);
-        System.out.println("  >>  Type a column number:");
-        return Integer.parseInt(in.next());
-    }
-
     private boolean askBoolean() {
         Scanner in = new Scanner(System.in);
         System.out.print("  >>  (y/n)");
@@ -333,5 +331,101 @@ public class Tui extends Observable implements RunnableView {
         }
     }
 
+    private void printCat(){
+        System.out.print(ANSI_GREEN + " █C█ " + ANSI_RESET+"║");
+    }
+    private void printBook(){
+        System.out.print(ANSI_WHITE + " █B█ "+ ANSI_RESET+"║");
+    }
+    private void printGame(){
+        System.out.print(ANSI_YELLOW + " █G█ "+ ANSI_RESET);
+    }
+    private void printPlant(){
+        System.out.print(ANSI_PURPLE + " █P█ "+ ANSI_RESET+"║");
+    }
+    private void printTrophies(){
+        System.out.print(ANSI_CYAN + " █T█ "+ ANSI_RESET+"║");
+    }
+    private void printFrame(){
+        System.out.print(ANSI_BLUE + " █F█ "+ ANSI_RESET+"║");
+    }
+    private void printEmpty(){
+        System.out.print("     "+ ANSI_RESET+"║");
+    }
+    private void printInvalid(){
+        System.out.print(ANSI_GREY + " ░░░ "+ ANSI_RESET+"║");
+    }
 
+
+    private void printShelves(){
+        int numOfPlayers = modelView.getPlayers().size();
+
+        for(Player p : modelView.getPlayers())
+            System.out.print("\t\t\t\t\t\t" + p.getName());
+
+        for(int nop = 0; nop < numOfPlayers; nop++)
+            System.out.print("\t\t\t╔═════╦═════╦═════╦═════╦═════╗");
+
+        System.out.print("\n");
+        for(int i = 0; i < numberOfRows; i++){
+            for(Player p : modelView.getPlayers()){
+                System.out.print("\t\t\t║");
+                for(int j = 0; j < numberOfColumns; j++){
+                    if(modelView.getShelfOf(p)[i][j] == null)
+                        printEmpty();
+                    else{
+                        switch (modelView.getShelfOf(p)[i][j].getType()) {
+                            case CATS -> printCat();
+                            case BOOKS -> printBook();
+                            case GAMES -> printGame();
+                            case PLANTS -> printPlant();
+                            case TROPHIES -> printTrophies();
+                            case FRAMES -> printFrame();
+                        }
+                    }
+                }
+            }
+            System.out.print(" " + i + "\n");
+        }
+        for(int nop = 0; nop < numOfPlayers; nop++) {
+            System.out.print("\t\t\t╚═════╩═════╩═════╩═════╩═════╝");
+            System.out.print("\n");
+            System.out.print("\t\t\t   0     1     2     3     4");
+            System.out.print("\n");
+        }
+
+
+
+    }
+    private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
+
+        int boardSize = 9;
+        System.out.print("\t\t\t\t\t\t\t\t\t\t\t╔═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╗\n");
+
+        for(int i = 0; i < boardSize; i++){
+            System.out.print("\t\t\t\t\t\t\t\t\t\t\t║");
+            for(int j = 0; j  < boardSize; j++){
+                if(!boardValid[i][j]) {
+                    printInvalid();
+                } else if(board[i][j] == null)
+                    printEmpty();
+                else{
+                    switch (board[i][j].getType()) {
+                        case CATS -> printCat();
+                        case BOOKS -> printBook();
+                        case GAMES -> printGame();
+                        case PLANTS -> printPlant();
+                        case TROPHIES -> printTrophies();
+                        case FRAMES -> printFrame();
+                    }
+                }
+            }
+            System.out.print(" " + i + "\n");
+            if(i != boardSize-1)
+                System.out.println("\t\t\t\t\t\t\t\t\t\t\t╠═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╣");
+        }
+        System.out.println("\t\t\t\t\t\t\t\t\t\t\t╚═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╝");
+        System.out.println("\t\t\t\t\t\t\t\t\t\t\t   0     1     2     3     4     5     6     7     8");
+
+    }
 }
