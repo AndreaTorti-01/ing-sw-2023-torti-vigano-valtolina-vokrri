@@ -40,6 +40,7 @@ public class ClientHandler extends Observable implements Runnable {
                 switch (msg.getClass().getSimpleName()) {
                     case "MoveMsg" -> notifyObservers((MoveMsg) msg);
                     case "ChatMsg" -> notifyObservers((ChatMsg) msg);
+                    case "String" -> notifyObservers((String) msg);
                     default -> System.out.println("unsupported");
                 }
             } catch (IOException | ClassNotFoundException e) {

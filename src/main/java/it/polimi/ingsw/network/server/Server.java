@@ -8,11 +8,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Server implements Runnable {
     private final ServerSocket serverSocket;
-    private final List<Lobby> lobbies = new ArrayList<>();
+    private final List<Lobby> lobbies = new LinkedList<>();
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -48,8 +49,9 @@ public class Server implements Runnable {
                 Game model = new Game();
                 GameController controller = new GameController(model);
                 Lobby l = new Lobby(controller);
-                l.addClientHandler(clientHandler);
                 lobbies.add(l);
+                l.addClientHandler(clientHandler);
+                clientHandler.addObserver(l);
                 model.addObserver(l);
                 model.notifyObservers(new GameView(model));
             }

@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -11,53 +13,54 @@ public class GameTest {
     @Test
     void testGameWithTwoPlayers() {
         int numberOfPlayers = 2;
-        String[] playerNames = new String[numberOfPlayers];
+        List<String> playerNames = new LinkedList<>();
 
         for (int i = 0; i < numberOfPlayers; i++)
-            playerNames[i] = this.generateRandomString();
+            playerNames.add(this.generateRandomString());
 
         Game model = new Game();
-        assertDoesNotThrow(() -> model.initGame(playerNames));
+        assertDoesNotThrow(() -> model.startGame(playerNames));
     }
 
     @Test
     void testGameWithThreePlayers() {
         int numberOfPlayers = 3;
-        String[] playerNames = new String[numberOfPlayers];
+        List<String> playerNames = new LinkedList<>();
 
         for (int i = 0; i < numberOfPlayers; i++)
-            playerNames[i] = this.generateRandomString();
+            playerNames.add(this.generateRandomString());
 
         Game model = new Game();
-        assertDoesNotThrow(() -> model.initGame(playerNames));
+        assertDoesNotThrow(() -> model.startGame(playerNames));
     }
 
     @Test
     void testGameWithFourPlayers() {
         int numberOfPlayers = 4;
-        String[] playerNames = new String[numberOfPlayers];
+        List<String> playerNames = new LinkedList<>();
 
         for (int i = 0; i < numberOfPlayers; i++)
-            playerNames[i] = this.generateRandomString();
+            playerNames.add(this.generateRandomString());
 
         Game model = new Game();
-        assertDoesNotThrow(() -> model.initGame(playerNames));
+        assertDoesNotThrow(() -> model.startGame(playerNames));
     }
 
     @Test
     void testGameWithIllegalNumberOfPlayers() {
-        String playerName = this.generateRandomString();
+        final List<String> playerNames = new LinkedList<>();
+        playerNames.add(this.generateRandomString());
         Game model = new Game();
-        assertThrows(IllegalArgumentException.class, () -> model.initGame(playerName));
+        assertThrows(IllegalArgumentException.class, () -> model.startGame(playerNames));
 
         int numberOfPlayers = 5;
-        String[] playerNames = new String[numberOfPlayers];
+        final List<String> playerNames2 = new LinkedList<>();
 
         for (int i = 0; i < numberOfPlayers; i++)
-            playerNames[i] = this.generateRandomString();
+            playerNames.add(this.generateRandomString());
 
         Game model2 = new Game();
-        assertThrows(IllegalArgumentException.class, () -> model2.initGame(playerNames));
+        assertThrows(IllegalArgumentException.class, () -> model2.startGame(playerNames2));
     }
 
     private String generateRandomString() {

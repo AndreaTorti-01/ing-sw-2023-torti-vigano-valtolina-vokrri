@@ -24,6 +24,7 @@ public class Tui extends Observable implements RunnableView {
     GameStatus gameStatus = GameStatus.waiting;
 
     public Tui() {
+        System.err.println("warning: created non observable tui");
     }
 
     public Tui(Client client) {
