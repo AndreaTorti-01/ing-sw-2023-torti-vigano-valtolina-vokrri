@@ -9,7 +9,7 @@ import it.polimi.ingsw.utils.Observer;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Lobby implements Observer<ChatMsg> {
+public class Lobby implements Observer {
     private final GameController controller;
     private final Set<ClientHandler> clientHandlers;
     private boolean isGameStarted;

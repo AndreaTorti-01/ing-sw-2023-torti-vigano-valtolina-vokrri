@@ -1,5 +1,7 @@
 package it.polimi.ingsw.utils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Vector;
 
 public abstract class Observable {
@@ -10,8 +12,7 @@ public abstract class Observable {
     }
 
     public synchronized void addObserver(Observer o) {
-        if (o == null)
-            throw new NullPointerException();
+        if (o == null) throw new NullPointerException();
         if (!observers.contains(o)) {
             observers.addElement(o);
         }
@@ -22,6 +23,14 @@ public abstract class Observable {
     }
 
     public void notifyObservers(Object message) {
-        for (Observer o : observers) o.update(message);
+
+        for (Observer o : observers) {
+            try {
+                Method m = o.getClass().getMethod("update", message.getClass());
+                m.invoke(o, message);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
