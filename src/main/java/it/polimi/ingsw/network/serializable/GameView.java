@@ -21,11 +21,18 @@ public class GameView implements Serializable {
     private final boolean isBagEmpty;
     private final GameStatus status;
     private final Player winner;
+
     public GameView(Game model) {
         if (model == null) throw new IllegalArgumentException();
 
-        this.board = model.getBoard().getTileMatrix();
-        this.boardValid = model.getBoard().getValidMatrix();
+        if (model.getBoard() != null) {
+            this.board = model.getBoard().getTileMatrix();
+            this.boardValid = model.getBoard().getValidMatrix();
+        } else {
+            board = null;
+            boardValid = null;
+        }
+        
         this.commonGoalCards = model.getCommonGoalCards();
         this.players = model.getPlayers();
         this.currentPlayer = model.getCurrentPlayer();

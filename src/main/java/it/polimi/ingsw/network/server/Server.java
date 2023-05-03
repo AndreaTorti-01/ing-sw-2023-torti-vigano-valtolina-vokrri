@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.network.serializable.GameView;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -50,6 +51,7 @@ public class Server implements Runnable {
                 l.addClientHandler(clientHandler);
                 lobbies.add(l);
                 model.addObserver(l);
+                model.notifyObservers(new GameView(model));
             }
         }
     }

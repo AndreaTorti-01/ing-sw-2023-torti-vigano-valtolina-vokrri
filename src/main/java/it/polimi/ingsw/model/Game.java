@@ -24,8 +24,8 @@ public class Game extends Observable {
 
     public Game() {
         this.status = GameStatus.waiting;
-        // notifyObservers(new GameView(this));
     }
+
 
     /**
      * This method initializes all the model elements too
@@ -35,9 +35,9 @@ public class Game extends Observable {
      */
 
     public void initGame(String... playerNames) throws IllegalArgumentException {
-        // initialization of a new Bag
-        bag = new Bag();
 
+        this.bag = new Bag();
+        
         int numberOfPlayers = playerNames.length;
 
         if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
@@ -60,13 +60,14 @@ public class Game extends Observable {
         notifyObservers(new GameView(this));
     }
 
+    public Player getWinner() {
+        return winner;
+    }
+
     public void setWinner(Player winner) {
         this.winner = winner;
     }
 
-    public Player getWinner() {
-        return winner;
-    }
     /**
      * Creates and return an arraylist of players,
      * giving each of them a random PersonalGoalCard

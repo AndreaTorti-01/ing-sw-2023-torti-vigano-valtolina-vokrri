@@ -21,6 +21,8 @@ public class Tui extends Observable implements RunnableView {
     Player me;
     GameView modelView;
 
+    GameStatus gameStatus = GameStatus.waiting;
+
     public Tui() {
     }
 
@@ -37,6 +39,10 @@ public class Tui extends Observable implements RunnableView {
         notifyObservers(playerName);
 
         clearConsole();
+
+        while (modelView == null) {
+            printWaitingScreen();
+        }
 
         // while true loop
         // waits for user input, if it is user turn
@@ -63,6 +69,8 @@ public class Tui extends Observable implements RunnableView {
     @Override
     public void updateView(GameView modelView) {
         this.modelView = modelView;
+        this.gameStatus = modelView.getGameStatus();
+        System.err.println("updated view!");
     }
 
     //#######################################################################################################################################
@@ -248,7 +256,7 @@ public class Tui extends Observable implements RunnableView {
         System.out.println(ANSI_CYAN + "\n \t\t\t\t\t\t\t\t\t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
 
         System.out.print("\n\n\n" + "\t\t\t\t█   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █▀▀█ 　 █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█ 　 █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀\n" + "\t\t\t\t█ █ █ █▄▄█ █   █   █ █  █ █ ▀█ 　 █▀▀ █  █ █▄▄▀ 　 █  █   █   █▀▀█ █▀▀ █▄▄▀ 　 █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█\n" + "\t\t\t\t█▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀");
-        while (modelView.getGameStatus().equals(GameStatus.waiting)) {
+        while (this.gameStatus.equals(GameStatus.waiting)) {
             //waits 500 milliseconds
             try {
                 TimeUnit.MILLISECONDS.sleep(400);

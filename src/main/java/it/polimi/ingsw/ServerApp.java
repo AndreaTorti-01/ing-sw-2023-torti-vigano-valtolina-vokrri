@@ -12,7 +12,6 @@ public class ServerApp {
     public static void main(String[] args) {
         Server server;
 
-
         try {
             server = new Server(new ServerSocket(Constants.serverPort));
         } catch (IOException e) {
