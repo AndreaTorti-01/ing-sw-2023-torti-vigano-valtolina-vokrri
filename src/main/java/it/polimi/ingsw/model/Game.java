@@ -24,6 +24,7 @@ public class Game extends Observable {
 
     public Game() {
         this.status = GameStatus.waiting;
+        this.bag = new Bag();
     }
 
 
@@ -36,8 +37,7 @@ public class Game extends Observable {
 
     public void initGame(String... playerNames) throws IllegalArgumentException {
 
-        this.bag = new Bag();
-        
+
         int numberOfPlayers = playerNames.length;
 
         if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
