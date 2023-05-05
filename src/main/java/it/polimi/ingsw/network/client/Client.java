@@ -29,6 +29,13 @@ public class Client implements Observer, Runnable {
         }
     }
 
+    public void update(Integer intMsg){
+        try {
+            outputStream.writeObject(intMsg);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void update(MoveMsg move) {
         try {
             outputStream.writeObject(move);

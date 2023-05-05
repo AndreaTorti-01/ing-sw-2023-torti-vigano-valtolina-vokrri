@@ -19,7 +19,7 @@ public class GameTest {
             playerNames.add(this.generateRandomString());
 
         Game model = new Game();
-        assertDoesNotThrow(() -> model.startGame(playerNames));
+        assertDoesNotThrow(() -> model.initModel(numberOfPlayers));
     }
 
     @Test
@@ -31,7 +31,7 @@ public class GameTest {
             playerNames.add(this.generateRandomString());
 
         Game model = new Game();
-        assertDoesNotThrow(() -> model.startGame(playerNames));
+        assertDoesNotThrow(() -> model.initModel(numberOfPlayers));
     }
 
     @Test
@@ -43,24 +43,26 @@ public class GameTest {
             playerNames.add(this.generateRandomString());
 
         Game model = new Game();
-        assertDoesNotThrow(() -> model.startGame(playerNames));
+        assertDoesNotThrow(() -> model.initModel(numberOfPlayers));
     }
 
     @Test
     void testGameWithIllegalNumberOfPlayers() {
         final List<String> playerNames = new LinkedList<>();
+
         playerNames.add(this.generateRandomString());
         Game model = new Game();
-        assertThrows(IllegalArgumentException.class, () -> model.startGame(playerNames));
+
 
         int numberOfPlayers = 5;
+        assertThrows(IllegalArgumentException.class, () -> model.initModel(numberOfPlayers));
         final List<String> playerNames2 = new LinkedList<>();
 
         for (int i = 0; i < numberOfPlayers; i++)
             playerNames.add(this.generateRandomString());
 
         Game model2 = new Game();
-        assertThrows(IllegalArgumentException.class, () -> model2.startGame(playerNames2));
+        assertThrows(IllegalArgumentException.class, () -> model2.initModel(numberOfPlayers));
     }
 
     private String generateRandomString() {

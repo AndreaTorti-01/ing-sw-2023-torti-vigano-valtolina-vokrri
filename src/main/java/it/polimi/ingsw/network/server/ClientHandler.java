@@ -43,6 +43,7 @@ public class ClientHandler extends Observable implements Runnable {
                     case "MoveMsg" -> notifyObservers((MoveMsg) msg);
                     case "ChatMsg" -> notifyObservers((ChatMsg) msg);
                     case "String" -> notifyObservers((String) msg);
+                    case "Integer" -> notifyObservers((Integer) msg);
                     default -> System.out.println("unsupported");
                 }
             } catch (IOException | ClassNotFoundException e) {

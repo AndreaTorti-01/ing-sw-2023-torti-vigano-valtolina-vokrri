@@ -8,17 +8,17 @@ import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class GameController {
     private final Game model;
-    int currentPlayer;
-    private final List<String> playerNames;
 
     public GameController(Game model) {
         this.model = model;
-        this.playerNames = new LinkedList<>();
+    }
+
+    public void initGame(Integer playerNum) {
+        this.model.initModel(playerNum);
     }
 
     public void makeMove(MoveMsg move) {
@@ -30,10 +30,7 @@ public class GameController {
     }
 
     public void addPlayer(String playerName) {
-        this.playerNames.add(playerName);
-        if (playerNames.size() == 3) {
-            this.model.startGame(playerNames);
-        }
+        this.model.addPlayer(playerName);
     }
 
 

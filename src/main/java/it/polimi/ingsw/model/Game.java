@@ -31,35 +31,35 @@ public class Game extends Observable {
     /**
      * This method initializes all the model elements too
      *
-     * @param playerNames the name of the players
-     * @throws IllegalArgumentException
      */
 
-    public void startGame(List<String> playerNames) throws IllegalArgumentException {
+    public void initModel(Integer playerNum) throws IllegalArgumentException {
 
-
-        int numberOfPlayers = playerNames.size();
-
-        if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
-            throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers);
+        if (playerNum < minNumberOfPlayers || playerNum > maxNumberOfPlayers)
+            throw new IllegalArgumentException("provided number of players (" + playerNum + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers);
         // initialization of a new Board
         try {
-            board = new Board(numberOfPlayers);
+            board = new Board(playerNum);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        // initialization of the players and corresponding personal goal cards
-        players = this.initPlayers(playerNames);
-
         // initialization of the common goal cards
         commonGoalCards = this.getRandomCommonGoalCards();
-        currentPlayer = players.get(0);
-        status = GameStatus.STARTED;
-
         // notifies listeners of the changes
         notifyObservers(new GameView(this));
     }
 
+    public void addPlayer(String playerName) {
+        //TODO add player to the game with the playername and generate its attributes
+
+        Player newPlayer = new Player(playerName);
+        //set a random personalgoalcard to the player
+        Random random = new Random();
+        int randomIndex = random.nextInt(0, numberOfPersonalGoalCardTypes);
+        PersonalGoalCard currentPersonalGoalCard = new PersonalGoalCard(randomIndex);
+        newPlayer.setPersonalGoalCard(currentPersonalGoalCard);
+        players.add(newPlayer);
+    }
     public Player getWinner() {
         return winner;
     }

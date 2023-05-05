@@ -111,7 +111,7 @@ public class Tui extends Observable implements RunnableView {
 
     private void askPlayerNumber() {
         Scanner scanner = new Scanner(System.in);
-        int playerNumber = 0;
+        Integer playerNumber = 0;
         boolean valid = false;
         while (!valid) {
             System.out.println("How many players are playing? (2-4)");
@@ -123,7 +123,7 @@ public class Tui extends Observable implements RunnableView {
                 printError("Invalid number or non-numeric input");
             }
         }
-        //TODO: send player number to server
+        notifyObservers(playerNumber);
     }
 
     private void clearConsole() {

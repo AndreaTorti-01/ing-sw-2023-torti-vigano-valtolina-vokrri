@@ -31,6 +31,10 @@ public class Lobby implements Observer {
         this.isGameStarted = true;
     }
 
+    public void update(Integer intMsg){
+        this.controller.initGame(intMsg);
+    }
+
     public void update(GameView modelView) {
         for (ClientHandler clientHandler : clientHandlers) {
             clientHandler.sendMsg(modelView);
