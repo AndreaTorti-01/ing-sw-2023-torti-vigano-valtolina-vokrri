@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.serializable.GameView;
 import it.polimi.ingsw.network.serializable.MoveMsg;
+import it.polimi.ingsw.network.serializable.TuiCommands;
 import it.polimi.ingsw.utils.Observable;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class Tui extends Observable implements RunnableView {
     String playerName;
     Player me;
     GameView modelView;
+
 
     GameStatus gameStatus = GameStatus.WAITING;
 
@@ -74,10 +76,9 @@ public class Tui extends Observable implements RunnableView {
         System.err.println("updated view!");
     }
 
-    //#######################################################################################################################################
-    //##################################################   FUNCTIONS   ######################################################################
-    //#######################################################################################################################################
-
+    /**
+     * Public method used to run internal private functions for testing purposes
+     */
     private void ScreenOutTest() {
         System.out.println("ScreenOutTest");
         //printBoard(new ItemCard[9][9], new boolean[9][9]);
@@ -85,6 +86,44 @@ public class Tui extends Observable implements RunnableView {
 
         //printWaitingScreen();
         clearConsole();
+    }
+
+    private void waitForCommands() {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        boolean validCommand = false;
+        //compared the textual input with the possible commands
+        for(TuiCommands command : TuiCommands.values()){
+            if(scanner.equals(command.getCommandName())){
+                validCommand = true;
+                break;
+            }
+        }
+        if(!validCommand)
+            printError("Invalid command");
+        else
+            handleCommand(input);
+    }
+
+    private void handleCommand(String input) {
+        //TODO handle the command types
+    }
+
+    private void askPlayerNumber() {
+        Scanner scanner = new Scanner(System.in);
+        int playerNumber = 0;
+        boolean valid = false;
+        while (!valid) {
+            System.out.println("How many players are playing? (2-4)");
+            try {
+                playerNumber = Integer.parseInt(scanner.nextLine());
+                if (playerNumber >= 2 && playerNumber <= 4) valid = true;
+                else printError("Invalid number of players");
+            } catch (NumberFormatException e) {
+                printError("Invalid number or non-numeric input");
+            }
+        }
+        //TODO: send player number to server
     }
 
     private void clearConsole() {
@@ -223,11 +262,9 @@ public class Tui extends Observable implements RunnableView {
     }
 
     private void printGameStatus() {
-        // Print the game status, including the main board and the shelves
+        // Prints the title, boards and shelves
         clearConsole();
-
         printMyShelfie();
-
         System.out.println("\n\n");
         printBoard(modelView.getBoard(), modelView.getBoardValid());
         System.out.println("\n\n");
@@ -293,9 +330,26 @@ public class Tui extends Observable implements RunnableView {
         clearConsole();
         printMyShelfie();
         printSeparee();
-        System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t\t\t\t\t\t█▀▀ ▄▀█ █▀▄▀█ █▀▀   █▀█ █ █ █▀▀ █▀█   █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▄█ █▀█ █ ▀ █ ██▄   █▄█ ▀▄▀ ██▄ █▀▄   ▄\n");
-        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t  >>  THE WINNER IS: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
+        if(playerName.equals(winnerName)) {
+            System.out.println(ANSI_PURPLE +"\t\t\t\t\t\t\t\t\t\t\t\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t█▀▄▀█▀▄▄▀█░▄▄▀█░▄▄▄█░▄▄▀█░▄▄▀█▄░▄█░██░█░██░▄▄▀█▄░▄██▄██▀▄▄▀█░▄▄▀█░▄▄\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t█░█▀█░██░█░██░█░█▄▀█░▀▀▄█░▀▀░██░██░██░█░██░▀▀░██░███░▄█░██░█░██░█▄▄▀\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t██▄███▄▄██▄██▄█▄▄▄▄█▄█▄▄█▄██▄██▄███▄▄▄█▄▄█▄██▄██▄██▄▄▄██▄▄██▄██▄█▄▄▄\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n\n\n\n" +
+                    ANSI_YELLOW+
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t ▄▄   ▄▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄    ▄     ▄ ▄▄▄▄▄▄▄ ▄▄    ▄    ▄▄ \n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █ █  █       █  █ █  █  █ █ ▄ █ █       █  █  █ █  █  █\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █▄█  █   ▄   █  █ █  █  █ ██ ██ █   ▄   █   █▄█ █  █  █\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t█       █  █ █  █  █▄█  █  █       █  █ █  █       █  █  █\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t█▄     ▄█  █▄█  █       █  █       █  █▄█  █  ▄    █  █▄▄█\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t  █   █ █       █       █  █   ▄   █       █ █ █   █   ▄▄ \n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t  █▄▄▄█ █▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█  █▄▄█ █▄▄█▄▄▄▄▄▄▄█▄█  █▄▄█  █▄▄█\n" + ANSI_RESET);
 
+
+        }else {
+            System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t\t\t\t\t\t█▀▀ ▄▀█ █▀▄▀█ █▀▀   █▀█ █ █ █▀▀ █▀█   █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▄█ █▀█ █ ▀ █ ██▄   █▄█ ▀▄▀ ██▄ █▀▄   ▄\n");
+            System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t  >>  THE WINNER IS: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
+        }
         printSeparee();
     }
 
