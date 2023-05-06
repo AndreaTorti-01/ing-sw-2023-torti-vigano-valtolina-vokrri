@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.network.serializable.ChatMsg;
-import it.polimi.ingsw.network.serializable.GameView;
+import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observer;
 
@@ -35,7 +35,7 @@ public class Lobby implements Observer {
         this.controller.initGame(intMsg);
     }
 
-    public void update(GameView modelView) {
+    public void update(GameViewMsg modelView) {
         for (ClientHandler clientHandler : clientHandlers) {
             clientHandler.sendMsg(modelView);
         }

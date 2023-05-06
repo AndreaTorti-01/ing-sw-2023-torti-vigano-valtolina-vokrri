@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
-import it.polimi.ingsw.network.serializable.GameView;
+import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.utils.Observable;
 
 import java.io.FileNotFoundException;
@@ -46,7 +46,7 @@ public class Game extends Observable {
         // initialization of the common goal cards
         commonGoalCards = this.getRandomCommonGoalCards();
         // notifies listeners of the changes
-        notifyObservers(new GameView(this));
+        notifyObservers(new GameViewMsg(this));
     }
 
     public void addPlayer(String playerName) {
@@ -201,6 +201,6 @@ public class Game extends Observable {
         this.status = GameStatus.ENDED;
 
         // notifies listeners of the changes
-        notifyObservers(new GameView(this));
+        notifyObservers(new GameViewMsg(this));
     }
 }
