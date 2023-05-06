@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.client.Client;
-import it.polimi.ingsw.network.serializable.GameView;
+import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.network.serializable.TuiCommands;
 import it.polimi.ingsw.utils.Observable;
@@ -20,7 +20,7 @@ import static it.polimi.ingsw.utils.Constants.*;
 public class Tui extends Observable implements RunnableView {
     String playerName;
     Player me;
-    GameView modelView;
+    GameViewMsg modelView;
 
 
     GameStatus gameStatus = GameStatus.WAITING;
@@ -70,7 +70,7 @@ public class Tui extends Observable implements RunnableView {
     }
 
     @Override
-    public void updateView(GameView modelView) {
+    public void updateView(GameViewMsg modelView) {
         this.modelView = modelView;
         this.gameStatus = modelView.getGameStatus();
         System.err.println("updated view!");
@@ -248,17 +248,17 @@ public class Tui extends Observable implements RunnableView {
         return column == column2 && (row == row2 + 1 || row == row2 - 1);
     }
 
-    private boolean isTakeable(GameView gameView, int row, int column) {
+    private boolean isTakeable(GameViewMsg gameViewMsg, int row, int column) {
         boolean free = false;
 
         if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns) return false;
 
         if (row == 0 || row == numberOfRows - 1) free = true;
         else if (column == 0 || column == numberOfColumns - 1) free = true;
-        else if (gameView.getBoard()[row - 1][column] == null || gameView.getBoard()[row + 1][column] == null || gameView.getBoard()[row][column - 1] == null || gameView.getBoard()[row][column + 1] == null)
+        else if (gameViewMsg.getBoard()[row - 1][column] == null || gameViewMsg.getBoard()[row + 1][column] == null || gameViewMsg.getBoard()[row][column - 1] == null || gameViewMsg.getBoard()[row][column + 1] == null)
             free = true;
 
-        return gameView.getBoardValid()[row][column] && gameView.getBoard()[row][column] != null && free;
+        return gameViewMsg.getBoardValid()[row][column] && gameViewMsg.getBoard()[row][column] != null && free;
     }
 
     private void printGameStatus() {

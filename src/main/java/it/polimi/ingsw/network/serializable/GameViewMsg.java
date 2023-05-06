@@ -10,7 +10,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-public class GameView implements Serializable {
+public class GameViewMsg implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private final ItemCard[][] board;
@@ -22,7 +22,7 @@ public class GameView implements Serializable {
     private final GameStatus status;
     private final Player winner;
 
-    public GameView(Game model) {
+    public GameViewMsg(Game model) {
         if (model == null) throw new IllegalArgumentException();
 
         if (model.getBoard() != null) {

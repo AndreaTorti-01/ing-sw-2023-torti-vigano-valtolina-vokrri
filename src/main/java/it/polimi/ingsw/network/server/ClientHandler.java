@@ -1,8 +1,6 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.network.serializable.ChatMsg;
-import it.polimi.ingsw.network.serializable.GameView;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observable;
 
@@ -24,6 +22,11 @@ public class ClientHandler extends Observable implements Runnable {
         }
     }
 
+    /**
+     * Manda il modelView al client a cui è accoppiato
+     *
+     * @param msg GameViewMsg
+     */
     public void sendMsg(Object msg) {
         try {
             outputStream.writeObject(msg);
@@ -32,6 +35,9 @@ public class ClientHandler extends Observable implements Runnable {
         }
     }
 
+    /**
+     * Inoltra i messaggi ricevuti alla Lobby
+     */
     @Override
     public void run() {
         do {

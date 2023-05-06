@@ -3752,7 +3752,7 @@
 										"$ref": "AAAAAAGH0aLudsBbe+I="
 									},
 									"edgePosition": 1,
-									"text": "+sends a gameView"
+									"text": "+sends a gameViewMsg"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -8168,7 +8168,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGH0ZkZ2FKXgIU="
 							},
-							"name": "sends a gameView",
+							"name": "sends a gameViewMsg",
 							"end1": {
 								"_type": "UMLAssociationEnd",
 								"_id": "AAAAAAGH0aLudsBYt4U=",

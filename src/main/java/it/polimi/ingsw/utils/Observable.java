@@ -29,7 +29,8 @@ public abstract class Observable {
                 Method m = o.getClass().getMethod("update", message.getClass());
                 m.invoke(o, message);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
+                System.err.println(e.getClass());
+                System.err.println(e.getMessage());
             }
         }
     }

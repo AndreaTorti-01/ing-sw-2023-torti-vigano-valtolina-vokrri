@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.network.serializable.ChatMsg;
-import it.polimi.ingsw.network.serializable.GameView;
+import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observer;
 import it.polimi.ingsw.view.RunnableView;
@@ -62,16 +62,16 @@ public class Client implements Observer, Runnable {
 
     @Override
     public void run() {
-        GameView modelView = null;
+        GameViewMsg modelView = null;
         new Thread(view).start();
 
         do {
             try {
-                modelView = (GameView) inputStream.readObject();
+                modelView = (GameViewMsg) inputStream.readObject();
                 view.updateView(modelView);
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println(e.getMessage());
             }
-        } while (modelView.getGameStatus().equals(GameStatus.ENDED));
+        } while (!modelView.getGameStatus().equals(GameStatus.ENDED));
     }
 }

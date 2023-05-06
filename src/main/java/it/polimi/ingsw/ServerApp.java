@@ -10,14 +10,31 @@ public class ServerApp {
     private static Server server;
 
     public static void main(String[] args) {
+        int serverPort = Constants.serverPort;
         Server server;
 
+        // parses the port at which the server should listen
+        // for connection requests from the clients
+        for (int i = 0; i < args.length - 1; i++) {
+            // if one of the arguments provided is "-p" or "--port",
+            if (args[i].equals("--port") || args[i].equals("-p")) {
+                try {
+                    serverPort = Integer.parseInt(args[i + 1]);
+                } catch (NumberFormatException | NullPointerException e) {
+                    System.err.println("Failed to parse the port at which the server should listen.\n Connecting to the default one");
+                }
+            }
+        }
+
         try {
-            server = new Server(new ServerSocket(Constants.serverPort));
+            // creates a new server socket for the client to connect
+            // at the specified port if provided, or at the default one
+            server = new Server(new ServerSocket(serverPort));
         } catch (IOException e) {
+            System.err.println("Failed to create the server socket");
             throw new RuntimeException(e);
         }
-        server.run();
 
+        server.run();
     }
 }
