@@ -23,13 +23,14 @@ public class GameController {
 
     public void makeMove(MoveMsg move) {
         ItemCard card;
-        for (List coords : move.getPickedCards()) {
+        for (List<Integer> coords : move.getPickedCards()) {
             card = model.getBoard().popCard((int) coords.get(0), (int) coords.get(1));
             model.getCurrentPlayer().getShelf().insert(move.getColumn(), card);
         }
     }
 
     public void addPlayer(String playerName) {
+        System.err.println("controller adding player " + playerName);
         this.model.addPlayer(playerName);
     }
 

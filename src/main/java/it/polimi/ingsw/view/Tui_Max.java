@@ -17,67 +17,69 @@ import java.util.concurrent.TimeUnit;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
-public class Tui extends Observable implements RunnableView {
-    private final Object lock = new Object();
-    GameStatus gameStatus = GameStatus.WAITING;
+public class Tui_Max extends Observable implements RunnableView {
     private String playerName;
     private Player me;
     private GameViewMsg modelView;
-    private State state = State.ASK_NAME;
-    public Tui() {
+    private boolean iAmLobbyLeader = false;
+
+
+
+
+    GameStatus gameStatus = GameStatus.WAITING;
+
+    public Tui_Max() {
         System.err.println("warning: created non observable tui");
     }
 
-    public Tui(Client client) {
+    public Tui_Max(Client client) {
         this.addObserver(client);
-    }
-
-    private State getState() {
-        synchronized (lock) {
-            return state;
-        }
-    }
-
-    private void setState(State state) {
-        synchronized (lock) {
-            this.state = state;
-            System.err.println("state changed to " + state);
-            lock.notifyAll();
-        }
     }
 
     @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
 
-        //noinspection InfiniteLoopStatement
+        /*
+        * these functions automatically call the notifyObservers method with their arguments
+        * askPlayerName() returns a string, saved as a class variable to be used in the future to check
+        * 1) if it's my turn
+        * 2) if i'm the lobby leader
+        * askPlayerNumber() can already handle non-integer format exceptions
+        * the player number is notified to observers to automatically start the game if the lobby reaches the requested number of players+
+         */
+        playerName = askPlayerName();
+        // wait for 0.5 seconds
+        try {
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(iAmLobbyLeader) askPlayerNumber();
+
+        clearConsole();
+
+        while (modelView == null) {
+            printWaitingScreen();
+        }
+
+        // while true loop
+        // waits for user input, if it is user turn
+        // sends input to Client
         while (true) {
-            this.playerName = askPlayerName();
 
+            if (modelView.getGameStatus() == GameStatus.WAITING) {
+                printWaitingScreen();
+                //doesn't return until the game is still in waiting status
 
-            while (getState() == State.ASK_NAME) {
-                synchronized (lock) {
-                    try {
-                        System.err.println("waiting for name");
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
-                    }
-                }
-            }
-
-            if (getState() == State.ASK_NUMBER) {
-                askPlayerNumber();
-            }
-
-            while (getState() == State.WAITING_FOR_PLAYERS) {
-                synchronized (lock) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
-                    }
-                }
+            } else if (modelView.getGameStatus() == GameStatus.STARTED) {
+                printGameStatus();
+                //checking if it's my turn
+                if (modelView.getCurrentPlayer().getName().equals(playerName)) pickCards();
+                //pickcards automatically calls the notifyObservers method with move message
+                //TODO: if we develop the game chat, its method will take place here!
+            } else {
+                printEndScreen(modelView.getWinner().getName());
             }
 
         }
@@ -85,14 +87,10 @@ public class Tui extends Observable implements RunnableView {
 
     @Override
     public void updateView(GameViewMsg modelView) {
-
         this.modelView = modelView;
-        if (modelView.getGameStatus() == GameStatus.WAITING) {
-            if (playerName.equals(modelView.getPlayers().get(0).getName()))
-                setState(State.ASK_NUMBER); // I am lobby leader
-            else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
-        }
-
+        this.gameStatus = modelView.getGameStatus();
+        if(playerName.equals(modelView.getPlayers().get(0).getName()))
+            iAmLobbyLeader = true;
         System.err.println("updated view!");
     }
 
@@ -113,14 +111,16 @@ public class Tui extends Observable implements RunnableView {
         String input = scanner.nextLine();
         boolean validCommand = false;
         //compared the textual input with the possible commands
-        for (TuiCommands command : TuiCommands.values()) {
-            if (scanner.equals(command.getCommandName())) {
+        for(TuiCommands command : TuiCommands.values()){
+            if(scanner.equals(command.getCommandName())){
                 validCommand = true;
                 break;
             }
         }
-        if (!validCommand) printError("Invalid command");
-        else handleCommand(input);
+        if(!validCommand)
+            printError("Invalid command");
+        else
+            handleCommand(input);
     }
 
     private void handleCommand(String input) {
@@ -348,11 +348,23 @@ public class Tui extends Observable implements RunnableView {
         clearConsole();
         printMyShelfie();
         printSeparee();
-        if (playerName.equals(winnerName)) {
-            System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t\t\t\t\t\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▀▄▀█▀▄▄▀█░▄▄▀█░▄▄▄█░▄▄▀█░▄▄▀█▄░▄█░██░█░██░▄▄▀█▄░▄██▄██▀▄▄▀█░▄▄▀█░▄▄\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█░█▀█░██░█░██░█░█▄▀█░▀▀▄█░▀▀░██░██░██░█░██░▀▀░██░███░▄█░██░█░██░█▄▄▀\n" + "\t\t\t\t\t\t\t\t\t\t\t\t██▄███▄▄██▄██▄█▄▄▄▄█▄█▄▄█▄██▄██▄███▄▄▄█▄▄█▄██▄██▄██▄▄▄██▄▄██▄██▄█▄▄▄\n" + "\t\t\t\t\t\t\t\t\t\t\t\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n\n\n\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t\t\t\t\t\t ▄▄   ▄▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄    ▄     ▄ ▄▄▄▄▄▄▄ ▄▄    ▄    ▄▄ \n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █ █  █       █  █ █  █  █ █ ▄ █ █       █  █  █ █  █  █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █▄█  █   ▄   █  █ █  █  █ ██ ██ █   ▄   █   █▄█ █  █  █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t█       █  █ █  █  █▄█  █  █       █  █ █  █       █  █  █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t█▄     ▄█  █▄█  █       █  █       █  █▄█  █  ▄    █  █▄▄█\n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t  █   █ █       █       █  █   ▄   █       █ █ █   █   ▄▄ \n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t  █▄▄▄█ █▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█  █▄▄█ █▄▄█▄▄▄▄▄▄▄█▄█  █▄▄█  █▄▄█\n" + ANSI_RESET);
+        if(playerName.equals(winnerName)) {
+            System.out.println(ANSI_PURPLE +"\t\t\t\t\t\t\t\t\t\t\t\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t█▀▄▀█▀▄▄▀█░▄▄▀█░▄▄▄█░▄▄▀█░▄▄▀█▄░▄█░██░█░██░▄▄▀█▄░▄██▄██▀▄▄▀█░▄▄▀█░▄▄\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t█░█▀█░██░█░██░█░█▄▀█░▀▀▄█░▀▀░██░██░██░█░██░▀▀░██░███░▄█░██░█░██░█▄▄▀\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t██▄███▄▄██▄██▄█▄▄▄▄█▄█▄▄█▄██▄██▄███▄▄▄█▄▄█▄██▄██▄██▄▄▄██▄▄██▄██▄█▄▄▄\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n\n\n\n" +
+                    ANSI_YELLOW+
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t ▄▄   ▄▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄    ▄     ▄ ▄▄▄▄▄▄▄ ▄▄    ▄    ▄▄ \n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █ █  █       █  █ █  █  █ █ ▄ █ █       █  █  █ █  █  █\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █▄█  █   ▄   █  █ █  █  █ ██ ██ █   ▄   █   █▄█ █  █  █\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t█       █  █ █  █  █▄█  █  █       █  █ █  █       █  █  █\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t█▄     ▄█  █▄█  █       █  █       █  █▄█  █  ▄    █  █▄▄█\n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t  █   █ █       █       █  █   ▄   █       █ █ █   █   ▄▄ \n" +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t\t  █▄▄▄█ █▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█  █▄▄█ █▄▄█▄▄▄▄▄▄▄█▄█  █▄▄█  █▄▄█\n" + ANSI_RESET);
 
 
-        } else {
+        }else {
             System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t\t\t\t\t\t█▀▀ ▄▀█ █▀▄▀█ █▀▀   █▀█ █ █ █▀▀ █▀█   █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▄█ █▀█ █ ▀ █ ██▄   █▄█ ▀▄▀ ██▄ █▀▄   ▄\n");
             System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t  >>  THE WINNER IS: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
         }
@@ -422,6 +434,7 @@ public class Tui extends Observable implements RunnableView {
         System.out.print(ANSI_GREY + " ░░░ " + ANSI_RESET + "║");
     }
 
+
     private void printShelves() {
         int numOfPlayers = modelView.getPlayers().size();
 
@@ -490,9 +503,5 @@ public class Tui extends Observable implements RunnableView {
         System.out.println("\t\t\t\t\t\t\t\t\t\t\t╚═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╝");
         System.out.println("\t\t\t\t\t\t\t\t\t\t\t   0     1     2     3     4     5     6     7     8");
 
-    }
-
-    private enum State {
-        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY
     }
 }

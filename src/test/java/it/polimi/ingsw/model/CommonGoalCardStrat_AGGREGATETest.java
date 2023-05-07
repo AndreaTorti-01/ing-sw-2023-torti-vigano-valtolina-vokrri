@@ -22,7 +22,7 @@ class CommonGoalCardStrat_AGGREGATETest {
             if (i + 1 < 10) fileName = String.format(folderName + "/TEST_FALSE_0%d" + fileExtension, i + 1);
             else fileName = String.format(folderName + "/TEST_FALSE_%d" + fileExtension, i + 1);
 
-            Shelf shelf = new Shelf(fileName);
+            Shelf shelf = new ShelfFactory().createShelf(fileName);
 
             assertFalse(commonGoalCardStrat.checkPattern(shelf));
         }
@@ -32,7 +32,7 @@ class CommonGoalCardStrat_AGGREGATETest {
             if (i + 1 < 10) fileName = String.format(folderName + "TEST_TRUE_0%d" + fileExtension, i + 1);
             else fileName = String.format(folderName + "TEST_TRUE_%d" + fileExtension, i + 1);
 
-            Shelf shelf = new Shelf(fileName);
+            Shelf shelf = new ShelfFactory().createShelf(fileName);
 
             assertTrue(commonGoalCardStrat.checkPattern(shelf));
         }
@@ -49,7 +49,7 @@ class CommonGoalCardStrat_AGGREGATETest {
             if (i + 1 < 10) fileName = String.format(folderName + "/TEST_FALSE_0%d" + fileExtension, i + 1);
             else fileName = String.format(folderName + "/TEST_FALSE_%d" + fileExtension, i + 1);
 
-            Shelf shelf = new Shelf(fileName);
+            Shelf shelf = new ShelfFactory().createShelf(fileName);
 
             assertFalse(commonGoalCardStrat.checkPattern(shelf));
         }
@@ -59,7 +59,7 @@ class CommonGoalCardStrat_AGGREGATETest {
             if (i + 1 < 10) fileName = String.format(folderName + "TEST_TRUE_0%d" + fileExtension, i + 1);
             else fileName = String.format(folderName + "TEST_TRUE_%d" + fileExtension, i + 1);
 
-            Shelf shelf = new Shelf(fileName);
+            Shelf shelf = new ShelfFactory().createShelf(fileName);
 
             assertTrue(commonGoalCardStrat.checkPattern(shelf));
         }

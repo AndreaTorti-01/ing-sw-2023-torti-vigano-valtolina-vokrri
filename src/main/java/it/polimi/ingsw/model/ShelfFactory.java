@@ -1,20 +1,19 @@
-package it.polimi.ingsw.utils;
+package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.ItemCards.ItemType;
-import it.polimi.ingsw.model.Shelf;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class FileUtils {
-    static public Shelf getShelfFromFile(String fileName) {
-        ItemCard[][] pattern = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
-
+public class ShelfFactory {
+    public Shelf createShelf(String fileName) {
+        Shelf shelf = new Shelf();
         try {
-            InputStream inputStream = FileUtils.class.getResourceAsStream(fileName);
+            InputStream inputStream = this.getClass().getResourceAsStream(fileName);
+            assert inputStream != null;
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
             int row = 0;
@@ -26,7 +25,7 @@ public class FileUtils {
 
                     // gets the type of the ItemCard given the abbreviation found in the file
                     // and inserts it in the correct position of the matrix
-                    pattern[row][column] = new ItemCard(ItemType.getItemTypeFromAbbreviation(currentChar), 0);
+                    shelf.setCardAt(row, column, new ItemCard(ItemType.getItemTypeFromAbbreviation(currentChar), 0));
                 }
 
                 // goes to next line
@@ -36,7 +35,6 @@ public class FileUtils {
         } catch (IOException | NullPointerException e) {
             throw new RuntimeException(e);
         }
-
-        return new Shelf(pattern);
+        return shelf;
     }
 }

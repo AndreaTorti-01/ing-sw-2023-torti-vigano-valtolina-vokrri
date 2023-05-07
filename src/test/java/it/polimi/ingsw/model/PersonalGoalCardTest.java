@@ -17,7 +17,8 @@ class PersonalGoalCardTest {
     @Test
     void testPattern() {
         for (int i = 0; i < Constants.numberOfPersonalGoalCardTypes; i++) {
-            PersonalGoalCard currentPersonalGoalCard = new PersonalGoalCard(i);
+            PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+            PersonalGoalCard currentPersonalGoalCard = personalGoalCardFactory.createPersonalGoalCard(i);
             ItemType[][] pattern = currentPersonalGoalCard.getPattern();
 
             try {
@@ -49,7 +50,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern0() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(0);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(0);
 
         assertEquals(personalGoalCard.getPattern()[0][2], ItemType.BOOKS);
         assertEquals(personalGoalCard.getPattern()[1][1], ItemType.PLANTS);
@@ -61,7 +63,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern1() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(1);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(1);
 
         assertEquals(personalGoalCard.getPattern()[0][0], ItemType.PLANTS);
         assertEquals(personalGoalCard.getPattern()[0][2], ItemType.FRAMES);
@@ -73,7 +76,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern2() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(2);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(2);
 
         assertEquals(personalGoalCard.getPattern()[1][1], ItemType.PLANTS);
         assertEquals(personalGoalCard.getPattern()[2][0], ItemType.CATS);
@@ -85,7 +89,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern3() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(3);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(3);
 
         assertEquals(personalGoalCard.getPattern()[1][0], ItemType.FRAMES);
         assertEquals(personalGoalCard.getPattern()[1][3], ItemType.GAMES);
@@ -97,7 +102,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern4() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(4);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(4);
 
         assertEquals(personalGoalCard.getPattern()[0][4], ItemType.GAMES);
         assertEquals(personalGoalCard.getPattern()[2][0], ItemType.TROPHIES);
@@ -109,7 +115,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern5() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(5);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(5);
 
         assertEquals(personalGoalCard.getPattern()[1][1], ItemType.TROPHIES);
         assertEquals(personalGoalCard.getPattern()[3][1], ItemType.FRAMES);
@@ -121,7 +128,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern6() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(6);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(6);
 
         assertEquals(personalGoalCard.getPattern()[0][2], ItemType.TROPHIES);
         assertEquals(personalGoalCard.getPattern()[0][4], ItemType.CATS);
@@ -133,7 +141,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern7() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(7);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(7);
 
         assertEquals(personalGoalCard.getPattern()[0][0], ItemType.CATS);
         assertEquals(personalGoalCard.getPattern()[1][3], ItemType.FRAMES);
@@ -145,7 +154,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern8() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(8);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(8);
 
         assertEquals(personalGoalCard.getPattern()[0][4], ItemType.FRAMES);
         assertEquals(personalGoalCard.getPattern()[1][1], ItemType.CATS);
@@ -157,7 +167,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern9() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(9);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(9);
 
         assertEquals(personalGoalCard.getPattern()[0][2], ItemType.GAMES);
         assertEquals(personalGoalCard.getPattern()[2][2], ItemType.CATS);
@@ -169,7 +180,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern10() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(10);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(10);
 
         assertEquals(personalGoalCard.getPattern()[0][4], ItemType.TROPHIES);
         assertEquals(personalGoalCard.getPattern()[1][1], ItemType.GAMES);
@@ -181,7 +193,8 @@ class PersonalGoalCardTest {
 
     @Test
     void testGetPattern11() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(11);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(11);
 
         assertEquals(personalGoalCard.getPattern()[0][2], ItemType.PLANTS);
         assertEquals(personalGoalCard.getPattern()[1][1], ItemType.BOOKS);
@@ -193,20 +206,22 @@ class PersonalGoalCardTest {
 
     @Test
     void testIllegalIndex() {
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
         assertThrows(
                 IndexOutOfBoundsException.class,
-                () -> new PersonalGoalCard(-1)
+                () -> personalGoalCardFactory.createPersonalGoalCard(-1)
         );
 
         assertThrows(
                 IndexOutOfBoundsException.class,
-                () -> new PersonalGoalCard(12)
+                () -> personalGoalCardFactory.createPersonalGoalCard(12)
         );
     }
 
     @Test
     void testToString() {
-        PersonalGoalCard personalGoalCard = new PersonalGoalCard(1);
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        PersonalGoalCard personalGoalCard = personalGoalCardFactory.createPersonalGoalCard(1);
         System.out.println(personalGoalCard);
     }
 }

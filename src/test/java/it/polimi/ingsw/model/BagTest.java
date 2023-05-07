@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.utils.Constants;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class BagTest {
     @Test
-    void BagTest() {
+    void BagTest1() {
         Bag bag1 = new Bag();
         assertEquals(Constants.maxNumberOfItemCards, bag1.getCardsInside().size());
     }
@@ -25,9 +26,7 @@ class BagTest {
 
         // initialize a set with all the possible item types
         Set<ItemType> itemTypes = new HashSet<>();
-        for (ItemType it : ItemType.values()) {
-            itemTypes.add(it);
-        }
+        Collections.addAll(itemTypes, ItemType.values());
 
         // draw 1 card and check that the size of the bag is 131, then remove the type of the card from the set
         ic = bag.drawCard();
@@ -40,89 +39,6 @@ class BagTest {
             assertEquals(Constants.numberOfItemCardsWithSameType, bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(it)).toList().size());
         }
         assertEquals(21, bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(extracted)).toList().size());
-
-        // TODO accorciare (fatto, sopra)
-        /*
-        if (ic.getType().equals(ItemType.BOOKS)) {
-            int a = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.CATS)).toList().size();
-            assertEquals(22, a);
-            int b = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.FRAMES)).toList().size();
-            assertEquals(22, b);
-            int c = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.BOOKS)).toList().size();
-            assertEquals(21, c);
-            int d = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.TROPHIES)).toList().size();
-            assertEquals(22, d);
-            int e = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.GAMES)).toList().size();
-            assertEquals(22, e);
-            int f = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.PLANTS)).toList().size();
-            assertEquals(22, f);
-        } else if (ic.getType().equals(ItemType.CATS)) {
-            int a = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.CATS)).toList().size();
-            assertEquals(21, a);
-            int b = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.FRAMES)).toList().size();
-            assertEquals(22, b);
-            int c = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.BOOKS)).toList().size();
-            assertEquals(22, c);
-            int d = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.TROPHIES)).toList().size();
-            assertEquals(22, d);
-            int e = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.GAMES)).toList().size();
-            assertEquals(22, e);
-            int f = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.PLANTS)).toList().size();
-            assertEquals(22, f);
-        } else if (ic.getType().equals(ItemType.TROPHIES)) {
-            int a = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.CATS)).toList().size();
-            assertEquals(22, a);
-            int b = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.FRAMES)).toList().size();
-            assertEquals(22, b);
-            int c = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.BOOKS)).toList().size();
-            assertEquals(22, c);
-            int d = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.TROPHIES)).toList().size();
-            assertEquals(21, d);
-            int e = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.GAMES)).toList().size();
-            assertEquals(22, e);
-            int f = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.PLANTS)).toList().size();
-            assertEquals(22, f);
-        } else if (ic.getType().equals(ItemType.PLANTS)) {
-            int a = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.CATS)).toList().size();
-            assertEquals(22, a);
-            int b = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.FRAMES)).toList().size();
-            assertEquals(22, b);
-            int c = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.BOOKS)).toList().size();
-            assertEquals(22, c);
-            int d = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.TROPHIES)).toList().size();
-            assertEquals(22, d);
-            int e = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.GAMES)).toList().size();
-            assertEquals(22, e);
-            int f = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.PLANTS)).toList().size();
-            assertEquals(21, f);
-        } else if (ic.getType().equals(ItemType.GAMES)) {
-            int a = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.CATS)).toList().size();
-            assertEquals(22, a);
-            int b = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.FRAMES)).toList().size();
-            assertEquals(22, b);
-            int c = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.BOOKS)).toList().size();
-            assertEquals(22, c);
-            int d = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.TROPHIES)).toList().size();
-            assertEquals(22, d);
-            int e = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.GAMES)).toList().size();
-            assertEquals(21, e);
-            int f = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.PLANTS)).toList().size();
-            assertEquals(22, f);
-        } else if (ic.getType().equals(ItemType.FRAMES)) {
-            int a = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.CATS)).toList().size();
-            assertEquals(22, a);
-            int b = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.FRAMES)).toList().size();
-            assertEquals(21, b);
-            int c = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.BOOKS)).toList().size();
-            assertEquals(22, c);
-            int d = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.TROPHIES)).toList().size();
-            assertEquals(22, d);
-            int e = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.GAMES)).toList().size();
-            assertEquals(22, e);
-            int f = bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(ItemType.PLANTS)).toList().size();
-            assertEquals(22, f);
-        }
-        */
 
         // draw 131 cards and check the bag is empty
         for (int i = 0; i < 131; i++) {

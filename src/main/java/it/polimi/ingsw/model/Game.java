@@ -19,12 +19,12 @@ public class Game extends Observable {
     private Player currentPlayer;
     private final Bag bag;
     private Board board;
-    private GameStatus status;
+    private GameStatus status = GameStatus.WAITING;
     private Player winner;
 
     public Game() {
-        this.status = GameStatus.WAITING;
         this.bag = new Bag();
+        this.players = new ArrayList<>();
     }
 
 
@@ -50,16 +50,22 @@ public class Game extends Observable {
     }
 
     public void addPlayer(String playerName) {
-        //TODO add player to the game with the playername and generate its attributes
+        System.err.println("model adding player " + playerName);
 
+        // init player
         Player newPlayer = new Player(playerName);
         //set a random personalgoalcard to the player
-        Random random = new Random();
-        int randomIndex = random.nextInt(0, numberOfPersonalGoalCardTypes);
-        PersonalGoalCard currentPersonalGoalCard = new PersonalGoalCard(randomIndex);
-        newPlayer.setPersonalGoalCard(currentPersonalGoalCard);
+        int randomIndex = new Random().nextInt(0, numberOfPersonalGoalCardTypes);
+
+        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+        newPlayer.setPersonalGoalCard(personalGoalCardFactory.createPersonalGoalCard(randomIndex));
+        // add player to the list
         players.add(newPlayer);
+
+        // notify lobby
+        this.notifyObservers(new GameViewMsg(this));
     }
+
     public Player getWinner() {
         return winner;
     }
@@ -89,7 +95,8 @@ public class Game extends Observable {
             int randomIndex = random.nextInt(0, indexes.size());
             indexes.remove(randomIndex);
 
-            PersonalGoalCard currentPersonalGoalCard = new PersonalGoalCard(randomIndex);
+            PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
+            PersonalGoalCard currentPersonalGoalCard = personalGoalCardFactory.createPersonalGoalCard(randomIndex);
             Player player = new Player(playerName);
 
             // gives to the player the corresponding personal goal card

@@ -37,6 +37,7 @@ public class Lobby implements Observer {
 
     public void update(GameViewMsg modelView) {
         for (ClientHandler clientHandler : clientHandlers) {
+            System.err.println("sending modelView to clients");
             clientHandler.sendMsg(modelView);
         }
     }
@@ -50,7 +51,7 @@ public class Lobby implements Observer {
     }
 
     public void update(String playerName) {
-        System.err.println("added player " + playerName);
+        System.err.println("adding player " + playerName);
         controller.addPlayer(playerName);
     }
 }

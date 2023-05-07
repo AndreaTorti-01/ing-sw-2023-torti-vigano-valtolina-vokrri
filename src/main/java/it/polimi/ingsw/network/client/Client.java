@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Objects;
 
 public class Client implements Observer, Runnable {
     private final ObjectInputStream inputStream;
@@ -72,6 +73,6 @@ public class Client implements Observer, Runnable {
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println(e.getMessage());
             }
-        } while (!modelView.getGameStatus().equals(GameStatus.ENDED));
+        } while (true);
     }
 }

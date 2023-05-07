@@ -1,13 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.ItemCards.ItemCard;
-import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.utils.Constants;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
@@ -23,7 +17,6 @@ public class Shelf {
      */
     public Shelf() {
         this.items = new ItemCard[numberOfRows][numberOfColumns];
-        this.isACopy = false;
     }
 
     /**
@@ -47,46 +40,6 @@ public class Shelf {
                 this.items[row][column] = new ItemCard(currentCard.getType(), 0);
             }
         }
-    }
-
-    /**
-     * Creates a new Shelf from the given file containing a representation of an ItemCards matrix
-     *
-     * @param fileName the name of the file containing a matrix of ItemCards
-     */
-    public Shelf(String fileName) {
-        // initializes items to a null matrix of
-        // Constants.numberOfRows rows and Constants.numberOfColumns columns
-        this();
-
-        try {
-            InputStream inputStream = this.getClass().getResourceAsStream(fileName);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            int row = 0;
-            String line = reader.readLine();
-            while (line != null) {
-                for (int column = 0; column < line.length(); column++) {
-                    char currentChar = line.charAt(column);
-                    if (currentChar == '*') continue;
-
-                    // gets the type of the ItemCard given the abbreviation found in the file
-                    // and inserts it in the correct position of the matrix
-                    this.items[row][column] = new ItemCard(
-                            ItemType.getItemTypeFromAbbreviation(currentChar),
-                            0
-                    );
-                }
-
-                // goes to next line
-                line = reader.readLine();
-                row++;
-            }
-        } catch (IOException | NullPointerException e) {
-            throw new RuntimeException(e);
-        }
-
-        this.isACopy = false;
     }
 
     /**
