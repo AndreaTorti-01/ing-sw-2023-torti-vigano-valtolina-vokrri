@@ -19,8 +19,9 @@ public class Game extends Observable {
     private List<Player> players;
     private Player currentPlayer;
     private Board board;
-    private GameStatus status = GameStatus.WAITING;
+    private GameStatus gameStatus = GameStatus.WAITING;
     private Player winner;
+    private int numberOfPlayers;
 
     public Game() {
         this.bag = new Bag();
@@ -28,12 +29,15 @@ public class Game extends Observable {
     }
 
     /**
-     * This method initializes all the model elements too
+     * This method initializes all the model elements
      */
     public void initModel(Integer numberOfPlayers) throws IllegalArgumentException {
 
+        // checking the numberOfPlayers is valid and setting it in the model
         if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
             throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers);
+        this.numberOfPlayers = numberOfPlayers;
+
         // initialization of a new Board
         try {
             board = new Board(numberOfPlayers);
@@ -42,7 +46,11 @@ public class Game extends Observable {
         }
 
         // initialization of the common goal cards
-        commonGoalCards = this.getRandomCommonGoalCards(numberOfPlayers);
+        commonGoalCards = this.getRandomCommonGoalCards();
+
+        // current player is first player
+        this.currentPlayer = players.get(0);
+
         // notifies listeners of the changes
         notifyObservers(new GameViewMsg(this));
     }
@@ -52,13 +60,18 @@ public class Game extends Observable {
 
         // init player
         Player newPlayer = new Player(playerName);
+
         //set a random personalgoalcard to the player
         int randomIndex = new Random().nextInt(0, numberOfPersonalGoalCardTypes);
+        newPlayer.setPersonalGoalCard(new PersonalGoalCardFactory().createPersonalGoalCard(randomIndex));
 
-        PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
-        newPlayer.setPersonalGoalCard(personalGoalCardFactory.createPersonalGoalCard(randomIndex));
         // add player to the list
         players.add(newPlayer);
+
+        // check if the player cap is reached and eventually start the game!
+        if (numberOfPlayers != 0 && numberOfPlayers == players.size()) {
+            this.gameStatus = GameStatus.STARTED;
+        }
 
         // notify lobby
         this.notifyObservers(new GameViewMsg(this));
@@ -153,7 +166,7 @@ public class Game extends Observable {
     /**
      * @return an arraylist of random CommonGoalCards.
      */
-    private List<CommonGoalCard> getRandomCommonGoalCards(int numberOfPlayers) {
+    private List<CommonGoalCard> getRandomCommonGoalCards() {
         List<CommonGoalCard> commonGoalCards = new ArrayList<>(numberOfCommonGoalCardsInGame);
 
         // initializes an array of indexes, then used to get two random indexes without duplicates
@@ -195,16 +208,20 @@ public class Game extends Observable {
      * @return the game status
      */
     public GameStatus getGameStatus() {
-        return status;
+        return gameStatus;
     }
 
     /**
      * sets the game to ended
      */
     public void endGame() {
-        this.status = GameStatus.ENDED;
+        this.gameStatus = GameStatus.ENDED;
 
         // notifies listeners of the changes
         notifyObservers(new GameViewMsg(this));
+    }
+
+    public void advancePlayerTurn() {
+        currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % numberOfPlayers);
     }
 }

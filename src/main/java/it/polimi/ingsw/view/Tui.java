@@ -3,17 +3,15 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
-import it.polimi.ingsw.network.serializable.TuiCommands;
 import it.polimi.ingsw.utils.Observable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
@@ -25,9 +23,6 @@ public class Tui extends Observable implements RunnableView {
     private GameViewMsg modelView;
     private State state = State.ASK_NAME;
 
-    public Tui() {
-        System.err.println("warning: created non observable tui");
-    }
 
     public Tui(Client client) {
         this.addObserver(client);
@@ -81,54 +76,59 @@ public class Tui extends Observable implements RunnableView {
         }
         //noinspection InfiniteLoopStatement
         while (true) {
+            while (getState() == State.WAITING_FOR_TURN) {
+                this.printGameStatus(); // TODO
+                synchronized (lock) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
+                    }
+                }
+            }
 
+            while (getState() == State.PLAY) {
+                this.printGameStatus(); // TODO
+                this.pickCards();
+                synchronized (lock) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
+                    }
+                }
+            }
         }
     }
 
+    /**
+     * updates the view with the new model state
+     *
+     * @param modelView which contains a representation of the model state
+     */
     @Override
     public void updateView(GameViewMsg modelView) {
         this.modelView = modelView;
 
-        if (!playerName.equals("") && modelView.getGameStatus() == GameStatus.WAITING) {
+        // the game is waiting for players
+        if (!playerName.equals("") && modelView.getGameStatus().equals(GameStatus.WAITING)) {
             if (playerName.equals(modelView.getPlayers().get(0).getName()))
                 setState(State.ASK_NUMBER); // I am lobby leader
             else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
+        }
+        // the game has started
+        else if (modelView.getGameStatus().equals(GameStatus.STARTED)) {
+            if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
+                setState(State.PLAY); // it's my turn
+            } else setState(State.WAITING_FOR_TURN); // it's not my turn
         }
 
         System.err.println("updated view!");
     }
 
     /**
-     * Public method used to run internal private functions for testing purposes
+     * takes care of notifying observers
      */
-    private void ScreenOutTest() {
-        System.out.println("ScreenOutTest");
-        //printBoard(new ItemCard[9][9], new boolean[9][9]);
-        printEndScreen("Diego");
-
-        //printWaitingScreen();
-        clearConsole();
-    }
-
-    private void waitForCommands() {
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        boolean validCommand = false;
-        //compared the textual input with the possible commands
-        for (TuiCommands command : TuiCommands.values()) {
-            if (scanner.equals(command.getCommandName())) {
-                validCommand = true;
-                break;
-            }
-        }
-        if (!validCommand) printError("Invalid command");
-        else handleCommand(input);
-    }
-
-    private void handleCommand(String input) {
-        //TODO handle the command types
-    }
-
     private void askPlayerNumber() {
         Scanner scanner = new Scanner(System.in);
         Integer playerNumber = 0;
@@ -146,21 +146,13 @@ public class Tui extends Observable implements RunnableView {
         notifyObservers(playerNumber);
     }
 
-    private void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        try {
-            if (System.getProperty("os.name").contains("Windows"))
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            else Runtime.getRuntime().exec("clear");
-        } catch (IOException | InterruptedException ex) {
-        }
-    }
-
+    /**
+     * takes care of notifying observer
+     */
     private void pickCards() {
         Scanner scanner = new Scanner(System.in);
-        List<ItemCard> picked = new ArrayList<ItemCard>();
-        List<List<Integer>> pickedCoords = new ArrayList<List<Integer>>();
+        List<ItemCard> picked = new ArrayList<>();
+        List<List<Integer>> pickedCoords = new ArrayList<>();
         MoveMsg msg;
 
         System.out.println("You can peek cards from the board");
@@ -282,90 +274,23 @@ public class Tui extends Observable implements RunnableView {
     }
 
     private void printGameStatus() {
-        // Prints the title, boards and shelves
-        clearConsole();
-        printMyShelfie();
-        System.out.println("\n\n");
         printBoard(modelView.getBoard(), modelView.getBoardValid());
-        System.out.println("\n\n");
+        System.out.println("\n");
         printShelves();
-        System.out.println("\n\n");
+        System.out.println("\n");
     }
 
-    private void printSeparee() {
-        System.out.println(ANSI_YELLOW + "\n\n" + "\t\t\t\t╔══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╗\n" + "\t\t\t\t╚══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╝" + ANSI_RESET + "\n\n");
-    }
-
-    private void printWaitingScreen() {
-        int iter = 0;
-
-
-        //clear the console screen
-        clearConsole();
-
-
-        System.out.println("\n" + ANSI_YELLOW +
-
-                "\t\t\t\t\t\t\t\t\t\t\t\t█   █ █▀▀ █   █▀▀ █▀▀█ █▀▄▀█ █▀▀ 　 ▀▀█▀▀ █▀▀█\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█ █ █ █▀▀ █   █   █  █ █ ▀ █ █▀▀ 　   █   █  █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▄▀▄█ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀   ▀ ▀▀▀ 　   █   ▀▀▀▀\n\n\n");
-
-        printMyShelfie();
-
-        System.out.println("\n\n\n" + ANSI_CYAN + "\n \n \n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  developed by gc-33" + ANSI_RESET);
-        System.out.println(ANSI_CYAN + "\n \t\t\t\t\t\t\t\t\t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
-
-        System.out.print("\n\n\n" + "\t\t\t\t█   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █▀▀█ 　 █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█ 　 █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀\n" + "\t\t\t\t█ █ █ █▄▄█ █   █   █ █  █ █ ▀█ 　 █▀▀ █  █ █▄▄▀ 　 █  █   █   █▀▀█ █▀▀ █▄▄▀ 　 █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█\n" + "\t\t\t\t█▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀");
-        while (this.gameStatus.equals(GameStatus.WAITING)) {
-            //waits 500 milliseconds
-            try {
-                TimeUnit.MILLISECONDS.sleep(400);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if (iter == 0) {
-                System.out.print(ANSI_YELLOW + "   ▄");
-                iter = 1;
-            } else if (iter == 1) {
-                System.out.print(ANSI_RED + "   ▄");
-                iter = 2;
-            } else if (iter == 2) {
-                System.out.print(ANSI_CYAN + "   ▄");
-                iter = 3;
-            } else {
-                System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b");
-                iter = 0;
-            }
-        }
-
-    }
-
-    private void printMyShelfie() {
-        System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t███╗   ███╗" + ANSI_PURPLE + "██╗   ██╗  " + ANSI_GREEN + " ██████╗" + ANSI_CYAN + "██╗  ██╗" + ANSI_RED + "███████╗" + ANSI_YELLOW + "██╗     " + ANSI_PURPLE + "███████╗" + ANSI_GREEN + "██╗" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t████╗ ████║" + ANSI_PURPLE + "╚██╗ ██╔╝  " + ANSI_GREEN + "██╔════╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "██╔════╝" + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔════╝" + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔════╝  " + ANSI_RED + "██║\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t██╔████╔██║" + ANSI_PURPLE + " ╚████╔╝   " + ANSI_GREEN + "╚█████╗ " + ANSI_CYAN + "███████║" + ANSI_RED + "█████╗  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "█████╗  " + ANSI_GREEN + "██║" + ANSI_CYAN + "█████╗    " + ANSI_RED + "██║\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║╚██╔╝██║" + ANSI_PURPLE + "  ╚██╔╝    " + ANSI_GREEN + " ╚═══██╗" + ANSI_CYAN + "██╔══██║" + ANSI_RED + "██╔══╝  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔══╝  " + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔══╝    " + ANSI_RED + "╚═╝\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║ ╚═╝ ██║" + ANSI_PURPLE + "   ██║     " + ANSI_GREEN + "██████╔╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "███████╗" + ANSI_YELLOW + "███████╗" + ANSI_PURPLE + "██║     " + ANSI_GREEN + "██║" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t╚═╝     ╚═╝" + ANSI_PURPLE + "   ╚═╝     " + ANSI_GREEN + "╚═════╝ " + ANSI_CYAN + "╚═╝  ╚═╝" + ANSI_RED + "╚══════╝" + ANSI_YELLOW + "╚══════╝" + ANSI_PURPLE + "╚═╝     " + ANSI_GREEN + "╚═╝" + ANSI_CYAN + "╚══════╝  " + ANSI_RED + "╚═╝" + ANSI_RESET);
-    }
 
     private void printEndScreen(String winnerName) {
-        // Print the end screen, showing the winner
-        int iteration = 0;
-
-        clearConsole();
-        printMyShelfie();
-        printSeparee();
-        if (playerName.equals(winnerName)) {
-            System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t\t\t\t\t\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▀▄▀█▀▄▄▀█░▄▄▀█░▄▄▄█░▄▄▀█░▄▄▀█▄░▄█░██░█░██░▄▄▀█▄░▄██▄██▀▄▄▀█░▄▄▀█░▄▄\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█░█▀█░██░█░██░█░█▄▀█░▀▀▄█░▀▀░██░██░██░█░██░▀▀░██░███░▄█░██░█░██░█▄▄▀\n" + "\t\t\t\t\t\t\t\t\t\t\t\t██▄███▄▄██▄██▄█▄▄▄▄█▄█▄▄█▄██▄██▄███▄▄▄█▄▄█▄██▄██▄██▄▄▄██▄▄██▄██▄█▄▄▄\n" + "\t\t\t\t\t\t\t\t\t\t\t\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n\n\n\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t\t\t\t\t\t ▄▄   ▄▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄    ▄     ▄ ▄▄▄▄▄▄▄ ▄▄    ▄    ▄▄ \n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █ █  █       █  █ █  █  █ █ ▄ █ █       █  █  █ █  █  █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █▄█  █   ▄   █  █ █  █  █ ██ ██ █   ▄   █   █▄█ █  █  █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t█       █  █ █  █  █▄█  █  █       █  █ █  █       █  █  █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t█▄     ▄█  █▄█  █       █  █       █  █▄█  █  ▄    █  █▄▄█\n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t  █   █ █       █       █  █   ▄   █       █ █ █   █   ▄▄ \n" + "\t\t\t\t\t\t\t\t\t\t\t\t\t  █▄▄▄█ █▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█  █▄▄█ █▄▄█▄▄▄▄▄▄▄█▄█  █▄▄█  █▄▄█\n" + ANSI_RESET);
 
 
-        } else {
-            System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t\t\t\t\t\t█▀▀ ▄▀█ █▀▄▀█ █▀▀   █▀█ █ █ █▀▀ █▀█   █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▄█ █▀█ █ ▀ █ ██▄   █▄█ ▀▄▀ ██▄ █▀▄   ▄\n");
-            System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t  >>  THE WINNER IS: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
-        }
-        printSeparee();
     }
 
-    private void printError(String error) {
-        // Print an error message
-        System.out.println(ANSI_RED + error + ANSI_RESET);
-    }
-
+    /**
+     * takes care of notifying observers
+     *
+     * @return the name of the player
+     */
     private String askPlayerName() {
         // Ask the name of the player
         Scanner in = new Scanner(System.in);
@@ -392,106 +317,55 @@ public class Tui extends Observable implements RunnableView {
         }
     }
 
-    private void printCat() {
-        System.out.print(ANSI_GREEN + " █C█ " + ANSI_RESET + "║");
-    }
-
-    private void printBook() {
-        System.out.print(ANSI_WHITE + " █B█ " + ANSI_RESET + "║");
-    }
-
-    private void printGame() {
-        System.out.print(ANSI_YELLOW + " █G█ " + ANSI_RESET);
-    }
-
-    private void printPlant() {
-        System.out.print(ANSI_PURPLE + " █P█ " + ANSI_RESET + "║");
-    }
-
-    private void printTrophies() {
-        System.out.print(ANSI_CYAN + " █T█ " + ANSI_RESET + "║");
-    }
-
-    private void printFrame() {
-        System.out.print(ANSI_BLUE + " █F█ " + ANSI_RESET + "║");
-    }
-
-    private void printEmpty() {
-        System.out.print("     " + ANSI_RESET + "║");
-    }
-
-    private void printInvalid() {
-        System.out.print(ANSI_GREY + " ░░░ " + ANSI_RESET + "║");
-    }
-
     private void printShelves() {
-        int numOfPlayers = modelView.getPlayers().size();
+        for (Player p : modelView.getPlayers()) {
+            Shelf shelf = p.getShelf();
+            System.out.println(p.getName() + "'s Shelf:");
+            String printString = "";
 
-        for (Player p : modelView.getPlayers())
-            System.out.print("\t\t\t\t\t\t" + p.getName());
-
-        for (int nop = 0; nop < numOfPlayers; nop++)
-            System.out.print("\t\t\t╔═════╦═════╦═════╦═════╦═════╗");
-
-        System.out.print("\n");
-        for (int i = 0; i < numberOfRows; i++) {
-            for (Player p : modelView.getPlayers()) {
-                System.out.print("\t\t\t║");
+            for (int i = 0; i < numberOfRows; i++) {
+                printString += "| ";
                 for (int j = 0; j < numberOfColumns; j++) {
-                    if (modelView.getShelfOf(p)[i][j] == null) printEmpty();
-                    else {
-                        switch (modelView.getShelfOf(p)[i][j].getType()) {
-                            case CATS -> printCat();
-                            case BOOKS -> printBook();
-                            case GAMES -> printGame();
-                            case PLANTS -> printPlant();
-                            case TROPHIES -> printTrophies();
-                            case FRAMES -> printFrame();
-                        }
-                    }
+                    if (shelf.getItemsMatrix()[i][j] != null)
+                        printString += shelf.getItemsMatrix()[i][j].toString() + " ";
+                    else printString += "* ";
                 }
+                printString += "|\n";
             }
-            System.out.print(" " + i + "\n");
-        }
-        for (int nop = 0; nop < numOfPlayers; nop++) {
-            System.out.print("\t\t\t╚═════╩═════╩═════╩═════╩═════╝");
-            System.out.print("\n");
-            System.out.print("\t\t\t   0     1     2     3     4");
-            System.out.print("\n");
-        }
+            printString += "-------------\n";
 
+            System.out.print(printString);
+
+        }
 
     }
 
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
+        String printString = "The board:\n";
 
-        int boardSize = 9;
-        System.out.print("\t\t\t\t\t\t\t\t\t\t\t╔═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╗\n");
-
+        printString += "---------------------\n";
         for (int i = 0; i < boardSize; i++) {
-            System.out.print("\t\t\t\t\t\t\t\t\t\t\t║");
+            printString += "| ";
             for (int j = 0; j < boardSize; j++) {
-                if (!boardValid[i][j]) {
-                    printInvalid();
-                } else if (board[i][j] == null) printEmpty();
-                else {
-                    switch (board[i][j].getType()) {
-                        case CATS -> printCat();
-                        case BOOKS -> printBook();
-                        case GAMES -> printGame();
-                        case PLANTS -> printPlant();
-                        case TROPHIES -> printTrophies();
-                        case FRAMES -> printFrame();
-                    }
+                if (boardValid[i][j]) {
+                    ItemCard card = board[i][j];
+                    if (card != null) printString += card + " ";
+                    else printString += "* ";
+                } else {
+                    printString += "- ";
                 }
-            }
-            System.out.print(" " + i + "\n");
-            if (i != boardSize - 1)
-                System.out.println("\t\t\t\t\t\t\t\t\t\t\t╠═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╣");
-        }
-        System.out.println("\t\t\t\t\t\t\t\t\t\t\t╚═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╝");
-        System.out.println("\t\t\t\t\t\t\t\t\t\t\t   0     1     2     3     4     5     6     7     8");
 
+            }
+            printString += "|\n";
+        }
+        printString += "---------------------";
+
+        System.out.print(printString);
+    }
+
+    private void printError(String error) {
+        // Print an error message
+        System.out.println(error);
     }
 
     private enum State {

@@ -39,7 +39,7 @@ public class Lobby implements Observer {
         }
 
         for (ClientHandler clientHandler : clientHandlers) {
-            System.err.println("sending modelView to clients");
+            System.err.println("sending modelView to client" + clientHandler.toString());
             clientHandler.sendMsg(modelView);
         }
     }

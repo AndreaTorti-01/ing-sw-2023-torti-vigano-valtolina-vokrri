@@ -27,6 +27,7 @@ public class GameController {
             card = model.getBoard().popCard((int) coords.get(0), (int) coords.get(1));
             model.getCurrentPlayer().getShelf().insert(move.getColumn(), card);
         }
+        model.advancePlayerTurn();
     }
 
     public void addPlayer(String playerName) {
