@@ -277,7 +277,6 @@ public class Tui extends Observable implements RunnableView {
         printBoard(modelView.getBoard(), modelView.getBoardValid());
         System.out.println("\n");
         printShelves();
-        System.out.println("\n");
     }
 
 
@@ -321,46 +320,56 @@ public class Tui extends Observable implements RunnableView {
         for (Player p : modelView.getPlayers()) {
             Shelf shelf = p.getShelf();
             System.out.println(p.getName() + "'s Shelf:");
-            String printString = "";
+            StringBuilder output = new StringBuilder();
 
             for (int i = 0; i < numberOfRows; i++) {
-                printString += "| ";
+                output.append("| ");
                 for (int j = 0; j < numberOfColumns; j++) {
                     if (shelf.getItemsMatrix()[i][j] != null)
-                        printString += shelf.getItemsMatrix()[i][j].toString() + " ";
-                    else printString += "* ";
+                        output.append(shelf.getItemsMatrix()[i][j].toString()).append(" ");
+                    else output.append("* ");
                 }
-                printString += "|\n";
+                output.append("|\n");
             }
-            printString += "-------------\n";
+            output.append("-------------\n");
 
-            System.out.print(printString);
+            output.append("  ");
+            for (int i = 0; i < numberOfColumns; i++) {
+                output.append(i).append(" ");
+            }
+            output.append("\n\n");
 
+            System.out.print(output);
         }
-
     }
 
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
-        String printString = "The board:\n";
+        StringBuilder output = new StringBuilder("The board:\n");
 
-        printString += "---------------------\n";
+        output.append("   ");
         for (int i = 0; i < boardSize; i++) {
-            printString += "| ";
+            output.append(i).append(" ");
+        }
+        output.append("\n");
+
+        output.append(" ---------------------\n");
+        for (int i = 0; i < boardSize; i++) {
+            output.append(i).append("| ");
             for (int j = 0; j < boardSize; j++) {
                 if (boardValid[i][j]) {
                     ItemCard card = board[i][j];
-                    if (card != null) printString += card + " ";
-                    else printString += "* ";
+                    if (card != null) output.append(card).append(" ");
+                    else output.append("* ");
                 } else {
-                    printString += "- ";
+                    output.append("- ");
                 }
 
             }
-            printString += "|\n";
+            output.append("|\n");
         }
-        printString += "---------------------";
+        output.append(" ---------------------");
 
-        System.out.print(printString);
+        System.out.print(output);
     }
 
     private void printError(String error) {

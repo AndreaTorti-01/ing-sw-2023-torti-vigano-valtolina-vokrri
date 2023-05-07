@@ -1,6 +1,11 @@
 package it.polimi.ingsw.model.ItemCards;
 
-public final class ItemCard {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class ItemCard implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -648130833358549189L;
     private final ItemType type;
     private final int sprite;
 

@@ -45,6 +45,9 @@ public class Game extends Observable {
             throw new RuntimeException(e);
         }
 
+        // refills the board
+        this.refillBoard();
+
         // initialization of the common goal cards
         commonGoalCards = this.getRandomCommonGoalCards();
 
@@ -118,6 +121,19 @@ public class Game extends Observable {
         }
 
         return players;
+    }
+
+    /**
+     * Refills the board
+     */
+    public void refillBoard() {
+        for (int row = 0; row < boardSize; row++) {
+            for (int column = 0; column < boardSize; column++) {
+                if (this.board.isValid(row, column) && this.board.peekCard(row, column) == null) {
+                    this.board.setTile(bag.drawCard(), row, column);
+                }
+            }
+        }
     }
 
 

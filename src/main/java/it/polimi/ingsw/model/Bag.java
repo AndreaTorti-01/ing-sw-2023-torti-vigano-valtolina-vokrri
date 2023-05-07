@@ -50,7 +50,6 @@ public class Bag implements Serializable {
         ).findFirst().orElse(null);
         cardsInside.remove(itemCard);
         return itemCard;
-
     }
 
 }
