@@ -18,9 +18,12 @@ import java.util.concurrent.TimeUnit;
 import static it.polimi.ingsw.utils.Constants.*;
 
 public class Tui extends Observable implements RunnableView {
-    String playerName;
-    Player me;
-    GameViewMsg modelView;
+    private String playerName;
+    private Player me;
+    private GameViewMsg modelView;
+    private boolean iAmLobbyLeader = false;
+
+
 
 
     GameStatus gameStatus = GameStatus.WAITING;
@@ -37,9 +40,16 @@ public class Tui extends Observable implements RunnableView {
     public void run() {
         Scanner scanner = new Scanner(System.in);
 
-        //asks the player name
+        /*
+        * these functions automatically call the notifyObservers method with their arguments
+        * askPlayerName() returns a string, saved as a class variable to be used in the future to check
+        * 1) if it's my turn
+        * 2) if i'm the lobby leader
+        * askPlayerNumber() can already handle non-integer format exceptions
+        * the player number is notified to observers to automatically start the game if the lobby reaches the requested number of players+
+         */
         playerName = askPlayerName();
-        notifyObservers(playerName);
+        if(iAmLobbyLeader) askPlayerNumber();
 
         clearConsole();
 
@@ -73,6 +83,8 @@ public class Tui extends Observable implements RunnableView {
     public void updateView(GameViewMsg modelView) {
         this.modelView = modelView;
         this.gameStatus = modelView.getGameStatus();
+        if(playerName.equals(modelView.getPlayers().get(0).getName()))
+            iAmLobbyLeader = true;
         System.err.println("updated view!");
     }
 
@@ -362,7 +374,9 @@ public class Tui extends Observable implements RunnableView {
         // Ask the name of the player
         Scanner in = new Scanner(System.in);
         System.out.println("  >>  Enter your name:  ");
-        return in.nextLine();
+        String name = in.nextLine();
+        notifyObservers(name);
+        return name;
     }
 
     private boolean askBoolean() {
