@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
@@ -12,30 +13,31 @@ import java.util.Set;
 public class Lobby implements Observer {
     private final GameController controller;
     private final Set<ClientHandler> clientHandlers;
-    private boolean isGameStarted;
+    private boolean isOpen;
 
     public Lobby(GameController controller) {
         this.controller = controller;
         this.clientHandlers = new HashSet<>();
     }
 
-    public boolean isGameStarted() {
-        return isGameStarted;
+    public boolean isOpen() {
+        return isOpen;
     }
 
     public void addClientHandler(ClientHandler clientHandler) {
         this.clientHandlers.add(clientHandler);
     }
 
-    public void startGame() {
-        this.isGameStarted = true;
-    }
-
-    public void update(Integer intMsg){
+    public void update(Integer intMsg) {
         this.controller.initGame(intMsg);
+        this.isOpen = true;
     }
 
     public void update(GameViewMsg modelView) {
+        if (modelView.getGameStatus().equals(GameStatus.STARTED)) {
+            this.isOpen = false;
+        }
+
         for (ClientHandler clientHandler : clientHandlers) {
             System.err.println("sending modelView to clients");
             clientHandler.sendMsg(modelView);

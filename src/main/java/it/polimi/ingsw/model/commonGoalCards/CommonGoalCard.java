@@ -3,9 +3,13 @@ package it.polimi.ingsw.model.commonGoalCards;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.utils.Constants;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Stack;
 
-public class CommonGoalCard {
+public class CommonGoalCard implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -4000317221403330726L;
     private final Stack<Integer> assignedPoints;
     private final CommonGoalCardStrat strategy;
 

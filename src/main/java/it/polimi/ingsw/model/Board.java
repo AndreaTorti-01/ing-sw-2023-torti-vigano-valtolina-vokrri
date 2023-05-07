@@ -3,14 +3,13 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.utils.Constants;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 
 import static it.polimi.ingsw.utils.Constants.boardSize;
 
-public class Board {
+public class Board implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 6344140278693113L;
     private final boolean[][] valid;
     private final ItemCard[][] tile;
 

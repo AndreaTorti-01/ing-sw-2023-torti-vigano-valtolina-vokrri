@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Objects;
 
 public class Client implements Observer, Runnable {
     private final ObjectInputStream inputStream;
@@ -30,13 +28,14 @@ public class Client implements Observer, Runnable {
         }
     }
 
-    public void update(Integer intMsg){
+    public void update(Integer intMsg) {
         try {
             outputStream.writeObject(intMsg);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
     public void update(MoveMsg move) {
         try {
             outputStream.writeObject(move);
@@ -63,7 +62,7 @@ public class Client implements Observer, Runnable {
 
     @Override
     public void run() {
-        GameViewMsg modelView = null;
+        GameViewMsg modelView;
         new Thread(view).start();
 
         do {

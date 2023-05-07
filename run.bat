@@ -1,9 +1,20 @@
+@echo off
+
 call mvn compile
 
 start java -cp target/classes it.polimi.ingsw.ServerApp
 
-set /p instances=Enter number of client instances to launch:
+set /a "i=0"
 
-FOR /L %%i IN (1,1,%instances%) DO (
-    start "Client %%i" cmd /c "java -cp target/classes it.polimi.ingsw.ClientApp"
+:loop
+echo Press Enter to start a new client. Type "quit" to exit.
+set /p input=
+if "%input%"=="" (
+    set /a "i+=1"
+    start "Client %i%" cmd /c "java -cp target/classes it.polimi.ingsw.ClientApp"
+    goto loop
+) else if /i "%input%"=="quit" (
+    exit /b
+) else (
+    goto loop
 )

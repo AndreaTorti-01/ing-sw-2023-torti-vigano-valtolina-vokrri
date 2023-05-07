@@ -14,10 +14,10 @@ import java.util.Random;
 import static it.polimi.ingsw.utils.Constants.*;
 
 public class Game extends Observable {
+    private final Bag bag;
     private List<CommonGoalCard> commonGoalCards;
     private List<Player> players;
     private Player currentPlayer;
-    private final Bag bag;
     private Board board;
     private GameStatus status = GameStatus.WAITING;
     private Player winner;
@@ -27,24 +27,22 @@ public class Game extends Observable {
         this.players = new ArrayList<>();
     }
 
-
     /**
      * This method initializes all the model elements too
-     *
      */
+    public void initModel(Integer numberOfPlayers) throws IllegalArgumentException {
 
-    public void initModel(Integer playerNum) throws IllegalArgumentException {
-
-        if (playerNum < minNumberOfPlayers || playerNum > maxNumberOfPlayers)
-            throw new IllegalArgumentException("provided number of players (" + playerNum + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers);
+        if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
+            throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers);
         // initialization of a new Board
         try {
-            board = new Board(playerNum);
+            board = new Board(numberOfPlayers);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
         // initialization of the common goal cards
-        commonGoalCards = this.getRandomCommonGoalCards();
+        commonGoalCards = this.getRandomCommonGoalCards(numberOfPlayers);
         // notifies listeners of the changes
         notifyObservers(new GameViewMsg(this));
     }
@@ -155,12 +153,11 @@ public class Game extends Observable {
     /**
      * @return an arraylist of random CommonGoalCards.
      */
-    private ArrayList<CommonGoalCard> getRandomCommonGoalCards() {
-        int numberOfPlayers = this.getNumberOfPlayers();
-        ArrayList<CommonGoalCard> commonGoalCards = new ArrayList<>(numberOfCommonGoalCardsInGame);
+    private List<CommonGoalCard> getRandomCommonGoalCards(int numberOfPlayers) {
+        List<CommonGoalCard> commonGoalCards = new ArrayList<>(numberOfCommonGoalCardsInGame);
 
         // initializes an array of indexes, then used to get two random indexes without duplicates
-        ArrayList<Integer> indexes = this.getIndexes(numberOfItemCardTypes);
+        List<Integer> indexes = this.getIndexes(numberOfItemCardTypes);
 
         for (int i = 0; i < numberOfCommonGoalCardsInGame; i++) {
             // chooses and removes a random index from the indexes array in order not to have duplicates
@@ -186,9 +183,9 @@ public class Game extends Observable {
      * @param bound the upper bound (excluded)
      * @return an array list with all indexes in range 0 (included) - bound (excluded)
      */
-    private ArrayList<Integer> getIndexes(int bound) {
+    private List<Integer> getIndexes(int bound) {
         // initializes an arrayList that contains all indexes in range 0-bound
-        ArrayList<Integer> indexes = new ArrayList<>(bound);
+        List<Integer> indexes = new ArrayList<>(bound);
         for (int i = 0; i < bound; i++) indexes.add(i);
 
         return indexes;

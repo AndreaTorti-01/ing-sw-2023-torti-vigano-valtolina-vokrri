@@ -3,10 +3,15 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.utils.Constants;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
-public class Shelf {
+public class Shelf implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1599653120498179003L;
     private final ItemCard[][] items;
     private boolean isACopy;
 

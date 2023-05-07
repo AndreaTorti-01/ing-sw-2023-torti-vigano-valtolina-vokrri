@@ -5,13 +5,14 @@ import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.utils.Constants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
-public interface CommonGoalCardStrat {
+public interface CommonGoalCardStrat extends Serializable {
     boolean checkPattern(Shelf shelf);
 
     CommonGoalCardType getType();

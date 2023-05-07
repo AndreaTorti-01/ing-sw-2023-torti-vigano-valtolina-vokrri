@@ -7,11 +7,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public class ServerApp {
-    private static Server server;
 
     public static void main(String[] args) {
         int serverPort = Constants.serverPort;
-        Server server;
 
         // parses the port at which the server should listen
         // for connection requests from the clients
@@ -26,6 +24,7 @@ public class ServerApp {
             }
         }
 
+        Server server;
         try {
             // creates a new server socket for the client to connect
             // at the specified port if provided, or at the default one

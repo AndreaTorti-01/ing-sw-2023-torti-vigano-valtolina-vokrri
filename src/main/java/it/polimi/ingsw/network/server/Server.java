@@ -31,19 +31,21 @@ public class Server implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             // assign the new client to a clientHandler
             ClientHandler clientHandler = new ClientHandler(s);
             // try to find a free lobby
-            for (Lobby l : lobbies) {
-                if (!l.isGameStarted()) {
-                    l.addClientHandler(clientHandler);
-                    clientHandler.addObserver(l);
+            for (Lobby lobby : lobbies) {
+                if (lobby.isOpen()) {
+                    lobby.addClientHandler(clientHandler);
+                    clientHandler.addObserver(lobby);
 
                     freeLobbyFound = true;
                     new Thread(clientHandler).start();
                     break;
                 }
             }
+            
             // if there's no free lobby, create a new one
             if (!freeLobbyFound) {
                 Game model = new Game();

@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.utils.Constants;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -11,7 +13,9 @@ import java.util.Set;
 import static it.polimi.ingsw.utils.Constants.maxNumberOfItemCards;
 import static it.polimi.ingsw.utils.Constants.numberOfItemCardsWithSameType;
 
-public class Bag {
+public class Bag implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -141148278954951272L;
     private final int maxCards = maxNumberOfItemCards;
     private final Set<ItemCard> cardsInside;
 

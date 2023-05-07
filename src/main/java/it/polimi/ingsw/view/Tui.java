@@ -20,10 +20,11 @@ import static it.polimi.ingsw.utils.Constants.*;
 public class Tui extends Observable implements RunnableView {
     private final Object lock = new Object();
     GameStatus gameStatus = GameStatus.WAITING;
-    private String playerName;
+    private String playerName = "";
     private Player me;
     private GameViewMsg modelView;
     private State state = State.ASK_NAME;
+
     public Tui() {
         System.err.println("warning: created non observable tui");
     }
@@ -50,44 +51,45 @@ public class Tui extends Observable implements RunnableView {
     public void run() {
         Scanner scanner = new Scanner(System.in);
 
+        // asks the player for his name
+        this.playerName = askPlayerName();
+
+        // waits for state to change
+        while (getState() == State.ASK_NAME) {
+            synchronized (lock) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    System.err.println("Interrupted while waiting for server: " + e.getMessage());
+                }
+            }
+        }
+
+        //
+        if (getState() == State.ASK_NUMBER) {
+            askPlayerNumber();
+        }
+
+        while (getState() == State.WAITING_FOR_PLAYERS) {
+            synchronized (lock) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    System.err.println("Interrupted while waiting for server: " + e.getMessage());
+                }
+            }
+        }
         //noinspection InfiniteLoopStatement
         while (true) {
-            this.playerName = askPlayerName();
-
-
-            while (getState() == State.ASK_NAME) {
-                synchronized (lock) {
-                    try {
-                        System.err.println("waiting for name");
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
-                    }
-                }
-            }
-
-            if (getState() == State.ASK_NUMBER) {
-                askPlayerNumber();
-            }
-
-            while (getState() == State.WAITING_FOR_PLAYERS) {
-                synchronized (lock) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
-                    }
-                }
-            }
 
         }
     }
 
     @Override
     public void updateView(GameViewMsg modelView) {
-
         this.modelView = modelView;
-        if (modelView.getGameStatus() == GameStatus.WAITING) {
+
+        if (!playerName.equals("") && modelView.getGameStatus() == GameStatus.WAITING) {
             if (playerName.equals(modelView.getPlayers().get(0).getName()))
                 setState(State.ASK_NUMBER); // I am lobby leader
             else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
