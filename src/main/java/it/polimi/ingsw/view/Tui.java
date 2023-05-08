@@ -229,6 +229,8 @@ public class Tui extends Observable implements RunnableView {
 
         //out of bound check
         if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns) return false;
+        //non existing card check
+        if(!gameViewMsg.getBoardValid()[row][column] || gameViewMsg.getBoard()[row][column] == null) return false;
 
         //checking if the card is adjacent to a free space (necessary to be taken
         if (row == 0 || row == numberOfRows - 1) free = true;
@@ -257,7 +259,7 @@ public class Tui extends Observable implements RunnableView {
         else adjacent = true;
 
 
-        return gameViewMsg.getBoardValid()[row][column] && gameViewMsg.getBoard()[row][column] != null && free && valid && adjacent;
+        return free && valid && adjacent;
     }
 
     private void printGameStatus() {
