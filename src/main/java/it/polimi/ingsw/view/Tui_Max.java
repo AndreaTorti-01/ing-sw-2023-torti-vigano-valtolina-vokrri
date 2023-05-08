@@ -403,27 +403,27 @@ public class Tui_Max extends Observable implements RunnableView {
     }
 
     private void printCat() {
-        System.out.print(ANSI_GREEN + " █C█ " + ANSI_RESET + "║");
+        System.out.print(" " + ANSI_GREEN_BACKGROUND + " C " + ANSI_RESET + " ║");
     }
 
     private void printBook() {
-        System.out.print(ANSI_WHITE + " █B█ " + ANSI_RESET + "║");
+        System.out.print(" " +ANSI_WHITE_BACKGROUND + " B " + ANSI_RESET + " ║");
     }
 
     private void printGame() {
-        System.out.print(ANSI_YELLOW + " █G█ " + ANSI_RESET);
+        System.out.print(" " + ANSI_YELLOW_BACKGROUND + " G " + ANSI_RESET + " ║");
     }
 
     private void printPlant() {
-        System.out.print(ANSI_PURPLE + " █P█ " + ANSI_RESET + "║");
+        System.out.print(" " + ANSI_PURPLE_BACKGROUND + " P " + ANSI_RESET + " ║");
     }
 
     private void printTrophies() {
-        System.out.print(ANSI_CYAN + " █T█ " + ANSI_RESET + "║");
+        System.out.print(" " +ANSI_CYAN_BACKGROUND + " T " + ANSI_RESET + " ║");
     }
 
     private void printFrame() {
-        System.out.print(ANSI_BLUE + " █F█ " + ANSI_RESET + "║");
+        System.out.print(" " +ANSI_BLUE_BACKGROUND + " F " + ANSI_RESET + " ║");
     }
 
     private void printEmpty() {
