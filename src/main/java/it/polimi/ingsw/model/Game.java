@@ -59,8 +59,6 @@ public class Game extends Observable {
     }
 
     public void addPlayer(String playerName) {
-        System.err.println("model adding player " + playerName);
-
         // init player
         Player newPlayer = new Player(playerName);
 

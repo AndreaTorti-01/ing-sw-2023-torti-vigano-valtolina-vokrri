@@ -31,6 +31,8 @@ public class Client implements Observer, Runnable {
     public void update(Integer intMsg) {
         try {
             outputStream.writeObject(intMsg);
+            outputStream.flush();
+            outputStream.reset();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -39,6 +41,8 @@ public class Client implements Observer, Runnable {
     public void update(MoveMsg move) {
         try {
             outputStream.writeObject(move);
+            outputStream.flush();
+            outputStream.reset();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -47,6 +51,8 @@ public class Client implements Observer, Runnable {
     public void update(ChatMsg message) {
         try {
             outputStream.writeObject(message);
+            outputStream.flush();
+            outputStream.reset();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -55,6 +61,8 @@ public class Client implements Observer, Runnable {
     public void update(String playerName) {
         try {
             outputStream.writeObject(playerName);
+            outputStream.flush();
+            outputStream.reset();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

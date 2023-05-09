@@ -34,14 +34,11 @@ public class Lobby implements Observer {
     }
 
     public void update(GameViewMsg modelView) {
-        if (modelView.getGameStatus().equals(GameStatus.STARTED)) {
+        if (modelView.getGameStatus().equals(GameStatus.STARTED))
             this.isOpen = false;
-        }
 
-        for (ClientHandler clientHandler : clientHandlers) {
-            System.err.println("sending modelView to client" + clientHandler.toString());
+        for (ClientHandler clientHandler : clientHandlers)
             clientHandler.sendMsg(modelView);
-        }
     }
 
     public void update(ChatMsg chatMsg) {
@@ -49,6 +46,7 @@ public class Lobby implements Observer {
     }
 
     public void update(MoveMsg moveMsg) {
+        System.err.println("move made");
         controller.makeMove(moveMsg);
     }
 

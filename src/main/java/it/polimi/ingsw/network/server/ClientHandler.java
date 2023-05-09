@@ -1,7 +1,5 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.network.serializable.ChatMsg;
-import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observable;
 
 import java.io.IOException;
@@ -30,6 +28,8 @@ public class ClientHandler extends Observable implements Runnable {
     public void sendMsg(Object msg) {
         try {
             outputStream.writeObject(msg);
+            outputStream.flush();
+            outputStream.reset();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -45,13 +45,7 @@ public class ClientHandler extends Observable implements Runnable {
                 System.err.println("waiting for messages...");
                 Object msg = inputStream.readObject();
                 System.err.println("message arrived");
-                switch (msg.getClass().getSimpleName()) {
-                    case "MoveMsg" -> notifyObservers((MoveMsg) msg);
-                    case "ChatMsg" -> notifyObservers((ChatMsg) msg);
-                    case "String" -> notifyObservers((String) msg);
-                    case "Integer" -> notifyObservers((Integer) msg);
-                    default -> System.out.println("unsupported");
-                }
+                notifyObservers(msg);
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

@@ -1,14 +1,12 @@
 package it.polimi.ingsw.view;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+
+import javax.swing.*;
 
 public class Gui {
-    private JFrame frame;
-    private JPanel panel;
-    private JButton button;
-    private JLabel label;
+    private final JFrame frame;
+    private final JPanel panel;
+    private final JButton button;
+    private final JLabel label;
 
     public Gui() {
         frame = new JFrame("Frame");

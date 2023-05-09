@@ -122,8 +122,6 @@ public class Tui extends Observable implements RunnableView {
                 setState(State.PLAY); // it's my turn
             } else setState(State.WAITING_FOR_TURN); // it's not my turn
         }
-
-        System.err.println("updated view!");
     }
 
     /**
@@ -131,7 +129,7 @@ public class Tui extends Observable implements RunnableView {
      */
     private void askPlayerNumber() {
         Scanner scanner = new Scanner(System.in);
-        Integer playerNumber = 0;
+        int playerNumber = 0;
         boolean valid = false;
         while (!valid) {
             System.out.println("How many players are playing? (2-4)");
@@ -177,7 +175,7 @@ public class Tui extends Observable implements RunnableView {
                 freeSlotsNumber[j] = freeSlots;
             }
         }
-        if(maxCards > 3) maxCards = 3;
+        if (maxCards > 3) maxCards = 3;
 
         //asking for card coordinates
         System.out.println("You can take up to " + maxCards + " cards");
@@ -189,28 +187,27 @@ public class Tui extends Observable implements RunnableView {
             int column = scanner.nextInt();
 
             //checking coordinate validity
-            if(isTakeable(modelView, row, column, pickedCoords)) {
+            if (isTakeable(modelView, row, column, pickedCoords)) {
                 List<Integer> coords = new ArrayList<>();
                 coords.add(row);
                 coords.add(column);
                 pickedCoords.add(coords);
                 pickedNum++;
-            }
-            else printError("Invalid coordinates!, retry");
+            } else printError("Invalid coordinates!, retry");
 
             //ask if the player wants to pick another card
-            if(pickedNum < maxCards) {
+            if (pickedNum < maxCards) {
                 System.out.println("Do you want to pick another card?");
-                if(!askBoolean()) break;
+                if (!askBoolean()) break;
             }
 
         }
 
-        while(!validChoice){
+        while (!validChoice) {
             System.out.println("Chose a shelf column to move the cards to: ");
             shelfCol = scanner.nextInt();
-            if(shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
-            else if(freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
+            if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
+            else if (freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
             else validChoice = true;
         }
         //notifying observers
@@ -230,13 +227,15 @@ public class Tui extends Observable implements RunnableView {
         //out of bound check
         if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns) return false;
         //non existing card check
-        if(!gameViewMsg.getBoardValid()[row][column] || gameViewMsg.getBoard()[row][column] == null) return false;
+        if (!gameViewMsg.getBoardValid()[row][column] || gameViewMsg.getBoard()[row][column] == null) return false;
 
         //checking if the card is adjacent to a free space (necessary to be taken
         if (row == 0 || row == numberOfRows - 1) free = true;
         else if (column == 0 || column == numberOfColumns - 1) free = true;
-        else if (gameViewMsg.getBoard()[row - 1][column] == null || gameViewMsg.getBoard()[row + 1][column] == null || gameViewMsg.getBoard()[row][column - 1] == null || gameViewMsg.getBoard()[row][column + 1] == null) free = true;
-        else if (!gameViewMsg.getBoardValid()[row - 1][column] || !gameViewMsg.getBoardValid()[row + 1][column] || !gameViewMsg.getBoardValid()[row][column - 1] || !gameViewMsg.getBoardValid()[row][column + 1]) free = true;
+        else if (gameViewMsg.getBoard()[row - 1][column] == null || gameViewMsg.getBoard()[row + 1][column] == null || gameViewMsg.getBoard()[row][column - 1] == null || gameViewMsg.getBoard()[row][column + 1] == null)
+            free = true;
+        else if (!gameViewMsg.getBoardValid()[row - 1][column] || !gameViewMsg.getBoardValid()[row + 1][column] || !gameViewMsg.getBoardValid()[row][column - 1] || !gameViewMsg.getBoardValid()[row][column + 1])
+            free = true;
 
         //the cards must be adjacent to each other (in line or in column) -> valid is used to check this condition
         if (pickedCoords.size() > 0) {
@@ -253,10 +252,12 @@ public class Tui extends Observable implements RunnableView {
         //the card must be adjacent to at least one of the other cards
         if (pickedCoords.size() > 0) {
             for (List<Integer> coords : pickedCoords) {
-                if (isAdjacent(row, column, coords.get(0), coords.get(1))) adjacent = true;
+                if (isAdjacent(row, column, coords.get(0), coords.get(1))) {
+                    adjacent = true;
+                    break;
+                }
             }
-        }
-        else adjacent = true;
+        } else adjacent = true;
 
 
         return free && valid && adjacent;
@@ -362,7 +363,7 @@ public class Tui extends Observable implements RunnableView {
 
     private void printError(String error) {
         // Print an error message
-        System.out.println(ANSI_PURPLE+ error + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + error + ANSI_RESET);
     }
 
     private enum State {
