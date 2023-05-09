@@ -152,7 +152,7 @@ public class Tui extends Observable implements RunnableView {
         Scanner scanner = new Scanner(System.in);
         List<List<Integer>> pickedCoords = new ArrayList<>();
 
-        System.out.println("You can peek cards from the board");
+        System.out.println("You can pick cards from the board");
         int pickedNum = 0; //number of already picked cards
         boolean validChoice = false;
         int shelfCol = 0; //column of the shelf where the player is moving cards to

@@ -237,5 +237,7 @@ public class Game extends Observable {
 
     public void advancePlayerTurn() {
         currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % numberOfPlayers);
+        // TODO consider refilling board
+        notifyObservers(new GameViewMsg(this));
     }
 }
