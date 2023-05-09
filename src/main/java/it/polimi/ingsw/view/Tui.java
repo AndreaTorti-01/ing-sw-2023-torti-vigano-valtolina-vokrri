@@ -180,7 +180,7 @@ public class Tui extends Observable implements RunnableView {
         //asking for card coordinates
         System.out.println("You can take up to " + maxCards + " cards");
 
-        while (pickedNum < maxCards) {
+        while (pickedNum < maxCards ) {
             System.out.print("Card " + (pickedNum + 1) + "-> enter ROW number:  ");
             int row = scanner.nextInt();
             System.out.print("Card " + (pickedNum + 1) + "-> enter COLUMN number:  ");
@@ -196,7 +196,7 @@ public class Tui extends Observable implements RunnableView {
             } else printError("Invalid coordinates!, retry");
 
             //ask if the player wants to pick another card
-            if (pickedNum < maxCards) {
+            if (pickedNum < maxCards && pickedNum != 0) {
                 System.out.println("Do you want to pick another card?");
                 if (!askBoolean()) break;
             }
