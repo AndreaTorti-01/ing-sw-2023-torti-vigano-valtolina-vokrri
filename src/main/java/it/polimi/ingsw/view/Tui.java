@@ -132,7 +132,7 @@ public class Tui extends Observable implements RunnableView {
         while (!valid) {
             System.out.println("How many players are playing? (2-4)");
             try {
-                playerNumber = Integer.parseInt(scanner.nextLine());
+                playerNumber = Integer.parseInt(scanLine());
                 if (playerNumber >= 2 && playerNumber <= 4) valid = true;
                 else printError("Invalid number of players");
             } catch (NumberFormatException e) {
@@ -234,7 +234,7 @@ public class Tui extends Observable implements RunnableView {
     private String askPlayerName() {
         // Ask the name of the player
         System.out.println("  >>  Enter your name:  ");
-        String name = scanner.nextLine();
+        String name = scanLine();
         notifyObservers(name);
         return name;
     }
@@ -243,7 +243,7 @@ public class Tui extends Observable implements RunnableView {
         System.out.print("  >>  (y/n) ");
 
         while (true) {
-            String input = scanner.nextLine();
+            String input = scanLine();
             char c = Character.toLowerCase(input.charAt(0));
             if (c == 'y') {
                 return true;
@@ -314,6 +314,14 @@ public class Tui extends Observable implements RunnableView {
     private void printError(String error) {
         // Print an error message
         System.out.println(ANSI_PURPLE + error + ANSI_RESET);
+    }
+
+    private String scanLine(){
+        String ret;
+        do {
+            ret = scanner.nextLine();
+        } while (ret.equals(""));
+        return ret;
     }
 
     private enum State {
