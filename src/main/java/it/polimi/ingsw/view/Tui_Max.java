@@ -1,15 +1,13 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
-import it.polimi.ingsw.network.serializable.TuiCommands;
 import it.polimi.ingsw.utils.Observable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -18,15 +16,11 @@ import java.util.concurrent.TimeUnit;
 import static it.polimi.ingsw.utils.Constants.*;
 
 public class Tui_Max extends Observable implements RunnableView {
+    Game.Status gameStatus = Game.Status.WAITING;
     private String playerName;
     private Player me;
     private GameViewMsg modelView;
     private boolean iAmLobbyLeader = false;
-
-
-
-
-    GameStatus gameStatus = GameStatus.WAITING;
 
     public Tui_Max() {
         System.err.println("warning: created non observable tui");
@@ -41,12 +35,12 @@ public class Tui_Max extends Observable implements RunnableView {
         Scanner scanner = new Scanner(System.in);
 
         /*
-        * these functions automatically call the notifyObservers method with their arguments
-        * askPlayerName() returns a string, saved as a class variable to be used in the future to check
-        * 1) if it's my turn
-        * 2) if i'm the lobby leader
-        * askPlayerNumber() can already handle non-integer format exceptions
-        * the player number is notified to observers to automatically start the game if the lobby reaches the requested number of players+
+         * these functions automatically call the notifyObservers method with their arguments
+         * askPlayerName() returns a string, saved as a class variable to be used in the future to check
+         * 1) if it's my turn
+         * 2) if i'm the lobby leader
+         * askPlayerNumber() can already handle non-integer format exceptions
+         * the player number is notified to observers to automatically start the game if the lobby reaches the requested number of players+
          */
         playerName = askPlayerName();
         // wait for 0.5 seconds
@@ -55,7 +49,7 @@ public class Tui_Max extends Observable implements RunnableView {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(iAmLobbyLeader) askPlayerNumber();
+        if (iAmLobbyLeader) askNumberOfPlayers();
 
         clearConsole();
 
@@ -66,13 +60,14 @@ public class Tui_Max extends Observable implements RunnableView {
         // while true loop
         // waits for user input, if it is user turn
         // sends input to Client
+        //noinspection InfiniteLoopStatement
         while (true) {
 
-            if (modelView.getGameStatus() == GameStatus.WAITING) {
+            if (modelView.getGameStatus() == Game.Status.WAITING) {
                 printWaitingScreen();
                 //doesn't return until the game is still in waiting status
 
-            } else if (modelView.getGameStatus() == GameStatus.STARTED) {
+            } else if (modelView.getGameStatus() == Game.Status.STARTED) {
                 printGameStatus();
                 //checking if it's my turn
                 if (modelView.getCurrentPlayer().getName().equals(playerName)) pickCards();
@@ -89,7 +84,7 @@ public class Tui_Max extends Observable implements RunnableView {
     public void updateView(GameViewMsg modelView) {
         this.modelView = modelView;
         this.gameStatus = modelView.getGameStatus();
-        if(playerName.equals(modelView.getPlayers().get(0).getName()))
+        if (playerName.equals(modelView.getPlayers().get(0).getName()))
             iAmLobbyLeader = true;
         System.err.println("updated view!");
     }
@@ -99,8 +94,7 @@ public class Tui_Max extends Observable implements RunnableView {
      */
     private void ScreenOutTest() {
         System.out.println("ScreenOutTest");
-        //printBoard(new ItemCard[9][9], new boolean[9][9]);
-        printEndScreen("Diego");
+        printEndScreen("Fabio");
 
         //printWaitingScreen();
         clearConsole();
@@ -110,14 +104,15 @@ public class Tui_Max extends Observable implements RunnableView {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         boolean validCommand = false;
+
         //compared the textual input with the possible commands
-        for(TuiCommands command : TuiCommands.values()){
-            if(scanner.equals(command.getCommandName())){
+        for (Command command : Command.values()) {
+            if (input.equals(command.getCommandName())) {
                 validCommand = true;
                 break;
             }
         }
-        if(!validCommand)
+        if (!validCommand)
             printError("Invalid command");
         else
             handleCommand(input);
@@ -127,10 +122,11 @@ public class Tui_Max extends Observable implements RunnableView {
         //TODO handle the command types
     }
 
-    private void askPlayerNumber() {
+    private void askNumberOfPlayers() {
         Scanner scanner = new Scanner(System.in);
         Integer playerNumber = 0;
         boolean valid = false;
+
         while (!valid) {
             System.out.println("How many players are playing? (2-4)");
             try {
@@ -147,12 +143,6 @@ public class Tui_Max extends Observable implements RunnableView {
     private void clearConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        try {
-            if (System.getProperty("os.name").contains("Windows"))
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            else Runtime.getRuntime().exec("clear");
-        } catch (IOException | InterruptedException ex) {
-        }
     }
 
     private void pickCards() {
@@ -291,7 +281,11 @@ public class Tui_Max extends Observable implements RunnableView {
     }
 
     private void printSeparee() {
-        System.out.println(ANSI_YELLOW + "\n\n" + "\t\t\t\t╔══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╗\n" + "\t\t\t\t╚══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╝" + ANSI_RESET + "\n\n");
+        System.out.println(ANSI_YELLOW +
+                "\n\n" +
+                "\t\t\t\t╔══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╦══╗\n" +
+                "\t\t\t\t╚══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╩══╝" +
+                ANSI_RESET + "\n\n");
     }
 
     private void printWaitingScreen() {
@@ -304,15 +298,23 @@ public class Tui_Max extends Observable implements RunnableView {
 
         System.out.println("\n" + ANSI_YELLOW +
 
-                "\t\t\t\t\t\t\t\t\t\t\t\t█   █ █▀▀ █   █▀▀ █▀▀█ █▀▄▀█ █▀▀ 　 ▀▀█▀▀ █▀▀█\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█ █ █ █▀▀ █   █   █  █ █ ▀ █ █▀▀ 　   █   █  █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▄▀▄█ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀   ▀ ▀▀▀ 　   █   ▀▀▀▀\n\n\n");
+                "\t\t\t\t\t\t\t\t\t\t\t\t█   █ █▀▀ █   █▀▀ █▀▀█ █▀▄▀█ █▀▀ 　 ▀▀█▀▀ █▀▀█\n" +
+                "\t\t\t\t\t\t\t\t\t\t\t\t█ █ █ █▀▀ █   █   █  █ █ ▀ █ █▀▀ 　   █   █  █\n" +
+                "\t\t\t\t\t\t\t\t\t\t\t\t█▄▀▄█ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀   ▀ ▀▀▀ 　   █   ▀▀▀▀\n\n\n");
 
         printMyShelfie();
 
         System.out.println("\n\n\n" + ANSI_CYAN + "\n \n \n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  developed by gc-33" + ANSI_RESET);
         System.out.println(ANSI_CYAN + "\n \t\t\t\t\t\t\t\t\t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
 
-        System.out.print("\n\n\n" + "\t\t\t\t█   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █▀▀█ 　 █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█ 　 █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀\n" + "\t\t\t\t█ █ █ █▄▄█ █   █   █ █  █ █ ▀█ 　 █▀▀ █  █ █▄▄▀ 　 █  █   █   █▀▀█ █▀▀ █▄▄▀ 　 █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█\n" + "\t\t\t\t█▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀");
-        while (this.gameStatus.equals(GameStatus.WAITING)) {
+        System.out.print("""
+
+
+
+                \t\t\t\t█   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █▀▀█ 　 █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█ 　 █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀
+                \t\t\t\t█ █ █ █▄▄█ █   █   █ █  █ █ ▀█ 　 █▀▀ █  █ █▄▄▀ 　 █  █   █   █▀▀█ █▀▀ █▄▄▀ 　 █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█
+                \t\t\t\t█▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀""");
+        while (this.gameStatus.equals(Game.Status.WAITING)) {
             //waits 500 milliseconds
             try {
                 TimeUnit.MILLISECONDS.sleep(400);
@@ -348,13 +350,14 @@ public class Tui_Max extends Observable implements RunnableView {
         clearConsole();
         printMyShelfie();
         printSeparee();
-        if(playerName.equals(winnerName)) {
-            System.out.println(ANSI_PURPLE +"\t\t\t\t\t\t\t\t\t\t\t\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\n" +
+        if (playerName.equals(winnerName)) {
+            System.out.println(ANSI_PURPLE +
+                    "\t\t\t\t\t\t\t\t\t\t\t\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\n" +
                     "\t\t\t\t\t\t\t\t\t\t\t\t█▀▄▀█▀▄▄▀█░▄▄▀█░▄▄▄█░▄▄▀█░▄▄▀█▄░▄█░██░█░██░▄▄▀█▄░▄██▄██▀▄▄▀█░▄▄▀█░▄▄\n" +
                     "\t\t\t\t\t\t\t\t\t\t\t\t█░█▀█░██░█░██░█░█▄▀█░▀▀▄█░▀▀░██░██░██░█░██░▀▀░██░███░▄█░██░█░██░█▄▄▀\n" +
                     "\t\t\t\t\t\t\t\t\t\t\t\t██▄███▄▄██▄██▄█▄▄▄▄█▄█▄▄█▄██▄██▄███▄▄▄█▄▄█▄██▄██▄██▄▄▄██▄▄██▄██▄█▄▄▄\n" +
                     "\t\t\t\t\t\t\t\t\t\t\t\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n\n\n\n" +
-                    ANSI_YELLOW+
+                    ANSI_YELLOW +
                     "\t\t\t\t\t\t\t\t\t\t\t\t\t ▄▄   ▄▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄    ▄     ▄ ▄▄▄▄▄▄▄ ▄▄    ▄    ▄▄ \n" +
                     "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █ █  █       █  █ █  █  █ █ ▄ █ █       █  █  █ █  █  █\n" +
                     "\t\t\t\t\t\t\t\t\t\t\t\t\t█  █▄█  █   ▄   █  █ █  █  █ ██ ██ █   ▄   █   █▄█ █  █  █\n" +
@@ -364,7 +367,7 @@ public class Tui_Max extends Observable implements RunnableView {
                     "\t\t\t\t\t\t\t\t\t\t\t\t\t  █▄▄▄█ █▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█  █▄▄█ █▄▄█▄▄▄▄▄▄▄█▄█  █▄▄█  █▄▄█\n" + ANSI_RESET);
 
 
-        }else {
+        } else {
             System.out.println(ANSI_PURPLE + "\t\t\t\t\t\t\t\t\t\t\t\t█▀▀ ▄▀█ █▀▄▀█ █▀▀   █▀█ █ █ █▀▀ █▀█   █\n" + "\t\t\t\t\t\t\t\t\t\t\t\t█▄█ █▀█ █ ▀ █ ██▄   █▄█ ▀▄▀ ██▄ █▀▄   ▄\n");
             System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t  >>  THE WINNER IS: " + ANSI_GREEN + winnerName + ANSI_YELLOW + "  <<" + ANSI_RESET);
         }
@@ -407,7 +410,7 @@ public class Tui_Max extends Observable implements RunnableView {
     }
 
     private void printBook() {
-        System.out.print(" " +ANSI_WHITE_BACKGROUND + " B " + ANSI_RESET + " ║");
+        System.out.print(" " + ANSI_WHITE_BACKGROUND + " B " + ANSI_RESET + " ║");
     }
 
     private void printGame() {
@@ -419,11 +422,11 @@ public class Tui_Max extends Observable implements RunnableView {
     }
 
     private void printTrophies() {
-        System.out.print(" " +ANSI_CYAN_BACKGROUND + " T " + ANSI_RESET + " ║");
+        System.out.print(" " + ANSI_CYAN_BACKGROUND + " T " + ANSI_RESET + " ║");
     }
 
     private void printFrame() {
-        System.out.print(" " +ANSI_BLUE_BACKGROUND + " F " + ANSI_RESET + " ║");
+        System.out.print(" " + ANSI_BLUE_BACKGROUND + " F " + ANSI_RESET + " ║");
     }
 
     private void printEmpty() {
@@ -502,6 +505,42 @@ public class Tui_Max extends Observable implements RunnableView {
         }
         System.out.println("\t\t\t\t\t\t\t\t\t\t\t╚═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╝");
         System.out.println("\t\t\t\t\t\t\t\t\t\t\t   0     1     2     3     4     5     6     7     8");
+    }
 
+
+    public enum Command {
+        CHAT("/chat"),
+        PRIVATECHAT("/privatechat"),
+        QUIT("/quit"),
+        HELP("/help");
+
+
+        private final String commandName;
+
+        Command(String identifier) {
+            this.commandName = identifier;
+        }
+
+        public String getCommandName() {
+            return this.commandName;
+        }
+
+        public void printList() {
+            System.out.println("List of commands:");
+            for (Tui.Command command : Tui.Command.values()) {
+                printCommandInfo(command);
+            }
+        }
+
+        public void printCommandInfo(Tui.Command command) {
+            switch (command) {
+                case CHAT -> System.out.println("Type /chat <message> to send a message to the other players");
+                case PRIVATECHAT ->
+                        System.out.println("Type /privatechat <player> <message> to send a private message to a player");
+                case QUIT -> System.out.println("Type /quit to quit the game");
+                case HELP -> System.out.println("Type /help to see the list of commands");
+
+            }
+        }
     }
 }

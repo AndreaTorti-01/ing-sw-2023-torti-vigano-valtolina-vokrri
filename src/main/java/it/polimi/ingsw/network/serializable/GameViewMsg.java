@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network.serializable;
 
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.GameStatus;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
@@ -19,7 +18,7 @@ public class GameViewMsg implements Serializable {
     private final List<Player> players;
     private final Player currentPlayer;
     private final boolean isBagEmpty;
-    private final GameStatus status;
+    private final Game.Status status;
     private final Player winner;
 
     public GameViewMsg(Game model) {
@@ -69,7 +68,7 @@ public class GameViewMsg implements Serializable {
         return isBagEmpty;
     }
 
-    public GameStatus getGameStatus() {
+    public Game.Status getGameStatus() {
         return this.status;
     }
 

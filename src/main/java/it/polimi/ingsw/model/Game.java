@@ -19,7 +19,7 @@ public class Game extends Observable {
     private List<Player> players;
     private Player currentPlayer;
     private Board board;
-    private GameStatus gameStatus = GameStatus.WAITING;
+    private Game.Status gameStatus = Game.Status.WAITING;
     private Player winner;
     private int numberOfPlayers;
 
@@ -71,7 +71,7 @@ public class Game extends Observable {
 
         // check if the player cap is reached and eventually start the game!
         if (numberOfPlayers != 0 && numberOfPlayers == players.size()) {
-            this.gameStatus = GameStatus.STARTED;
+            this.gameStatus = Game.Status.STARTED;
         }
 
         // notify lobby
@@ -133,7 +133,6 @@ public class Game extends Observable {
             }
         }
     }
-
 
     /**
      * @return the players
@@ -221,7 +220,7 @@ public class Game extends Observable {
     /**
      * @return the game status
      */
-    public GameStatus getGameStatus() {
+    public Game.Status getGameStatus() {
         return gameStatus;
     }
 
@@ -229,7 +228,7 @@ public class Game extends Observable {
      * sets the game to ended
      */
     public void endGame() {
-        this.gameStatus = GameStatus.ENDED;
+        this.gameStatus = Game.Status.ENDED;
 
         // notifies listeners of the changes
         notifyObservers(new GameViewMsg(this));
@@ -267,5 +266,11 @@ public class Game extends Observable {
         // TODO consider the case in which the game ends
 
         notifyObservers(new GameViewMsg(this));
+    }
+
+    public enum Status {
+        WAITING,
+        STARTED,
+        ENDED
     }
 }
