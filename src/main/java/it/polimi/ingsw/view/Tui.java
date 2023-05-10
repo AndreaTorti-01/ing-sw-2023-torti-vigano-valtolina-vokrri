@@ -17,12 +17,11 @@ import static it.polimi.ingsw.utils.Constants.*;
 
 public class Tui extends Observable implements RunnableView {
     private final Object lock = new Object();
-    Game.Status gameStatus = Game.Status.WAITING;
+    boolean gaveNumber;
     private String playerName = "";
-    private Player me;
     private GameViewMsg modelView;
     private State state = State.ASK_NAME;
-
+    private final Scanner scanner = new Scanner(System.in);
 
     public Tui(Client client) {
         this.addObserver(client);
@@ -44,7 +43,6 @@ public class Tui extends Observable implements RunnableView {
 
     @Override
     public void run() {
-        Scanner scanner = new Scanner(System.in);
 
         // asks the player for his name
         this.playerName = askPlayerName();
@@ -63,6 +61,7 @@ public class Tui extends Observable implements RunnableView {
         //
         if (getState() == State.ASK_NUMBER) {
             askPlayerNumber();
+            gaveNumber = true;
         }
 
         while (getState() == State.WAITING_FOR_PLAYERS) {
@@ -77,7 +76,7 @@ public class Tui extends Observable implements RunnableView {
         //noinspection InfiniteLoopStatement
         while (true) {
             while (getState() == State.WAITING_FOR_TURN) {
-                this.printGameStatus(); // TODO
+                printGameStatus(); // TODO complete
                 synchronized (lock) {
                     try {
                         lock.wait();
@@ -88,8 +87,8 @@ public class Tui extends Observable implements RunnableView {
             }
 
             while (getState() == State.PLAY) {
-                this.printGameStatus(); // TODO
-                this.pickCards();
+                printGameStatus(); // TODO complete
+                pickCards();
                 synchronized (lock) {
                     try {
                         lock.wait();
@@ -112,7 +111,7 @@ public class Tui extends Observable implements RunnableView {
 
         // the game is waiting for players
         if (!playerName.equals("") && modelView.getGameStatus().equals(Game.Status.WAITING)) {
-            if (playerName.equals(modelView.getPlayers().get(0).getName()))
+            if (playerName.equals(modelView.getPlayers().get(0).getName()) && !gaveNumber)
                 setState(State.ASK_NUMBER); // I am lobby leader
             else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
         }
@@ -128,7 +127,6 @@ public class Tui extends Observable implements RunnableView {
      * takes care of notifying observers
      */
     private void askPlayerNumber() {
-        Scanner scanner = new Scanner(System.in);
         int playerNumber = 0;
         boolean valid = false;
         while (!valid) {
@@ -149,7 +147,6 @@ public class Tui extends Observable implements RunnableView {
      * takes care of notifying observer
      */
     private void pickCards() {
-        Scanner scanner = new Scanner(System.in);
         List<List<Integer>> pickedCoords = new ArrayList<>();
 
         System.out.println("You can pick cards from the board");
@@ -159,7 +156,7 @@ public class Tui extends Observable implements RunnableView {
         int maxCards = 0; //maximum cards that can be picked
         int[] freeSlotsNumber = new int[numberOfColumns]; //number of max cards that can be inserted in each column
 
-
+        Player me = null;
         for (Player p : modelView.getPlayers())
             if (p.getName().equals(playerName)) {
                 me = p;
@@ -183,8 +180,10 @@ public class Tui extends Observable implements RunnableView {
         while (pickedNum < maxCards) {
             System.out.print("Card " + (pickedNum + 1) + "-> enter ROW number:  ");
             int row = scanner.nextInt();
+            scanner.nextLine();
             System.out.print("Card " + (pickedNum + 1) + "-> enter COLUMN number:  ");
             int column = scanner.nextInt();
+            scanner.nextLine();
 
             //checking coordinate validity
             if (isTakeable(modelView, row, column, pickedCoords)) {
@@ -206,10 +205,12 @@ public class Tui extends Observable implements RunnableView {
         while (!validChoice) {
             System.out.println("Chose a shelf column to move the cards to: ");
             shelfCol = scanner.nextInt();
+            scanner.nextLine();
             if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
             else if (freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
             else validChoice = true;
         }
+
         //notifying observers
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
     }
@@ -232,19 +233,17 @@ public class Tui extends Observable implements RunnableView {
      */
     private String askPlayerName() {
         // Ask the name of the player
-        Scanner in = new Scanner(System.in);
         System.out.println("  >>  Enter your name:  ");
-        String name = in.nextLine();
+        String name = scanner.nextLine();
         notifyObservers(name);
         return name;
     }
 
     private boolean askBoolean() {
-        Scanner in = new Scanner(System.in);
-        System.out.print("  >>  (y/n)");
+        System.out.print("  >>  (y/n) ");
 
         while (true) {
-            String input = in.nextLine();
+            String input = scanner.nextLine();
             char c = Character.toLowerCase(input.charAt(0));
             if (c == 'y') {
                 return true;

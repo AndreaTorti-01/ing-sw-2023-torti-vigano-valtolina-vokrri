@@ -263,7 +263,13 @@ public class Game extends Observable {
 
         if (needsRefill) this.refillBoard();
 
-        // TODO consider the case in which the game ends
+        // TODO add player personalgoalcard points
+
+        // TODO add player commongoalcard points
+
+        // TODO check if game ended
+
+        // TODO if it ended add final points and set Status.ENDED
 
         notifyObservers(new GameViewMsg(this));
     }
