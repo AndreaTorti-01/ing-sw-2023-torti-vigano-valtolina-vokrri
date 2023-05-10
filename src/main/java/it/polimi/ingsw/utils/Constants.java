@@ -10,6 +10,9 @@ import java.util.List;
 public class Constants {
     public static final int numberOfColumns = 5;
     public static final int numberOfRows = 6;
+    public static final int numberOfBoardRows = 9;
+    public static final int numberOfBoardColumns = 9;
+
     public static final int maxNumberOfPlayers = 4;
     public static final int minNumberOfPlayers = 2;
     public static final int numberOfItemCardsWithSameType = 22;
@@ -42,30 +45,31 @@ public class Constants {
      * takes in coords of a card you want to take and returns true if you can take it
      * already takes care of out of bounds and null cards
      *
-     * @param gameViewMsg
+     * @param modelView
      * @param row
      * @param column
      * @param pickedCoords already picked cards
      * @return
      */
-    public static boolean isTakeable(GameViewMsg gameViewMsg, int row, int column, List<List<Integer>> pickedCoords) {
+    public static boolean isTakeable(GameViewMsg modelView, int row, int column, List<List<Integer>> pickedCoords) {
         // TODO diego fix this
 
         boolean free = false; //has a null adjacent card
         boolean valid = true; //is a valid card (not taken yet, in the same row or col as the others)
         boolean adjacent = false; //is adjacent to at least one of the other cards
 
+
         // out of bound check
-        if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns) return false;
+        if (row < 0 || row >= numberOfBoardRows || column < 0 || column >= numberOfBoardColumns) return false;
         // non-existing card check
-        if (!gameViewMsg.getBoardValid()[row][column] || gameViewMsg.getBoard()[row][column] == null) return false;
+        if (!modelView.getBoardValid()[row][column] || modelView.getBoard()[row][column] == null) return false;
 
         // checking if the card is adjacent to a free space (necessary to be takeable)
-        if (row == 0 || row == numberOfRows - 1) free = true;
-        else if (column == 0 || column == numberOfColumns - 1) free = true;
-        else if (gameViewMsg.getBoard()[row - 1][column] == null || gameViewMsg.getBoard()[row + 1][column] == null || gameViewMsg.getBoard()[row][column - 1] == null || gameViewMsg.getBoard()[row][column + 1] == null)
+        if (row == 0 || row == numberOfBoardRows - 1) free = true;
+        else if (column == 0 || column == numberOfBoardColumns - 1) free = true;
+        else if (modelView.getBoard()[row - 1][column] == null || modelView.getBoard()[row + 1][column] == null || modelView.getBoard()[row][column - 1] == null || modelView.getBoard()[row][column + 1] == null)
             free = true;
-        else if (!gameViewMsg.getBoardValid()[row - 1][column] || !gameViewMsg.getBoardValid()[row + 1][column] || !gameViewMsg.getBoardValid()[row][column - 1] || !gameViewMsg.getBoardValid()[row][column + 1])
+        else if (!modelView.getBoardValid()[row - 1][column] || !modelView.getBoardValid()[row + 1][column] || !modelView.getBoardValid()[row][column - 1] || !modelView.getBoardValid()[row][column + 1])
             free = true;
 
         // the cards must be adjacent to each other (in line or in column) -> valid is used to check this condition
@@ -88,8 +92,7 @@ public class Constants {
                     break;
                 }
             }
-        } else adjacent = true;
-
+        }else adjacent = true;
 
         return free && valid && adjacent;
     }
