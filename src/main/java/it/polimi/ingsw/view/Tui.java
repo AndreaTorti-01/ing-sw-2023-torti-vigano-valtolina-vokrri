@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Shelf;
@@ -17,7 +17,7 @@ import static it.polimi.ingsw.utils.Constants.*;
 
 public class Tui extends Observable implements RunnableView {
     private final Object lock = new Object();
-    GameStatus gameStatus = GameStatus.WAITING;
+    Game.Status gameStatus = Game.Status.WAITING;
     private String playerName = "";
     private Player me;
     private GameViewMsg modelView;
@@ -111,13 +111,13 @@ public class Tui extends Observable implements RunnableView {
         this.modelView = modelView;
 
         // the game is waiting for players
-        if (!playerName.equals("") && modelView.getGameStatus().equals(GameStatus.WAITING)) {
+        if (!playerName.equals("") && modelView.getGameStatus().equals(Game.Status.WAITING)) {
             if (playerName.equals(modelView.getPlayers().get(0).getName()))
                 setState(State.ASK_NUMBER); // I am lobby leader
             else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
         }
         // the game has started
-        else if (modelView.getGameStatus().equals(GameStatus.STARTED)) {
+        else if (modelView.getGameStatus().equals(Game.Status.STARTED)) {
             if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
                 setState(State.PLAY); // it's my turn
             } else setState(State.WAITING_FOR_TURN); // it's not my turn
@@ -319,5 +319,41 @@ public class Tui extends Observable implements RunnableView {
 
     private enum State {
         ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY
+    }
+
+    public enum Command {
+        CHAT("/chat"),
+        PRIVATECHAT("/privatechat"),
+        QUIT("/quit"),
+        HELP("/help");
+
+
+        private final String commandName;
+
+        Command(String identifier) {
+            this.commandName = identifier;
+        }
+
+        public String getCommandName() {
+            return this.commandName;
+        }
+
+        public void printList() {
+            System.out.println("List of commands:");
+            for (Command command : Command.values()) {
+                printCommandInfo(command);
+            }
+        }
+
+        public void printCommandInfo(Command command) {
+            switch (command) {
+                case CHAT -> System.out.println("Type /chat <message> to send a message to the other players");
+                case PRIVATECHAT ->
+                        System.out.println("Type /privatechat <player> <message> to send a private message to a player");
+                case QUIT -> System.out.println("Type /quit to quit the game");
+                case HELP -> System.out.println("Type /help to see the list of commands");
+
+            }
+        }
     }
 }

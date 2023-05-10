@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.GameController;
-import it.polimi.ingsw.model.GameStatus;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
@@ -34,7 +34,7 @@ public class Lobby implements Observer {
     }
 
     public void update(GameViewMsg modelView) {
-        if (modelView.getGameStatus().equals(GameStatus.STARTED))
+        if (modelView.getGameStatus().equals(Game.Status.STARTED))
             this.isOpen = false;
 
         for (ClientHandler clientHandler : clientHandlers)

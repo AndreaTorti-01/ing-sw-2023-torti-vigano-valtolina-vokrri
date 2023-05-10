@@ -19,7 +19,7 @@ public class Game extends Observable {
     private List<Player> players;
     private Player currentPlayer;
     private Board board;
-    private GameStatus gameStatus = GameStatus.WAITING;
+    private Game.Status gameStatus = Game.Status.WAITING;
     private Player winner;
     private int numberOfPlayers;
 
@@ -71,7 +71,7 @@ public class Game extends Observable {
 
         // check if the player cap is reached and eventually start the game!
         if (numberOfPlayers != 0 && numberOfPlayers == players.size()) {
-            this.gameStatus = GameStatus.STARTED;
+            this.gameStatus = Game.Status.STARTED;
         }
 
         // notify lobby
@@ -133,7 +133,6 @@ public class Game extends Observable {
             }
         }
     }
-
 
     /**
      * @return the players
@@ -221,7 +220,7 @@ public class Game extends Observable {
     /**
      * @return the game status
      */
-    public GameStatus getGameStatus() {
+    public Game.Status getGameStatus() {
         return gameStatus;
     }
 
@@ -229,7 +228,7 @@ public class Game extends Observable {
      * sets the game to ended
      */
     public void endGame() {
-        this.gameStatus = GameStatus.ENDED;
+        this.gameStatus = Game.Status.ENDED;
 
         // notifies listeners of the changes
         notifyObservers(new GameViewMsg(this));
@@ -237,6 +236,8 @@ public class Game extends Observable {
 
     public void advancePlayerTurn() {
         currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % numberOfPlayers);
+        GameViewMsg currentGameView = new GameViewMsg(this);
+        List<List<Integer>> emptyList = new ArrayList<>();
 
         // if there are no takeable cards one next to each other, refill the board
         boolean needsRefill = true;
@@ -244,16 +245,16 @@ public class Game extends Observable {
             for (int column = 0; column < boardSize && needsRefill; column++) {
 
                 // if the card considered is takeable...
-                if (isTakeable(new GameViewMsg(this), row, column, null)) {
+                if (isTakeable(currentGameView, row, column, emptyList)) {
 
                     // check if one of the adjacent cards is takeable
-                    if (row > 0 && isTakeable(new GameViewMsg(this), row - 1, column, null)) {
+                    if (row > 0 && isTakeable(currentGameView, row - 1, column, emptyList)) {
                         needsRefill = false;
-                    } else if (row < boardSize - 1 && isTakeable(new GameViewMsg(this), row + 1, column, null)) {
+                    } else if (row < boardSize - 1 && isTakeable(currentGameView, row + 1, column, emptyList)) {
                         needsRefill = false;
-                    } else if (column > 0 && isTakeable(new GameViewMsg(this), row, column - 1, null)) {
+                    } else if (column > 0 && isTakeable(currentGameView, row, column - 1, emptyList)) {
                         needsRefill = false;
-                    } else if (column < boardSize - 1 && isTakeable(new GameViewMsg(this), row, column + 1, null)) {
+                    } else if (column < boardSize - 1 && isTakeable(currentGameView, row, column + 1, emptyList)) {
                         needsRefill = false;
                     }
                 }
@@ -265,5 +266,11 @@ public class Game extends Observable {
         // TODO consider the case in which the game ends
 
         notifyObservers(new GameViewMsg(this));
+    }
+
+    public enum Status {
+        WAITING,
+        STARTED,
+        ENDED
     }
 }
