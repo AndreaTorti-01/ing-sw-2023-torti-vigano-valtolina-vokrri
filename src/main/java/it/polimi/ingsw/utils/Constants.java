@@ -1,5 +1,9 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.network.serializable.GameViewMsg;
+
+import java.util.List;
+
 /**
  * A class containing all the constant values of the game
  */
@@ -33,4 +37,65 @@ public class Constants {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
+    /**
+     * takes in coords of a card you want to take and returns true if you can take it
+     * already takes care of out of bounds and null cards
+     *
+     * @param gameViewMsg
+     * @param row
+     * @param column
+     * @param pickedCoords already picked cards
+     * @return
+     */
+    public static boolean isTakeable(GameViewMsg gameViewMsg, int row, int column, List<List<Integer>> pickedCoords) {
+        // TODO diego fix this
+
+        boolean free = false; //has a null adjacent card
+        boolean valid = true; //is a valid card (not taken yet, in the same row or col as the others)
+        boolean adjacent = false; //is adjacent to at least one of the other cards
+
+        // out of bound check
+        if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns) return false;
+        // non-existing card check
+        if (!gameViewMsg.getBoardValid()[row][column] || gameViewMsg.getBoard()[row][column] == null) return false;
+
+        // checking if the card is adjacent to a free space (necessary to be takeable)
+        if (row == 0 || row == numberOfRows - 1) free = true;
+        else if (column == 0 || column == numberOfColumns - 1) free = true;
+        else if (gameViewMsg.getBoard()[row - 1][column] == null || gameViewMsg.getBoard()[row + 1][column] == null || gameViewMsg.getBoard()[row][column - 1] == null || gameViewMsg.getBoard()[row][column + 1] == null)
+            free = true;
+        else if (!gameViewMsg.getBoardValid()[row - 1][column] || !gameViewMsg.getBoardValid()[row + 1][column] || !gameViewMsg.getBoardValid()[row][column - 1] || !gameViewMsg.getBoardValid()[row][column + 1])
+            free = true;
+
+        // the cards must be adjacent to each other (in line or in column) -> valid is used to check this condition
+        if (pickedCoords.size() > 0) {
+            boolean inRow = true;
+            boolean inColumn = true;
+            for (List<Integer> coords : pickedCoords) {
+                if (row == coords.get(0) && column == coords.get(1)) valid = false; //already picked
+                if (row != coords.get(0)) inRow = false;
+                if (column != coords.get(1)) inColumn = false;
+            }
+            valid = valid && (inRow || inColumn);
+        }
+
+        // the card must be adjacent to at least one of the other cards
+        if (pickedCoords.size() > 0) {
+            for (List<Integer> coords : pickedCoords) {
+                if (isAdjacent(row, column, coords.get(0), coords.get(1))) {
+                    adjacent = true;
+                    break;
+                }
+            }
+        } else adjacent = true;
+
+
+        return free && valid && adjacent;
+    }
+
+    public static boolean isAdjacent(int row, int column, int row2, int column2) {
+        return Math.abs(row - row2) == 1 && column == column2 ||
+                row == row2 && Math.abs(column - column2) == 1;
+    }
 }

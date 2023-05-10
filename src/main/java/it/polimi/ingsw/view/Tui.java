@@ -180,7 +180,7 @@ public class Tui extends Observable implements RunnableView {
         //asking for card coordinates
         System.out.println("You can take up to " + maxCards + " cards");
 
-        while (pickedNum < maxCards ) {
+        while (pickedNum < maxCards) {
             System.out.print("Card " + (pickedNum + 1) + "-> enter ROW number:  ");
             int row = scanner.nextInt();
             System.out.print("Card " + (pickedNum + 1) + "-> enter COLUMN number:  ");
@@ -212,55 +212,6 @@ public class Tui extends Observable implements RunnableView {
         }
         //notifying observers
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
-    }
-
-    private boolean isAdjacent(int row, int column, int row2, int column2) {
-        if (row == row2 && (column == column2 + 1 || column == column2 - 1)) return true;
-        return column == column2 && (row == row2 + 1 || row == row2 - 1);
-    }
-
-    private boolean isTakeable(GameViewMsg gameViewMsg, int row, int column, List<List<Integer>> pickedCoords) {
-        boolean free = false; //has a null adjacent card
-        boolean valid = true; //is a valid card (not taken yet, in the same row or col as the others)
-        boolean adjacent = false; //is adjacent to at least one of the other cards
-
-        //out of bound check
-        if (row < 0 || row >= numberOfRows || column < 0 || column >= numberOfColumns) return false;
-        //non existing card check
-        if (!gameViewMsg.getBoardValid()[row][column] || gameViewMsg.getBoard()[row][column] == null) return false;
-
-        //checking if the card is adjacent to a free space (necessary to be taken
-        if (row == 0 || row == numberOfRows - 1) free = true;
-        else if (column == 0 || column == numberOfColumns - 1) free = true;
-        else if (gameViewMsg.getBoard()[row - 1][column] == null || gameViewMsg.getBoard()[row + 1][column] == null || gameViewMsg.getBoard()[row][column - 1] == null || gameViewMsg.getBoard()[row][column + 1] == null)
-            free = true;
-        else if (!gameViewMsg.getBoardValid()[row - 1][column] || !gameViewMsg.getBoardValid()[row + 1][column] || !gameViewMsg.getBoardValid()[row][column - 1] || !gameViewMsg.getBoardValid()[row][column + 1])
-            free = true;
-
-        //the cards must be adjacent to each other (in line or in column) -> valid is used to check this condition
-        if (pickedCoords.size() > 0) {
-            boolean inRow = true;
-            boolean inColumn = true;
-            for (List<Integer> coords : pickedCoords) {
-                if (row == coords.get(0) && column == coords.get(1)) valid = false; //already picked
-                if (row != coords.get(0)) inRow = false;
-                if (column != coords.get(1)) inColumn = false;
-            }
-            valid = valid && (inRow || inColumn);
-        }
-
-        //the card must be adjacent to at least one of the other cards
-        if (pickedCoords.size() > 0) {
-            for (List<Integer> coords : pickedCoords) {
-                if (isAdjacent(row, column, coords.get(0), coords.get(1))) {
-                    adjacent = true;
-                    break;
-                }
-            }
-        } else adjacent = true;
-
-
-        return free && valid && adjacent;
     }
 
     private void printGameStatus() {

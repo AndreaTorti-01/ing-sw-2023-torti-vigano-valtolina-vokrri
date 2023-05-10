@@ -237,7 +237,33 @@ public class Game extends Observable {
 
     public void advancePlayerTurn() {
         currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % numberOfPlayers);
-        // TODO consider refilling board
+
+        // if there are no takeable cards one next to each other, refill the board
+        boolean needsRefill = true;
+        for (int row = 0; row < boardSize && needsRefill; row++) {
+            for (int column = 0; column < boardSize && needsRefill; column++) {
+
+                // if the card considered is takeable...
+                if (isTakeable(new GameViewMsg(this), row, column, null)) {
+
+                    // check if one of the adjacent cards is takeable
+                    if (row > 0 && isTakeable(new GameViewMsg(this), row - 1, column, null)) {
+                        needsRefill = false;
+                    } else if (row < boardSize - 1 && isTakeable(new GameViewMsg(this), row + 1, column, null)) {
+                        needsRefill = false;
+                    } else if (column > 0 && isTakeable(new GameViewMsg(this), row, column - 1, null)) {
+                        needsRefill = false;
+                    } else if (column < boardSize - 1 && isTakeable(new GameViewMsg(this), row, column + 1, null)) {
+                        needsRefill = false;
+                    }
+                }
+            }
+        }
+
+        if (needsRefill) this.refillBoard();
+
+        // TODO consider the case in which the game ends
+
         notifyObservers(new GameViewMsg(this));
     }
 }
