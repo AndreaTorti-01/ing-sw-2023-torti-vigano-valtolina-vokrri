@@ -237,6 +237,8 @@ public class Game extends Observable {
 
     public void advancePlayerTurn() {
         currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % numberOfPlayers);
+        GameViewMsg currentGameView = new GameViewMsg(this);
+        List<List<Integer>> emptyList = new ArrayList<>();
 
         // if there are no takeable cards one next to each other, refill the board
         boolean needsRefill = true;
@@ -244,16 +246,16 @@ public class Game extends Observable {
             for (int column = 0; column < boardSize && needsRefill; column++) {
 
                 // if the card considered is takeable...
-                if (isTakeable(new GameViewMsg(this), row, column, null)) {
+                if (isTakeable(currentGameView, row, column, emptyList)) {
 
                     // check if one of the adjacent cards is takeable
-                    if (row > 0 && isTakeable(new GameViewMsg(this), row - 1, column, null)) {
+                    if (row > 0 && isTakeable(currentGameView, row - 1, column, emptyList)) {
                         needsRefill = false;
-                    } else if (row < boardSize - 1 && isTakeable(new GameViewMsg(this), row + 1, column, null)) {
+                    } else if (row < boardSize - 1 && isTakeable(currentGameView, row + 1, column, emptyList)) {
                         needsRefill = false;
-                    } else if (column > 0 && isTakeable(new GameViewMsg(this), row, column - 1, null)) {
+                    } else if (column > 0 && isTakeable(currentGameView, row, column - 1, emptyList)) {
                         needsRefill = false;
-                    } else if (column < boardSize - 1 && isTakeable(new GameViewMsg(this), row, column + 1, null)) {
+                    } else if (column < boardSize - 1 && isTakeable(currentGameView, row, column + 1, emptyList)) {
                         needsRefill = false;
                     }
                 }
