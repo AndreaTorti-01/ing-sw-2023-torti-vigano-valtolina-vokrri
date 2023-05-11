@@ -138,6 +138,17 @@ public class Shelf implements Serializable {
         return length;
     }
 
+    /**
+     * @return true if the shelf does not have any available space left, false otherwise
+     */
+    public boolean isFull() {
+        for (int column = 0; column < numberOfColumns; column++) {
+            // if a column does not have a card in the first row, the shelf is not full
+            if (this.getCardAt(0, column) == null) return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();

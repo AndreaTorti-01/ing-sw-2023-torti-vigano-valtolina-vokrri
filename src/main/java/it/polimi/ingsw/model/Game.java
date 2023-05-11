@@ -22,7 +22,7 @@ public class Game extends Observable {
     private Game.Status gameStatus = Game.Status.WAITING;
     private Player winner;
     private int numberOfPlayers;
-    private boolean isGameEnded = false;
+    private boolean isGameEnded;
 
     public Game() {
         this.bag = new Bag();
@@ -236,52 +236,62 @@ public class Game extends Observable {
         notifyObservers(new GameViewMsg(this));
     }
 
-    private void addFinalPoints(){
+    private void addFinalPoints() {
         // at the end of the game the personalGoal points are assigned
         System.err.println("setting PersonalGoalCard points...");
-        for(Player p: players) p.setScore(p.getScore() + p.getPersonalGoalCard().checkPattern(p.getShelf()) );
+        for (Player player : players) {
+            int currentScore = player.getScore();
+            // calculates the score obtained from the personal goal card
+            int personalGoalCardScore = player.getPersonalGoalCard().checkPattern(player.getShelf());
+
+            // sets the final score of the player
+            player.setScore(currentScore + personalGoalCardScore);
+        }
+
         // is assigned a bonus point to the first player completing the shelf.
         // (in case of multiple full-shelves, the first one in the player list is necessarily the first-completed one)
         System.err.println("setting the final bonus point...");
-        for(Player p: players) if(isShelfFull(p.getShelf())) p.setScore(p.getScore() + 1);
+        for (Player player : players) {
+            if (player.getShelf().isFull()) {
+                player.setScore(player.getScore() + 1);
+                break;
+            }
+        }
+
         // assigning bonus points for the size of the tile aggregations - using headLiminate() function as in AGGAREGATE cgc strategy
-        for(Player p: players) {
-            Shelf sCopy = p.getShelf().getCopy();
-            for(int i = 0; i < numberOfRows; i++)
-                for(int j = 0; j < numberOfColumns; j++) {
+        for (Player player : players) {
+            Shelf shelfCopy = player.getShelf().getCopy();
+            for (int i = 0; i < numberOfRows; i++)
+                for (int j = 0; j < numberOfColumns; j++) {
                     int aggregateScore;
-                    int aggregateSize = headLiminate(sCopy, sCopy.getCardAt(i, j));
-                    switch(aggregateSize){
-                        case 0, 1, 2 -> {aggregateScore = 0;}
-                        case 3 -> {aggregateScore = 2;}
-                        case 4 -> {aggregateScore = 3;}
-                        case 5 -> {aggregateScore = 5;}
+                    int aggregateSize = headLiminate(shelfCopy, shelfCopy.getCardAt(i, j));
+
+                    switch (aggregateSize) {
+                        case 0, 1, 2 -> aggregateScore = 0;
+                        case 3 -> aggregateScore = 2;
+                        case 4 -> aggregateScore = 3;
+                        case 5 -> aggregateScore = 5;
+                        default -> aggregateScore = 8;
                     }
-                    if(aggregateSize > 5) aggregateScore = 8;
-                    else aggregateScore = 0;
-                    p.setScore(p.getScore() + aggregateScore);
+
+                    player.setScore(player.getScore() + aggregateScore);
                 }
         }
     }
 
-    private boolean isShelfFull(Shelf s){
-        boolean full = true;
-        for (int i = 0; i < numberOfColumns; i++) if (s.getCardAt(0, i) == null) full = false;
-        //if all the columns are full, the shelf is full
-        return full;
-    }
-
     public void advancePlayerTurn() {
-        Player prevPlayer = currentPlayer;
-        Player firstFinishing = null;
+        Player previousPlayer = currentPlayer;
         currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % numberOfPlayers);
         GameViewMsg currentGameView = new GameViewMsg(this);
         List<List<Integer>> emptyList = new ArrayList<>();
 
-        // if the lash moving player is at the bottom of the list, and there is at least a player
+        // if the last moving player is at the bottom of the list, and there is at least a player
         // with a full shelf, the game is over
-        if (prevPlayer.equals(players.get(players.size()-1)))
-            for (Player p : players) if(isShelfFull(p.getShelf()) && !this.gameStatus.equals(Status.ENDED)) this.endGame();
+        if (previousPlayer.equals(players.get(players.size() - 1)))
+            for (Player player : players) {
+                if (player.getShelf().isFull() && !this.gameStatus.equals(Status.ENDED))
+                    this.endGame();
+            }
 
         // if there are no takeable cards one next to each other, refill the board
         boolean needsRefill = true;
@@ -304,6 +314,7 @@ public class Game extends Observable {
                 }
             }
         }
+
         if (needsRefill) this.refillBoard();
 
         // common points:
@@ -323,11 +334,11 @@ public class Game extends Observable {
         // CommonGoalCards points will be assigned at runtime
 
 
-        for(int i = 0; i < commonGoalCards.size(); i++){
+        for (int i = 0; i < commonGoalCards.size(); i++) {
             //if he didn't achieve it yet and now the pattern is respected, commonGC points will be assigned
-            if(!prevPlayer.hasAchievedCommonGoalCard(i) && commonGoalCards.get(i).checkPattern(prevPlayer.getShelf())) {
-                prevPlayer.setScore(prevPlayer.getScore() + commonGoalCards.get(i).popPoints());
-                prevPlayer.setAchievedCommonGoalCard(i);
+            if (!previousPlayer.hasAchievedCommonGoalCard(i) && commonGoalCards.get(i).checkPattern(previousPlayer.getShelf())) {
+                previousPlayer.setScore(previousPlayer.getScore() + commonGoalCards.get(i).popPoints());
+                previousPlayer.setAchievedCommonGoalCard(i);
             }
         }
 
@@ -339,6 +350,4 @@ public class Game extends Observable {
         STARTED,
         ENDED
     }
-
-
 }
