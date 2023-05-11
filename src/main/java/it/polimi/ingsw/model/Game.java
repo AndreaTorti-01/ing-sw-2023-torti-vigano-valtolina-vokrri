@@ -22,6 +22,7 @@ public class Game extends Observable {
     private Game.Status gameStatus = Game.Status.WAITING;
     private Player winner;
     private int numberOfPlayers;
+    private boolean isGameEnded = false;
 
     public Game() {
         this.bag = new Bag();
@@ -239,6 +240,18 @@ public class Game extends Observable {
         GameViewMsg currentGameView = new GameViewMsg(this);
         List<List<Integer>> emptyList = new ArrayList<>();
 
+        if (currentPlayer.equals(players.size())) {
+            for (Player p : players) {
+                int count = 0;
+                Shelf s = p.getShelf();
+                for (int i = 0; i < 5; i++) {
+                    if (s.getCardAt(0, i) != null) {
+                        count++;
+                    }
+                }
+                if (count == 5) isGameEnded = true;
+            }
+        }
         // if there are no takeable cards one next to each other, refill the board
         boolean needsRefill = true;
         for (int row = 0; row < boardSize && needsRefill; row++) {
@@ -268,6 +281,7 @@ public class Game extends Observable {
         // TODO add player commongoalcard points
 
         // TODO check if game ended
+        if (isGameEnded) this.endGame();
 
         // TODO if it ended add final points and set Status.ENDED
 
@@ -279,4 +293,6 @@ public class Game extends Observable {
         STARTED,
         ENDED
     }
+
+
 }
