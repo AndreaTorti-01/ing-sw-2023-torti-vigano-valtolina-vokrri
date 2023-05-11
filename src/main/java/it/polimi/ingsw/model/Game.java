@@ -231,6 +231,11 @@ public class Game extends Observable {
     public void endGame() {
         this.gameStatus = Game.Status.ENDED;
 
+
+        // at the end of the game the personalGoal points are assigned
+        System.err.println("setting PersonalGoalCard points...");
+        for(Player p: players) p.setScore(p.getScore() + p.getPersonalGoalCard().checkPattern(p.getShelf()) );
+
         // notifies listeners of the changes
         notifyObservers(new GameViewMsg(this));
     }
@@ -276,21 +281,35 @@ public class Game extends Observable {
         }
 
         if (needsRefill) this.refillBoard();
+        // common points:
+        // 8 - 4
+        // 8 - 6 - 4
+        // 8 - 6 - 4 - 2
 
-        // PersonalGoalCard checking...
+        // TODO + 1 pt a chi finisce per primo
+
+        // personal
+        // 1  2  3  4  5  6  -> numero di tessere rispettate
+        // 1  2  4  6  9  12 -> punteggio assegnato
+
+        // TODO punteggi aggregazione
+        // 3  4  5  6+  grandezza cluster
+        // 2  3  5  8   punteggio
+
+        // CommonGoalCard checking...
         // Must check the shelf of the previous player, who just played his move
+        // CommonGoalCards points will be assigned at runtime
         Player prev = players.get((players.indexOf(currentPlayer)-1) % players.size());
-        if(!prev.hasAchievedPersonalGoalCard() &&
-            prev.getPersonalGoalCard().checkPattern(prev.getShelf()))
 
+        for(int i = 0; i < commonGoalCards.size(); i++){
+            //if he didn't achieve it yet and now the pattern is respected, commonGC points will be assigned
+            if(!prev.hasAchievedCommonGoalCard(i) && commonGoalCards.get(i).checkPattern(prev.getShelf())) {
+                prev.setScore(prev.getScore() + commonGoalCards.get(i).popPoints());
+                prev.setAchievedCommonGoalCard(i);
+            }
+        }
 
-
-        // TODO add player commongoalcard points
-
-        // TODO check if game ended
         if (isGameEnded) this.endGame();
-
-        // TODO if it ended add final points and set Status.ENDED
 
         notifyObservers(new GameViewMsg(this));
     }

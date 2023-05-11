@@ -1,12 +1,13 @@
 package it.polimi.ingsw.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Player implements Serializable {
     private final String name;
     private final Shelf shelf;
     private PersonalGoalCard personalGoalCard;
-    private boolean hasAchievedCommonGoalCard;
+    private boolean[] hasAchievedCommonGoalCard;
     private boolean hasAchievedPersonalGoalCard;
     private int score;
 
@@ -14,7 +15,7 @@ public class Player implements Serializable {
         this.name = name;
         this.shelf = new Shelf();
         this.score = 0;
-        this.hasAchievedCommonGoalCard = false;
+        this.hasAchievedCommonGoalCard = new boolean[2];
         this.hasAchievedPersonalGoalCard = false;
     }
 
@@ -42,12 +43,19 @@ public class Player implements Serializable {
         return name;
     }
 
-    public boolean hasAchievedCommonGoalCard() {
-        return hasAchievedCommonGoalCard;
+    public boolean hasAchievedCommonGoalCard(int index) {
+        if(index >= 0 && index < 2) return hasAchievedCommonGoalCard[index];
+        else {
+            System.err.println("invalid CGC index!");
+            return false;
+        }
     }
 
-    public void setAchievedCommonGoalCard() {
-        this.hasAchievedCommonGoalCard = true;
+    public void setAchievedCommonGoalCard(int index) {
+        if (index >= 0 && index < 2) hasAchievedCommonGoalCard[index] = true;
+        else{
+            System.err.println("invalid CGC index!");
+        }
     }
 
     public boolean hasAchievedPersonalGoalCard() {

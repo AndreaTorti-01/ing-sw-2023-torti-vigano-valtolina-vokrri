@@ -38,17 +38,37 @@ public class PersonalGoalCard implements Serializable {
         pattern[row][column] = itemType;
     }
 
-    public boolean checkPattern(Shelf shelf) {
+    public int checkPattern(Shelf shelf) {
+        int goodTilesNum = 0;
         for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < numberOfColumns; column++) {
                 ItemCard currentCard = shelf.getCardAt(row, column);
                 ItemType checker = this.getTypeAt(row, column);
 
-                if (currentCard != null && !currentCard.getType().equals(checker)) return false;
-                if (currentCard == null && checker != null) return false;
+                if (currentCard.getType().equals(checker)) goodTilesNum++;
             }
         }
-        return true;
+        switch (goodTilesNum){
+            case 1 -> {
+                return 1;
+            }
+            case 2 -> {
+                return 2;
+            }
+            case 3 -> {
+                return 4;
+            }
+            case 4 -> {
+                return 6;
+            }
+            case 5 -> {
+                return 9;
+            }
+            case 6 -> {
+                return 12;
+            }
+        }
+        return 0;
     }
 
     public ItemType getTypeAt(int row, int column) {
@@ -69,4 +89,5 @@ public class PersonalGoalCard implements Serializable {
 
         return output.toString();
     }
+
 }
