@@ -330,7 +330,6 @@ public class Game extends Observable {
                 prevPlayer.setAchievedCommonGoalCard(i);
             }
         }
-        if (isGameEnded) this.endGame();
 
         notifyObservers(new GameViewMsg(this));
     }

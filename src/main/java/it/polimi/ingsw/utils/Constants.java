@@ -134,7 +134,7 @@ public class Constants {
         }
         return 0;
     }
-}
+
 
     public static List<ItemCard> getHeads(Shelf shelfCopy, int row, int column) {
         List<ItemCard> heads = new ArrayList<>();
