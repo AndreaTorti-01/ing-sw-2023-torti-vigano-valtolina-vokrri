@@ -240,16 +240,17 @@ public class Game extends Observable {
         GameViewMsg currentGameView = new GameViewMsg(this);
         List<List<Integer>> emptyList = new ArrayList<>();
 
-        if (currentPlayer.equals(players.size())) {
+        if (currentPlayer.equals(players.get(players.size()-1))) {
             for (Player p : players) {
                 int count = 0;
                 Shelf s = p.getShelf();
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < numberOfColumns; i++) {
                     if (s.getCardAt(0, i) != null) {
                         count++;
                     }
                 }
-                if (count == 5) isGameEnded = true;
+                //if all the columns are full, the shelf is full and the game must end
+                if (count == numberOfColumns) isGameEnded = true;
             }
         }
         // if there are no takeable cards one next to each other, refill the board
@@ -276,7 +277,13 @@ public class Game extends Observable {
 
         if (needsRefill) this.refillBoard();
 
-        // TODO add player personalgoalcard points
+        // PersonalGoalCard checking...
+        // Must check the shelf of the previous player, who just played his move
+        Player prev = players.get((players.indexOf(currentPlayer)-1) % players.size());
+        if(!prev.hasAchievedPersonalGoalCard() &&
+            prev.getPersonalGoalCard().checkPattern(prev.getShelf()))
+
+
 
         // TODO add player commongoalcard points
 
