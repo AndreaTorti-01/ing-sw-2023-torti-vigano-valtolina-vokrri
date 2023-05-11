@@ -230,34 +230,59 @@ public class Game extends Observable {
      */
     public void endGame() {
         this.gameStatus = Game.Status.ENDED;
-
-
-        // at the end of the game the personalGoal points are assigned
-        System.err.println("setting PersonalGoalCard points...");
-        for(Player p: players) p.setScore(p.getScore() + p.getPersonalGoalCard().checkPattern(p.getShelf()) );
-
+        //adding final points...
+        addFinalPoints();
         // notifies listeners of the changes
         notifyObservers(new GameViewMsg(this));
     }
 
+    private void addFinalPoints(){
+        // at the end of the game the personalGoal points are assigned
+        System.err.println("setting PersonalGoalCard points...");
+        for(Player p: players) p.setScore(p.getScore() + p.getPersonalGoalCard().checkPattern(p.getShelf()) );
+        // is assigned a bonus point to the first player completing the shelf.
+        // (in case of multiple full-shelves, the first one in the player list is necessarily the first-completed one)
+        System.err.println("setting the final bonus point...");
+        for(Player p: players) if(isShelfFull(p.getShelf())) p.setScore(p.getScore() + 1);
+        // assigning bonus points for the size of the tile aggregations - using headLiminate() function as in AGGAREGATE cgc strategy
+        for(Player p: players) {
+            Shelf sCopy = p.getShelf().getCopy();
+            for(int i = 0; i < numberOfRows; i++)
+                for(int j = 0; j < numberOfColumns; j++) {
+                    int aggregateScore;
+                    int aggregateSize = headLiminate(sCopy, sCopy.getCardAt(i, j));
+                    switch(aggregateSize){
+                        case 0, 1, 2 -> {aggregateScore = 0;}
+                        case 3 -> {aggregateScore = 2;}
+                        case 4 -> {aggregateScore = 3;}
+                        case 5 -> {aggregateScore = 5;}
+                    }
+                    if(aggregateSize > 5) aggregateScore = 8;
+                    else aggregateScore = 0;
+                    p.setScore(p.getScore() + aggregateScore);
+                }
+        }
+    }
+
+    private boolean isShelfFull(Shelf s){
+        boolean full = true;
+        for (int i = 0; i < numberOfColumns; i++) if (s.getCardAt(0, i) == null) full = false;
+        //if all the columns are full, the shelf is full
+        return full;
+    }
+
     public void advancePlayerTurn() {
+        Player prevPlayer = currentPlayer;
+        Player firstFinishing = null;
         currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % numberOfPlayers);
         GameViewMsg currentGameView = new GameViewMsg(this);
         List<List<Integer>> emptyList = new ArrayList<>();
 
-        if (currentPlayer.equals(players.get(players.size()-1))) {
-            for (Player p : players) {
-                int count = 0;
-                Shelf s = p.getShelf();
-                for (int i = 0; i < numberOfColumns; i++) {
-                    if (s.getCardAt(0, i) != null) {
-                        count++;
-                    }
-                }
-                //if all the columns are full, the shelf is full and the game must end
-                if (count == numberOfColumns) isGameEnded = true;
-            }
-        }
+        // if the lash moving player is at the bottom of the list, and there is at least a player
+        // with a full shelf, the game is over
+        if (prevPlayer.equals(players.get(players.size()-1)))
+            for (Player p : players) if(isShelfFull(p.getShelf()) && !this.gameStatus.equals(Status.ENDED)) this.endGame();
+
         // if there are no takeable cards one next to each other, refill the board
         boolean needsRefill = true;
         for (int row = 0; row < boardSize && needsRefill; row++) {
@@ -279,36 +304,32 @@ public class Game extends Observable {
                 }
             }
         }
-
         if (needsRefill) this.refillBoard();
+
         // common points:
         // 8 - 4
         // 8 - 6 - 4
         // 8 - 6 - 4 - 2
 
-        // TODO + 1 pt a chi finisce per primo
-
         // personal
         // 1  2  3  4  5  6  -> numero di tessere rispettate
         // 1  2  4  6  9  12 -> punteggio assegnato
 
-        // TODO punteggi aggregazione
         // 3  4  5  6+  grandezza cluster
         // 2  3  5  8   punteggio
 
         // CommonGoalCard checking...
         // Must check the shelf of the previous player, who just played his move
         // CommonGoalCards points will be assigned at runtime
-        Player prev = players.get((players.indexOf(currentPlayer)-1) % players.size());
+
 
         for(int i = 0; i < commonGoalCards.size(); i++){
             //if he didn't achieve it yet and now the pattern is respected, commonGC points will be assigned
-            if(!prev.hasAchievedCommonGoalCard(i) && commonGoalCards.get(i).checkPattern(prev.getShelf())) {
-                prev.setScore(prev.getScore() + commonGoalCards.get(i).popPoints());
-                prev.setAchievedCommonGoalCard(i);
+            if(!prevPlayer.hasAchievedCommonGoalCard(i) && commonGoalCards.get(i).checkPattern(prevPlayer.getShelf())) {
+                prevPlayer.setScore(prevPlayer.getScore() + commonGoalCards.get(i).popPoints());
+                prevPlayer.setAchievedCommonGoalCard(i);
             }
         }
-
         if (isGameEnded) this.endGame();
 
         notifyObservers(new GameViewMsg(this));
