@@ -219,11 +219,50 @@ public class Tui extends Observable implements RunnableView {
         printBoard(modelView.getBoard(), modelView.getBoardValid());
         System.out.println("\n");
         printShelves();
+        printPersonalGoalCards();
+        printCommonGoalCards();
+        printScores();
     }
 
+    private void printCommonGoalCards(){;
+        System.out.println("Common goal cards: ");
+        for(int i = 0; i < modelView.getCommonGoalCards().size(); i++){
+            System.out.print((i+1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString()+ "\t\t\t");
+        }
+        System.out.println();
+    }
+
+    private void printPersonalGoalCards(){
+        System.out.println("Personal goal cards: ");
+        for(Player p: modelView.getPlayers()) {
+            if (p.getName().equals(playerName)) {
+                StringBuilder output = new StringBuilder();
+
+                for (int i = 0; i < numberOfRows; i++) {
+                    output.append("| ");
+                    for (int j = 0; j < numberOfColumns; j++) {
+                        if (p.getPersonalGoalCard().getPattern()[i][j] != null)
+                            output.append(p.getPersonalGoalCard().getPattern()[i][j].toString().charAt(0)).append(" ");
+                        else output.append("* ");
+                    }
+                    output.append("|\n");
+                }
+                output.append("-------------\n");
+
+                output.append("  ");
+                for (int i = 0; i < numberOfColumns; i++) {
+                    output.append(i).append(" ");
+                }
+                output.append("\n\n");
+
+                System.out.print(output);
+            }
+        }
+    }
 
     private void printEndScreen(String winnerName) {
         System.out.println("The winner is " + winnerName + "!");
+        printScores();
     }
 
     /**
@@ -279,6 +318,13 @@ public class Tui extends Observable implements RunnableView {
             output.append("\n\n");
 
             System.out.print(output);
+        }
+    }
+
+    private void printScores(){
+        System.out.println("Scores:");
+        for (Player p : modelView.getPlayers()) {
+            System.out.println(p.getName() + "'s points: " + p.getScore());
         }
     }
 
