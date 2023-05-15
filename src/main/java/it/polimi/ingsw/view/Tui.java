@@ -205,7 +205,7 @@ public class Tui extends Observable implements RunnableView {
             System.out.println("Chose a shelf column to move the cards to: ");
             while(!validChoice) {
                 try {
-                    shelfCol = Integer.parseInt(scanLine());
+                    shelfCol = scanner.nextInt();
                     if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
                     else if (freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
                     else validChoice = true;
