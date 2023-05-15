@@ -142,7 +142,6 @@ public class Tui extends Observable implements RunnableView {
         notifyObservers(playerNumber);
     }
 
-
     /**
      * takes care of notifying observer
      */
@@ -202,14 +201,19 @@ public class Tui extends Observable implements RunnableView {
 
         }
 
-        while (!validChoice) {
+
             System.out.println("Chose a shelf column to move the cards to: ");
-            shelfCol = scanner.nextInt();
-            scanner.nextLine();
-            if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
-            else if (freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
-            else validChoice = true;
-        }
+            while(!validChoice) {
+                try {
+                    shelfCol = Integer.parseInt(scanLine());
+                    if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
+                    else if (freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
+                    else validChoice = true;
+                } catch (NumberFormatException e) {
+                    printError("Invalid number or non-numeric input");
+                }
+
+            }
 
         //notifying observers
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
