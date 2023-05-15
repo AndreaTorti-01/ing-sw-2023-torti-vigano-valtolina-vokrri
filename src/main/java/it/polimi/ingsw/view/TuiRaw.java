@@ -14,9 +14,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import static it.polimi.ingsw.utils.Constants.*;
-import static it.polimi.ingsw.view.TerminalPrintables.*;
 
-public class Tui extends Observable implements RunnableView {
+public class TuiRaw extends Observable implements RunnableView {
     private final Object lock = new Object();
     boolean gaveNumber;
     private String playerName = "";
@@ -24,7 +23,7 @@ public class Tui extends Observable implements RunnableView {
     private State state = State.ASK_NAME;
     private final Scanner scanner = new Scanner(System.in);
 
-    public Tui(Client client) {
+    public TuiRaw(Client client) {
         this.addObserver(client);
     }
 
@@ -46,7 +45,6 @@ public class Tui extends Observable implements RunnableView {
     public void run() {
 
         // asks the player for his name
-        printWelcomeScreen();
         this.playerName = askPlayerName();
 
         // waits for state to change
@@ -115,8 +113,7 @@ public class Tui extends Observable implements RunnableView {
         if (!playerName.equals("") && modelView.getGameStatus().equals(Game.Status.WAITING)) {
             if (playerName.equals(modelView.getPlayers().get(0).getName()) && !gaveNumber)
                 setState(State.ASK_NUMBER); // I am lobby leader
-            else
-                setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
+            else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
         }
         // the game has started
         else if (modelView.getGameStatus().equals(Game.Status.STARTED)) {
@@ -142,7 +139,6 @@ public class Tui extends Observable implements RunnableView {
                 printError("Invalid number or non-numeric input");
             }
         }
-        printWaitingForPlayers();
         notifyObservers(playerNumber);
     }
 
@@ -206,39 +202,30 @@ public class Tui extends Observable implements RunnableView {
         }
 
 
-            System.out.println("Chose a shelf column to move the cards to: ");
-            while(!validChoice) {
-                try {
-                    shelfCol = scanner.nextInt();
-                    if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
-                    else if (freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
-                    else validChoice = true;
-                } catch (NumberFormatException e) {
-                    printError("Invalid number or non-numeric input");
-                }
-
+        System.out.println("Chose a shelf column to move the cards to: ");
+        while(!validChoice) {
+            try {
+                shelfCol = scanner.nextInt();
+                if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
+                else if (freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
+                else validChoice = true;
+            } catch (NumberFormatException e) {
+                printError("Invalid number or non-numeric input");
             }
+
+        }
 
         //notifying observers
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
     }
 
     private void printGameStatus() {
-        // Prints the title, boards and shelves
-        clearConsole();
-        printSeparee();
-        printMyShelfie();
-        printSeparee();
         printBoard(modelView.getBoard(), modelView.getBoardValid());
         System.out.println("\n");
         printShelves();
-        printSeparee();
-        printCommonGoalCards();
-        System.out.println();
         printPersonalGoalCards();
-        printSeparee();
+        printCommonGoalCards();
         printScores();
-        printSeparee();
     }
 
     private void printCommonGoalCards(){;
@@ -250,43 +237,31 @@ public class Tui extends Observable implements RunnableView {
     }
 
     private void printPersonalGoalCards(){
-        System.out.println("Your personal goal card:");
-        Player playingPlayer = null;
+        System.out.println("Personal goal cards: ");
+        for(Player p: modelView.getPlayers()) {
+            if (p.getName().equals(playerName)) {
+                StringBuilder output = new StringBuilder();
 
-        for(Player p: modelView.getPlayers()){
-            if(p.getName().equals(playerName)) playingPlayer = p;
-        }
-
-        if(playingPlayer != null) {
-            System.out.print("\t\t\t╔═════╦═════╦═════╦═════╦═════╗");
-            System.out.print("\n");
-
-            for (int i = 0; i < numberOfRows; i++) {
-                System.out.print("\t\t\t║");
-                for (int j = 0; j < numberOfColumns; j++) {
-                    if (playingPlayer.getPersonalGoalCard().getPattern()[i][j] == null) printEmpty();
-                    else {
-                        switch (playingPlayer.getPersonalGoalCard().getPattern()[i][j]) {
-                            case CATS -> printCat();
-                            case BOOKS -> printBook();
-                            case GAMES -> printGame();
-                            case PLANTS -> printPlant();
-                            case TROPHIES -> printTrophies();
-                            case FRAMES -> printFrame();
-                        }
+                for (int i = 0; i < numberOfRows; i++) {
+                    output.append("| ");
+                    for (int j = 0; j < numberOfColumns; j++) {
+                        if (p.getPersonalGoalCard().getPattern()[i][j] != null)
+                            output.append(p.getPersonalGoalCard().getPattern()[i][j].toString().charAt(0)).append(" ");
+                        else output.append("* ");
                     }
+                    output.append("|\n");
                 }
-                System.out.print(" " + i );
-                System.out.print("\n");
-                if(i != numberOfRows - 1)
-                    System.out.println("\t\t\t╠═════╬═════╬═════╬═════╬═════╣");
+                output.append("-------------\n");
+
+                output.append("  ");
+                for (int i = 0; i < numberOfColumns; i++) {
+                    output.append(i).append(" ");
+                }
+                output.append("\n\n");
+
+                System.out.print(output);
             }
-            System.out.print("\t\t\t╚═════╩═════╩═════╩═════╩═════╝");
-            System.out.print("\n");
-            System.out.print("\t\t\t   0     1     2     3     4  ");
-            System.out.println();
         }
-        else System.err.println("Error: player not found");
     }
 
     private void printEndScreen(String winnerName) {
@@ -324,93 +299,66 @@ public class Tui extends Observable implements RunnableView {
     }
 
     private void printShelves() {
-        int numOfPlayers = modelView.getPlayers().size();
+        for (Player p : modelView.getPlayers()) {
+            Shelf shelf = p.getShelf();
+            System.out.println(p.getName() + "'s Shelf:");
+            StringBuilder output = new StringBuilder();
 
-        for (Player p : modelView.getPlayers())
-            System.out.print("\t\t\t\t\t\t\t\t\t\t" + p.getName());
-        System.out.print("\n");
-
-        for (int nop = 0; nop < numOfPlayers; nop++)
-            System.out.print("\t\t\t╔═════╦═════╦═════╦═════╦═════╗  ");
-        System.out.print("\n");
-
-        for (int i = 0; i < numberOfRows; i++) {
-            for (Player p : modelView.getPlayers()) {
-                System.out.print("\t\t\t║");
+            for (int i = 0; i < numberOfRows; i++) {
+                output.append("| ");
                 for (int j = 0; j < numberOfColumns; j++) {
-                    if (modelView.getShelfOf(p)[i][j] == null) printEmpty();
-                    else {
-                        switch (modelView.getShelfOf(p)[i][j].getType()) {
-                            case CATS -> printCat();
-                            case BOOKS -> printBook();
-                            case GAMES -> printGame();
-                            case PLANTS -> printPlant();
-                            case TROPHIES -> printTrophies();
-                            case FRAMES -> printFrame();
-                        }
-                    }
+                    if (shelf.getItemsMatrix()[i][j] != null)
+                        output.append(shelf.getItemsMatrix()[i][j].toString()).append(" ");
+                    else output.append("* ");
                 }
-                System.out.print(" " + i );
+                output.append("|\n");
             }
-            System.out.print("\n");
-            if(i != numberOfRows - 1) {
-                for (Player p : modelView.getPlayers())
-                    if (i != numberOfRows - 1)
-                        System.out.print("\t\t\t╠═════╬═════╬═════╬═════╬═════╣  ");
-                System.out.print("\n");
+            output.append("-------------\n");
+
+            output.append("  ");
+            for (int i = 0; i < numberOfColumns; i++) {
+                output.append(i).append(" ");
             }
+            output.append("\n\n");
+
+            System.out.print(output);
         }
-        for (int nop = 0; nop < numOfPlayers; nop++)
-            System.out.print("\t\t\t╚═════╩═════╩═════╩═════╩═════╝  ");
-        System.out.print("\n");
-        for (int nop = 0; nop < numOfPlayers; nop++)
-            System.out.print("\t\t\t   0     1     2     3     4");
-        System.out.print("\n");
     }
 
     private void printScores(){
-        System.out.println(ANSI_RED + "\t\tScoreboard:" + ANSI_RESET);
-
+        System.out.println("Scores:");
         for (Player p : modelView.getPlayers()) {
-            if(modelView.getPlayers().indexOf(p) != modelView.getPlayers().size() - 1)
-                System.out.print("\t\t╠════> " + p.getName() + ": " + p.getScore() + "\t");
-            else
-                System.out.print("\t\t╚════> " + p.getName() + ": " + p.getScore() + "\t");
-
-            for(int i = 0; i < p.getScore(); i++)
-                System.out.print("★");
-            System.out.println();
+            System.out.println(p.getName() + "'s points: " + p.getScore());
         }
     }
 
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
+        StringBuilder output = new StringBuilder("The board:\n");
 
-        int boardSize = 9;
-        System.out.println("\t\t\t\t\t\t\t\t\t\t\t╔═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╗");
-
+        output.append("   ");
         for (int i = 0; i < boardSize; i++) {
-            System.out.print("\t\t\t\t\t\t\t\t\t\t\t║");
-            for (int j = 0; j < boardSize; j++) {
-                if (!boardValid[i][j]) {
-                    printInvalid();
-                } else if (board[i][j] == null) printEmpty();
-                else {
-                    switch (board[i][j].getType()) {
-                        case CATS -> printCat();
-                        case BOOKS -> printBook();
-                        case GAMES -> printGame();
-                        case PLANTS -> printPlant();
-                        case TROPHIES -> printTrophies();
-                        case FRAMES -> printFrame();
-                    }
-                }
-            }
-            System.out.print(" " + i + "\n");
-            if (i != boardSize - 1)
-                System.out.println("\t\t\t\t\t\t\t\t\t\t\t╠═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╣");
+            output.append(i).append(" ");
         }
-        System.out.println("\t\t\t\t\t\t\t\t\t\t\t╚═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╝");
-        System.out.println("\t\t\t\t\t\t\t\t\t\t\t   0     1     2     3     4     5     6     7     8");
+        output.append("\n");
+
+        output.append(" ---------------------\n");
+        for (int i = 0; i < boardSize; i++) {
+            output.append(i).append("| ");
+            for (int j = 0; j < boardSize; j++) {
+                if (boardValid[i][j]) {
+                    ItemCard card = board[i][j];
+                    if (card != null) output.append(card).append(" ");
+                    else output.append("* ");
+                } else {
+                    output.append("- ");
+                }
+
+            }
+            output.append("|\n");
+        }
+        output.append(" ---------------------");
+
+        System.out.print(output);
     }
 
     private void printError(String error) {

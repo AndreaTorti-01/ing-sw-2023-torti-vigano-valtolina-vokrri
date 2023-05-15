@@ -264,29 +264,6 @@ public class Tui_Max extends Observable implements RunnableView {
                 \t\t\t\t█   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █▀▀█ 　 █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█ 　 █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀
                 \t\t\t\t█ █ █ █▄▄█ █   █   █ █  █ █ ▀█ 　 █▀▀ █  █ █▄▄▀ 　 █  █   █   █▀▀█ █▀▀ █▄▄▀ 　 █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█
                 \t\t\t\t█▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀""");
-        while (this.gameStatus.equals(Game.Status.WAITING)) {
-            //waits 500 milliseconds
-            try {
-                TimeUnit.MILLISECONDS.sleep(400);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if (iter == 0) {
-                System.out.print(ANSI_YELLOW + "   ▄");
-                iter = 1;
-            } else if (iter == 1) {
-                System.out.print(ANSI_RED + "   ▄");
-                iter = 2;
-            } else if (iter == 2) {
-                System.out.print(ANSI_CYAN + "   ▄");
-                iter = 3;
-            } else {
-                System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b");
-                iter = 0;
-            }
-        }
-
     }
 
     private void printMyShelfie() {
@@ -466,8 +443,6 @@ public class Tui_Max extends Observable implements RunnableView {
             System.out.print("\t\t\t   0     1     2     3     4");
             System.out.print("\n");
         }
-
-
     }
 
     private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
