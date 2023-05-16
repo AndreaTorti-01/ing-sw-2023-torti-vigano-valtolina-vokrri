@@ -3,7 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
@@ -18,11 +17,11 @@ import static it.polimi.ingsw.view.TerminalPrintables.*;
 
 public class Tui extends Observable implements RunnableView {
     private final Object lock = new Object();
+    private final Scanner scanner = new Scanner(System.in);
     boolean gaveNumber;
     private String playerName = "";
     private GameViewMsg modelView;
     private State state = State.ASK_NAME;
-    private final Scanner scanner = new Scanner(System.in);
 
     public Tui(Client client) {
         this.addObserver(client);
@@ -182,7 +181,16 @@ public class Tui extends Observable implements RunnableView {
 
         while (pickedNum < maxCards) {
             System.out.print("Card " + (pickedNum + 1) + "-> enter ROW number:  ");
-            int row = scanner.nextInt();
+            boolean valid = false;
+            int row = 0;
+            while (!valid)
+                try {
+                    row = Integer.parseInt(scanLine());
+                    if (row >= 0 && row < numberOfRows) valid = true;
+                    else printError("Invalid number of players");
+                } catch (NumberFormatException e) {
+                    printError("Invalid number or non-numeric input");
+                }
             scanner.nextLine();
             System.out.print("Card " + (pickedNum + 1) + "-> enter COLUMN number:  ");
             int column = scanner.nextInt();
@@ -206,18 +214,18 @@ public class Tui extends Observable implements RunnableView {
         }
 
 
-            System.out.println("Chose a shelf column to move the cards to: ");
-            while(!validChoice) {
-                try {
-                    shelfCol = scanner.nextInt();
-                    if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
-                    else if (freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
-                    else validChoice = true;
-                } catch (NumberFormatException e) {
-                    printError("Invalid number or non-numeric input");
-                }
-
+        System.out.println("Chose a shelf column to move the cards to: ");
+        while (!validChoice) {
+            try {
+                shelfCol = scanner.nextInt();
+                if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
+                else if (freeSlotsNumber[shelfCol] < pickedNum) printError("Not enough space! retry");
+                else validChoice = true;
+            } catch (NumberFormatException e) {
+                printError("Invalid number or non-numeric input");
             }
+
+        }
 
         //notifying observers
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
@@ -241,23 +249,24 @@ public class Tui extends Observable implements RunnableView {
         printSeparee();
     }
 
-    private void printCommonGoalCards(){;
+    private void printCommonGoalCards() {
+        ;
         System.out.println("Common goal cards: ");
-        for(int i = 0; i < modelView.getCommonGoalCards().size(); i++){
-            System.out.print((i+1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString()+ "\t\t\t");
+        for (int i = 0; i < modelView.getCommonGoalCards().size(); i++) {
+            System.out.print((i + 1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString() + "\t\t\t");
         }
         System.out.println();
     }
 
-    private void printPersonalGoalCards(){
+    private void printPersonalGoalCards() {
         System.out.println("Your personal goal card:");
         Player playingPlayer = null;
 
-        for(Player p: modelView.getPlayers()){
-            if(p.getName().equals(playerName)) playingPlayer = p;
+        for (Player p : modelView.getPlayers()) {
+            if (p.getName().equals(playerName)) playingPlayer = p;
         }
 
-        if(playingPlayer != null) {
+        if (playingPlayer != null) {
             System.out.print("\t\t\t╔═════╦═════╦═════╦═════╦═════╗");
             System.out.print("\n");
 
@@ -276,17 +285,16 @@ public class Tui extends Observable implements RunnableView {
                         }
                     }
                 }
-                System.out.print(" " + i );
+                System.out.print(" " + i);
                 System.out.print("\n");
-                if(i != numberOfRows - 1)
+                if (i != numberOfRows - 1)
                     System.out.println("\t\t\t╠═════╬═════╬═════╬═════╬═════╣");
             }
             System.out.print("\t\t\t╚═════╩═════╩═════╩═════╩═════╝");
             System.out.print("\n");
             System.out.print("\t\t\t   0     1     2     3     4  ");
             System.out.println();
-        }
-        else System.err.println("Error: player not found");
+        } else System.err.println("Error: player not found");
     }
 
     private void printEndScreen(String winnerName) {
@@ -350,10 +358,10 @@ public class Tui extends Observable implements RunnableView {
                         }
                     }
                 }
-                System.out.print(" " + i );
+                System.out.print(" " + i);
             }
             System.out.print("\n");
-            if(i != numberOfRows - 1) {
+            if (i != numberOfRows - 1) {
                 for (Player p : modelView.getPlayers())
                     if (i != numberOfRows - 1)
                         System.out.print("\t\t\t╠═════╬═════╬═════╬═════╬═════╣  ");
@@ -368,16 +376,16 @@ public class Tui extends Observable implements RunnableView {
         System.out.print("\n");
     }
 
-    private void printScores(){
+    private void printScores() {
         System.out.println(ANSI_RED + "\t\tScoreboard:" + ANSI_RESET);
 
         for (Player p : modelView.getPlayers()) {
-            if(modelView.getPlayers().indexOf(p) != modelView.getPlayers().size() - 1)
+            if (modelView.getPlayers().indexOf(p) != modelView.getPlayers().size() - 1)
                 System.out.print("\t\t╠════> " + p.getName() + ": " + p.getScore() + "\t");
             else
                 System.out.print("\t\t╚════> " + p.getName() + ": " + p.getScore() + "\t");
 
-            for(int i = 0; i < p.getScore(); i++)
+            for (int i = 0; i < p.getScore(); i++)
                 System.out.print("★");
             System.out.println();
         }
@@ -418,7 +426,7 @@ public class Tui extends Observable implements RunnableView {
         System.out.println(ANSI_PURPLE + error + ANSI_RESET);
     }
 
-    private String scanLine(){
+    private String scanLine() {
         String ret;
         do {
             ret = scanner.nextLine();

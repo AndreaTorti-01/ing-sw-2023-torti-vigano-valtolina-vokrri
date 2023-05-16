@@ -1,0 +1,22 @@
+ISTRUZIONI DI GIOCO
+
+SCOPO DEL GIOCO:
+
+I giocatori dovranno prendere le tessere Oggetto dalla plancia
+Soggiorno e metterle nelle loro Librerie per guadagnare punti.
+Il gioco termina quando un giocatore riempie completamente la
+propria Libreria; il giocatore con più punti alla fine della partita
+sarà il vincitore. Ci sono 4 modi per guadagnare punti:
+- La Carta Obiettivo Personale fornisce punti se il giocatore riempie gli spazi indicati con
+  le tessere Oggetto corrispondenti.
+- Gruppi di tessere oggetto adiacenti dello stesso tipo nella vostra Libreria forniscono punti a seconda
+ di quante tessere sono collegate (hanno, cioè, un lato che si tocca).
+ Nota: sono considerate dello stesso tipo le tessere Oggetto con lo stesso colore di
+ sfondo.
+- Le carte Obiettivo Comune forniscono punti ai giocatori che realizzano lo schema illustrato.
+  Vedete la descrizione dettagliata delle carte Obiettivo Comune.
+- Innesco della fine della partita: Il primo giocatore che riempie completamente la propria Libreria
+  guadagna 1 punto aggiuntivo.
+
+FLUSSO DI GIOCO:
+
