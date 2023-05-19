@@ -22,7 +22,8 @@ public class RmiClient implements Client {
         super();
         try {
             registry = LocateRegistry.getRegistry();
-        } catch (RemoteException e) {
+            this.clientHandler = (RmiClientHandler) registry.lookup("clientHandler");
+        } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
         view = new Tui(this);
@@ -30,39 +31,33 @@ public class RmiClient implements Client {
 
     @Override
     public void update(Integer numberOfPlayers) throws RemoteException {
-
+        clientHandler.notifyObservers(numberOfPlayers);
     }
 
     @Override
     public void update(String playerName) throws RemoteException {
-
+        clientHandler.notifyObservers(playerName);
     }
 
     @Override
     public void update(MoveMsg move) throws RemoteException {
+        clientHandler.notifyObservers(move);
 
     }
 
     @Override
     public void update(ChatMsg message) throws RemoteException {
-
+        clientHandler.notifyObservers(message);
     }
 
     public void run() {
         GameViewMsg modelView;
         new Thread(view).start();
 
-        try {
-            this.clientHandler = (RmiClientHandler) registry.lookup("clientHandler");
 
-            //noinspection InfiniteLoopStatement
-            do {
-                
-            } while (true);
-        } catch (RemoteException | NotBoundException e) {
-            throw new RuntimeException(e);
-        }
-
-
+        //noinspection InfiniteLoopStatement
+        do {
+            
+        } while (true);
     }
 }

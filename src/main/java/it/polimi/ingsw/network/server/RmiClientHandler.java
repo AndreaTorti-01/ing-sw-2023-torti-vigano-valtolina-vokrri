@@ -10,7 +10,6 @@ public class RmiClientHandler extends Observable implements ClientHandler {
     private final RmiClient client;
 
     public RmiClientHandler(RmiClient client) throws RemoteException {
-
         this.client = client;
     }
 
@@ -21,6 +20,5 @@ public class RmiClientHandler extends Observable implements ClientHandler {
 
     @Override
     public void run() {
-        
     }
 }

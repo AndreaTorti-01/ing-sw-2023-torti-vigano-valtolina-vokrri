@@ -18,18 +18,18 @@ public class RmiServer extends UnicastRemoteObject implements Server {
     private static final long serialVersionUID = -5433204935316346424L;
     private final List<Lobby> lobbies = new LinkedList<>();
     private final Registry registry;
-    private RmiClient client;
 
     public RmiServer(Registry registry) throws RemoteException {
         super();
         this.registry = registry;
+        registry.rebind("server", this);
     }
 
     @Override
     public void run() {
+        RmiClient client;
         try {
-            registry.rebind("server", (Server) this);
-            this.client = (RmiClient) registry.lookup("client");
+            client = (RmiClient) registry.lookup("client");
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }
