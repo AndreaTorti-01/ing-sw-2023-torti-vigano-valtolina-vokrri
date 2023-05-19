@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.utils.Observable;
 
 import java.io.IOException;
@@ -7,11 +8,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ClientHandler extends Observable implements Runnable {
+public class SocketClientHandler extends Observable implements ClientHandler {
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
 
-    public ClientHandler(Socket socket) {
+    public SocketClientHandler(Socket socket) {
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
@@ -40,6 +41,7 @@ public class ClientHandler extends Observable implements Runnable {
      */
     @Override
     public void run() {
+        //noinspection InfiniteLoopStatement
         do {
             try {
                 System.err.println("waiting for messages...");

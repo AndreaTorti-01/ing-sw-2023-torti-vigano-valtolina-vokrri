@@ -27,6 +27,7 @@ public class Constants {
     public static final int boardSize = 9;
     public static final String serverIpAddress = "127.0.0.1";
     public static final int serverPort = 8888;
+    public static final int rmiServerPort = 1099;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";

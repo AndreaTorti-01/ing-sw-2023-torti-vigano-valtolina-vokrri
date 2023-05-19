@@ -3,7 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.network.client.Client;
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observable;
@@ -250,7 +250,6 @@ public class Tui extends Observable implements RunnableView {
     }
 
     private void printCommonGoalCards() {
-        ;
         System.out.println("Common goal cards: ");
         for (int i = 0; i < modelView.getCommonGoalCards().size(); i++) {
             System.out.print((i + 1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString() + "\t\t\t");
@@ -259,9 +258,16 @@ public class Tui extends Observable implements RunnableView {
     }
 
     private void printPersonalGoalCards() {
-        System.out.println("Your personal goal card:");
-        Player playingPlayer = null;
+        System.out.println("Personal goal cards: ");
 
+        for (Player player : modelView.getPlayers()) {
+            if (player.getName().equals(playerName)) {
+                StringBuilder output = new StringBuilder();
+
+            }
+        }
+
+        Player playingPlayer = null;
         for (Player p : modelView.getPlayers()) {
             if (p.getName().equals(playerName)) playingPlayer = p;
         }
@@ -377,8 +383,7 @@ public class Tui extends Observable implements RunnableView {
     }
 
     private void printScores() {
-        System.out.println(ANSI_RED + "\t\tScoreboard:" + ANSI_RESET);
-
+        System.out.println("Scores:");
         for (Player p : modelView.getPlayers()) {
             if (modelView.getPlayers().indexOf(p) != modelView.getPlayers().size() - 1)
                 System.out.print("\t\t╠════> " + p.getName() + ": " + p.getScore() + "\t");

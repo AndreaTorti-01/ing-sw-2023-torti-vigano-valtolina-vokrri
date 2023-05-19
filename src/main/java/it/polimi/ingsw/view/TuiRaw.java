@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Shelf;
-import it.polimi.ingsw.network.client.Client;
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observable;
@@ -17,11 +17,11 @@ import static it.polimi.ingsw.utils.Constants.*;
 
 public class TuiRaw extends Observable implements RunnableView {
     private final Object lock = new Object();
+    private final Scanner scanner = new Scanner(System.in);
     boolean gaveNumber;
     private String playerName = "";
     private GameViewMsg modelView;
     private State state = State.ASK_NAME;
-    private final Scanner scanner = new Scanner(System.in);
 
     public TuiRaw(Client client) {
         this.addObserver(client);
@@ -203,7 +203,7 @@ public class TuiRaw extends Observable implements RunnableView {
 
 
         System.out.println("Chose a shelf column to move the cards to: ");
-        while(!validChoice) {
+        while (!validChoice) {
             try {
                 shelfCol = scanner.nextInt();
                 if (shelfCol < 0 || shelfCol >= numberOfColumns) printError("Invalid column! retry");
@@ -228,17 +228,18 @@ public class TuiRaw extends Observable implements RunnableView {
         printScores();
     }
 
-    private void printCommonGoalCards(){;
+    private void printCommonGoalCards() {
+        ;
         System.out.println("Common goal cards: ");
-        for(int i = 0; i < modelView.getCommonGoalCards().size(); i++){
-            System.out.print((i+1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString()+ "\t\t\t");
+        for (int i = 0; i < modelView.getCommonGoalCards().size(); i++) {
+            System.out.print((i + 1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString() + "\t\t\t");
         }
         System.out.println();
     }
 
-    private void printPersonalGoalCards(){
+    private void printPersonalGoalCards() {
         System.out.println("Personal goal cards: ");
-        for(Player p: modelView.getPlayers()) {
+        for (Player p : modelView.getPlayers()) {
             if (p.getName().equals(playerName)) {
                 StringBuilder output = new StringBuilder();
 
@@ -325,7 +326,7 @@ public class TuiRaw extends Observable implements RunnableView {
         }
     }
 
-    private void printScores(){
+    private void printScores() {
         System.out.println("Scores:");
         for (Player p : modelView.getPlayers()) {
             System.out.println(p.getName() + "'s points: " + p.getScore());
@@ -366,7 +367,7 @@ public class TuiRaw extends Observable implements RunnableView {
         System.out.println(ANSI_PURPLE + error + ANSI_RESET);
     }
 
-    private String scanLine(){
+    private String scanLine() {
         String ret;
         do {
             ret = scanner.nextLine();
