@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view;
 
-import javafx.application.Application;
-
 import javax.swing.*;
 
-public class Gui extends Application{
+public class Gui {
     private final JFrame frame;
     private final JPanel panel;
     private final JButton button;
