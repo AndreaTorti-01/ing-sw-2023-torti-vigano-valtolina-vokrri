@@ -1,24 +1,24 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
-import it.polimi.ingsw.utils.Observer;
 import it.polimi.ingsw.view.RunnableView;
-import it.polimi.ingsw.view.Tui;
+import it.polimi.ingsw.view.Tui_Max;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Client implements Observer, Runnable {
+public class SocketClient implements Client {
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
     private final RunnableView view;
 
-    public Client(Socket socket) {
-        this.view = new Tui(this);
+    public SocketClient(Socket socket) {
+        this.view = new Tui_Max(this);
 
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -68,11 +68,11 @@ public class Client implements Observer, Runnable {
         }
     }
 
-    @Override
     public void run() {
         GameViewMsg modelView;
         new Thread(view).start();
 
+        //noinspection InfiniteLoopStatement
         do {
             try {
                 modelView = (GameViewMsg) inputStream.readObject();

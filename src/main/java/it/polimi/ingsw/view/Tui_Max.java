@@ -3,7 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.network.client.Client;
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observable;
@@ -14,7 +14,6 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import static it.polimi.ingsw.utils.Constants.*;
-import static it.polimi.ingsw.utils.Constants.isTakeable;
 
 public class Tui_Max extends Observable implements RunnableView {
     Game.Status gameStatus = Game.Status.WAITING;
@@ -60,7 +59,7 @@ public class Tui_Max extends Observable implements RunnableView {
 
         // while true loop
         // waits for user input, if it is user turn
-        // sends input to Client
+        // sends input to SocketClient
         //noinspection InfiniteLoopStatement
         while (true) {
 
@@ -211,6 +210,7 @@ public class Tui_Max extends Observable implements RunnableView {
         //notifying observers
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
     }
+
     private void printGameStatus() {
         // Prints the title, boards and shelves
         clearConsole();
@@ -270,23 +270,24 @@ public class Tui_Max extends Observable implements RunnableView {
         System.out.println(ANSI_YELLOW + "\t\t\t\t\t\t\t\t███╗   ███╗" + ANSI_PURPLE + "██╗   ██╗  " + ANSI_GREEN + " ██████╗" + ANSI_CYAN + "██╗  ██╗" + ANSI_RED + "███████╗" + ANSI_YELLOW + "██╗     " + ANSI_PURPLE + "███████╗" + ANSI_GREEN + "██╗" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t████╗ ████║" + ANSI_PURPLE + "╚██╗ ██╔╝  " + ANSI_GREEN + "██╔════╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "██╔════╝" + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔════╝" + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔════╝  " + ANSI_RED + "██║\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t██╔████╔██║" + ANSI_PURPLE + " ╚████╔╝   " + ANSI_GREEN + "╚█████╗ " + ANSI_CYAN + "███████║" + ANSI_RED + "█████╗  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "█████╗  " + ANSI_GREEN + "██║" + ANSI_CYAN + "█████╗    " + ANSI_RED + "██║\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║╚██╔╝██║" + ANSI_PURPLE + "  ╚██╔╝    " + ANSI_GREEN + " ╚═══██╗" + ANSI_CYAN + "██╔══██║" + ANSI_RED + "██╔══╝  " + ANSI_YELLOW + "██║     " + ANSI_PURPLE + "██╔══╝  " + ANSI_GREEN + "██║" + ANSI_CYAN + "██╔══╝    " + ANSI_RED + "╚═╝\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t██║ ╚═╝ ██║" + ANSI_PURPLE + "   ██║     " + ANSI_GREEN + "██████╔╝" + ANSI_CYAN + "██║  ██║" + ANSI_RED + "███████╗" + ANSI_YELLOW + "███████╗" + ANSI_PURPLE + "██║     " + ANSI_GREEN + "██║" + ANSI_CYAN + "███████╗  " + ANSI_RED + "██╗\n" + ANSI_YELLOW + "\t\t\t\t\t\t\t\t╚═╝     ╚═╝" + ANSI_PURPLE + "   ╚═╝     " + ANSI_GREEN + "╚═════╝ " + ANSI_CYAN + "╚═╝  ╚═╝" + ANSI_RED + "╚══════╝" + ANSI_YELLOW + "╚══════╝" + ANSI_PURPLE + "╚═╝     " + ANSI_GREEN + "╚═╝" + ANSI_CYAN + "╚══════╝  " + ANSI_RED + "╚═╝" + ANSI_RESET);
     }
 
-    private void printCommonGoalCards(){;
+    private void printCommonGoalCards() {
+        ;
         System.out.println("Common goal cards: ");
-        for(int i = 0; i < modelView.getCommonGoalCards().size(); i++){
-            System.out.print((i+1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString()+ "\t\t\t");
+        for (int i = 0; i < modelView.getCommonGoalCards().size(); i++) {
+            System.out.print((i + 1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString() + "\t\t\t");
         }
         System.out.println();
     }
 
-    private void printPersonalGoalCards(){
+    private void printPersonalGoalCards() {
         System.out.println("Your personal goal card:");
         Player playingPlayer = null;
 
-        for(Player p: modelView.getPlayers()){
-            if(p.getName().equals(playerName)) playingPlayer = p;
+        for (Player p : modelView.getPlayers()) {
+            if (p.getName().equals(playerName)) playingPlayer = p;
         }
 
-        if(playingPlayer != null) {
+        if (playingPlayer != null) {
             System.out.print("\t\t\t╔═════╦═════╦═════╦═════╦═════╗");
             for (int i = 0; i < numberOfRows; i++) {
                 System.out.print("║");
@@ -309,8 +310,7 @@ public class Tui_Max extends Observable implements RunnableView {
             System.out.print("\n");
             System.out.print("\t\t\t   0     1     2     3     4");
             System.out.println();
-        }
-        else System.err.println("Error: player not found");
+        } else System.err.println("Error: player not found");
     }
 
     private void printEndScreen(String winnerName) {
@@ -479,12 +479,12 @@ public class Tui_Max extends Observable implements RunnableView {
         System.out.println(ANSI_RED + "\t\t╔═╣ Scoreboard:" + ANSI_RESET);
         System.out.println("\t\t║");
         for (Player p : modelView.getPlayers()) {
-            if(modelView.getPlayers().indexOf(p) != modelView.getPlayers().size() - 1)
+            if (modelView.getPlayers().indexOf(p) != modelView.getPlayers().size() - 1)
                 System.out.print("\t\t╠════> " + p.getName() + ": " + p.getScore() + "\t");
             else
                 System.out.print("\t\t╚════> " + p.getName() + ": " + p.getScore() + "\t");
 
-            for(int i = 0; i < p.getScore(); i++)
+            for (int i = 0; i < p.getScore(); i++)
                 System.out.print("★");
             System.out.println();
         }
