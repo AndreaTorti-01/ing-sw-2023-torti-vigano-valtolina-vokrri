@@ -20,3 +20,32 @@ sarà il vincitore. Ci sono 4 modi per guadagnare punti:
 
 FLUSSO DI GIOCO:
 
+- Il gioco è diviso in turni, svolti in senso orario a partire dal primo giocatore.
+Durante il vostro turno, dovete prendere 1, 2 o 3 tessere Oggetto dalla plancia
+Soggiorno, seguendo queste regole:
+Le tessere che prendete devono essere adiacenti l’una all’altra e formare
+una linea retta.
+Tutte le tessere che prendete devono avere almeno un lato libero (non toccare
+direttamente altre tessere) all’inizio del vostro turno (non potete, cioè, prendere
+una tessera che diventa libera dopo la vostra prima scelta).
+Dopodiché dovete mettere tutte le tessere che avete scelto in 1 colonna della
+vostra Libreria. Potete decidere l’ordine, ma non potete mettere le tessere
+in più di 1 colonna nello stesso turno.
+Nota: non potete prendere le tessere se non avete abbastanza spazi disponibili nella vostra Libreria.
+
+- Ripristino del soggiorno: Dovete ripristinare il Soggiorno quando, alla fine del vostro turno, le tessere sulla
+plancia non hanno tessere adiacenti (il giocatore successivo potrebbe prendere solo tessere singole).
+Pescate nuove tessere Oggetto dal sacchetto e piazzatele casualmente in tutti gli spazi vuoti della plancia
+(ricordate che gli spazi con 3 o 4 puntini sono disponibili solo in partite a 3 o 4 giocatori).
+
+- Realizzare un obiettivo comune: se alla fine del vostro turno avete soddisfatto i requisiti di una
+carta Obiettivo Comune, ricevete il Punteggio più alto disponibile per quella carta.
+I punteggi assegnati al compimento di un obiettivo comune diminuiscono man mano che i giocatori lo raggiungono
+e dipendono dal numero di giocatori in partita.
+4 giocatori: 8-6-4-2 , 3 giocatori: 8-6-4 , 2 giocatori: 8-4
+Potete soddisfare i requisiti di entrambe le carte Obiettivo Comune durante lo stesso turno e
+prendere perciò le tessera Punteggio da entrambe le carte. Potete ottenere una sola tessera per ciascun Obiettivo
+Comune in tutta la partita (non potete perciò avere più tessere Punteggio con lo stesso numero romano sul retro).
+I giocatori che soddisfano per primi i requisiti degli Obiettivi Comuni guadagneranno più punti, quindi cercate
+di essere più veloci dei vostri avversari!
+
