@@ -62,19 +62,19 @@ Il giocatore che ha totalizzato più punti vince la partia. In caso di parità, 
 nell`ordine di gioco.
 
 SPIEGAZIONE COMMON GOAL CARD:
-CROSS: cinque tessere dello stesso tipo che formano una 'x'.
-DIAGONAL_FIVE: cinque tessere dello stesso tipo che formano una diagonale.
-EIGHT_EQUAL: otto tessere dello stesso tipo.
-EQUAL_CORNERS: tessere dello stesso tipo ai quattro angoli della libreria.
-FOUR_LINE_MAX_THREE_TYPES: quattro righe formate ciascuno da 5 tessere di uno, due o tre tipi differenti.
-FOUR_QUARTETS: quattro gruppi separati formati  da quattro tessere adiacenti dello stesso tipo. Le tessere
+--> CROSS: cinque tessere dello stesso tipo che formano una 'x'.
+--> DIAGONAL_FIVE: cinque tessere dello stesso tipo che formano una diagonale.
+--> EIGHT_EQUAL: otto tessere dello stesso tipo.
+--> EQUAL_CORNERS: tessere dello stesso tipo ai quattro angoli della libreria.
+--> FOUR_LINE_MAX_THREE_TYPES: quattro righe formate ciascuno da 5 tessere di uno, due o tre tipi differenti.
+--> FOUR_QUARTETS: quattro gruppi separati formati  da quattro tessere adiacenti dello stesso tipo. Le tessere
 di un gruppo possono essere diverse da quelle di un altro gruppo.
-SIX_PAIRS: sei gruppi separati formati ciascuno da due tessere adiacenti dello stesso tipo. Le tessere
+--> SIX_PAIRS: sei gruppi separati formati ciascuno da due tessere adiacenti dello stesso tipo. Le tessere
 di un gruppo possono essere diverse da quelle di un altro gruppo.
-STAIR: cinque colonne di altezza crescente o decrescente, le tessere possono essere di qualsiasi tipo.
-THREE_COLUMNS_MAX_THREE_TYPES: tre colonne formate ciascuna da 6 tessere di uno, due o tre tipi differenti.
-TWO_RAINBOW_COLUMNS: due colonne formate ciascuna da 6 tipi diversi di tessere.
-TWO_RAINBOW_LINES: due righe formate ciascuna da 5 tipi diversi di tessere.
-TWO_SQUARES: due gruppi separati di quattro tessere dello stesso tipo che formano una 2x2. Le tessere
+--> STAIR: cinque colonne di altezza crescente o decrescente, le tessere possono essere di qualsiasi tipo.
+--> THREE_COLUMNS_MAX_THREE_TYPES: tre colonne formate ciascuna da 6 tessere di uno, due o tre tipi differenti.
+--> TWO_RAINBOW_COLUMNS: due colonne formate ciascuna da 6 tipi diversi di tessere.
+--> TWO_RAINBOW_LINES: due righe formate ciascuna da 5 tipi diversi di tessere.
+--> TWO_SQUARES: due gruppi separati di quattro tessere dello stesso tipo che formano una 2x2. Le tessere
 dei due gruppi devono essere dello stesso tipo.
 
