@@ -17,5 +17,5 @@ public interface Client extends Remote, Observer {
 
     void update(ChatMsg message) throws RemoteException;
 
-    void run() throws RemoteException;
+    void run();
 }

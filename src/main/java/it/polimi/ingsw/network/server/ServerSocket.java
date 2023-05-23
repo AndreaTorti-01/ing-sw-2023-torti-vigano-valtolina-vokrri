@@ -5,16 +5,15 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.Server;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SocketServer implements Server {
-    private final ServerSocket serverSocket;
+public class ServerSocket implements Server, Runnable {
+    private final java.net.ServerSocket serverSocket;
     private final List<Lobby> lobbies = new LinkedList<>();
 
-    public SocketServer(ServerSocket serverSocket) {
+    public ServerSocket(java.net.ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
 
@@ -35,7 +34,7 @@ public class SocketServer implements Server {
             }
 
             // assign the new client to a clientHandler
-            SocketClientHandler clientHandler = new SocketClientHandler(socket);
+            ClientHandlerSocket clientHandler = new ClientHandlerSocket(socket);
             // try to find a free lobby
             for (Lobby lobby : lobbies) {
                 if (lobby.isOpen()) {

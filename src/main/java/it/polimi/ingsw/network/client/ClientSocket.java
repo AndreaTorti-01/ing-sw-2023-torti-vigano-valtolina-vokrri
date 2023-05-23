@@ -5,20 +5,25 @@ import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.view.RunnableView;
-import it.polimi.ingsw.view.tui.Tui_Max;
+import it.polimi.ingsw.view.TuiRaw;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class SocketClient implements Client {
+public class ClientSocket implements Client {
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
     private final RunnableView view;
 
-    public SocketClient(Socket socket) {
-        this.view = new Tui_Max(this);
+    public ClientSocket(Socket socket, boolean isTui) {
+        if (isTui) {
+            this.view = new TuiRaw(this);
+        } else {
+            this.view = null; // FIXME
+        }
+
 
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());

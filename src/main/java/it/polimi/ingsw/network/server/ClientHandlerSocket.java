@@ -8,11 +8,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class SocketClientHandler extends Observable implements ClientHandler {
+public class ClientHandlerSocket extends Observable implements ClientHandler, Runnable {
     private final ObjectInputStream inputStream;
     private final ObjectOutputStream outputStream;
 
-    public SocketClientHandler(Socket socket) {
+    public ClientHandlerSocket(Socket socket) {
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
