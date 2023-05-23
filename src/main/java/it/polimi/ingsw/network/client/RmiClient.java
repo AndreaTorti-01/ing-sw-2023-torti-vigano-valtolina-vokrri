@@ -6,7 +6,7 @@ import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.network.server.RmiClientHandler;
 import it.polimi.ingsw.view.RunnableView;
-import it.polimi.ingsw.view.Tui;
+import it.polimi.ingsw.view.tui.Tui;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

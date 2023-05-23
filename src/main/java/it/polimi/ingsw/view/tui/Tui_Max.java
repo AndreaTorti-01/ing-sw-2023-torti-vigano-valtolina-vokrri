@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
@@ -7,6 +7,7 @@ import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observable;
+import it.polimi.ingsw.view.RunnableView;
 
 import java.util.ArrayList;
 import java.util.List;
