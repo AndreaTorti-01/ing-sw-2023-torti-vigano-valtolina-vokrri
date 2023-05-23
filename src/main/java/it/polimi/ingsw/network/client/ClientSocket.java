@@ -5,7 +5,7 @@ import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.view.RunnableView;
-import it.polimi.ingsw.view.TuiRaw;
+import it.polimi.ingsw.view.tui.TuiRaw;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
