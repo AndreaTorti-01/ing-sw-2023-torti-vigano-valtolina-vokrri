@@ -5,7 +5,7 @@ import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.network.server.ClientHandlerRmiInterface;
 import it.polimi.ingsw.network.server.ServerRmiInterface;
 import it.polimi.ingsw.view.RunnableView;
-import it.polimi.ingsw.view.TuiRaw;
+import it.polimi.ingsw.view.tui.TuiRaw;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
