@@ -6,6 +6,9 @@ public class GuiTestRunner {
     public static void main(String[] args) throws Exception {
         Gui gui = new Gui();
 
-        gui.start(new Stage());
+        Stage stage = new Stage(null);
+        //call the start method of the Gui class
+        gui.start(stage);
+
     }
 }
