@@ -7,7 +7,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="softeng-gc33" />
-        <module name="ing-sw-2023-torti-vigano-valtolina-vokrri" />
       </profile>
     </annotationProcessing>
   </component>
