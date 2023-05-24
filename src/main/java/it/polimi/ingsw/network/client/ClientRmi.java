@@ -7,13 +7,17 @@ import it.polimi.ingsw.network.server.ServerRmiInterface;
 import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.tui.TuiRaw;
 
+import java.io.Serial;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 
-public class ClientRmi implements ClientRmiInterface {
+public class ClientRmi extends UnicastRemoteObject implements ClientRmiInterface {
+    @Serial
+    private static final long serialVersionUID = 4369082279461316690L;
     private final RunnableView view;
     private String uuid; // FIXME may not be unique
     private Registry registry;
@@ -21,7 +25,6 @@ public class ClientRmi implements ClientRmiInterface {
     private ClientHandlerRmiInterface clientHandler;
 
     public ClientRmi(boolean isTui) throws RemoteException {
-        super();
         if (isTui) {
             view = new TuiRaw(this);
         } else {
@@ -54,7 +57,7 @@ public class ClientRmi implements ClientRmiInterface {
         return view;
     }
 
-    public void run() {
+    public void run() throws RemoteException {
         this.uuid = UUID.randomUUID().toString();
 
         try {
@@ -63,20 +66,22 @@ public class ClientRmi implements ClientRmiInterface {
             e.printStackTrace();
         }
 
+        registry.rebind("client#" + uuid, this);
+
 
         try {
             this.server = (ServerRmiInterface) registry.lookup("server");
-        } catch (NotBoundException | RemoteException e) {
-            throw new RuntimeException(e);
+        } catch (NotBoundException e) {
+            e.printStackTrace();
         }
 
-        String clientHandlerName;
+        String clientHandlerName = null;
+        clientHandlerName = "clientHandler#" + server.createClientHandlerAndReturnName();
         try {
-            clientHandlerName = server.createClientHandlerAndReturnName();
             clientHandler = (ClientHandlerRmiInterface) registry.lookup(clientHandlerName);
-            clientHandler.lookupClient(this.uuid);
-        } catch (RemoteException | NotBoundException e) {
-            throw new RuntimeException(e);
+            clientHandler.lookupClient("client#" + this.uuid);
+        } catch (NotBoundException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -43,10 +43,11 @@ public class ClientHandlerRmi extends Observable implements ClientHandlerRmiInte
      *
      * @param clientName
      */
-    public void lookupClient(String clientName) {
+    public void lookupClient(String clientName) throws RemoteException {
+        System.err.println("ClientHandlerRmi: lookupClient(" + clientName + ")");
         try {
             this.client = (ClientRmiInterface) registry.lookup(clientName);
-        } catch (NotBoundException | RemoteException e) {
+        } catch (NotBoundException e) {
             throw new RuntimeException(e);
         }
     }

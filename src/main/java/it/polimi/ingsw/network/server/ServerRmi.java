@@ -36,7 +36,7 @@ public class ServerRmi extends UnicastRemoteObject implements ServerRmiInterface
                 clientHandler.addObserver(lobby);
 
                 clientHandler.addToRegistry();
-
+                System.err.println("clientHandler#" + clientHandler.getUuid() + " added to registry");
                 return clientHandler.getUuid();
             }
         }
@@ -52,7 +52,7 @@ public class ServerRmi extends UnicastRemoteObject implements ServerRmiInterface
         clientHandler.addObserver(lobby);
 
         clientHandler.addToRegistry();
-
+        System.err.println("clientHandler#" + clientHandler.getUuid() + " added to registry");
         return clientHandler.getUuid();
     }
 }
