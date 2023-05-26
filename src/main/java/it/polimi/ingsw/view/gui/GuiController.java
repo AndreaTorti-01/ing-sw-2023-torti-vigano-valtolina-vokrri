@@ -5,13 +5,7 @@ import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.utils.Observable;
 import it.polimi.ingsw.view.RunnableView;
-import it.polimi.ingsw.view.tui.Tui;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 
 import java.util.Scanner;
 
@@ -24,11 +18,8 @@ public class GuiController extends Observable implements RunnableView {
     private String playerName = "";
     private GameViewMsg modelView;
     private GuiController.State state = GuiController.State.ASK_NAME;
-    public ImageView nickname_label;
     private Gui gui;
     private static final String fxmlPath = "/graphicalResources/fxml/";
-    public TextField insert_nickname;
-
     public GuiController(Client client) {
         this.addObserver(client);
     }
@@ -50,9 +41,8 @@ public class GuiController extends Observable implements RunnableView {
     public void run() {
         Application.launch(Gui.class);
 
-        // TODO: change scene
-        printWelcomeScreen();
-        this.playerName = getNickname();
+        // TODO: change scene to welcome screen
+        //TODO: ask for name
 
         // waits for state to change
         while (getState() == GuiController.State.ASK_NAME) {
@@ -129,9 +119,6 @@ public class GuiController extends Observable implements RunnableView {
                 setState(GuiController.State.PLAY); // it's my turn
             } else setState(GuiController.State.WAITING_FOR_TURN); // it's not my turn
         }
-    }
-    public String getNickname() {
-        return insert_nickname.getText();
     }
 
     private enum State {

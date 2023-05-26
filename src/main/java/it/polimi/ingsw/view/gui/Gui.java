@@ -20,7 +20,7 @@ public class Gui extends Application{
     public void start(Stage primaryStage) throws IOException {
         mainStage = primaryStage;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/graphicalResources/fxml/scena2.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/graphicalResources/fxml/WelcomeScreen.fxml"));
         Parent root = loader.load();
 
         mainStage.setTitle("MyShelfie - gc_33");

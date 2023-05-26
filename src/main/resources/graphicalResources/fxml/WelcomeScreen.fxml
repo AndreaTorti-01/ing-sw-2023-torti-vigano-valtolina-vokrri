@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.GraphicsManager">
+    <children>
+        <ImageView fx:id="nickname_label" fitHeight="900.0" fitWidth="1600.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../home_my_shelfie.jpg" />
+            </image>
+        </ImageView>
+        <TextField fx:id="insert_nickname" alignment="CENTER" layoutX="624.0" layoutY="495.0" prefHeight="43.0" prefWidth="303.0" />
+        <Label layoutX="624.0" layoutY="464.0" prefHeight="4.0" prefWidth="187.0" text="Scegli il tuo nickname " textFill="#f5f53a">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Label>
+    </children>
+</Pane>
