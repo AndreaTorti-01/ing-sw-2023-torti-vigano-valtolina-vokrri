@@ -19,7 +19,12 @@ public class Gui extends Application{
     @Override
     public void start(Stage primaryStage) throws IOException {
         mainStage = primaryStage;
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/graphicalResources/fxml/scena2.fxml"));
+        Parent root = loader.load();
+
         mainStage.setTitle("MyShelfie - gc_33");
+        mainStage.setScene(new javafx.scene.Scene(root));
         mainStage.show();
     }
 
