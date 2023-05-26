@@ -179,7 +179,16 @@ public class TuiRaw extends Observable implements RunnableView {
 
         while (pickedNum < maxCards) {
             System.out.print("Card " + (pickedNum + 1) + "-> enter ROW number:  ");
-            int row = scanner.nextInt();
+            boolean valid = false;
+            int row = 0;
+            while (!valid)
+                try {
+                    row = Integer.parseInt(scanLine());
+                    if (row >= 0 && row < numberOfRows) valid = true;
+                    else printError("Invalid number of players");
+                } catch (NumberFormatException e) {
+                    printError("Invalid number or non-numeric input");
+                }
             scanner.nextLine();
             System.out.print("Card " + (pickedNum + 1) + "-> enter COLUMN number:  ");
             int column = scanner.nextInt();
