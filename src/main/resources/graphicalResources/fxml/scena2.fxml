@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="pain" maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0"
             xmlns="http://javafx.com/javafx/19">
     <children>
-        <ImageView fx:id="floor" fitHeight="900.0" fitWidth="1600.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="floor" fitHeight="900.0" fitWidth="1600.0" layoutX="1.0" pickOnBounds="true"
+                   preserveRatio="true">
             <image>
                 <Image url="@../misc/sfondo parquet3.jpg"/>
             </image>
@@ -23,34 +23,34 @@
                 <Image url="@../boards/livingroom.png"/>
             </image>
         </ImageView>
-        <ImageView fx:id="shelf0" fitHeight="150.0" fitWidth="200.0" layoutX="91.0" layoutY="504.0" pickOnBounds="true"
+        <ImageView fx:id="shelf2" fitHeight="150.0" fitWidth="200.0" layoutX="91.0" layoutY="504.0" pickOnBounds="true"
                    preserveRatio="true">
             <image>
                 <Image url="@../boards/bookshelf_orth.png"/>
             </image>
         </ImageView>
-        <ImageView fx:id="shelf1" fitHeight="150.0" fitWidth="200.0" layoutX="324.0" layoutY="504.0" pickOnBounds="true"
+        <ImageView fx:id="shelf3" fitHeight="150.0" fitWidth="200.0" layoutX="324.0" layoutY="504.0" pickOnBounds="true"
                    preserveRatio="true">
             <image>
                 <Image url="@../boards/bookshelf_orth.png"/>
             </image>
         </ImageView>
-        <ImageView fx:id="shelf2" fitHeight="150.0" fitWidth="200.0" layoutX="324.0" layoutY="300.0" pickOnBounds="true"
+        <ImageView fx:id="shelf1" fitHeight="150.0" fitWidth="200.0" layoutX="324.0" layoutY="300.0" pickOnBounds="true"
                    preserveRatio="true">
             <image>
                 <Image url="@../boards/bookshelf_orth.png"/>
             </image>
         </ImageView>
-        <ImageView fx:id="shelf3" fitHeight="200.0" fitWidth="200.0" layoutX="66.0" layoutY="250.0" pickOnBounds="true"
+        <ImageView fx:id="shelf0" fitHeight="200.0" fitWidth="200.0" layoutX="66.0" layoutY="250.0" pickOnBounds="true"
                    preserveRatio="true">
             <image>
                 <Image url="@../boards/bookshelf_orth.png"/>
             </image>
         </ImageView>
-        <ImageView fx:id="myshelfie" fitHeight="256.0" fitWidth="603.0" layoutX="-7.0" layoutY="14.0"
+        <ImageView fx:id="myshelfie" fitHeight="212.0" fitWidth="564.0" layoutX="-7.0" layoutY="23.0"
                    pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@Title%202000x618px.png"/>
+                <Image url="@../Publisher material/Title 2000x618px.png"/>
             </image>
         </ImageView>
         <Text fx:id="playerName3" layoutX="388.0" layoutY="679.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"
@@ -64,6 +64,71 @@
                            prefWidth="14.0"/>
             </children>
         </Pane>
-        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+        <ImageView fx:id="commonGoal1" fitHeight="150.0" fitWidth="200.0" layoutX="1120.0" layoutY="285.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../common goal cards/1.jpg"/>
+            </image>
+        </ImageView>
+        <ImageView fx:id="commonGoal2" fitHeight="150.0" fitWidth="200.0" layoutX="1364.0" layoutY="282.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../common goal cards/5.jpg"/>
+            </image>
+        </ImageView>
+        <ImageView fx:id="personalGoal" fitHeight="226.0" fitWidth="150.0" layoutX="1153.0" layoutY="450.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../personal goal cards/0PGC.png"/>
+            </image>
+        </ImageView>
+        <ImageView fx:id="cranio" fitHeight="150.0" fitWidth="200.0" layoutX="726.0" layoutY="25.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../Publisher material/Publisher.png"/>
+            </image>
+        </ImageView>
+        <ImageView fx:id="cat" fitHeight="226.0" fitWidth="186.0" layoutX="1371.0" layoutY="474.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../others/gatto.gif"/>
+            </image>
+        </ImageView>
+        <Text layoutX="80.0" layoutY="828.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" È il tuo turno"
+              wrappingWidth="432.114501953125">
+            <font>
+                <Font size="64.0"/>
+            </font>
+        </Text>
+        <ImageView fx:id="scoreboard" fitHeight="282.0" fitWidth="420.0" layoutX="1130.0" layoutY="33.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../others/punteggio.png"/>
+            </image>
+        </ImageView>
+        <Text fx:id="nameScore0" layoutX="1175.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="nome0"/>
+        <Text fx:id="nameScore1" layoutX="1274.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="nome1"/>
+        <Text fx:id="nameScore2" layoutX="1369.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="nome 2"/>
+        <Text fx:id="nameScore3" layoutX="1464.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="nome 3"/>
+        <Text fx:id="score0" layoutX="1177.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <font>
+                <Font size="64.0"/>
+            </font>
+        </Text>
+        <Text fx:id="score1" layoutX="1275.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <font>
+                <Font size="64.0"/>
+            </font>
+        </Text>
+        <Text fx:id="score2" layoutX="1372.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <font>
+                <Font size="64.0"/>
+            </font>
+        </Text>
+        <Text fx:id="score3" layoutX="1467.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <font>
+                <Font size="64.0"/>
+            </font>
+        </Text>
     </children>
 </AnchorPane>
