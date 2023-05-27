@@ -5,6 +5,7 @@ import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.view.RunnableView;
+import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.view.tui.TuiRaw;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class ClientSocket implements Client {
         if (isTui) {
             this.view = new TuiRaw(this);
         } else {
-            this.view = null; // FIXME
+            this.view = new Gui(this);
         }
 
 
