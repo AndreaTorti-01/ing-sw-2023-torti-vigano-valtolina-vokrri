@@ -1,4 +1,37 @@
 package it.polimi.ingsw.view.gui.controllers;
 
-public class PlayingScreenController {
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+
+public class PlayingScreenController implements StdController {
+
+    private static final String fxmlPath = "/graphicalResources/fxml/";
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+
+    public Parent loadResource(String fxmlName, Parent root) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            System.exit(1);
+        }
+        return root;
+    }
+
+    public void changeScene(ActionEvent actionEvent) throws IOException {
+        root = loadResource("scena3.fxml", root);
+        stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 }

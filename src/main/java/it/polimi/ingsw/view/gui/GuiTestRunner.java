@@ -1,15 +1,13 @@
-package it.polimi.ingsw.view.gui;
-
-import javafx.application.Application;
-import javafx.stage.Stage;
+/* package it.polimi.ingsw.view.gui;
 
 public class GuiTestRunner {
     public static void main(String[] args) throws Exception {
 
         GuiApp guiApp = new GuiApp();
-        GuiApp.main(args);
-
+        guiApp.main(args);
+        guiApp.changeScene("PlayingScreen.fxml");
 
 
     }
 }
+*/

@@ -8,10 +8,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class GuiApp extends Application{
-    private Stage mainStage;
-    private Parent root = new Parent() {};
+public class GuiApp extends Application {
     private static final String fxmlPath = "/graphicalResources/fxml/";
+    private Stage mainStage;
+    private Parent root = new Parent() {
+    };
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -23,15 +25,15 @@ public class GuiApp extends Application{
 
         Scene scene = new Scene(root);
 
-        stage.setScene(scene);
-        stage.setWidth(1600);
-        stage.setHeight(900);
-        stage.setResizable(false);
-        stage.setMaximized(false);
-        stage.setFullScreen(false);
-        stage.setFullScreenExitHint("");
-        stage.setTitle("MyShelfie ~ gc_33");
-        stage.show();
+        mainStage.setScene(scene);
+        mainStage.setWidth(1600);
+        mainStage.setHeight(900);
+        mainStage.setResizable(false);
+        mainStage.setMaximized(false);
+        mainStage.setFullScreen(false);
+        mainStage.setFullScreenExitHint("");
+        mainStage.setTitle("MyShelfie ~ gc_33");
+        mainStage.show();
     }
 
 
@@ -39,6 +41,7 @@ public class GuiApp extends Application{
         root = loadResource(fxmlName, root);
         mainStage.getScene().setRoot(root);
     }
+
     public Parent loadResource(String fxmlName, Parent root) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
         try {
