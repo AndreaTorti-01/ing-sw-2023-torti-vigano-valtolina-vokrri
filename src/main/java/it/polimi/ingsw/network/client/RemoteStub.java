@@ -32,7 +32,8 @@ public class RemoteStub implements Server, ClientHandler, Runnable {
     public ClientHandler registerClient(Client client) throws RemoteException {
         this.client = client;
 
-        try (Socket socket = new Socket(serverIpAddress, serverPort)) {
+        try {
+            Socket socket = new Socket(serverIpAddress, serverPort);
             this.oos = new ObjectOutputStream(socket.getOutputStream());
             this.ois = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
