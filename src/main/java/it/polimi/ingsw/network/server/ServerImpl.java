@@ -53,14 +53,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server, Runnable 
             clientHandler.addObserver(lobby);
         }
 
-
-        try {
-            return new ClientHandlerImpl(client);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return clientHandler;
     }
 
     @Override

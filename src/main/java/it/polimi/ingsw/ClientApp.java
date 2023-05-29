@@ -14,20 +14,20 @@ public class ClientApp {
 
     public static void main(String[] args) {
         boolean isSocket = false;
-        boolean isTui = true;
+        boolean isTui = false;
 
         // parses the arguments provided from the player
         // in the terminal when launching the client app
-        // for (String arg : args) {
-        //     // if one of the arguments is "-s" or "--socket"
-        //     // launches the app in socket mode
-        //     if (arg.equals("-s") || arg.equals("--socket")) {
-        //         isSocket = true;
-        //     }
-        //     if (arg.equals("-cli") || arg.equals("--terminal")) {
-        //         isTui = true;
-        //     }
-        // }
+        for (String arg : args) {
+            // if one of the arguments is "-s" or "--socket"
+            // launches the app in socket mode
+            if (arg.equals("-s") || arg.equals("--socket")) {
+                isSocket = true;
+            }
+            if (arg.equals("-cli") || arg.equals("--terminal")) {
+                isTui = true;
+            }
+        }
 
         // if no argument is provided for the rmi launch,
         // it launches the app in socket mode
@@ -88,11 +88,5 @@ public class ClientApp {
             e.printStackTrace();
         }
 
-
-        // send a message to the server
-        assert client != null;
-        client.sendMessage("Hello from the client");
-
-        System.out.println("Client sent message to server");
     }
 }

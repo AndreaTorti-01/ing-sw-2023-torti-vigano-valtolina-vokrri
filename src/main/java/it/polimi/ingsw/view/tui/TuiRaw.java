@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Shelf;
-import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
@@ -25,8 +24,8 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     private GameViewMsg modelView;
     private State state = State.ASK_NAME;
 
-    public TuiRaw(Client client) {
-        this.addObserver((ClientImpl) client);
+    public TuiRaw(ClientImpl client) {
+        this.addObserver(client);
     }
 
     private State getState() {
@@ -141,6 +140,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
                 printError("Invalid number or non-numeric input");
             }
         }
+        gaveNumber = true;
         notifyObservers(playerNumber);
     }
 
@@ -190,10 +190,8 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
                 } catch (NumberFormatException e) {
                     printError("Invalid number or non-numeric input");
                 }
-            scanner.nextLine();
             System.out.print("Card " + (pickedNum + 1) + "-> enter COLUMN number:  ");
-            int column = scanner.nextInt();
-            scanner.nextLine();
+            int column = Integer.parseInt(scanLine());
 
             //checking coordinate validity
             if (isTakeable(modelView, row, column, pickedCoords)) {
@@ -240,7 +238,6 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     private void printCommonGoalCards() {
-        ;
         System.out.println("Common goal cards: ");
         for (int i = 0; i < modelView.getCommonGoalCards().size(); i++) {
             System.out.print((i + 1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString() + "\t\t\t");
@@ -290,6 +287,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         // Ask the name of the player
         System.out.println("  >>  Enter your name:  ");
         String name = scanLine();
+        this.playerName = name;
         notifyObservers(name);
         return name;
     }

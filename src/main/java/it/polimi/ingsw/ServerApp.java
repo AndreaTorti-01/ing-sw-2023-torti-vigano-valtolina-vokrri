@@ -40,6 +40,6 @@ public class ServerApp {
             e.printStackTrace();
         }
 
-        System.out.println("Server started");
+        System.err.println("Server started");
     }
 }

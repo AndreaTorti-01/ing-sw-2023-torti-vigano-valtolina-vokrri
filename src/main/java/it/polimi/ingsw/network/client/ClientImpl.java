@@ -50,8 +50,8 @@ public class ClientImpl extends UnicastRemoteObject implements Client, Observer 
 
     @Override
     public void receiveMessage(GameViewMsg message) throws RemoteException {
-        // observer update
-        this.update(message);
+        // update the view with the new modelView
+        view.updateView(message);
     }
 
     public void sendMessage(Object message) {
