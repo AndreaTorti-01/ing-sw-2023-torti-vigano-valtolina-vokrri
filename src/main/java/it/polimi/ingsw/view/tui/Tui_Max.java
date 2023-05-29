@@ -4,9 +4,10 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
-import it.polimi.ingsw.utils.Observable;
+import it.polimi.ingsw.utils.ObservableImpl;
 import it.polimi.ingsw.view.RunnableView;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
-public class Tui_Max extends Observable implements RunnableView {
+public class Tui_Max extends ObservableImpl implements RunnableView {
     Game.Status gameStatus = Game.Status.WAITING;
     private String playerName;
     private Player me;
@@ -28,7 +29,7 @@ public class Tui_Max extends Observable implements RunnableView {
     }
 
     public Tui_Max(Client client) {
-        this.addObserver(client);
+        this.addObserver((ClientImpl) client);
     }
 
     @Override

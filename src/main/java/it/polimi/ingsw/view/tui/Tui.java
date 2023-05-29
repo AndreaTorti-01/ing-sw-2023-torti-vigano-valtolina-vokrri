@@ -4,9 +4,10 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
-import it.polimi.ingsw.utils.Observable;
+import it.polimi.ingsw.utils.ObservableImpl;
 import it.polimi.ingsw.view.RunnableView;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.Scanner;
 import static it.polimi.ingsw.utils.Constants.*;
 import static it.polimi.ingsw.view.tui.TerminalPrintables.*;
 
-public class Tui extends Observable implements RunnableView {
+public class Tui extends ObservableImpl implements RunnableView {
     private final Object lock = new Object();
     private final Scanner scanner = new Scanner(System.in);
     boolean gaveNumber;
@@ -25,7 +26,7 @@ public class Tui extends Observable implements RunnableView {
     private State state = State.ASK_NAME;
 
     public Tui(Client client) {
-        this.addObserver(client);
+        this.addObserver((ClientImpl) client);
     }
 
     private State getState() {

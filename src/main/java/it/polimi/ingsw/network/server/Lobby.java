@@ -41,7 +41,7 @@ public class Lobby implements Observer {
 
         for (ClientHandler clientHandler : clientHandlers) {
             try {
-                clientHandler.sendMsg(modelView);
+                ((ClientHandlerImpl) clientHandler).sendMessage(modelView);
             } catch (RemoteException e) {
                 System.err.println("A remote exception was thrown!");
                 throw new RuntimeException(e);

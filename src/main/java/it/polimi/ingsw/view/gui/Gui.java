@@ -2,14 +2,16 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
-import it.polimi.ingsw.utils.Observable;
+import it.polimi.ingsw.utils.ObservableImpl;
 import it.polimi.ingsw.view.RunnableView;
 import javafx.application.Application;
 
 import java.util.Scanner;
 
-public class Gui extends Observable implements RunnableView {
+public class Gui extends ObservableImpl implements RunnableView {
+    private static final String fxmlPath = "/graphicalResources/fxml/";
     private final Object lock = new Object();
     private final Scanner scanner = new Scanner(System.in);
     boolean gaveNumber;
@@ -19,9 +21,9 @@ public class Gui extends Observable implements RunnableView {
     private GuiApp gui;
 
     public Gui(Client client) {
-        this.addObserver(client);
+        this.addObserver((ClientImpl) client);
     }
-    private static final String fxmlPath = "/graphicalResources/fxml/";
+
     private Gui.State getState() {
         synchronized (lock) {
             return state;
@@ -40,7 +42,7 @@ public class Gui extends Observable implements RunnableView {
     public void run() {
         Application.launch(GuiApp.class);
 
-        // TODO: change scene to welcome screen
+        //TODO: change scene to welcome screen
         //TODO: ask for name
 
         // waits for state to change

@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
-import it.polimi.ingsw.utils.Observable;
+import it.polimi.ingsw.utils.ObservableImpl;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Random;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
-public class Game extends Observable {
+public class Game extends ObservableImpl {
     private final Bag bag;
     private List<CommonGoalCard> commonGoalCards;
     private List<Player> players;
