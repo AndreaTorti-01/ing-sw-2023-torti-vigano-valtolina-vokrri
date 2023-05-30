@@ -40,8 +40,11 @@ public class WelcomeScreenController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+
+
     @FXML
     @Override
+    //initialize method is standard-called when the fxml file is loaded
     public void initialize(URL url, ResourceBundle resourceBundle) {
         enterButton.setText("Enter");
         askerLabel.setText("Insert your nickname");
@@ -105,13 +108,28 @@ public class WelcomeScreenController implements Initializable {
 
     public void Player2(ActionEvent actionEvent) {
         this.numberOfPlayers = 2;
+        waitingRoom();
     }
 
     public void Player3(ActionEvent actionEvent) {
         this.numberOfPlayers = 3;
+        waitingRoom();
     }
 
     public void Player4(ActionEvent actionEvent) {
         this.numberOfPlayers = 4;
+        waitingRoom();
+    }
+
+    public void waitingRoom() {
+        button2.setVisible(false);
+        button3.setVisible(false);
+        button4.setVisible(false);
+
+        button2.setDisable(true);
+        button3.setDisable(true);
+        button4.setDisable(true);
+
+        askerLabel.setText("Waiting for other players...");
     }
 }
