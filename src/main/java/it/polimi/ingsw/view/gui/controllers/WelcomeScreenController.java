@@ -21,7 +21,7 @@ public class WelcomeScreenController implements Initializable {
     @FXML
     private static final String fxmlPath = "/graphicalResources/fxml/";
     @FXML
-    public ImageView nickname_label;
+    public ImageView background;
     @FXML
     public TextField textField;
     @FXML
@@ -34,6 +34,7 @@ public class WelcomeScreenController implements Initializable {
     public Button button2;
     @FXML
     public Label askerLabel;
+
     private boolean insertedName = false;
     private int numberOfPlayers;
     private String PlayerName;
@@ -78,7 +79,7 @@ public class WelcomeScreenController implements Initializable {
     }
     public void changeScene(String sceneName){
         root = loadResource(sceneName, root);
-        stage = (Stage) nickname_label.getScene().getWindow();
+        stage = (Stage) background.getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
