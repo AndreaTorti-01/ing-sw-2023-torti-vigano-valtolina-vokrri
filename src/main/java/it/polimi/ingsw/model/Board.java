@@ -114,13 +114,9 @@ public class Board implements Serializable {
 
         return output.toString();
     }
-
-    // TODO keep?
     public boolean[][] getValidMatrix() {
         return valid;
     }
-
-    // TODO keep?
     public ItemCard[][] getTileMatrix() {
         return tile;
     }
