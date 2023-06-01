@@ -25,7 +25,7 @@ public class ShelfFactory {
 
                     // gets the type of the ItemCard given the abbreviation found in the file
                     // and inserts it in the correct position of the matrix
-                    shelf.setCardAt(row, column, new ItemCard(ItemType.getItemTypeFromAbbreviation(currentChar)));
+                    shelf.setCardAt(row, column, new ItemCard(ItemType.getItemTypeFromAbbreviation(currentChar), 0));
                 }
 
                 // goes to next line

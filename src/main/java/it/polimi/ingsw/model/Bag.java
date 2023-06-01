@@ -27,7 +27,7 @@ public class Bag implements Serializable {
         cardsInside = new HashSet<>();
         for (ItemType type : ItemType.values()) {
             for (int i = 0; i < numberOfItemCardsWithSameType; i++) {
-                cardsInside.add(new ItemCard(type));
+                cardsInside.add(new ItemCard(type, i % 3));
             }
         }
     }

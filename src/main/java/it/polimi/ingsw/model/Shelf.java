@@ -42,7 +42,7 @@ public class Shelf implements Serializable {
                 if (currentCard == null) continue;
                 // creates a new itemCard with the same type as the one currently selected
                 // and inserts it in the current position of the new shelf
-                this.items[row][column] = new ItemCard(currentCard.getType());
+                this.items[row][column] = new ItemCard(currentCard.getType(), 0);
             }
         }
     }
@@ -96,7 +96,7 @@ public class Shelf implements Serializable {
 
                 // creates a new ItemCard with the same type as the one currently selected
                 // and inserts it in the itemCards at the same position
-                itemCards[row][column] = new ItemCard(currentCard.getType());
+                itemCards[row][column] = new ItemCard(currentCard.getType(), 0);
             }
         }
 
