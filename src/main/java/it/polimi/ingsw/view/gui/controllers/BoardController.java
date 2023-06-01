@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.ItemCards.ItemCard;
-import it.polimi.ingsw.model.ItemCards.ItemVariant;
 import it.polimi.ingsw.model.Board;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -31,7 +30,6 @@ public class BoardController implements Initializable {
     }
 
     private String getTilePath(ItemCard itemCard){
-        ItemVariant variant = itemCard.getVariant();
         String tilesPath = "/graphicalResources/itemTiles/";
         switch(itemCard.getType()){
             case CATS -> tilesPath += "Gatti1.";
@@ -41,10 +39,10 @@ public class BoardController implements Initializable {
             case FRAMES -> tilesPath += "Cornici1.";
             case GAMES -> tilesPath += "Giochi1.";
         }
-        switch (variant){
-            case VARIANT_1 -> tilesPath += "1.png";
-            case VARIANT_2 -> tilesPath += "2.png";
-            case VARIANT_3 -> tilesPath += "3.png";
+        switch (itemCard.getSprite()){
+            case 0 -> tilesPath += "1.png";
+            case 1 -> tilesPath += "2.png";
+            case 2 -> tilesPath += "3.png";
         }
         return tilesPath;
     }
