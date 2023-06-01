@@ -7,29 +7,24 @@ public class ItemCard implements Serializable {
     @Serial
     private static final long serialVersionUID = -648130833358549189L;
     private final ItemType type;
-    private final int sprite;
+    private final ItemVariant variant;
 
     /**
      * @param type   the type of the item card, passed as an enum value
-     * @param sprite must be between 0 and 2
      */
-    public ItemCard(ItemType type, int sprite) {
+    public ItemCard(ItemType type) {
         this.type = type;
-        if (sprite < 0 || sprite > 2)
-            throw new IllegalArgumentException("Sprite must be between 0 and 2");
-        this.sprite = sprite;
+        //generates a random variant
+        this.variant = ItemVariant.getRandomItemVariant();
     }
 
     public ItemType getType() {
         return type;
     }
+    public ItemVariant getVariant(){return this.variant;}
 
     @Override
     public String toString() {
         return type.getAbbreviation();
-    }
-
-    public int getSprite() {
-        return sprite;
     }
 }
