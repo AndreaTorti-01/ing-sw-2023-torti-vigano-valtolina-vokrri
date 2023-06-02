@@ -21,14 +21,12 @@ public class GuiApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         mainStage = stage;
-        root = loadResource("WelcomeScreen.fxml", root);
+        root = loadResource("PlayingScreen.fxml", root);
 
         Scene scene = new Scene(root);
 
         mainStage.setScene(scene);
-        mainStage.setWidth(1600);
-        mainStage.setHeight(900);
-        mainStage.setResizable(false);
+        mainStage.setResizable(true);
         mainStage.setMaximized(false);
         mainStage.setFullScreen(false);
         mainStage.setFullScreenExitHint("");
@@ -36,11 +34,6 @@ public class GuiApp extends Application {
         mainStage.show();
     }
 
-
-    public void changeScene(String fxmlName) {
-        root = loadResource(fxmlName, root);
-        mainStage.getScene().setRoot(root);
-    }
 
     public Parent loadResource(String fxmlName, Parent root) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));

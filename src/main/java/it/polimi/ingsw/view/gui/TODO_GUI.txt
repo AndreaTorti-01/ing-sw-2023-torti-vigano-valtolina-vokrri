@@ -1,15 +1,8 @@
 TODO
 
-1) aggiungere le grid alla board
-
-2) aggiungere le grid alle shelf
-
-3) shelf e board devono essere create come fxml separati e aggiunti nell'fxml principale della schermata di gioco.
-3.1) devono esserci 4 fxml delle shelf (shelf0, 1, 2, 3), tutti con il link allo stesso cotroller)
-
 3) aggiungere tutti i metodi dei controller
 
-4) la tui non è pienamente finita, manca la gestione della schermata finale
+4) la tui non è pienamente finita, manca la gestione della schermata finale -> anche gui
 
-5) sempre nella gui bisogna modificare pickcards per pickare carte separate
+5) sempre nella tui (e gui) bisogna modificare pickcards per pickare carte separate
 
