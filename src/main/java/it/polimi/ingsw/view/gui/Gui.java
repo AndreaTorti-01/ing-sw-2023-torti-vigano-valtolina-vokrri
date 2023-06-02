@@ -2,9 +2,11 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
+import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.ObservableImpl;
 import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.gui.controllers.*;
@@ -14,7 +16,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
+import static it.polimi.ingsw.utils.Constants.*;
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 
 public class Gui extends ObservableImpl implements RunnableView {
     private static final String fxmlPath = "/graphicalResources/fxml/";
@@ -29,7 +36,7 @@ public class Gui extends ObservableImpl implements RunnableView {
     private PlayingScreenController playingScreenController;
     private EndScreenController endScreenController;
     private BoardController boardController;
-    private ShelfController shelfController0, shelfController1, shelfController2, shelfController3;
+    private ShelfController shelfController;
     private FXMLLoader loader;
     private Parent root;
 
@@ -58,7 +65,7 @@ public class Gui extends ObservableImpl implements RunnableView {
 
         Application.launch(GuiApp.class);
 
-        loader = new FXMLLoader(getClass().getResource(fxmlPath + "welcomeScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource(fxmlPath + "WelcomeScreen.fxml"));
         try {
             root = loader.load(); // can throw IOException
         } catch (IOException e) {
@@ -98,6 +105,7 @@ public class Gui extends ObservableImpl implements RunnableView {
         //noinspection InfiniteLoopStatement
         while (true) {
             while (getState() == Gui.State.WAITING_FOR_TURN) {
+                updateGameScene();
                 synchronized (lock) {
                     try {
                         lock.wait();
@@ -108,7 +116,8 @@ public class Gui extends ObservableImpl implements RunnableView {
             }
 
             while (getState() == Gui.State.PLAY) {
-                // TODO ask for action (picking cards, placing cards, etc.
+                updateGameScene();
+                pickCards();
                 synchronized (lock) {
                     try {
                         lock.wait();
@@ -125,9 +134,55 @@ public class Gui extends ObservableImpl implements RunnableView {
      *
      * @return the name of the player
      */
+
+    private void pickCards() {
+        List<List<Integer>> pickedCoords = new ArrayList<>();
+
+        int pickedNum = 0; //number of already picked cards
+        boolean validChoice = false;
+        int shelfCol = 0; //column of the shelf where the player is moving cards to
+        int maxCards = 0; //maximum cards that can be picked
+        int[] freeSlotsNumber = new int[numberOfColumns]; //number of max cards that can be inserted in each column
+
+        //notifying observers
+        notifyObservers(new MoveMsg(pickedCoords, shelfCol));
+    }
+
+    private int getSelectedRow() {
+        int row = -1;
+        do {
+            //sleep for 0.1 second
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            row = boardController.getSelectedRow();
+        } while (row == -1);
+        return row;
+    }
+    private int getSelectedColumn(){
+        int col = -1;
+        do{
+            //sleep for 0.1 second
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            col = boardController.getSelectedColumn();
+        }while(col == -1);
+        return col;
+    }
     public String getPlayerName(){
         String name = "";
         do{
+            //sleep for 0.1 second
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             name = welcomeScreenController.getNickname();
         }while(name.equals(""));
         notifyObservers(name);
@@ -139,6 +194,12 @@ public class Gui extends ObservableImpl implements RunnableView {
     public void getNumberOfPlayers(){
         int numPlayers = 0;
         do{
+            //sleep for 0.1 second
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             numPlayers = welcomeScreenController.getNumberOfPlayers();
         }while(numPlayers == 0);
         notifyObservers(numPlayers);
@@ -162,10 +223,43 @@ public class Gui extends ObservableImpl implements RunnableView {
         }
         // the game has started
         else if (modelView.getGameStatus().equals(Game.Status.STARTED)) {
-            //TODO: show the game scene
+
+            updateGameScene();
+
             if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
                 setState(Gui.State.PLAY); // it's my turn
             } else setState(Gui.State.WAITING_FOR_TURN); // it's not my turn
+        }
+    }
+
+    private void updateGameScene(){
+        loader = new FXMLLoader(getClass().getResource(fxmlPath + "Board.fxml"));
+        try {
+            root = loader.load(); // can throw IOException
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        boardController = loader.getController();
+        //updates the board
+        boardController.updateBoardGraphics(modelView.getBoard());
+
+        loader = new FXMLLoader(getClass().getResource(fxmlPath + "Shelf0.fxml"));
+        try {
+            root = loader.load(); // can throw IOException
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        shelfController = loader.getController();
+        //updates the shelfs
+        int shelfNumber = 1;
+        for(Player p : modelView.getPlayers()){
+            if(p.getName().equals(playerName))
+                shelfController.updateShelfGraphics(p.getShelf(), 0);
+            else{
+                shelfController.updateShelfGraphics(p.getShelf(), shelfNumber);
+                shelfNumber = shelfNumber + 1;
+            }
+
         }
     }
 
