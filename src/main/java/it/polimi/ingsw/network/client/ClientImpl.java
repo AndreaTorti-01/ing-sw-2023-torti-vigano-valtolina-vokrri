@@ -29,6 +29,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client, Observer 
             new Thread(view).start();
         } else {
             this.view = new Gui(this);
+            new Thread(view).start();
         }
     }
 

@@ -185,6 +185,7 @@ public class Gui extends ObservableImpl implements RunnableView {
             }
             name = welcomeScreenController.getNickname();
         }while(name.equals(""));
+
         notifyObservers(name);
         return name;
     }

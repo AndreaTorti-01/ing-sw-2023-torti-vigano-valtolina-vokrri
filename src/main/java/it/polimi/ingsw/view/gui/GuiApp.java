@@ -21,7 +21,7 @@ public class GuiApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         mainStage = stage;
-        root = loadResource("PlayingScreen.fxml", root);
+        root = loadResource("WelcomeScreen.fxml", root);
 
         Scene scene = new Scene(root);
 

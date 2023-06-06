@@ -23,6 +23,8 @@ public class RemoteStub implements Server, ClientHandler, Runnable {
     public void receiveMessage(Object message) throws RemoteException {
         try {
             oos.writeObject(message);
+            oos.flush();
+            oos.reset(); //to solve the problem not receiving the following
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -82,7 +82,7 @@ public class BoardController implements Initializable {
         this.clickedRow = -1;
         this.clickedColumn = -1;
         this.isMyTurn = false;
-        
+
         for (int i = 0; i < numberOfBoardRows; i++) {
             for (int j = 0; j < numberOfBoardColumns; j++) {
                 ImageView imageView = (ImageView) Board.getChildren().get(i * numberOfBoardColumns + j);

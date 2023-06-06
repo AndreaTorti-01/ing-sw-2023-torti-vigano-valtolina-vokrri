@@ -30,6 +30,8 @@ public class ClientSkeleton implements Client, Runnable {
     public void receiveMessage(GameViewMsg message) throws RemoteException {
         try {
             oos.writeObject(message);
+            oos.flush();
+            oos.reset(); //to solve the problem not receiving the following
         } catch (IOException e) {
             e.printStackTrace();
         }

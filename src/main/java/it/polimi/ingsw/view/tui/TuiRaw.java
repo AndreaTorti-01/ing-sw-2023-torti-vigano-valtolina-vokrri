@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import static it.polimi.ingsw.utils.Constants.*;
+import static it.polimi.ingsw.view.tui.TerminalPrintables.*;
+import static it.polimi.ingsw.view.tui.TerminalPrintables.printFrame;
 
 public class TuiRaw extends ObservableImpl implements RunnableView {
     private final Object lock = new Object();
@@ -156,6 +158,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         int shelfCol = 0; //column of the shelf where the player is moving cards to
         int maxCards = 0; //maximum cards that can be picked
         int[] freeSlotsNumber = new int[numberOfColumns]; //number of max cards that can be inserted in each column
+        List<ItemCard> pickedCards = new ArrayList<>(); //list of picked cards
 
         Player me = null;
         for (Player p : modelView.getPlayers())
@@ -199,6 +202,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
                 coords.add(row);
                 coords.add(column);
                 pickedCoords.add(coords);
+                pickedCards.add(modelView.getBoard()[row][column]);
                 pickedNum++;
             } else printError("Invalid coordinates!, retry");
 
@@ -210,6 +214,27 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
 
         }
 
+        System.out.println("These are the cards you picked: ");
+        printPickedCards(pickedCards);
+        System.out.println("Chose the the order: 1 - 2 - 3");
+
+        int orderId = 0; // not redundant
+        List<List<Integer>> tmp = new ArrayList<>();
+        List<Integer> used = new ArrayList<>();
+        while (tmp.size() < pickedCoords.size()) {
+
+            do {
+                orderId = scanner.nextInt();
+            } while ((orderId < 1 || orderId > pickedCoords.size()));
+
+            if(!used.contains(orderId)) {
+                used.add(orderId);
+                tmp.add(pickedCoords.get(orderId - 1));
+            }
+            else
+                printError("You already used this number! retry");
+        }
+        pickedCoords = tmp;
 
         System.out.println("Chose a shelf column to move the cards to: ");
         while (!validChoice) {
@@ -228,6 +253,20 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
     }
 
+    private void printPickedCards(List<ItemCard> pickedCards) {
+        for (ItemCard card : pickedCards) {
+            switch (card.getType()) {
+                case CATS -> printCat();
+                case BOOKS -> printBook();
+                case GAMES -> printGame();
+                case PLANTS -> printPlant();
+                case TROPHIES -> printTrophies();
+                case FRAMES -> printFrame();
+            }
+            System.out.print("\t");
+        }
+
+    }
     private void printGameStatus() {
         printBoard(modelView.getBoard(), modelView.getBoardValid());
         System.out.println("\n");
