@@ -36,6 +36,7 @@ public class ChatMsg implements Serializable {
 
     @Override
     public String toString() {
-        return sourcePlayer + ": " + message;
+        String msgType = isMsgPublic ? "" : "(private) ";
+        return msgType + sourcePlayer + ": " + message;
     }
 }

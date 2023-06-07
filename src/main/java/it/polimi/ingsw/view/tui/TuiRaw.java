@@ -78,28 +78,65 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
         //noinspection InfiniteLoopStatement
         while (true) {
-            while (getState() == State.WAITING_FOR_TURN) {
-                printGameStatus(); // TODO complete
-                synchronized (lock) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
-                    }
-                }
-            }
+            // scan for command
+            String line = scanLine();
 
-            while (getState() == State.PLAY) {
-                printGameStatus(); // TODO complete
-                pickCards();
-                synchronized (lock) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
+            // check if it's a command
+            if (line.charAt(0) == '/') {
+                String command = line.split(" ")[0];
+
+                // check which command it is
+                switch (command) {
+                    case "/chat" -> {
+                        // check that it has 2 arguments
+                        if (line.split(" ").length >= 2) {
+                            String chatMessage = line.split(" ", 2)[1];
+                            notifyObservers(new ChatMsg(null, playerName, true, chatMessage));
+                        } else {
+                            System.out.println("Invalid arguments: Type /chat <message> to send a message to all players");
+                        }
                     }
+
+                    case "/privatechat" -> {
+                        // check that it has 3 arguments
+                        if (line.split(" ").length >= 3) {
+                            String destPlayer = line.split(" ")[1];
+                            List<String> playerNames = new ArrayList<>();
+                            for (Player player : modelView.getPlayers()) {
+                                playerNames.add(player.getName());
+                            }
+
+                            // check that the dest player exists and is not the player himself
+                            if (playerNames.contains(destPlayer) && !destPlayer.equals(playerName)) {
+                                String chatMessage = line.split(" ", 3)[2];
+                                notifyObservers(new ChatMsg(destPlayer, playerName, false, chatMessage));
+                            } else if (destPlayer.equals(playerName)) {
+                                System.out.println("You can't send a private message to yourself, touch some grass instead :)");
+                            } else {
+                                System.out.println("Invalid player name");
+                            }
+                        } else {
+                            System.out.println("Invalid arguments: Type /privatechat <player> <message> to send a private message to a player");
+                        }
+                    }
+
+                    case "/pick" -> {
+                        // check if it's the player's turn
+                        if (state.equals(State.PLAY)) {
+                            pickCards();
+                        } else System.out.println("Picking cards is not an option right now.");
+                    }
+
+                    case "/help" -> {
+                        System.out.println("Type /chat <message> to send a message to all players");
+                        System.out.println("Type /privatechat <player> <message> to send a private message to a player");
+                        System.out.println("Type /pick to start the card picking process");
+                        System.out.println("Type /help to see this list again");
+                    }
+
+                    default -> System.out.println("Invalid command: type /help for a list of commands");
                 }
-            }
+            } else System.out.println("Invalid command: type /help for a list of commands");
         }
     }
 
@@ -114,15 +151,16 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
 
         // the game is waiting for players
         if (!playerName.equals("") && modelView.getGameStatus().equals(Game.Status.WAITING)) {
-            if (playerName.equals(modelView.getPlayers().get(0).getName()) && !gaveNumber)
+            if (playerName.equals(modelView.getPlayers().get(0).getName()) && !gaveNumber) {
                 setState(State.ASK_NUMBER); // I am lobby leader
-            else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
+            } else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
         }
         // the game has started
         else if (modelView.getGameStatus().equals(Game.Status.STARTED)) {
-            if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
+            if (modelView.getCurrentPlayer().getName().equals(this.playerName))
                 setState(State.PLAY); // it's my turn
-            } else setState(State.WAITING_FOR_TURN); // it's not my turn
+            else setState(State.WAITING_FOR_TURN); // it's not my turn
+            printGameStatus();
         }
     }
 
@@ -314,8 +352,10 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     private void printChat() {
+        if (modelView.getMessages().size() == 0) return;
+        System.out.println("Chat: ");
         for (ChatMsg message : modelView.getMessages()) {
-            if (message.isMsgPublic() || !message.isMsgPublic() && message.getDestPlayer().equals(playerName))
+            if (message.isMsgPublic() || !message.isMsgPublic() && (message.getDestPlayer().equals(playerName) || message.getSourcePlayer().equals(playerName)))
                 System.out.println(message);
         }
     }
@@ -433,41 +473,5 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
 
     private enum State {
         ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY
-    }
-
-    public enum Command {
-        CHAT("/chat"),
-        PRIVATECHAT("/privatechat"),
-        QUIT("/quit"),
-        HELP("/help");
-
-
-        private final String commandName;
-
-        Command(String identifier) {
-            this.commandName = identifier;
-        }
-
-        public String getCommandName() {
-            return this.commandName;
-        }
-
-        public void printList() {
-            System.out.println("List of commands:");
-            for (Command command : Command.values()) {
-                printCommandInfo(command);
-            }
-        }
-
-        public void printCommandInfo(Command command) {
-            switch (command) {
-                case CHAT -> System.out.println("Type /chat <message> to send a message to the other players");
-                case PRIVATECHAT ->
-                        System.out.println("Type /privatechat <player> <message> to send a private message to a player");
-                case QUIT -> System.out.println("Type /quit to quit the game");
-                case HELP -> System.out.println("Type /help to see the list of commands");
-
-            }
-        }
     }
 }
