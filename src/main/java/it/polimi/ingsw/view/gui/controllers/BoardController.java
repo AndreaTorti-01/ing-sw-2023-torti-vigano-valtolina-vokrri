@@ -1,8 +1,6 @@
 package it.polimi.ingsw.view.gui.controllers;
 
-import com.sun.media.jfxmedia.events.AudioSpectrumEvent;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
-import it.polimi.ingsw.model.Board;
 import javafx.fxml.Initializable;
 import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
@@ -11,10 +9,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import static it.polimi.ingsw.utils.Constants.*;
+import static it.polimi.ingsw.utils.Constants.numberOfBoardColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfBoardRows;
 
 public class BoardController implements Initializable {
     public GridPane Board;
@@ -23,12 +21,12 @@ public class BoardController implements Initializable {
     public int clickedColumn = -1;
 
 
-    public void updateBoardGraphics(ItemCard[][] tileMatrix){
+    public void updateBoardGraphics(ItemCard[][] tileMatrix) {
         resetSelection();
 
         for (int i = 0; i < numberOfBoardRows; i++) {
             for (int j = 0; j < numberOfBoardColumns; j++) {
-                if(tileMatrix[i][j] != null){
+                if (tileMatrix[i][j] != null) {
                     ItemCard itemCard = tileMatrix[i][j];
 
                     ImageView imageView = (ImageView) Board.getChildren().get(i * numberOfBoardColumns + j);
@@ -39,9 +37,9 @@ public class BoardController implements Initializable {
         }
     }
 
-    private String getTilePath(ItemCard itemCard){
+    private String getTilePath(ItemCard itemCard) {
         String tilesPath = "/graphicalResources/itemTiles/";
-        switch(itemCard.getType()){
+        switch (itemCard.getType()) {
             case CATS -> tilesPath += "Gatti1.";
             case BOOKS -> tilesPath += "Libri1.";
             case PLANTS -> tilesPath += "Piante1.";
@@ -49,7 +47,7 @@ public class BoardController implements Initializable {
             case FRAMES -> tilesPath += "Cornici1.";
             case GAMES -> tilesPath += "Giochi1.";
         }
-        switch (itemCard.getSprite()){
+        switch (itemCard.getSprite()) {
             case 0 -> tilesPath += "1.png";
             case 1 -> tilesPath += "2.png";
             case 2 -> tilesPath += "3.png";
@@ -57,16 +55,17 @@ public class BoardController implements Initializable {
         return tilesPath;
     }
 
-    public int getSelectedRow(){
+    public int getSelectedRow() {
         this.isMyTurn = true;
         return this.clickedRow;
     }
+
     public int getSelectedColumn() {
         this.isMyTurn = true;
         return this.clickedColumn;
     }
 
-    public void setPicked(int row, int col){
+    public void setPicked(int row, int col) {
         //sets the bloom effect ont he picked card
         this.clickedRow = -1;
         this.clickedColumn = -1;
@@ -74,11 +73,12 @@ public class BoardController implements Initializable {
         imageView.setEffect(new Bloom());
     }
 
-    public void setReady(){
+    public void setReady() {
         clickedRow = -1;
         clickedColumn = -1;
     }
-    public void resetSelection(){
+
+    public void resetSelection() {
         this.clickedRow = -1;
         this.clickedColumn = -1;
         this.isMyTurn = false;
@@ -96,12 +96,10 @@ public class BoardController implements Initializable {
     }
 
     public void handleImageViewClick(MouseEvent mouseEvent) {
-        if(isMyTurn) {
+        if (isMyTurn) {
             ImageView imageView = (ImageView) mouseEvent.getSource();
             this.clickedColumn = GridPane.getColumnIndex(imageView);
             this.clickedRow = GridPane.getRowIndex(imageView);
         }
     }
-
-
 }

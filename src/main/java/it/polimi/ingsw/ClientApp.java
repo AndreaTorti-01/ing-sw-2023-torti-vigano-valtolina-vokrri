@@ -29,28 +29,6 @@ public class ClientApp {
             }
         }
 
-        // if no argument is provided for the rmi launch,
-        // it launches the app in socket mode
-        //if (isSocket) {
-        //    try {
-        //        // requests connection to the server with the specified IP address and port
-        //        client = new ClientSocket(new Socket(Constants.serverIpAddress, Constants.serverPort), isTui);
-        //    } catch (IOException e) {
-        //        System.err.println("Failed to connect to the server socket");
-        //        throw new RuntimeException(e);
-        //    }
-        //} else {
-        //    try {
-        //        Registry registry = LocateRegistry.getRegistry();
-        //        client = new ClientRmi(isTui);
-        //    } catch (RemoteException e) {
-        //        System.err.println("Failed to create the client RMI");
-        //        throw new RuntimeException(e);
-        //    }
-        //}
-        //// runs the client
-        //client.run();
-
         // generate a client implementation
         ClientImpl client = null;
         try {

@@ -6,20 +6,19 @@ import java.io.Serializable;
 public class ChatMsg implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final int destPlayer;
+    private final String destPlayer;
     private final String sourcePlayer;
     private final boolean isMsgPublic;
-
     private final String message;
 
-    public ChatMsg(int destPlayer, String sourcePlayer, boolean isMsgPublic, String message) {
+    public ChatMsg(String destPlayer, String sourcePlayer, boolean isMsgPublic, String message) {
         this.destPlayer = destPlayer;
         this.sourcePlayer = sourcePlayer;
         this.isMsgPublic = isMsgPublic;
         this.message = message;
     }
 
-    public int getDestPlayer() {
+    public String getDestPlayer() {
         return destPlayer;
     }
 
@@ -33,5 +32,10 @@ public class ChatMsg implements Serializable {
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public String toString() {
+        return sourcePlayer + ": " + message;
     }
 }

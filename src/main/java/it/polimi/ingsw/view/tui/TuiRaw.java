@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.network.client.ClientImpl;
+import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.ObservableImpl;
@@ -16,7 +17,6 @@ import java.util.Scanner;
 
 import static it.polimi.ingsw.utils.Constants.*;
 import static it.polimi.ingsw.view.tui.TerminalPrintables.*;
-import static it.polimi.ingsw.view.tui.TerminalPrintables.printFrame;
 
 public class TuiRaw extends ObservableImpl implements RunnableView {
     private final Object lock = new Object();
@@ -227,11 +227,10 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
                 orderId = scanner.nextInt();
             } while ((orderId < 1 || orderId > pickedCoords.size()));
 
-            if(!used.contains(orderId)) {
+            if (!used.contains(orderId)) {
                 used.add(orderId);
                 tmp.add(pickedCoords.get(orderId - 1));
-            }
-            else
+            } else
                 printError("You already used this number! retry");
         }
         pickedCoords = tmp;
@@ -267,6 +266,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
 
     }
+
     private void printGameStatus() {
         printBoard(modelView.getBoard(), modelView.getBoardValid());
         System.out.println("\n");
@@ -274,6 +274,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         printPersonalGoalCards();
         printCommonGoalCards();
         printScores();
+        printChat();
     }
 
     private void printCommonGoalCards() {
@@ -309,6 +310,13 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
 
                 System.out.print(output);
             }
+        }
+    }
+
+    private void printChat() {
+        for (ChatMsg message : modelView.getMessages()) {
+            if (message.isMsgPublic() || !message.isMsgPublic() && message.getDestPlayer().equals(playerName))
+                System.out.println(message);
         }
     }
 

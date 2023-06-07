@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Stack;
 
 public class GameViewMsg implements Serializable {
     @Serial
@@ -20,6 +21,7 @@ public class GameViewMsg implements Serializable {
     private final boolean isBagEmpty;
     private final Game.Status status;
     private final Player winner;
+    private final Stack<ChatMsg> messages;
 
     public GameViewMsg(Game model) {
         if (model == null) throw new IllegalArgumentException();
@@ -38,6 +40,7 @@ public class GameViewMsg implements Serializable {
         this.isBagEmpty = model.getBag().getCardsInside().size() == 0;
         this.status = model.getGameStatus();
         this.winner = model.getWinner();
+        this.messages = model.getMessages();
     }
 
     public ItemCard[][] getBoard() {
@@ -74,6 +77,10 @@ public class GameViewMsg implements Serializable {
 
     public Player getWinner() {
         return this.winner;
+    }
+
+    public Stack<ChatMsg> getMessages() {
+        return this.messages;
     }
 
 }

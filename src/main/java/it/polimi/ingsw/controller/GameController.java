@@ -2,10 +2,10 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
-import it.polimi.ingsw.model.PersonalGoalCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
+import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 
 import java.util.List;
@@ -56,5 +56,9 @@ public class GameController {
             }
         }
         model.setWinner(winner);
+    }
+
+    public void addChatMessage(ChatMsg chatMsg) {
+        this.model.addChatMessage(chatMsg);
     }
 }

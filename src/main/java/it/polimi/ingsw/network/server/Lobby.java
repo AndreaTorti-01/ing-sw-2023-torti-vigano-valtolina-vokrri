@@ -50,7 +50,7 @@ public class Lobby implements Observer {
     }
 
     public void update(ChatMsg chatMsg) {
-        throw new UnsupportedOperationException();
+        controller.addChatMessage(chatMsg);
     }
 
     public void update(MoveMsg moveMsg) {

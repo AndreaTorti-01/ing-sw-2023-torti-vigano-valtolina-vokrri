@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
+import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.utils.ObservableImpl;
 
@@ -10,11 +11,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
 public class Game extends ObservableImpl {
     private final Bag bag;
+    private final Stack<ChatMsg> messages;
     private List<CommonGoalCard> commonGoalCards;
     private List<Player> players;
     private Player currentPlayer;
@@ -27,6 +30,7 @@ public class Game extends ObservableImpl {
     public Game() {
         this.bag = new Bag();
         this.players = new ArrayList<>();
+        this.messages = new Stack<>();
     }
 
     /**
@@ -342,6 +346,15 @@ public class Game extends ObservableImpl {
             }
         }
 
+        notifyObservers(new GameViewMsg(this));
+    }
+
+    public Stack<ChatMsg> getMessages() {
+        return this.messages;
+    }
+
+    public void addChatMessage(ChatMsg chatMsg) {
+        this.messages.push(chatMsg);
         notifyObservers(new GameViewMsg(this));
     }
 
