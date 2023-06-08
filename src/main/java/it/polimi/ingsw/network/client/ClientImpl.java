@@ -17,20 +17,24 @@ import java.rmi.server.UnicastRemoteObject;
 public class ClientImpl extends UnicastRemoteObject implements Client, Observer {
     @Serial
     private static final long serialVersionUID = 2177950121442992758L;
-    private final RunnableView view;
+    private static RunnableView view;
     private ClientHandler clientHandler;
 
 
     public ClientImpl(boolean isTui) throws RemoteException {
         super();
 
-        if (isTui) {
-            this.view = new TuiRaw(this);
+    //    if (isTui) {
+    //        view = new TuiRaw(this);
+    //        new Thread(view).start();
+    //    } else {
+            view = new Gui(this);
             new Thread(view).start();
-        } else {
-            this.view = new Gui(this);
-            new Thread(view).start();
-        }
+    //    }
+    }
+
+    public static RunnableView getView() {
+        return view;
     }
 
     public void update(Integer numberOfPlayers) throws RemoteException {

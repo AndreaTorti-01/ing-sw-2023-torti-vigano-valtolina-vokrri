@@ -1,5 +1,9 @@
 package it.polimi.ingsw.view.gui.controllers;
 
+import it.polimi.ingsw.network.client.ClientImpl;
+import it.polimi.ingsw.view.gui.Gui;
+import it.polimi.ingsw.view.gui.Gui.State;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,18 +39,19 @@ public class WelcomeScreenController implements Initializable {
     @FXML
     public Label askerLabel;
 
-    private boolean insertedName = false;
+    //other parameters
+    private Gui gui;
+    private String playerName;
+    boolean insertedName = false;
     private int numberOfPlayers;
-    private String PlayerName;
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
 
 
     @FXML
     @Override
     //initialize method is standard-called when the fxml file is loaded
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.gui = (Gui) ClientImpl.getView();
+
         enterButton.setText("Enter");
         askerLabel.setText("Insert your nickname");
 
@@ -58,15 +63,8 @@ public class WelcomeScreenController implements Initializable {
         button3.setDisable(true);
         button4.setDisable(true);
 
-        this.numberOfPlayers = 0;
-        this.PlayerName = "";
-    }
-    public int getNumberOfPlayers() {
-        return numberOfPlayers;
-    }
-
-    public String getNickname() {
-        return PlayerName;
+        playerName = "";
+        numberOfPlayers = 0;
     }
     public Parent loadResource(String fxmlName, Parent root) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
@@ -77,6 +75,7 @@ public class WelcomeScreenController implements Initializable {
         }
         return root;
     }
+    /*
     public void changeScene(String sceneName){
         root = loadResource(sceneName, root);
         stage = (Stage) background.getScene().getWindow();
@@ -84,45 +83,58 @@ public class WelcomeScreenController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-
+    */
     public void ButtonAction(ActionEvent actionEvent) {
+
         if(!textField.getText().isEmpty() && !insertedName){
-            this.PlayerName = textField.getText();
+            this.playerName = textField.getText();
+
+            gui.setPlayerName(playerName);
+
             insertedName = true;
             textField.clear();
-            askerLabel.setText("How many players?");
+            askerLabel.setText("");
 
             textField.setVisible(false);
             textField.setDisable(true);
 
             enterButton.setVisible(false);
+            enterButton.setDisable(true);
+        }
+    }
+    public void askNumber(){
+        Platform.runLater(() -> {
+            askerLabel.setText("How many players?");
             button2.setVisible(true);
             button3.setVisible(true);
             button4.setVisible(true);
 
-            enterButton.setDisable(true);
             button2.setDisable(false);
             button3.setDisable(false);
             button4.setDisable(false);
-        }
+        });
     }
 
     public void Player2(ActionEvent actionEvent) {
         this.numberOfPlayers = 2;
-        waitingRoom();
+        gui.setPlayerNumber(numberOfPlayers);
+        waitForPlayers();
     }
 
     public void Player3(ActionEvent actionEvent) {
         this.numberOfPlayers = 3;
-        waitingRoom();
+        gui.setPlayerNumber(numberOfPlayers);
+        waitForPlayers();
     }
 
     public void Player4(ActionEvent actionEvent) {
         this.numberOfPlayers = 4;
-        waitingRoom();
+        gui.setPlayerNumber(numberOfPlayers);
+        waitForPlayers();
     }
 
-    public void waitingRoom() {
+    public void waitForPlayers(){
+        askerLabel.setText("Waiting for other players...");
         button2.setVisible(false);
         button3.setVisible(false);
         button4.setVisible(false);
@@ -130,7 +142,5 @@ public class WelcomeScreenController implements Initializable {
         button2.setDisable(true);
         button3.setDisable(true);
         button4.setDisable(true);
-
-        askerLabel.setText("Waiting for other players...");
     }
 }

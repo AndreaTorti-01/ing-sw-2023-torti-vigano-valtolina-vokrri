@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.view.gui.controllers.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +11,13 @@ import java.io.IOException;
 
 public class GuiApp extends Application {
     private static final String fxmlPath = "/graphicalResources/fxml/";
-    private Stage mainStage;
+    private static boolean createdController = false;
+    private static Stage mainStage;
+    private static WelcomeScreenController welcomeScreenController;
+    private static BoardController boardController;
+    private static EndScreenController endScreenController;
+    private static PlayingScreenController playingScreenController;
+    private static ShelfController shelfController;
     private Parent root = new Parent() {
     };
 
@@ -21,10 +28,19 @@ public class GuiApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         mainStage = stage;
-        root = loadResource("WelcomeScreen.fxml", root);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "WelcomeScreen.fxml"));
+        try {
+            root = loader.load(); // can throw IOException
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        welcomeScreenController = loader.getController();
+        createdController = true;
+
 
         Scene scene = new Scene(root);
-
         mainStage.setScene(scene);
         mainStage.setResizable(true);
         mainStage.setMaximized(false);
@@ -34,7 +50,27 @@ public class GuiApp extends Application {
         mainStage.show();
     }
 
-
+    public static WelcomeScreenController getWelcomeScreenController() {
+        return welcomeScreenController;
+    }
+    public static BoardController getBoardController() {
+        return boardController;
+    }
+    public static EndScreenController getEndScreenController() {
+        return endScreenController;
+    }
+    public static PlayingScreenController getPlayingScreenController() {
+        return playingScreenController;
+    }
+    public static ShelfController getShelfController() {
+        return shelfController;
+    }
+    public static boolean controllersAvailable() {
+        return createdController;
+    }
+    public static Stage getMainStage() {
+        return mainStage;
+    }
     public Parent loadResource(String fxmlName, Parent root) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
         try {
