@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.controllers;
 import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.view.gui.Gui.State;
+import it.polimi.ingsw.view.gui.GuiApp;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,24 +67,6 @@ public class WelcomeScreenController implements Initializable {
         playerName = "";
         numberOfPlayers = 0;
     }
-    public Parent loadResource(String fxmlName, Parent root) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            System.exit(1);
-        }
-        return root;
-    }
-    /*
-    public void changeScene(String sceneName){
-        root = loadResource(sceneName, root);
-        stage = (Stage) background.getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-    */
     public void ButtonAction(ActionEvent actionEvent) {
 
         if(!textField.getText().isEmpty() && !insertedName){
@@ -132,15 +115,19 @@ public class WelcomeScreenController implements Initializable {
         gui.setPlayerNumber(numberOfPlayers);
         waitForPlayers();
     }
-
+    public void changescene(){
+        GuiApp.changeScene(GuiApp.getPlayingScreenRoot());
+    }
     public void waitForPlayers(){
-        askerLabel.setText("Waiting for other players...");
-        button2.setVisible(false);
-        button3.setVisible(false);
-        button4.setVisible(false);
+        Platform.runLater(() -> {
+            askerLabel.setText("Waiting for other players...");
+            button2.setVisible(false);
+            button3.setVisible(false);
+            button4.setVisible(false);
 
-        button2.setDisable(true);
-        button3.setDisable(true);
-        button4.setDisable(true);
+            button2.setDisable(true);
+            button3.setDisable(true);
+            button4.setDisable(true);
+        });
     }
 }

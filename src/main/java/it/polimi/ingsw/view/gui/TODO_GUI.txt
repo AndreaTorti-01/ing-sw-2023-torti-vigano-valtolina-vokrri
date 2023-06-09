@@ -6,3 +6,4 @@ TODO
 
 5) sempre nella tui (e gui) bisogna modificare pickcards per pickare carte separate
 
+6) nel playing screen devono esserci sia un textfield che un button per inviare il messaggio, e un textpane per visualizzare i messaggi

@@ -83,12 +83,6 @@ public class Gui extends ObservableImpl implements RunnableView {
         //launching the GUI
         Application.launch(GuiApp.class);
 
-        //waiting for the GUI to be ready
-        while (!GuiApp.controllersAvailable())
-            sleep(100);
-
-        welcomeScreenController = GuiApp.getWelcomeScreenController();
-
         // waits for state to change
         while (getState() == Gui.State.ASK_NAME) {
             synchronized (lock) {
@@ -159,13 +153,21 @@ public class Gui extends ObservableImpl implements RunnableView {
                 welcomeScreenController = GuiApp.getWelcomeScreenController();
                 welcomeScreenController.askNumber();
             }
-            else
+            else {
                 setState(Gui.State.WAITING_FOR_PLAYERS); // I am not lobby leader
+                System.out.println("waiting for players");
+                while (!GuiApp.controllersAvailable())
+                    sleep(100);
+                welcomeScreenController = GuiApp.getWelcomeScreenController();
+                welcomeScreenController.waitForPlayers();
+            }
         }
         // the game has started
         else if (modelView.getGameStatus().equals(Game.Status.STARTED)) {
-
-            //update game scene
+            while (!GuiApp.controllersAvailable())
+                sleep(100);
+            welcomeScreenController = GuiApp.getWelcomeScreenController();
+            welcomeScreenController.changescene();
 
             if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
                 setState(Gui.State.PLAY); // it's my turn

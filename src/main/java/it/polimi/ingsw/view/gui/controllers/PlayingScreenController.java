@@ -32,7 +32,7 @@ public class PlayingScreenController implements Initializable {
     }
 
     public void changeScene(ActionEvent actionEvent) throws IOException {
-        root = loadResource("scena3.fxml", root);
+        root = loadResource("EndScreen.fxml", root);
         stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.view.gui.controllers.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ public class GuiApp extends Application {
     private static EndScreenController endScreenController;
     private static PlayingScreenController playingScreenController;
     private static ShelfController shelfController;
+    private static Parent welcomeScreenRoot, endScreenRoot, playingScreenRoot;
     private Parent root = new Parent() {
     };
 
@@ -29,18 +31,52 @@ public class GuiApp extends Application {
     public void start(Stage stage) throws IOException {
         mainStage = stage;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "WelcomeScreen.fxml"));
+        FXMLLoader loader;
+
+        loader = new FXMLLoader(getClass().getResource(fxmlPath + "Board.fxml"));
         try {
-            root = loader.load(); // can throw IOException
+            root = loader.load();
+            boardController = loader.getController();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.exit(1);
         }
 
-        welcomeScreenController = loader.getController();
+        loader = new FXMLLoader(getClass().getResource(fxmlPath + "WelcomeScreen.fxml"));
+        try {
+            welcomeScreenRoot = loader.load();
+            welcomeScreenController = loader.getController();
+        } catch (IOException e) {
+            System.exit(1);
+        }
+
+        loader = new FXMLLoader(getClass().getResource(fxmlPath + "EndScreen.fxml"));
+        try {
+            endScreenRoot = loader.load();
+            endScreenController = loader.getController();
+        } catch (IOException e) {
+            System.exit(1);
+        }
+
+        loader = new FXMLLoader(getClass().getResource(fxmlPath + "PlayingScreen.fxml"));
+        try {
+            playingScreenRoot = loader.load();
+            playingScreenController = loader.getController();
+        } catch (IOException e) {
+            System.exit(1);
+        }
+
+        loader = new FXMLLoader(getClass().getResource(fxmlPath + "Shelf0.fxml"));
+        try {
+            Parent shelfRoot = loader.load();
+            shelfController = loader.getController();
+        } catch (IOException e) {
+            System.exit(1);
+        }
+
+        //to simply resolve synchronization problems between gui and guiApp
         createdController = true;
 
-
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(welcomeScreenRoot);
         mainStage.setScene(scene);
         mainStage.setResizable(true);
         mainStage.setMaximized(false);
@@ -50,6 +86,18 @@ public class GuiApp extends Application {
         mainStage.show();
     }
 
+    public static Parent getWelcomeScreenRoot() {
+        return welcomeScreenRoot;
+    }
+    public static Parent getEndScreenRoot() {
+        return endScreenRoot;
+    }
+    public static Parent getPlayingScreenRoot() {
+        return playingScreenRoot;
+    }
+    public static void changeScene(Parent root) {
+        Platform.runLater(() -> mainStage.getScene().setRoot(root));
+    }
     public static WelcomeScreenController getWelcomeScreenController() {
         return welcomeScreenController;
     }
@@ -71,13 +119,13 @@ public class GuiApp extends Application {
     public static Stage getMainStage() {
         return mainStage;
     }
-    public Parent loadResource(String fxmlName, Parent root) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
+    public FXMLLoader loadResource(String fxmlName, Parent root, FXMLLoader loader) {
+        loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
         try {
             root = loader.load();
         } catch (IOException e) {
             System.exit(1);
         }
-        return root;
+        return loader;
     }
 }
