@@ -1,29 +1,20 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.client.ClientImpl;
+import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.ObservableImpl;
 import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.gui.controllers.*;
-import it.polimi.ingsw.view.tui.Tui;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import static it.polimi.ingsw.utils.Constants.*;
-import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 
 public class Gui extends ObservableImpl implements RunnableView {
     private static final String fxmlPath = "/graphicalResources/fxml/";
@@ -41,7 +32,7 @@ public class Gui extends ObservableImpl implements RunnableView {
     private ShelfController shelfController;
     private FXMLLoader loader;
     private Parent root;
-
+    private List<List<Integer>> pickedCoords;
 
 
     public Gui(Client client) {
@@ -61,6 +52,17 @@ public class Gui extends ObservableImpl implements RunnableView {
     public void setPlayerNumber(int playerNumber) {
         gaveNumber = true;
         notifyObservers(playerNumber);
+    }
+    public void setPicked(List<List<Integer>> pickedCoords) {
+        this.pickedCoords = pickedCoords;
+        shelfController.setReady(pickedCoords.size());
+    }
+    public void setMove(int shelfCol){
+        boardController.resetSelection();
+        notifyObservers(new MoveMsg(pickedCoords, shelfCol));
+    }
+    public void sendMsg(String destPlayer, String sourcePlayer, boolean isMsgPublic, String message){
+        notifyObservers(new ChatMsg(destPlayer, sourcePlayer, isMsgPublic, message));
     }
 
     private void setState(Gui.State state) {
@@ -169,11 +171,22 @@ public class Gui extends ObservableImpl implements RunnableView {
             welcomeScreenController = GuiApp.getWelcomeScreenController();
             welcomeScreenController.changescene();
 
+            //TODO boardController.updateGraphics();
+            //TODO shelfController.updateGraphics();
+            //TODO playingScreenController.updateGraphics();
+
             if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
                 setState(Gui.State.PLAY); // it's my turn
+                //TODO playingScreenController.setMyTurn();
             } else setState(Gui.State.WAITING_FOR_TURN); // it's not my turn
+                //TODO playingScreenController.setTurnOf(modelView.getCurrentPlayer().getName());
         }
     }
+
+    public String getPlayerName() {
+        return  playerName;
+    }
+
 
     public enum State {
         ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY

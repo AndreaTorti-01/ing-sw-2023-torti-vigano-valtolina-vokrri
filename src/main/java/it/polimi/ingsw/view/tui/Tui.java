@@ -189,15 +189,23 @@ public class Tui extends ObservableImpl implements RunnableView {
             while (!valid)
                 try {
                     row = Integer.parseInt(scanLine());
-                    if (row >= 0 && row < numberOfRows) valid = true;
-                    else printError("Invalid number of players");
+                    if (row >= 0 && row < numberOfBoardRows) valid = true;
+                    else printError("Invalid number");
                 } catch (NumberFormatException e) {
                     printError("Invalid number or non-numeric input");
                 }
-            scanner.nextLine();
+
             System.out.print("Card " + (pickedNum + 1) + "-> enter COLUMN number:  ");
-            int column = scanner.nextInt();
-            scanner.nextLine();
+            valid = false;
+            int column = 0;
+            while (!valid)
+                try {
+                    column = Integer.parseInt(scanLine());
+                    if (column >= 0 && column < numberOfBoardColumns) valid = true;
+                    else printError("Invalid number");
+                } catch (NumberFormatException e) {
+                    printError("Invalid number or non-numeric input");
+                }
 
             //checking coordinate validity
             if (isTakeable(modelView, row, column, pickedCoords)) {
