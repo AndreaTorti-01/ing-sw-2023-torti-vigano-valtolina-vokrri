@@ -21,12 +21,14 @@ import static it.polimi.ingsw.utils.Constants.*;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class BoardController implements Initializable {
-    public GridPane Board;
+    public GridPane gridBoard;
     public int clickedRow = -1;
     public int clickedColumn = -1;
     private static Gui gui;
-    private List<List<Integer>> pickedCoords;
+    private final List<List<Integer>> pickedCoords = new ArrayList<>();
     private int pickedNum = 0;
+
+    private boolean sentPicked = false;
 
 
     private void updateBoardGraphics(ItemCard[][] tileMatrix) {
@@ -37,7 +39,7 @@ public class BoardController implements Initializable {
                 if (tileMatrix[i][j] != null) {
                     ItemCard itemCard = tileMatrix[i][j];
 
-                    ImageView imageView = (ImageView) Board.getChildren().get(i * numberOfBoardColumns + j);
+                    ImageView imageView = (ImageView) gridBoard.getChildren().get(i * numberOfBoardColumns + j);
                     Image newImage = new Image(getTilePath(itemCard));
                     imageView.setImage(newImage);
                 }
@@ -69,7 +71,7 @@ public class BoardController implements Initializable {
         Platform.runLater(() -> {
             for (int i = 0; i < numberOfBoardRows; i++) {
                 for (int j = 0; j < numberOfBoardColumns; j++) {
-                    ImageView imageView = (ImageView) Board.getChildren().get(i * numberOfBoardColumns + j);
+                    ImageView imageView = (ImageView) gridBoard.getChildren().get(i * numberOfBoardColumns + j);
                     imageView.setEffect(null);
                 }
             }
@@ -86,17 +88,16 @@ public class BoardController implements Initializable {
 
 
 
-        if (gui.getState().equals(State.PLAY) && pickedCoords.size() < 3) {
+        if (gui.getState().equals(State.PLAY) && pickedCoords.size() < 3 && !sentPicked) {
 
             ImageView clickedImageView = (ImageView) mouseEvent.getSource();
-            int clickedIndex = Board.getChildren().indexOf(clickedImageView);
+            int clickedIndex = gridBoard.getChildren().indexOf(clickedImageView);
             clickedRow = clickedIndex / numberOfBoardColumns;
             clickedColumn = clickedIndex % numberOfBoardColumns;
 
             //starts picking the cards (specular to pickcards)
             Player me = null;
             int maxCards = 0;
-            int[] freeSlotsNumber = new int[numberOfColumns];
 
             for (Player p : gui.getModelView().getPlayers())
                 if (p.getName().equals(gui.getPlayerName())) {
@@ -111,7 +112,6 @@ public class BoardController implements Initializable {
                 for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
                     if (gui.getModelView().getShelfOf(me)[i][j] == null) freeSlots++;
                     if (freeSlots > maxCards) maxCards = freeSlots;
-                    freeSlotsNumber[j] = freeSlots;
                 }
             }
             if (maxCards > 3) maxCards = 3;
@@ -130,7 +130,31 @@ public class BoardController implements Initializable {
                 } else System.out.println("Invalid coordinates!, retry");
             }
             gui.setPicked(pickedCoords);
+            if(pickedCoords.size() == maxCards) sentPicked = true;
         }
+    }
+
+    public void updateGraphics(ItemCard[][] tileMatrix) {
+        pickedNum = 0;
+        sentPicked = false;
+
+        Platform.runLater(() -> {
+            ItemCard[][] board = gui.getModelView().getBoard();
+
+            for (int i = 0; i < numberOfBoardRows; i++) {
+                for (int j = 0; j < numberOfBoardColumns; j++) {
+                    ImageView imageView = (ImageView) gridBoard.getChildren().get(i * numberOfBoardColumns + j);
+                    System.out.println("printed");
+                    if (tileMatrix[i][j] != null) {
+                        Image newImage = new Image(getTilePath(tileMatrix[i][j]));
+                        imageView.setImage(newImage);
+                    }else{
+                        Image newImage = new Image("/graphicalResources/itemTiles/Empty.png");
+                        imageView.setImage(newImage);
+                    }
+                }
+            }
+        });
     }
 }
 

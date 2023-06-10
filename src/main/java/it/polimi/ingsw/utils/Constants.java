@@ -78,7 +78,7 @@ public class Constants {
             free = true;
 
         // the cards must be adjacent to each other (in line or in column) -> valid is used to check this condition
-        if (pickedCoords.size() > 0) {
+        if (pickedCoords != null && pickedCoords.size() > 0) {
             boolean inRow = true;
             boolean inColumn = true;
             for (List<Integer> coords : pickedCoords) {
@@ -90,7 +90,7 @@ public class Constants {
         }
 
         // the card must be adjacent to at least one of the other cards
-        if (pickedCoords.size() > 0) {
+        if (pickedCoords != null && pickedCoords.size() > 0) {
             for (List<Integer> coords : pickedCoords) {
                 if (isAdjacent(row, column, coords.get(0), coords.get(1))) {
                     adjacent = true;
