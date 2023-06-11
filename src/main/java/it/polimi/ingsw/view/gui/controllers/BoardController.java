@@ -27,7 +27,7 @@ public class BoardController implements Initializable {
     public int clickedRow = -1;
     public int clickedColumn = -1;
     private static Gui gui;
-    private final List<List<Integer>> pickedCoords = new ArrayList<>();
+    private List<List<Integer>> pickedCoords = new ArrayList<>();
     private int pickedNum = 0;
 
     private boolean sentPicked = false;
@@ -95,8 +95,10 @@ public class BoardController implements Initializable {
 
             ImageView clickedImageView = (ImageView) mouseEvent.getSource();
             int clickedIndex = gridBoard.getChildren().indexOf(clickedImageView);
-            clickedRow = clickedIndex / numberOfBoardColumns;
-            clickedColumn = clickedIndex % numberOfBoardColumns;
+            clickedColumn = clickedIndex / numberOfBoardColumns;
+            clickedRow = clickedIndex % numberOfBoardColumns;
+
+            System.out.println("Clicked on row: " + clickedRow + " column: " + clickedColumn);
 
             //starts picking the cards (specular to pickcards)
             Player me = null;
@@ -121,6 +123,9 @@ public class BoardController implements Initializable {
 
             if(pickedNum < maxCards) {
                 //checking coordinate validity
+                if(!isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
+                    System.out.println("non takable");
+                }
                 if (clickedRow >= 0 && clickedRow < numberOfBoardRows && clickedColumn >= 0 && clickedColumn < numberOfBoardColumns & isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
                     List<Integer> coords = new ArrayList<>();
                     coords.add(clickedRow);
@@ -133,22 +138,60 @@ public class BoardController implements Initializable {
                 } else System.out.println("Invalid coordinates!, retry");
             }
             gui.setPicked(pickedCoords);
-            if(pickedCoords.size() == maxCards) sentPicked = true;
+            if(pickedCoords.size() == maxCards) {
+                sentPicked = true;
+            }
         }
     }
 
     public void updateGraphics() {
         pickedNum = 0;
         sentPicked = false;
+        pickedCoords = new ArrayList<>();
 
         Platform.runLater(() -> {
             ItemCard[][] tileMatrix = gui.getModelView().getBoard();
 
-            //gridBoard.getChildren().clear();
+            //prints the board for debugging
+            for (int i = 0; i < numberOfBoardRows; i++) {
+                for (int j = 0; j < numberOfBoardColumns; j++)
+                    if(tileMatrix[i][j] == null)
+                        System.out.print("x");
+                    else
+                        switch (tileMatrix[i][j].getType()) {
+                            case CATS -> System.out.print("C ");
+                            case BOOKS -> System.out.print("B ");
+                            case PLANTS -> System.out.print("P ");
+                            case TROPHIES -> System.out.print("T ");
+                            case FRAMES -> System.out.print("F ");
+                            case GAMES -> System.out.print("G ");
+                        }
+                System.out.println();
+            }
+            //PRINTS THE SHELVES FOR DEBUGGING
+            System.out.println("SHELVES:");
+            for (Player p : gui.getModelView().getPlayers()) {
+                System.out.println(p.getName() + ":");
+                for (int i = 0; i < numberOfRows; i++) {
+                    for (int j = 0; j < numberOfColumns; j++)
+                        if (gui.getModelView().getShelfOf(p)[i][j] == null)
+                            System.out.print("x");
+                        else
+                            switch (gui.getModelView().getShelfOf(p)[i][j].getType()) {
+                                case CATS -> System.out.print("C ");
+                                case BOOKS -> System.out.print("B ");
+                                case PLANTS -> System.out.print("P ");
+                                case TROPHIES -> System.out.print("T ");
+                                case FRAMES -> System.out.print("F ");
+                                case GAMES -> System.out.print("G ");
+                            }
+                    System.out.println();
+                }
+            }
 
             for (int i = 0; i < numberOfBoardRows; i++) {
                 for (int j = 0; j < numberOfBoardColumns; j++) {
-                    ImageView imageView = (ImageView) gridBoard.getChildren().get(i * numberOfBoardColumns + j);
+                    ImageView imageView = (ImageView) gridBoard.getChildren().get(j * numberOfBoardColumns + i);
                     if (tileMatrix[i][j] != null) {
                         Image newImage = new Image(getTilePath(tileMatrix[i][j]));
                         imageView.setImage(newImage);

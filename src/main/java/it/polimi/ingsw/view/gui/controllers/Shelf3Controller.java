@@ -28,8 +28,12 @@ public class Shelf3Controller implements Initializable {
                 for(int j = 0; j < numberOfColumns; j++) {
                     if(newShelf[i][j] != null) {
                         ItemCard itemCard = newShelf[i][j];
-                        ImageView imageView = (ImageView) shelf3.getChildren().get(i * numberOfColumns + j);
+                        ImageView imageView = (ImageView) shelf3.getChildren().get(j * numberOfRows + i);
                         Image newImage = new Image(getTilePath(itemCard));
+                        imageView.setImage(newImage);
+                    }else {
+                        ImageView imageView = (ImageView) shelf3.getChildren().get(j * numberOfRows + i);
+                        Image newImage = new Image("/graphicalResources/itemTiles/Empty.png");
                         imageView.setImage(newImage);
                     }
                 }

@@ -55,7 +55,7 @@ public class Shelf0Controller implements Initializable {
             }
             if (freeSlots >= pickedSize) {
                 availableCols[j] = true;
-            }
+            }else availableCols[j] = false;
         }
     }
 
@@ -73,16 +73,15 @@ public class Shelf0Controller implements Initializable {
                 for(int j = 0; j < numberOfColumns; j++) {
                     if(gui.getModelView().getShelfOf(myID)[i][j] != null) {
                         ItemCard itemCard = gui.getModelView().getShelfOf(myID)[i][j];
-                        ImageView imageView = (ImageView) shelf0.getChildren().get(i * numberOfColumns + j);
+                        ImageView imageView = (ImageView) shelf0.getChildren().get(j * numberOfRows + i);
                         Image newImage = new Image(getTilePath(itemCard));
                         imageView.setImage(newImage);
                     }else {
-                        ImageView imageView = (ImageView) shelf0.getChildren().get(i * numberOfColumns + j);
+                        ImageView imageView = (ImageView) shelf0.getChildren().get(j * numberOfRows + i);
                         imageView.setImage(new Image("graphicalResources/itemTiles/Empty.png"));
                     }
                 }
             }
-
         });
     }
 
@@ -92,16 +91,14 @@ public class Shelf0Controller implements Initializable {
 
             ImageView clickedImageView = (ImageView) mouseEvent.getSource();
             int clickedIndex = shelf0.getChildren().indexOf(clickedImageView);
-            selectedColumn = clickedIndex % numberOfColumns;
+            selectedColumn = clickedIndex / numberOfRows;
+            System.out.println("Selected column: " + selectedColumn);
 
             if (availableCols[selectedColumn]) {
+                System.out.println("Available column");
                 gui.setMove(selectedColumn);
                 sent = true;
             }else System.out.println("Not available column");
         }
-
-
-
     }
-
 }
