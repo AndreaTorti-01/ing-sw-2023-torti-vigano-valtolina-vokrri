@@ -29,7 +29,7 @@ public class Gui extends ObservableImpl implements RunnableView {
     private PlayingScreenController playingScreenController;
     private EndScreenController endScreenController;
     private BoardController boardController;
-    private ShelfController shelfController;
+    private Shelf0Controller shelf0Controller;
     private FXMLLoader loader;
     private Parent root;
     private List<List<Integer>> pickedCoords;
@@ -55,7 +55,7 @@ public class Gui extends ObservableImpl implements RunnableView {
     }
     public void setPicked(List<List<Integer>> pickedCoords) {
         this.pickedCoords = pickedCoords;
-        shelfController.setReady(pickedCoords.size());
+        shelf0Controller.setReady(pickedCoords.size());
     }
     public void setMove(int shelfCol){
         boardController.resetSelection();
@@ -172,20 +172,21 @@ public class Gui extends ObservableImpl implements RunnableView {
             welcomeScreenController.changescene();
 
 
-            shelfController = GuiApp.getShelfController();
+
             playingScreenController = GuiApp.getPlayingScreenController();
             boardController = GuiApp.getBoardController();
+            shelf0Controller = GuiApp.getShelf0Controller();
 
             boardController.updateGraphics();
-            System.out.println("board updated");
-            //TODO shelfController.updateGraphics();
-            //TODO playingScreenController.updateGraphics();
+            shelf0Controller.updateGraphics();
+            System.out.println("shelf updated");
+            playingScreenController.updateGraphics();
 
             if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
                 setState(Gui.State.PLAY); // it's my turn
-                //TODO playingScreenController.setMyTurn();
+                //TODO playingScreenController.setMyTurn(); // only displays a message on the screen
             } else setState(Gui.State.WAITING_FOR_TURN); // it's not my turn
-                //TODO playingScreenController.setTurnOf(modelView.getCurrentPlayer().getName());
+                //TODO playingScreenController.setTurnOf(modelView.getCurrentPlayer().getName()); // only displays a message on the screen
         }
     }
 

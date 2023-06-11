@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.view.gui.Gui.State;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
@@ -21,6 +22,7 @@ import static it.polimi.ingsw.utils.Constants.*;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class BoardController implements Initializable {
+    @FXML
     public GridPane gridBoard;
     public int clickedRow = -1;
     public int clickedColumn = -1;
@@ -66,6 +68,7 @@ public class BoardController implements Initializable {
     }
 
     public void resetSelection() {
+        sentPicked = true;
         this.clickedRow = -1;
         this.clickedColumn = -1;
         Platform.runLater(() -> {
@@ -141,7 +144,7 @@ public class BoardController implements Initializable {
         Platform.runLater(() -> {
             ItemCard[][] tileMatrix = gui.getModelView().getBoard();
 
-            gridBoard.getChildren().clear();
+            //gridBoard.getChildren().clear();
 
             for (int i = 0; i < numberOfBoardRows; i++) {
                 for (int j = 0; j < numberOfBoardColumns; j++) {

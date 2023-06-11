@@ -106,7 +106,23 @@ public class Constants {
         return Math.abs(row - row2) == 1 && column == column2 ||
                 row == row2 && Math.abs(column - column2) == 1;
     }
-
+    public static String getTilePath(ItemCard itemCard) {
+        String tilesPath = "/graphicalResources/itemTiles/";
+        switch (itemCard.getType()) {
+            case CATS -> tilesPath += "Gatti1.";
+            case BOOKS -> tilesPath += "Libri1.";
+            case PLANTS -> tilesPath += "Piante1.";
+            case TROPHIES -> tilesPath += "Trofei1.";
+            case FRAMES -> tilesPath += "Cornici1.";
+            case GAMES -> tilesPath += "Giochi1.";
+        }
+        switch (itemCard.getSprite()) {
+            case 0 -> tilesPath += "1.png";
+            case 1 -> tilesPath += "2.png";
+            case 2 -> tilesPath += "3.png";
+        }
+        return tilesPath;
+    }
     public static int headLiminate(Shelf shelfCopy, ItemCard hotCard) {
         List<ItemCard> heads;
         int adjacentToHead = 0;

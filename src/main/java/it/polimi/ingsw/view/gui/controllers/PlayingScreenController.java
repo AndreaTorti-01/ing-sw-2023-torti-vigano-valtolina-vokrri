@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.gui.controllers;
 
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.view.gui.Gui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,16 +22,17 @@ public class PlayingScreenController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private Gui gui;
     @FXML
     private BoardController boardController;
     @FXML
-    private ShelfController shelf0Controller;
+    private Shelf0Controller shelf0Controller;
     @FXML
-    private ShelfController shelf1Controller;
+    private Shelf1Controller shelf1Controller;
     @FXML
-    private ShelfController shelf2Controller;
+    private Shelf2Controller shelf2Controller;
     @FXML
-    private ShelfController shelf3Controller;
+    private Shelf3Controller shelf3Controller;
 
     public Parent loadResource(String fxmlName, Parent root) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
@@ -51,10 +54,49 @@ public class PlayingScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        gui = (Gui) it.polimi.ingsw.network.client.ClientImpl.getView();
+    }
 
+    public void updateGraphics() {
+
+        for(Player player : gui.getModelView().getPlayers()) {
+            int plID = 1;
+            if(!gui.getPlayerName().equals(player.getName())) {
+                switch(plID) {
+                    case 1: {
+                        shelf1Controller.updateGraphics(player.getShelf().getItemsMatrix());
+                        //TODO setting name
+                        break;
+                    }
+                    case 2: {
+                        shelf2Controller.updateGraphics(player.getShelf().getItemsMatrix());
+                        //TODO setting name
+                        break;
+                    }
+                    case 3: {
+                        shelf3Controller.updateGraphics(player.getShelf().getItemsMatrix());
+                        //TODO setting name
+                        break;
+                    }
+                }
+                plID++;
+            }
+        }
     }
 
     public BoardController getBoardController() {
         return boardController;
+    }
+    public Shelf0Controller getShelf0Controller() {
+        return shelf0Controller;
+    }
+    public Shelf1Controller getShelf1Controller() {
+        return shelf1Controller;
+    }
+    public Shelf2Controller getShelf2Controller() {
+        return shelf2Controller;
+    }
+    public Shelf3Controller getShelf3Controller() {
+        return shelf3Controller;
     }
 }

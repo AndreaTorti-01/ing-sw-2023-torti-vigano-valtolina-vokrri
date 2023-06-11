@@ -18,7 +18,10 @@ public class GuiApp extends Application {
     private static BoardController boardController;
     private static EndScreenController endScreenController;
     private static PlayingScreenController playingScreenController;
-    private static ShelfController shelfController;
+    private static Shelf0Controller shelf0Controller;
+    private static Shelf1Controller shelf1Controller;
+    private static Shelf2Controller shelf2Controller;
+    private static Shelf3Controller shelf3Controller;
     private static Parent welcomeScreenRoot, endScreenRoot, playingScreenRoot;
     private Parent root = new Parent() {
     };
@@ -58,14 +61,10 @@ public class GuiApp extends Application {
             System.exit(1);
         }
         boardController = playingScreenController.getBoardController();
-
-        loader = new FXMLLoader(getClass().getResource(fxmlPath + "Shelf0.fxml"));
-        try {
-            Parent shelfRoot = loader.load();
-            shelfController = loader.getController();
-        } catch (IOException e) {
-            System.exit(1);
-        }
+        shelf0Controller = playingScreenController.getShelf0Controller();
+        shelf1Controller = playingScreenController.getShelf1Controller();
+        shelf2Controller = playingScreenController.getShelf2Controller();
+        shelf3Controller = playingScreenController.getShelf3Controller();
 
         //to simply resolve synchronization problems between gui and guiApp
         createdController = true;
@@ -104,8 +103,17 @@ public class GuiApp extends Application {
     public static PlayingScreenController getPlayingScreenController() {
         return playingScreenController;
     }
-    public static ShelfController getShelfController() {
-        return shelfController;
+    public static Shelf0Controller getShelf0Controller() {
+        return shelf0Controller;
+    }
+    public static Shelf1Controller getShelf1Controller() {
+        return shelf1Controller;
+    }
+    public static Shelf2Controller getShelf2Controller() {
+        return shelf2Controller;
+    }
+    public static Shelf3Controller getShelf3Controller() {
+        return shelf3Controller;
     }
     public static boolean controllersAvailable() {
         return createdController;

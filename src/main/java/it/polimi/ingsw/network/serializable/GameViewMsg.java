@@ -52,7 +52,12 @@ public class GameViewMsg implements Serializable {
     }
 
     public ItemCard[][] getShelfOf(Player player) {
-        return players.get(players.indexOf(player)).getShelf().getItemsMatrix();
+        for (Player p : players) {
+            if (p.getName().equals(player.getName())) {
+                return p.getShelf().getItemsMatrix();
+            }
+        }
+        return null;
     }
 
     public List<CommonGoalCard> getCommonGoalCards() {

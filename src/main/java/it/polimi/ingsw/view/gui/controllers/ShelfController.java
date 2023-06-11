@@ -2,20 +2,16 @@ package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.view.gui.Gui;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import static it.polimi.ingsw.utils.Constants.*;
@@ -33,7 +29,11 @@ public class ShelfController implements Initializable {
     public int selectedColumn = -1;
     private static Gui gui;
     private int pickedNum = 0;
-    Player myID;
+    private Player myID;
+    private final boolean[] availableCols = new boolean[numberOfColumns];
+    private boolean sent = false;
+
+
 
 
     public void updateShelfGraphics(ItemCard[][] newShelf, int shelfIdentifier) {
@@ -89,6 +89,7 @@ public class ShelfController implements Initializable {
         selectedColumn = -1;
         int maxCards = 0;
         pickedNum = pickedSize;
+        sent = false;
 
         if(myID == null) //removable? updategraphics is always called before setready
             for (Player p : gui.getModelView().getPlayers())
@@ -104,10 +105,12 @@ public class ShelfController implements Initializable {
                 if (gui.getModelView().getShelfOf(myID)[i][j] == null) freeSlots++;
             }
             if (freeSlots >= pickedSize) {
+                availableCols[j] = true;
+
                 for(int i = 0; i < numberOfRows; i++){
-                    if(gui.getModelView().getShelfOf(myID)[i][j] == null) {
+                    if(gui.getModelView().getShelfOf(myID)[i][j] == null && (i == numberOfRows - 1 || gui.getModelView().getShelfOf(myID)[i+1][j] != null)){
                         ImageView imageView = (ImageView) Shelf0.getChildren().get(i * numberOfColumns + j);
-                        imageView.setEffect(new Bloom()); //possibile che non si veda il bloom
+                        imageView.setImage(new Image("/graphicalResources/itemTiles/EmptyMarked.png"));
                     }
                 }
             }
@@ -147,8 +150,33 @@ public class ShelfController implements Initializable {
         });
     }
 
+    public void resetMark(){
+        for (int i = 0; i < numberOfRows; i++) {
+            for(int j = 0; j < numberOfColumns; j++){
+                if(gui.getModelView().getShelfOf(myID)[i][j] == null){
+                    ImageView imageView = (ImageView) Shelf0.getChildren().get(i * numberOfColumns + j);
+                    imageView.setImage(new Image("/graphicalResources/itemTiles/Empty.png"));
+                }
+            }
+        }
+    }
+
     public void handleImageViewClick(MouseEvent mouseEvent) {
-        //stores row and column of the clicked image
+        //gets the column of the clicked imageview
+        if (gui.getState().equals(Gui.State.PLAY) && !sent) {
+
+            ImageView clickedImageView = (ImageView) mouseEvent.getSource();
+            int clickedIndex = shelves[0].getChildren().indexOf(clickedImageView);
+            selectedColumn = clickedIndex % numberOfBoardColumns;
+
+            if (availableCols[selectedColumn]) {
+                gui.setMove(selectedColumn);
+                resetMark();
+                sent = true;
+            }else System.out.println("Not available column");
+        }
+
+
 
     }
 
