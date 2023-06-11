@@ -150,14 +150,6 @@ public class ShelfController implements Initializable {
     public void handleImageViewClick(MouseEvent mouseEvent) {
         //stores row and column of the clicked image
 
-            for (int j = 0; j < numberOfColumns; j++) {
-                int freeSlots = 0;
-                for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
-                    if (gui.getModelView().getShelfOf(me)[i][j] == null) freeSlots++;
-                    if (freeSlots > maxCards) maxCards = freeSlots;
-                }
-            }
-
     }
 
 }
