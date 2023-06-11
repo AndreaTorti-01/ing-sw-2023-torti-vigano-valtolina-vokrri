@@ -134,17 +134,18 @@ public class BoardController implements Initializable {
         }
     }
 
-    public void updateGraphics(ItemCard[][] tileMatrix) {
+    public void updateGraphics() {
         pickedNum = 0;
         sentPicked = false;
 
         Platform.runLater(() -> {
-            ItemCard[][] board = gui.getModelView().getBoard();
+            ItemCard[][] tileMatrix = gui.getModelView().getBoard();
+
+            gridBoard.getChildren().clear();
 
             for (int i = 0; i < numberOfBoardRows; i++) {
                 for (int j = 0; j < numberOfBoardColumns; j++) {
                     ImageView imageView = (ImageView) gridBoard.getChildren().get(i * numberOfBoardColumns + j);
-                    System.out.println("printed");
                     if (tileMatrix[i][j] != null) {
                         Image newImage = new Image(getTilePath(tileMatrix[i][j]));
                         imageView.setImage(newImage);

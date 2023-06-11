@@ -10,9 +10,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static it.polimi.ingsw.utils.Constants.*;
@@ -29,15 +32,18 @@ public class ShelfController implements Initializable {
     private final GridPane[] shelves = new GridPane[4];
     public int selectedColumn = -1;
     private static Gui gui;
-    private int pickedSize = 0;
+    private int pickedNum = 0;
+    Player myID;
 
-    public void updateShelfGraphics(Shelf newShelf, int shelfIdentifier) {
+
+    public void updateShelfGraphics(ItemCard[][] newShelf, int shelfIdentifier) {
         resetBloom();
+        shelves[shelfIdentifier].getChildren().clear();
 
         for (int i = 0; i < numberOfRows; i++) {
             for (int j = 0; j < numberOfColumns; j++) {
-                if (newShelf.getCardAt(i, j) != null) {
-                    ItemCard itemCard = newShelf.getCardAt(i, j);
+                if (newShelf[i][j] != null) {
+                    ItemCard itemCard = newShelf[i][j];
 
                     ImageView imageView = (ImageView) shelves[shelfIdentifier].getChildren().get(i * numberOfColumns + j);
                     Image newImage = new Image(getTilePath(itemCard));
@@ -82,23 +88,24 @@ public class ShelfController implements Initializable {
     public void setReady(int pickedSize){
         selectedColumn = -1;
         int maxCards = 0;
-        Player me = null;
+        pickedNum = pickedSize;
 
-        for (Player p : gui.getModelView().getPlayers())
-            if (p.getName().equals(gui.getPlayerName())) {
-                me = p;
-                break;
-            }
-        if (me == null) throw new NullPointerException();
+        if(myID == null) //removable? updategraphics is always called before setready
+            for (Player p : gui.getModelView().getPlayers())
+                if (p.getName().equals(gui.getPlayerName())) {
+                    myID = p;
+                    break;
+                }
+        if (myID == null) throw new NullPointerException();
 
         for (int j = 0; j < numberOfColumns; j++) {
             int freeSlots = 0;
             for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
-                if (gui.getModelView().getShelfOf(me)[i][j] == null) freeSlots++;
+                if (gui.getModelView().getShelfOf(myID)[i][j] == null) freeSlots++;
             }
             if (freeSlots >= pickedSize) {
                 for(int i = 0; i < numberOfRows; i++){
-                    if(gui.getModelView().getShelfOf(me)[i][j] == null) {
+                    if(gui.getModelView().getShelfOf(myID)[i][j] == null) {
                         ImageView imageView = (ImageView) Shelf0.getChildren().get(i * numberOfColumns + j);
                         imageView.setEffect(new Bloom()); //possibile che non si veda il bloom
                     }
@@ -106,6 +113,7 @@ public class ShelfController implements Initializable {
             }
         }
     }
+
     public void resetBloom() {
         selectedColumn = -1;
 
@@ -116,4 +124,40 @@ public class ShelfController implements Initializable {
             }
         }
     }
+
+    public void updateGraphics() {
+
+        if(myID == null)
+            for (Player p : gui.getModelView().getPlayers())
+                if (p.getName().equals(gui.getPlayerName())) {
+                    myID = p;
+                    break;
+                }
+
+        Platform.runLater(() -> {
+            int j = 1;
+            for (int i = 0; i < gui.getModelView().getPlayers().size(); i++) {
+                if(!gui.getModelView().getPlayers().get(i).equals(myID)) {
+                    updateShelfGraphics(gui.getModelView().getShelfOf(gui.getModelView().getPlayers().get(i)), j);
+                    j++;
+                }
+            }
+
+            updateShelfGraphics(gui.getModelView().getShelfOf(myID), 0);
+        });
+    }
+
+    public void handleImageViewClick(MouseEvent mouseEvent) {
+        //stores row and column of the clicked image
+
+            for (int j = 0; j < numberOfColumns; j++) {
+                int freeSlots = 0;
+                for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
+                    if (gui.getModelView().getShelfOf(me)[i][j] == null) freeSlots++;
+                    if (freeSlots > maxCards) maxCards = freeSlots;
+                }
+            }
+
+    }
+
 }

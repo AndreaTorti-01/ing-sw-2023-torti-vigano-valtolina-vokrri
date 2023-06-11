@@ -20,6 +20,16 @@ public class PlayingScreenController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    @FXML
+    private BoardController boardController;
+    @FXML
+    private ShelfController shelf0Controller;
+    @FXML
+    private ShelfController shelf1Controller;
+    @FXML
+    private ShelfController shelf2Controller;
+    @FXML
+    private ShelfController shelf3Controller;
 
     public Parent loadResource(String fxmlName, Parent root) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
@@ -42,5 +52,9 @@ public class PlayingScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    }
+
+    public BoardController getBoardController() {
+        return boardController;
     }
 }

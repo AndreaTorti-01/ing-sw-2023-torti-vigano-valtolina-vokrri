@@ -171,11 +171,12 @@ public class Gui extends ObservableImpl implements RunnableView {
             welcomeScreenController = GuiApp.getWelcomeScreenController();
             welcomeScreenController.changescene();
 
-            boardController = GuiApp.getBoardController();
+
             shelfController = GuiApp.getShelfController();
             playingScreenController = GuiApp.getPlayingScreenController();
+            boardController = GuiApp.getBoardController();
 
-            boardController.updateGraphics(modelView.getBoard());
+            boardController.updateGraphics();
             System.out.println("board updated");
             //TODO shelfController.updateGraphics();
             //TODO playingScreenController.updateGraphics();

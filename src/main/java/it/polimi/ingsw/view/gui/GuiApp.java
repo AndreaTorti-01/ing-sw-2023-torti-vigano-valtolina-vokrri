@@ -33,13 +33,6 @@ public class GuiApp extends Application {
 
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource(fxmlPath + "Board.fxml"));
-        try {
-            root = loader.load();
-            boardController = loader.getController();
-        } catch (IOException e) {
-            System.exit(1);
-        }
 
         loader = new FXMLLoader(getClass().getResource(fxmlPath + "WelcomeScreen.fxml"));
         try {
@@ -64,6 +57,7 @@ public class GuiApp extends Application {
         } catch (IOException e) {
             System.exit(1);
         }
+        boardController = playingScreenController.getBoardController();
 
         loader = new FXMLLoader(getClass().getResource(fxmlPath + "Shelf0.fxml"));
         try {
