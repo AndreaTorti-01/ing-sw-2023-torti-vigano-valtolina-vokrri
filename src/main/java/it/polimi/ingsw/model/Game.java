@@ -234,9 +234,8 @@ public class Game extends ObservableImpl {
      */
     public void endGame() {
         this.gameStatus = Game.Status.ENDED;
-        //adding final points...
         addFinalPoints();
-        // notifies listeners of the changes
+        calculateWinner();
         notifyObservers(new GameViewMsg(this));
     }
 
@@ -284,18 +283,33 @@ public class Game extends ObservableImpl {
     }
 
     public void advancePlayerTurn() {
+        // advances the player
         Player previousPlayer = currentPlayer;
         currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % numberOfPlayers);
         GameViewMsg currentGameView = new GameViewMsg(this);
         List<List<Integer>> emptyList = new ArrayList<>();
 
+        // CommonGoalCard checking...
+        // Must check the shelf of the previous player, who just played his move
+        // CommonGoalCards points will be assigned at runtime
+        for (int i = 0; i < commonGoalCards.size(); i++) {
+            //if he didn't achieve it yet and now the pattern is respected, commonGC points will be assigned
+            if (!previousPlayer.hasAchievedCommonGoalCard(i) && commonGoalCards.get(i).checkPattern(previousPlayer.getShelf())) {
+                previousPlayer.setScore(previousPlayer.getScore() + commonGoalCards.get(i).popPoints());
+                previousPlayer.setAchievedCommonGoalCard(i);
+            }
+        }
+
         // if the last moving player is at the bottom of the list, and there is at least a player
         // with a full shelf, the game is over
-        if (previousPlayer.equals(players.get(players.size() - 1)))
+        if (previousPlayer.equals(players.get(players.size() - 1))) {
             for (Player player : players) {
-                if (player.getShelf().isFull() && !this.gameStatus.equals(Status.ENDED))
+                if (player.getShelf().isFull() && !this.gameStatus.equals(Status.ENDED)) { // ? ridondante
                     this.endGame();
+                    return;
+                }
             }
+        }
 
         // if there are no takeable cards one next to each other, refill the board
         boolean needsRefill = true;
@@ -333,20 +347,19 @@ public class Game extends ObservableImpl {
         // 3  4  5  6+  grandezza cluster
         // 2  3  5  8   punteggio
 
-        // CommonGoalCard checking...
-        // Must check the shelf of the previous player, who just played his move
-        // CommonGoalCards points will be assigned at runtime
+        notifyObservers(new GameViewMsg(this));
+    }
 
-
-        for (int i = 0; i < commonGoalCards.size(); i++) {
-            //if he didn't achieve it yet and now the pattern is respected, commonGC points will be assigned
-            if (!previousPlayer.hasAchievedCommonGoalCard(i) && commonGoalCards.get(i).checkPattern(previousPlayer.getShelf())) {
-                previousPlayer.setScore(previousPlayer.getScore() + commonGoalCards.get(i).popPoints());
-                previousPlayer.setAchievedCommonGoalCard(i);
+    private void calculateWinner() {
+        Player winner = null;
+        int maxScore = 0;
+        for (Player player : getPlayers()) {
+            if (player.getScore() > maxScore) {
+                maxScore = player.getScore();
+                winner = player;
             }
         }
-
-        notifyObservers(new GameViewMsg(this));
+        setWinner(winner);
     }
 
     public Stack<ChatMsg> getMessages() {

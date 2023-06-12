@@ -61,10 +61,15 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
             }
         }
 
-        //
-        if (getState() == State.ASK_NUMBER) {
-            askPlayerNumber();
-            gaveNumber = true;
+        while (getState() == State.ASK_NUMBER) {
+            synchronized (lock) {
+                try {
+                    new Thread(this::askPlayerNumber).start();
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    System.err.println("Interrupted while waiting for server: " + e.getMessage());
+                }
+            }
         }
 
         while (getState() == State.WAITING_FOR_PLAYERS) {
@@ -76,11 +81,65 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
                 }
             }
         }
-        //noinspection InfiniteLoopStatement
+
+        // create a thread passing the function that will handle the input
+        Thread inputHandler = new Thread(this::acceptInput);
+        inputHandler.start();
+
+        while (!(getState() == State.ENDED)) {
+            synchronized (lock) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    System.err.println("Interrupted while waiting for server: " + e.getMessage());
+                }
+            }
+        }
+
+        // kill the thread
+        inputHandler.interrupt(); // TODO investigate
+
+        // wait for input to close the game
+        System.out.println("Press enter to close the game");
+        scanner.nextLine();
+    }
+
+    /**
+     * updates the view with the new model state
+     *
+     * @param modelView which contains a representation of the model state
+     */
+    @Override
+    public void updateView(GameViewMsg modelView) {
+        this.modelView = modelView;
+
+        // the game is waiting for players
+        if (!playerName.equals("") && modelView.getGameStatus().equals(Game.Status.WAITING)) {
+            if (playerName.equals(modelView.getPlayers().get(0).getName()) && !gaveNumber) {
+                setState(State.ASK_NUMBER); // I am lobby leader
+            } else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
+        }
+        // the game has started
+        else if (modelView.getGameStatus().equals(Game.Status.STARTED)) {
+            if (modelView.getCurrentPlayer().getName().equals(this.playerName))
+                setState(State.PLAY); // it's my turn
+            else setState(State.WAITING_FOR_TURN); // it's not my turn
+            printGameStatus();
+            if (getState() == State.PLAY) {
+                System.out.println("It's your turn!");
+            }
+        }
+        // the game ends
+        else if (modelView.getGameStatus().equals(Game.Status.ENDED)) {
+            printEndScreen(modelView.getWinner().getName());
+            setState(State.ENDED);
+        }
+    }
+
+    private void acceptInput() {
         while (true) {
             // scan for command
             String line = scanLine();
-
             // check if it's a command
             if (line.charAt(0) == '/') {
                 String command = line.split(" ")[0];
@@ -140,29 +199,6 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
     }
 
-    /**
-     * updates the view with the new model state
-     *
-     * @param modelView which contains a representation of the model state
-     */
-    @Override
-    public void updateView(GameViewMsg modelView) {
-        this.modelView = modelView;
-
-        // the game is waiting for players
-        if (!playerName.equals("") && modelView.getGameStatus().equals(Game.Status.WAITING)) {
-            if (playerName.equals(modelView.getPlayers().get(0).getName()) && !gaveNumber) {
-                setState(State.ASK_NUMBER); // I am lobby leader
-            } else setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
-        }
-        // the game has started
-        else if (modelView.getGameStatus().equals(Game.Status.STARTED)) {
-            if (modelView.getCurrentPlayer().getName().equals(this.playerName))
-                setState(State.PLAY); // it's my turn
-            else setState(State.WAITING_FOR_TURN); // it's not my turn
-            printGameStatus();
-        }
-    }
 
     /**
      * takes care of notifying observers
@@ -272,7 +308,11 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         while (tmp.size() < pickedCoords.size()) {
 
             do {
-                orderId = scanner.nextInt();
+                try {
+                    orderId = Integer.parseInt(scanLine());
+                } catch (NumberFormatException e) {
+                    printError("Invalid number or non-numeric input");
+                }
             } while ((orderId < 1 || orderId > pickedCoords.size()));
 
             if (!used.contains(orderId)) {
@@ -482,6 +522,6 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     private enum State {
-        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY
+        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY, ENDED
     }
 }

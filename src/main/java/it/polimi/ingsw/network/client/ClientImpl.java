@@ -24,13 +24,13 @@ public class ClientImpl extends UnicastRemoteObject implements Client, Observer 
     public ClientImpl(boolean isTui) throws RemoteException {
         super();
 
-    //    if (isTui) {
-    //        view = new TuiRaw(this);
-    //        new Thread(view).start();
-    //    } else {
+        if (isTui) {
+            view = new TuiRaw(this);
+            new Thread(view).start();
+        } else {
             view = new Gui(this);
             new Thread(view).start();
-    //    }
+        }
     }
 
     public static RunnableView getView() {
