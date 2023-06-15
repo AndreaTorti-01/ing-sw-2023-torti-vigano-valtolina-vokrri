@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
 
 public class Player implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 8215888944172497532L;
     private final String name;
     private final Shelf shelf;
     private PersonalGoalCard personalGoalCard;
@@ -44,7 +46,7 @@ public class Player implements Serializable {
     }
 
     public boolean hasAchievedCommonGoalCard(int index) {
-        if(index >= 0 && index < 2) return hasAchievedCommonGoalCard[index];
+        if (index >= 0 && index < 2) return hasAchievedCommonGoalCard[index];
         else {
             System.err.println("invalid CGC index!");
             return false;
@@ -53,7 +55,7 @@ public class Player implements Serializable {
 
     public void setAchievedCommonGoalCard(int index) {
         if (index >= 0 && index < 2) hasAchievedCommonGoalCard[index] = true;
-        else{
+        else {
             System.err.println("invalid CGC index!");
         }
     }

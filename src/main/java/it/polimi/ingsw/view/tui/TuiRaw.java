@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.network.serializable.ChatMsg;
+import it.polimi.ingsw.network.serializable.CheatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.ObservableImpl;
@@ -184,6 +185,12 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
                         if (state.equals(State.PLAY)) {
                             pickCards();
                         } else System.out.println("Picking cards is not an option right now.");
+                    }
+
+                    case "/cheat" -> {
+                        if (modelView.getCurrentPlayer().getName().equals(playerName)) {
+                            notifyObservers(new CheatMsg(playerName));
+                        }
                     }
 
                     case "/help" -> {

@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.client;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.network.serializable.ChatMsg;
+import it.polimi.ingsw.network.serializable.CheatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observer;
@@ -43,6 +44,10 @@ public class ClientImpl extends UnicastRemoteObject implements Client, Observer 
 
     public void update(String playerName) throws RemoteException {
         this.sendMessage(playerName);
+    }
+
+    public void update(CheatMsg cheatMsg) throws RemoteException {
+        this.sendMessage(cheatMsg);
     }
 
     public void update(MoveMsg move) throws RemoteException {

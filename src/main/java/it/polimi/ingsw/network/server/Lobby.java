@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.network.serializable.ChatMsg;
+import it.polimi.ingsw.network.serializable.CheatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observer;
@@ -56,6 +57,11 @@ public class Lobby implements Observer {
     public void update(MoveMsg moveMsg) {
         System.err.println("move made");
         controller.makeMove(moveMsg);
+    }
+
+    public void update(CheatMsg cheatMsg) {
+        System.err.println(cheatMsg.getCheater() + " IS CHEATING!");
+        controller.cheat();
     }
 
     public void update(String playerName) {
