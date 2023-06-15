@@ -9,6 +9,10 @@ import java.io.Serializable;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
+/**
+ * A class representing the Shelf.
+ * This class contains all the Item Cards inserted by the Player.
+ */
 public class Shelf implements Serializable {
     @Serial
     private static final long serialVersionUID = 1599653120498179003L;
@@ -27,7 +31,7 @@ public class Shelf implements Serializable {
     /**
      * Creates a new Shelf based on the matrix of ItemCard passed as argument
      *
-     * @param items a matrix of ItemCard that represents the shelf
+     * @param items a matrix of Item Cards that represents the shelf
      */
     public Shelf(ItemCard[][] items) {
         // initializes items to a null matrix of
@@ -48,40 +52,50 @@ public class Shelf implements Serializable {
     }
 
     /**
-     * Get the card at the specified position
-     *
-     * @param row    must be between boundaries (specified in the {@link Constants} file)
-     * @param column must be between boundaries (specified in the {@link Constants} file)
-     * @return ItemCard | null, depending on the presence of a card at the specified position
+     * @param row    must be between boundaries (provided in the {@link Constants} file)
+     * @param column must be between boundaries (provided in the {@link Constants} file)
+     * @return ItemCard at the provided position (if any), null otherwise.
      */
-    public ItemCard getCardAt(int row, int column) {
+    public ItemCard getCardAt(int row, int column) throws IllegalArgumentException {
+        if (row < 0 || row > numberOfRows) {
+            throw new IllegalArgumentException(
+                    "Provided row (" + row + ") is out of range 0 - " + numberOfRows
+            );
+        }
+
+        if (column < 0 || column > numberOfColumns) {
+            throw new IllegalArgumentException(
+                    "Provided column (" + column + ") is out of range 0 - " + numberOfColumns
+            );
+        }
+
         return items[row][column];
     }
 
     /**
-     * Sets the card at the specified position to the new specified value
+     * Sets the card at the provided position to the provided value.
      * <p>
      * <p>
-     * ************************************** <p>
+     * ************************************* <p>
      * * USE ONLY ON A CLONE OF THE SHELF! * <p>
-     * ************************************** <p>
+     * ************************************* <p>
      *
-     * @param row     must be between boundaries (specified in the {@link Constants} file)
-     * @param column  must be between boundaries (specified in the {@link Constants} file)
-     * @param newCard the new value assigned to the specified position
+     * @param row     must be between boundaries (provided in the {@link Constants} file).
+     * @param column  must be between boundaries (provided in the {@link Constants} file).
+     * @param newCard the new value assigned to be set.
      */
     public void setCardAt(int row, int column, ItemCard newCard) throws IllegalAccessError {
         if (!this.isACopy) throw new IllegalAccessError("Cannot call this method on the original shelf!");
         this.items[row][column] = newCard;
     }
 
-    // TODO keep?
-    public ItemCard[][] getItemsMatrix() {
+    // TODO keep? bad practice
+    public ItemCard[][] getItems() {
         return items;
     }
 
     /**
-     * @return a deep copy of the current Shelf
+     * @return a deep copy of the current Shelf.
      */
     public Shelf getCopy() {
         // initializes a new null matrix of ItemCards
@@ -108,11 +122,11 @@ public class Shelf implements Serializable {
     }
 
     /**
-     * Inserts the given ItemCard in the first available row of the shelf from the top
+     * Inserts the given ItemCard in the first available row of the provided column in the shelf.
      *
-     * @param column must be between boundaries (specified in the {@link Constants} file)
-     * @param item   the card to be inserted
-     * @throws RuntimeException if the column is full
+     * @param column must be between boundaries (provided in the {@link Constants} file).
+     * @param item   the card to be inserted.
+     * @throws IndexOutOfBoundsException if the column is full.
      */
     public void insert(int column, ItemCard item) throws IndexOutOfBoundsException {
         if (items[0][column] != null)
@@ -126,8 +140,8 @@ public class Shelf implements Serializable {
     }
 
     /**
-     * @param column must be between boundaries (specified in the {@link Constants} file)
-     * @return length of the given column
+     * @param column must be between boundaries (provided in the {@link Constants} file).
+     * @return length of the provided column.
      */
     public int getColumnLength(int column) {
         int length = 0;
@@ -139,7 +153,7 @@ public class Shelf implements Serializable {
     }
 
     /**
-     * @return true if the shelf does not have any available space left, false otherwise
+     * @return true if the shelf does not have any available space left, false otherwise.
      */
     public boolean isFull() {
         for (int column = 0; column < numberOfColumns; column++) {
@@ -149,6 +163,9 @@ public class Shelf implements Serializable {
         return true;
     }
 
+    /**
+     * @return a string representation of this shelf.
+     */
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();

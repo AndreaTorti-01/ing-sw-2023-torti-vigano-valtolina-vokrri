@@ -8,7 +8,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * A factory class that creates Shelves.
+ */
 public class ShelfFactory {
+    /**
+     * Creates a new Shelf by parsing a well formatted file that contains its pattern.<p>
+     *
+     * @param fileName the name of the file containing the pattern to be parsed.
+     * @return the Shelf containing the elements parsed from the file.
+     */
     public Shelf createShelf(String fileName) {
         Shelf shelf = new Shelf();
         try {

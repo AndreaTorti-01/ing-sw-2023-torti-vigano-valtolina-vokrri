@@ -15,15 +15,34 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * A class that implements the Server Interface.
+ * This class has the only task to accept new client connection and create new lobbies if needed.
+ */
 public class ServerImpl extends UnicastRemoteObject implements Server, Runnable {
     @Serial
     private static final long serialVersionUID = -6751882795824411L;
     private final List<Lobby> lobbies = new LinkedList<>();
 
+    /**
+     * Creates a new Server Implementation.
+     *
+     * @throws RemoteException if something goes wrong with the RMI connection.
+     */
     public ServerImpl() throws RemoteException {
         super();
     }
 
+    /**
+     * Registers the provided Client and adds it in a free lobby, if found.
+     * If no lobbies are available, creates a new one and adds the client to it.
+     * <p>
+     * Furthermore, creates a new Client Handler to be associated with the provided Client.
+     *
+     * @param client the client to be registered.
+     * @return the Client Handler associated with the provided Client.
+     * @throws RemoteException if something goes wrong with the RMI connection.
+     */
     @Override
     public ClientHandler registerClient(Client client) throws RemoteException {
         ClientHandlerImpl clientHandler = new ClientHandlerImpl(client);
@@ -56,6 +75,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server, Runnable 
         return clientHandler;
     }
 
+    /**
+     * Waits for new Client socket connection requests.
+     */
     @Override
     public void run() {
         Socket socket = null;
@@ -69,7 +91,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server, Runnable 
                 socket = serverSocket.accept();
 
                 System.err.println(
-                        "ServerImpl: accettata connessione da " + socket.getInetAddress() + ":" + socket.getPort());
+                        "ServerImpl: connection accepted from " + socket.getInetAddress() + ":" + socket.getPort());
 
             } catch (IOException e) {
                 e.printStackTrace();

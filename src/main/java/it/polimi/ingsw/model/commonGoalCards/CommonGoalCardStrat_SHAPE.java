@@ -3,29 +3,42 @@ package it.polimi.ingsw.model.commonGoalCards;
 import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Shelf;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 
 public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
+    @Serial
+    private static final long serialVersionUID = 2165136835284717126L;
     private final Shape shape;
     private final CommonGoalCardType type;
 
-    public CommonGoalCardStrat_SHAPE(CommonGoalCardType type) {
+    // TODO rewrite JavaDOC
+
+    /**
+     * Creates a new SHAPE Common Goal Card Strategy of the provided type.
+     *
+     * @param cardType the type of the Common Goal Card Strategy.
+     *                 Must be {@code SIX_PAIRS} or {@code FOUR_QUARTETS}.
+     */
+    public CommonGoalCardStrat_SHAPE(CommonGoalCardType cardType) {
         // load the shape from file based on the type
         try {
-            this.shape = loadShape(type);
+            this.shape = loadShape(cardType);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.type = type;
+        this.type = cardType;
     }
 
+    /**
+     * Checks if the pattern of the SHAPE Common Goal Card type is satisfied in the provided shelf.
+     *
+     * @param shelf the shelf to check the pattern in.
+     * @return true if the pattern is satisfied, false otherwise.
+     */
     @Override
     public boolean checkPattern(Shelf shelf) {
         int shapesFound = 0;
@@ -77,6 +90,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         return false;
     }
 
+    // TODO Add JavaDOC
     private int checkPatternsNumber(boolean[][] maskedShelf, Shape shape) {
         int shapesFound = 0;
         int row, column, shapeRow, shapeColumn, startingRow, startingColumn;
@@ -159,23 +173,33 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         return shapesFound;
     }
 
+    /**
+     * @return the type of this Common Goal Card.
+     */
     @Override
     public CommonGoalCardType getType() {
         return type;
     }
 
+    /**
+     * Loads the shape of the Common Goal Card Strategy from a well formatted file via a custom parser.
+     *
+     * @param type the type of the Common Goal Card.
+     * @return the shape parsed from the file.
+     * @throws IOException in case the file is not found.
+     */
     private Shape loadShape(CommonGoalCardType type) throws IOException {
-
         // open the file with the type name
         String fileName = type.toString();
-        BufferedReader sc = null;
+        BufferedReader sc;
 
         InputStream inputStream = CommonGoalCardStrat_SHAPE.class.getResourceAsStream("/shapes/" + fileName + ".txt");
+        assert inputStream != null;
         sc = new BufferedReader(new InputStreamReader(inputStream));
 
         // load width and height
         int width = sc.read() - 48;
-        sc.read(); // skip the space
+        var ignored = sc.read(); // skip the space
         int height = sc.read() - 48;
         sc.readLine(); // skip the newline
 
@@ -192,7 +216,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
 
         // load the mirror flag
         boolean mirror = sc.read() == '1';
-        sc.read(); // skip the space
+        ignored = sc.read(); // skip the space
         int numberOfShapes = sc.read() - 48;
 
         // create the shape

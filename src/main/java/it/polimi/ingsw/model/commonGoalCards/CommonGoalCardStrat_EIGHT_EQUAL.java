@@ -4,10 +4,21 @@ import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Shelf;
 
+import java.io.Serial;
+
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_EIGHT_EQUAL implements CommonGoalCardStrat {
+    @Serial
+    private static final long serialVersionUID = -5460232929999583608L;
+
+    /**
+     * Checks if the pattern of the EIGHT EQUAL Common Goal Card type is satisfied in the provided shelf.
+     *
+     * @param shelf the shelf to check the pattern in.
+     * @return true if the pattern is satisfied, false otherwise.
+     */
     @Override
     public boolean checkPattern(Shelf shelf) {
         final int cardsToCheck = 8;
@@ -34,6 +45,9 @@ public class CommonGoalCardStrat_EIGHT_EQUAL implements CommonGoalCardStrat {
         return false;
     }
 
+    /**
+     * @return the type of this Common Goal Card ({@code EIGHT_EQUAL})
+     */
     @Override
     public CommonGoalCardType getType() {
         return CommonGoalCardType.EIGHT_EQUAL;

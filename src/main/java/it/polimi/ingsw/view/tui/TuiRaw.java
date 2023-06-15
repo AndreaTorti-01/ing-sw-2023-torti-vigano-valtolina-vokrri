@@ -412,7 +412,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         if (modelView.getMessages().size() == 0) return;
         System.out.println("Chat: ");
         for (ChatMsg message : modelView.getMessages()) {
-            if (message.isMsgPublic() || !message.isMsgPublic() && (message.getDestPlayer().equals(playerName) || message.getSourcePlayer().equals(playerName)))
+            if (message.isPublic() || !message.isPublic() && (message.getDestinationPlayer().equals(playerName) || message.getSourcePlayer().equals(playerName)))
                 System.out.println(message);
         }
     }
@@ -461,8 +461,8 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
             for (int i = 0; i < numberOfRows; i++) {
                 output.append("| ");
                 for (int j = 0; j < numberOfColumns; j++) {
-                    if (shelf.getItemsMatrix()[i][j] != null)
-                        output.append(shelf.getItemsMatrix()[i][j].toString()).append(" ");
+                    if (shelf.getItems()[i][j] != null)
+                        output.append(shelf.getItems()[i][j].toString()).append(" ");
                     else output.append("* ");
                 }
                 output.append("|\n");

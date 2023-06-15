@@ -45,17 +45,7 @@ public class Constants {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-
-    /**
-     * takes in coords of a card you want to take and returns true if you can take it
-     * already takes care of out of bounds and null cards
-     *
-     * @param modelView
-     * @param row
-     * @param column
-     * @param pickedCoords already picked cards
-     * @return
-     */
+    
     public static boolean isTakeable(GameViewMsg modelView, int row, int column, List<List<Integer>> pickedCoords) {
         // TODO diego fix this
 
@@ -97,7 +87,7 @@ public class Constants {
                     break;
                 }
             }
-        }else adjacent = true;
+        } else adjacent = true;
 
         return free && valid && adjacent;
     }
@@ -106,6 +96,7 @@ public class Constants {
         return Math.abs(row - row2) == 1 && column == column2 ||
                 row == row2 && Math.abs(column - column2) == 1;
     }
+
     public static String getTilePath(ItemCard itemCard) {
         String tilesPath = "/graphicalResources/itemTiles/";
         switch (itemCard.getType()) {
@@ -123,6 +114,7 @@ public class Constants {
         }
         return tilesPath;
     }
+
     public static int headLiminate(Shelf shelfCopy, ItemCard hotCard) {
         List<ItemCard> heads;
         int adjacentToHead = 0;
@@ -163,28 +155,28 @@ public class Constants {
         else currentType = currentCard.getType();
 
         // checks the upper card
-        // and inserts it in the list if it has the same type of the specified one
+        // and inserts it in the list if it has the same type of the provided one
         if (row + 1 < numberOfRows) {
             ItemCard upperCard = shelfCopy.getCardAt(row + 1, column);
             if (upperCard != null && currentType.equals(upperCard.getType())) heads.add(upperCard);
         }
 
         // checks the right card
-        // and inserts it in the list if it has the same type of the specified one
+        // and inserts it in the list if it has the same type of the provided one
         if (column + 1 < numberOfColumns) {
             ItemCard rightCard = shelfCopy.getCardAt(row, column + 1);
             if (rightCard != null && currentType.equals(rightCard.getType())) heads.add(rightCard);
         }
 
         // checks the lower card
-        // and inserts it in the list if it has the same type of the specified one
+        // and inserts it in the list if it has the same type of the provided one
         if (row - 1 >= 0) {
             ItemCard lowerCard = shelfCopy.getCardAt(row - 1, column);
             if (lowerCard != null && currentType.equals(lowerCard.getType())) heads.add(lowerCard);
         }
 
         // checks the left card
-        // and inserts it in the list if it has the same type of the specified one
+        // and inserts it in the list if it has the same type of the provided one
         if (column - 1 >= 0) {
             ItemCard leftCard = shelfCopy.getCardAt(row, column - 1);
             if (leftCard != null && currentType.equals(leftCard.getType())) heads.add(leftCard);

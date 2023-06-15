@@ -45,32 +45,31 @@ public class Gui extends ObservableImpl implements RunnableView {
         }
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-        notifyObservers(playerName);
-    }
-    public void setPlayerNumber(int playerNumber) {
-        gaveNumber = true;
-        notifyObservers(playerNumber);
-    }
-    public void setPicked(List<List<Integer>> pickedCoords) {
-        this.pickedCoords = pickedCoords;
-        shelf0Controller.setReady(pickedCoords.size());
-    }
-    public void setMove(int shelfCol){
-        boardController.resetSelection();
-        notifyObservers(new MoveMsg(pickedCoords, shelfCol));
-    }
-    public void sendMsg(String destPlayer, String sourcePlayer, boolean isMsgPublic, String message){
-        notifyObservers(new ChatMsg(destPlayer, sourcePlayer, isMsgPublic, message));
-    }
-
     private void setState(Gui.State state) {
         synchronized (lock) {
             this.state = state;
             System.err.println("state changed to " + state);
             lock.notifyAll();
         }
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        gaveNumber = true;
+        notifyObservers(playerNumber);
+    }
+
+    public void setPicked(List<List<Integer>> pickedCoords) {
+        this.pickedCoords = pickedCoords;
+        shelf0Controller.setReady(pickedCoords.size());
+    }
+
+    public void setMove(int shelfCol) {
+        boardController.resetSelection();
+        notifyObservers(new MoveMsg(pickedCoords, shelfCol));
+    }
+
+    public void sendMsg(String destPlayer, String sourcePlayer, boolean isMsgPublic, String message) {
+        notifyObservers(new ChatMsg(destPlayer, sourcePlayer, isMsgPublic, message));
     }
 
     public GameViewMsg getModelView() {
@@ -134,7 +133,6 @@ public class Gui extends ObservableImpl implements RunnableView {
         }
     }
 
-
     /**
      * updates the view with the new model state
      *
@@ -154,8 +152,7 @@ public class Gui extends ObservableImpl implements RunnableView {
                     sleep(100);
                 welcomeScreenController = GuiApp.getWelcomeScreenController();
                 welcomeScreenController.askNumber();
-            }
-            else {
+            } else {
                 setState(Gui.State.WAITING_FOR_PLAYERS); // I am not lobby leader
                 System.out.println("waiting for players");
                 while (!GuiApp.controllersAvailable())
@@ -172,7 +169,6 @@ public class Gui extends ObservableImpl implements RunnableView {
             welcomeScreenController.changescene();
 
 
-
             playingScreenController = GuiApp.getPlayingScreenController();
             boardController = GuiApp.getBoardController();
             shelf0Controller = GuiApp.getShelf0Controller();
@@ -186,17 +182,17 @@ public class Gui extends ObservableImpl implements RunnableView {
                 setState(Gui.State.PLAY); // it's my turn
                 //TODO playingScreenController.setMyTurn(); // only displays a message on the screen
             } else setState(Gui.State.WAITING_FOR_TURN); // it's not my turn
-                //TODO playingScreenController.setTurnOf(modelView.getCurrentPlayer().getName()); // only displays a message on the screen
+            //TODO playingScreenController.setTurnOf(modelView.getCurrentPlayer().getName()); // only displays a message on the screen
         }
     }
 
     public String getPlayerName() {
-        return  playerName;
+        return playerName;
     }
 
-
-    public enum State {
-        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+        notifyObservers(playerName);
     }
 
     private void sleep(int millis) {
@@ -205,6 +201,10 @@ public class Gui extends ObservableImpl implements RunnableView {
         } catch (InterruptedException e) {
             System.err.println("Interrupted while sleeping: " + e.getMessage());
         }
+    }
+
+    public enum State {
+        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY
     }
 
 }

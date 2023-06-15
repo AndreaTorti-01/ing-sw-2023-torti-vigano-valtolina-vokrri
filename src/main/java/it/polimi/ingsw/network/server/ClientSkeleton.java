@@ -10,6 +10,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
 
+/**
+ * A class that implements the Client Interface.
+ * This class represents the Client on the server side,
+ * establishing a socket communication channel between the Client Handler and the client objects.
+ */
 public class ClientSkeleton implements Client, Runnable {
 
     private ClientHandler clientHandler;
@@ -17,6 +22,11 @@ public class ClientSkeleton implements Client, Runnable {
     private ObjectInputStream ois;
 
 
+    /**
+     * Creates a Client Skeleton from the provided socket.
+     *
+     * @param socket the communication socket.
+     */
     public ClientSkeleton(Socket socket) {
         try {
             oos = new ObjectOutputStream(socket.getOutputStream());
@@ -26,17 +36,36 @@ public class ClientSkeleton implements Client, Runnable {
         }
     }
 
+    /**
+     * Receives the provided message from the client.
+     *
+     * @param message the message to be received.
+     * @throws RemoteException if something goes wrong with the RMI connection.
+     */
     @Override
     public void receiveMessage(GameViewMsg message) throws RemoteException {
         try {
             oos.writeObject(message);
             oos.flush();
-            oos.reset(); //to solve the problem not receiving the following
+            oos.reset();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Sets the Client Handler to the provided one.
+     *
+     * @param clientHandler the Client Handler to be set.
+     */
+    public void setClientHandler(ClientHandler clientHandler) {
+        this.clientHandler = clientHandler;
+    }
+
+    /**
+     * Waits for new messages to be received from the client
+     * and sends it to the client handler.
+     */
     @Override
     public void run() {
         //noinspection InfiniteLoopStatement
@@ -48,9 +77,5 @@ public class ClientSkeleton implements Client, Runnable {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void setClientHandler(ClientHandler clientHandler) {
-        this.clientHandler = clientHandler;
     }
 }

@@ -7,6 +7,10 @@ import java.io.*;
 
 import static it.polimi.ingsw.utils.Constants.boardSize;
 
+/**
+ * A class that represents a Board.
+ * This class contains the Item Cards the player can pick from.
+ */
 public class Board implements Serializable {
     @Serial
     private static final long serialVersionUID = 6344140278693113L;
@@ -14,10 +18,10 @@ public class Board implements Serializable {
     private final ItemCard[][] tile;
 
     /**
-     * The file is read through the object loader ObjectInputStream
+     * Creates a new Board with a layout based on the number of players.
      *
-     * @param numberOfPlayers is the number of players: needed to choose the board layout
-     * @throws FileNotFoundException if the number of players is not between boundaries (specified in the {@link Constants} file)
+     * @param numberOfPlayers the number of players by which the board layout is chosen.
+     * @throws FileNotFoundException if the provided number of players is not valid (provided in the {@link Constants} file)
      */
     public Board(int numberOfPlayers) throws FileNotFoundException {
         // deferred valid assignment because of multiple try/catches
@@ -40,32 +44,33 @@ public class Board implements Serializable {
     }
 
     /**
-     * @param row    must be between boundaries (specified in the {@link Constants} file)
-     * @param column must be between boundaries (specified in the {@link Constants} file)
-     * @return true or false depending on the validity of the selected tile in the current game
+     * @param row    must be between boundaries (provided in the {@link Constants} file).
+     * @param column must be between boundaries (provided in the {@link Constants} file).
+     * @return true if the tile at the provided position is valid, false otherwise.
      */
     public boolean isValid(int row, int column) {
         return valid[row][column];
     }
 
     /**
-     * @param tile   may be ItemCard or null
-     * @param row    must be between boundaries (specified in the {@link Constants} file)
-     * @param column must be between boundaries (specified in the {@link Constants} file)
-     * @throws ArrayIndexOutOfBoundsException if (row,column) is not a valid position
+     * Inserts the provided ItemCard in the tile at the provided position.
+     *
+     * @param tile   may be ItemCard or null.
+     * @param row    must be between boundaries (provided in the {@link Constants} file).
+     * @param column must be between boundaries (provided in the {@link Constants} file).
+     * @throws ArrayIndexOutOfBoundsException if the provided position is not valid.
      */
     public void setTile(ItemCard tile, int row, int column) throws ArrayIndexOutOfBoundsException {
-        // go out of bounds even if the tile is not valid
         if (isValid(row, column)) {
             this.tile[row][column] = tile;
         } else throw new ArrayIndexOutOfBoundsException();
     }
 
     /**
-     * @param row    must be between boundaries (specified in the {@link Constants} file)
-     * @param column must be between boundaries (specified in the {@link Constants} file)
-     * @return the card on the selected tile, without removing it, or null if the tile is empty
-     * @throws ArrayIndexOutOfBoundsException if (row,column) is not a valid position
+     * @param row    must be between boundaries (provided in the {@link Constants} file).
+     * @param column must be between boundaries (provided in the {@link Constants} file).
+     * @return the card on the selected tile, without removing it, or null if the tile is empty.
+     * @throws ArrayIndexOutOfBoundsException if the provided position is not valid.
      */
     public ItemCard peekCard(int row, int column) throws ArrayIndexOutOfBoundsException {
         // go out of bounds even if the tile is not valid
@@ -75,11 +80,11 @@ public class Board implements Serializable {
     }
 
     /**
-     * @param row    must be between boundaries (specified in the {@link Constants} file)
-     * @param column must be between boundaries (specified in the {@link Constants} file)
-     * @return the card on the selected tile, removing it, or null if the tile is empty
-     * @throws NullPointerException           if the tile is already empty
-     * @throws ArrayIndexOutOfBoundsException if (row,column) is not a valid position
+     * @param row    must be between boundaries (provided in the {@link Constants} file).
+     * @param column must be between boundaries (provided in the {@link Constants} file).
+     * @return the card on the selected tile, removing it, or null if the tile is empty.
+     * @throws NullPointerException           if the tile is already empty.
+     * @throws ArrayIndexOutOfBoundsException if the provided position is not valid.
      */
     public ItemCard popCard(int row, int column) throws NullPointerException, ArrayIndexOutOfBoundsException {
         ItemCard card;
@@ -96,6 +101,20 @@ public class Board implements Serializable {
         }
     }
 
+    /**
+     * @return the matrix that represents the valid tiles.
+     */
+    public boolean[][] getValidMatrix() {
+        return valid;
+    }
+
+    public ItemCard[][] getTileMatrix() {
+        return tile;
+    }
+
+    /**
+     * @return a string representation of this board.
+     */
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
@@ -113,11 +132,5 @@ public class Board implements Serializable {
         }
 
         return output.toString();
-    }
-    public boolean[][] getValidMatrix() {
-        return valid;
-    }
-    public ItemCard[][] getTileMatrix() {
-        return tile;
     }
 }

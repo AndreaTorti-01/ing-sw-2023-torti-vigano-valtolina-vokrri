@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils;
 
 /**
- * Observer interface implemented by classes which wants to be informed of changes of an Observable object
+ * Observer interface implemented by classes which wants to be informed of Observable object changes.
  */
 public interface Observer {
     default void update(Object message) {

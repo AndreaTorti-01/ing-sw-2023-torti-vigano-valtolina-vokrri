@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Shelf;
 
+import java.io.Serial;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,13 +13,22 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_MAX_THREE_TYPES implements CommonGoalCardStrat {
 
+    @Serial
+    private static final long serialVersionUID = -6262685542763303817L;
     private final int numberOfColumnsToCheck;
 
     private final int numberOfLinesToCheck;
     private final int maxNumberOfTypes;
     private final CommonGoalCardType type;
 
-    public CommonGoalCardStrat_MAX_THREE_TYPES(CommonGoalCardType cardType) throws RuntimeException {
+    /**
+     * Creates a new MAX THREE TYPES Common Goal Card Strategy of the provided type.
+     *
+     * @param cardType the type of the Common Goal Card Strategy.
+     *                 Must be {@code FOUR_LINES_MAX_THREE_TYPE} or {@code THREE_COLUMNS_MAX_THREE_TYPES}.
+     * @throws IllegalArgumentException if the provided type is not {@code FOUR_LINES_MAX_THREE_TYPE} or {@code THREE_COLUMNS_MAX_THREE_TYPES}.
+     */
+    public CommonGoalCardStrat_MAX_THREE_TYPES(CommonGoalCardType cardType) throws IllegalArgumentException {
         type = cardType;
         maxNumberOfTypes = 3;
         if (cardType.equals(CommonGoalCardType.FOUR_LINES_MAX_THREE_TYPES)) {
@@ -28,9 +38,19 @@ public class CommonGoalCardStrat_MAX_THREE_TYPES implements CommonGoalCardStrat 
         } else if (cardType.equals(CommonGoalCardType.THREE_COLUMNS_MAX_THREE_TYPES)) {
             numberOfColumnsToCheck = 3;
             numberOfLinesToCheck = 0;
-        } else throw new RuntimeException("WRONG COMMONCARD TYPE");
+        } else {
+            throw new IllegalArgumentException(
+                    "The type of Common Goal Card Strategy must be " + CommonGoalCardType.FOUR_LINES_MAX_THREE_TYPES.name() + " or " + CommonGoalCardType.THREE_COLUMNS_MAX_THREE_TYPES.name()
+            );
+        }
     }
 
+    /**
+     * Checks if the pattern of the MAX THREE TYPES Common Goal Card type is satisfied in the provided shelf.
+     *
+     * @param shelf the shelf to check the pattern in.
+     * @return true if the pattern is satisfied, false otherwise.
+     */
     public boolean checkPattern(Shelf shelf) {
         int counterOfLines = 0;
         int counterOfColumns = 0;
@@ -91,7 +111,9 @@ public class CommonGoalCardStrat_MAX_THREE_TYPES implements CommonGoalCardStrat 
 
     }
 
-
+    /**
+     * @return the type of this Common Goal Type ({@code FOUR_LINES_MAX_THREE_TYPE} or {@code THREE_COLUMNS_MAX_THREE_TYPES})
+     */
     public CommonGoalCardType getType() {
         return type;
     }

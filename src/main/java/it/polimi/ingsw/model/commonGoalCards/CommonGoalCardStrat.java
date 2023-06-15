@@ -18,12 +18,12 @@ public interface CommonGoalCardStrat extends Serializable {
     CommonGoalCardType getType();
 
     /**
-     * Recursively removes all adjacent cards with the same type from the shelf copy
-     * and returns the number of them
+     * Recursively removes all adjacent cards with the same type from the shelf deep copy
+     * and returns the number of items removed.
      *
-     * @param shelfCopy a deep copy of the shelf
-     * @param hotCard   the center card from where to delete all the adjacent ones
-     * @return the number of adjacent cards with the same type
+     * @param shelfCopy a deep copy of the shelf.
+     * @param hotCard   the center card from where to delete all the adjacent ones.
+     * @return the number of adjacent cards with the same type removed from the shelf.
      */
     default int headLiminate(Shelf shelfCopy, ItemCard hotCard) {
         List<ItemCard> heads;
@@ -55,12 +55,12 @@ public interface CommonGoalCardStrat extends Serializable {
     }
 
     /**
-     * Retrieves all the adjacent cards with the same type as the one in the (row, column) position in the shelf
+     * Retrieves all the adjacent cards with the same type as the one in the provided position of the provided shelf.
      *
-     * @param shelfCopy a deep copy of the shelf
-     * @param row       must be between boundaries (specified in the {@link Constants} file)
-     * @param column    must be between boundaries (specified in the {@link Constants} file)
-     * @return a list of all adjacent cards with the same type
+     * @param shelfCopy a deep copy of the shelf.
+     * @param row       must be between boundaries (provided in the {@link Constants} file).
+     * @param column    must be between boundaries (provided in the {@link Constants} file).
+     * @return a list of all adjacent cards with the same type.
      */
     default ArrayList<ItemCard> getHeads(Shelf shelfCopy, int row, int column) {
         ArrayList<ItemCard> heads = new ArrayList<>();
@@ -72,28 +72,28 @@ public interface CommonGoalCardStrat extends Serializable {
         else currentType = currentCard.getType();
 
         // checks the upper card
-        // and inserts it in the list if it has the same type of the specified one
+        // and inserts it in the list if it has the same type of the provided one
         if (row + 1 < numberOfRows) {
             ItemCard upperCard = shelfCopy.getCardAt(row + 1, column);
             if (upperCard != null && currentType.equals(upperCard.getType())) heads.add(upperCard);
         }
 
         // checks the right card
-        // and inserts it in the list if it has the same type of the specified one
+        // and inserts it in the list if it has the same type of the provided one
         if (column + 1 < numberOfColumns) {
             ItemCard rightCard = shelfCopy.getCardAt(row, column + 1);
             if (rightCard != null && currentType.equals(rightCard.getType())) heads.add(rightCard);
         }
 
         // checks the lower card
-        // and inserts it in the list if it has the same type of the specified one
+        // and inserts it in the list if it has the same type of the provided one
         if (row - 1 >= 0) {
             ItemCard lowerCard = shelfCopy.getCardAt(row - 1, column);
             if (lowerCard != null && currentType.equals(lowerCard.getType())) heads.add(lowerCard);
         }
 
         // checks the left card
-        // and inserts it in the list if it has the same type of the specified one
+        // and inserts it in the list if it has the same type of the provided one
         if (column - 1 >= 0) {
             ItemCard leftCard = shelfCopy.getCardAt(row, column - 1);
             if (leftCard != null && currentType.equals(leftCard.getType())) heads.add(leftCard);

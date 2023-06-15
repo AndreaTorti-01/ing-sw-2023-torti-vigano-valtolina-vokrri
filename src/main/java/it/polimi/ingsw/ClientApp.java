@@ -10,8 +10,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+/**
+ * Client App main class.
+ */
 public class ClientApp {
-
     public static void main(String[] args) {
         boolean isSocket = false;
         boolean isTui = false;

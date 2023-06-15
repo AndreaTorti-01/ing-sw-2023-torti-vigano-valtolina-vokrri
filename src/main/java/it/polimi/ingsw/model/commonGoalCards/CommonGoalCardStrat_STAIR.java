@@ -2,10 +2,21 @@ package it.polimi.ingsw.model.commonGoalCards;
 
 import it.polimi.ingsw.model.Shelf;
 
+import java.io.Serial;
+
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class CommonGoalCardStrat_STAIR implements CommonGoalCardStrat {
+    @Serial
+    private static final long serialVersionUID = -6277214700657472564L;
+
+    /**
+     * Checks if the pattern of the STAIR Common Goal Card type is satisfied in the provided shelf.
+     *
+     * @param shelf the shelf to check the pattern in.
+     * @return true if the pattern is satisfied, false otherwise.
+     */
     @Override
     public boolean checkPattern(Shelf shelf) {
         // the length of the stair is at most equal to the number of columns or the number of rows
@@ -71,6 +82,9 @@ public class CommonGoalCardStrat_STAIR implements CommonGoalCardStrat {
         return false;
     }
 
+    /**
+     * @return the type of this Common Goal Card ({@code STAIR}).
+     */
     @Override
     public CommonGoalCardType getType() {
         return CommonGoalCardType.STAIR;

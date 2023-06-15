@@ -10,18 +10,21 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import static it.polimi.ingsw.utils.Constants.maxNumberOfItemCards;
 import static it.polimi.ingsw.utils.Constants.numberOfItemCardsWithSameType;
 
+/**
+ * A class that represents the Bag.
+ * This class contains the Item Cards used to fill the Board.
+ */
 public class Bag implements Serializable {
     @Serial
     private static final long serialVersionUID = -141148278954951272L;
-    private final int maxCards = maxNumberOfItemCards;
     private final Set<ItemCard> cardsInside;
 
     /**
      * Fills the bag with every type of ItemCard.
-     * See {@link Constants} to know the number of cards inside the bag and the number of ItemCards with the same type.
+     * See {@link Constants} to know the number of cards inside the bag
+     * and the number of Item Cards with the same type.
      */
     public Bag() {
         cardsInside = new HashSet<>();
@@ -33,14 +36,14 @@ public class Bag implements Serializable {
     }
 
     /**
-     * @return the set of cards contained in the bag
+     * @return the set of cards contained in the bag.
      */
     public Set<ItemCard> getCardsInside() {
         return cardsInside;
     }
 
     /**
-     * @return a random ItemCard from the bag, if not empty
+     * @return a random ItemCard from the bag, if not empty.
      */
     public ItemCard drawCard() {
         if (cardsInside.size() == 0) return null;

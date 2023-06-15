@@ -15,6 +15,10 @@ import java.util.Stack;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
+/**
+ * A class that represents the Game.
+ * This class contains the status of a game, with all the information about it.
+ */
 public class Game extends ObservableImpl {
     private final Bag bag;
     private final Stack<ChatMsg> messages;
@@ -27,6 +31,9 @@ public class Game extends ObservableImpl {
     private int numberOfPlayers;
     private boolean isGameEnded;
 
+    /**
+     * Creates a new Game, initializing all the game items.
+     */
     public Game() {
         this.bag = new Bag();
         this.players = new ArrayList<>();
@@ -34,7 +41,7 @@ public class Game extends ObservableImpl {
     }
 
     /**
-     * This method initializes all the model elements
+     * Initializes all the model elements.
      */
     public void initModel(Integer numberOfPlayers) throws IllegalArgumentException {
 
@@ -63,6 +70,11 @@ public class Game extends ObservableImpl {
         notifyObservers(new GameViewMsg(this));
     }
 
+    /**
+     * Adds a new player to the game with the provided name.
+     *
+     * @param playerName the name of the player to be inserted.
+     */
     public void addPlayer(String playerName) {
         // init player
         Player newPlayer = new Player(playerName);
@@ -83,51 +95,25 @@ public class Game extends ObservableImpl {
         this.notifyObservers(new GameViewMsg(this));
     }
 
+    /**
+     * @return the Player that won this game.
+     */
     public Player getWinner() {
         return winner;
     }
 
-    public void setWinner(Player winner) {
-        this.winner = winner;
-    }
-
     /**
-     * Creates and return an arraylist of players,
-     * giving each of them a random PersonalGoalCard
+     * Sets the provided player as the winner of the game.
      *
-     * @param playerNames an array containing the name of each player
-     * @return an arraylist of players
+     * @param playerName the player that won the game.
      */
-    private List<Player> initPlayers(List<String> playerNames) {
-        Random random = new Random();
-
-        // initializes a list of available indexes
-        List<Integer> indexes = this.getIndexes(numberOfPersonalGoalCardTypes);
-
-        players = new ArrayList<>();
-
-        // for each player name, instantiates a new Player and gives him a random personal goal card
-        for (String playerName : playerNames) {
-            // chooses and removes a random index from the array of indexes in order not to have duplicates
-            int randomIndex = random.nextInt(0, indexes.size());
-            indexes.remove(randomIndex);
-
-            PersonalGoalCardFactory personalGoalCardFactory = new PersonalGoalCardFactory();
-            PersonalGoalCard currentPersonalGoalCard = personalGoalCardFactory.createPersonalGoalCard(randomIndex);
-            Player player = new Player(playerName);
-
-            // gives to the player the corresponding personal goal card
-            player.setPersonalGoalCard(currentPersonalGoalCard);
-
-            // adds the newly created player to the list
-            players.add(player);
-        }
-
-        return players;
+    public void setWinner(Player playerName) {
+        this.winner = playerName;
     }
 
+
     /**
-     * Refills the board
+     * Refills the board with the Item Cards drawn from the bag.
      */
     public void refillBoard() {
         for (int row = 0; row < boardSize; row++) {
@@ -140,49 +126,42 @@ public class Game extends ObservableImpl {
     }
 
     /**
-     * @return the players
+     * @return a list of players playing this game.
      */
     public List<Player> getPlayers() {
         return players;
     }
 
     /**
-     * @return the currentPlayer
+     * @return the current player whose turn it is.
      */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
     /**
-     * @return the number of players
-     */
-    public int getNumberOfPlayers() {
-        return players.size();
-    }
-
-    /**
-     * @return the bag
+     * @return the bag of this game.
      */
     public Bag getBag() {
         return bag;
     }
 
     /**
-     * @return the board
+     * @return the board of this game.
      */
     public Board getBoard() {
         return board;
     }
 
     /**
-     * @return the common goal cards
+     * @return a list of common goal cards in this game.
      */
     public List<CommonGoalCard> getCommonGoalCards() {
         return commonGoalCards;
     }
 
     /**
-     * @return an arraylist of random CommonGoalCards.
+     * @return a list of random Common Goal Cards.
      */
     private List<CommonGoalCard> getRandomCommonGoalCards() {
         List<CommonGoalCard> commonGoalCards = new ArrayList<>(numberOfCommonGoalCardsInGame);
@@ -211,8 +190,8 @@ public class Game extends ObservableImpl {
     }
 
     /**
-     * @param bound the upper bound (excluded)
-     * @return an array list with all indexes in range 0 (included) - bound (excluded)
+     * @param bound the upper bound (excluded).
+     * @return a list with all indexes in range 0 (included) - bound (excluded)
      */
     private List<Integer> getIndexes(int bound) {
         // initializes an arrayList that contains all indexes in range 0-bound
@@ -223,14 +202,15 @@ public class Game extends ObservableImpl {
     }
 
     /**
-     * @return the game status
+     * @return the status of this game.
      */
     public Game.Status getGameStatus() {
         return gameStatus;
     }
 
     /**
-     * sets the game to ended
+     * Sets the game status to ended.
+     * Calculates all the final points and the winner.
      */
     public void endGame() {
         this.gameStatus = Game.Status.ENDED;
@@ -239,6 +219,10 @@ public class Game extends ObservableImpl {
         notifyObservers(new GameViewMsg(this));
     }
 
+    /**
+     * For every player, adds the final points obtained by completing the Personal Goal Card pattern,
+     * by filling the shelf and by counting the number of aggregations.
+     */
     private void addFinalPoints() {
         // at the end of the game the personalGoal points are assigned
         System.err.println("setting PersonalGoalCard points...");
@@ -282,6 +266,12 @@ public class Game extends ObservableImpl {
         }
     }
 
+    /**
+     * Advances the turn of this game.
+     * Moreover, checks if the current player has achieved his Common Goal Card,
+     * if any of the players completed his shelf in order to end the game and
+     * if the board needs to be refilled.
+     */
     public void advancePlayerTurn() {
         // advances the player
         Player previousPlayer = currentPlayer;
@@ -311,15 +301,15 @@ public class Game extends ObservableImpl {
             }
         }
 
-        // if there are no takeable cards one next to each other, refill the board
+        // if there are no take-able cards one next to each other, refill the board
         boolean needsRefill = true;
         for (int row = 0; row < boardSize && needsRefill; row++) {
             for (int column = 0; column < boardSize && needsRefill; column++) {
 
-                // if the card considered is takeable...
+                // if the card considered is take-able...
                 if (isTakeable(currentGameView, row, column, emptyList)) {
 
-                    // check if one of the adjacent cards is takeable
+                    // check if one of the adjacent cards is take-able
                     if (row > 0 && isTakeable(currentGameView, row - 1, column, emptyList)) {
                         needsRefill = false;
                     } else if (row < boardSize - 1 && isTakeable(currentGameView, row + 1, column, emptyList)) {
@@ -350,27 +340,43 @@ public class Game extends ObservableImpl {
         notifyObservers(new GameViewMsg(this));
     }
 
+    /**
+     * Calculates the winner of this game.
+     */
     private void calculateWinner() {
         Player winner = null;
         int maxScore = 0;
+
         for (Player player : getPlayers()) {
             if (player.getScore() > maxScore) {
                 maxScore = player.getScore();
                 winner = player;
             }
         }
+
         setWinner(winner);
     }
 
+    /**
+     * @return the messages sent during this game.
+     */
     public Stack<ChatMsg> getMessages() {
         return this.messages;
     }
 
+    /**
+     * Adds the provided message in the chat.
+     *
+     * @param chatMsg the message to be added.
+     */
     public void addChatMessage(ChatMsg chatMsg) {
         this.messages.push(chatMsg);
         notifyObservers(new GameViewMsg(this));
     }
 
+    /**
+     * An Enum representing the status of the game.
+     */
     public enum Status {
         WAITING,
         STARTED,

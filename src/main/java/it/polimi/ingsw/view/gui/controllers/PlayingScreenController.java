@@ -59,22 +59,22 @@ public class PlayingScreenController implements Initializable {
 
     public void updateGraphics() {
 
-        for(Player player : gui.getModelView().getPlayers()) {
+        for (Player player : gui.getModelView().getPlayers()) {
             int plID = 1;
-            if(!gui.getPlayerName().equals(player.getName())) {
-                switch(plID) {
+            if (!gui.getPlayerName().equals(player.getName())) {
+                switch (plID) {
                     case 1: {
-                        shelf1Controller.updateGraphics(player.getShelf().getItemsMatrix());
+                        shelf1Controller.updateGraphics(player.getShelf().getItems());
                         //TODO setting name
                         break;
                     }
                     case 2: {
-                        shelf2Controller.updateGraphics(player.getShelf().getItemsMatrix());
+                        shelf2Controller.updateGraphics(player.getShelf().getItems());
                         //TODO setting name
                         break;
                     }
                     case 3: {
-                        shelf3Controller.updateGraphics(player.getShelf().getItemsMatrix());
+                        shelf3Controller.updateGraphics(player.getShelf().getItems());
                         //TODO setting name
                         break;
                     }
@@ -87,15 +87,19 @@ public class PlayingScreenController implements Initializable {
     public BoardController getBoardController() {
         return boardController;
     }
+
     public Shelf0Controller getShelf0Controller() {
         return shelf0Controller;
     }
+
     public Shelf1Controller getShelf1Controller() {
         return shelf1Controller;
     }
+
     public Shelf2Controller getShelf2Controller() {
         return shelf2Controller;
     }
+
     public Shelf3Controller getShelf3Controller() {
         return shelf3Controller;
     }

@@ -1,11 +1,5 @@
 package it.polimi.ingsw.model.commonGoalCards;
 
-import it.polimi.ingsw.utils.Constants;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-
 public enum CommonGoalCardType {
     CROSS,
     DIAGONAL_FIVE,
@@ -20,27 +14,10 @@ public enum CommonGoalCardType {
     TWO_RAINBOW_LINES,
     TWO_SQUARES;
 
-    private static final ArrayList<CommonGoalCardType> values = new ArrayList<>(
-            Arrays.asList(CommonGoalCardType.values())
-    );
-
-    // TODO: remove?
-    public static ArrayList<CommonGoalCardType> getValues() {
-        return values;
-    }
-
     /**
-     * Gets a new random type from the common goal card type enumeration
-     *
-     * @return a random value from the enumeration
+     * @param type the type of Common Goal Card to get the strategy from.
+     * @return the Common Goal Card Strategy corresponding to the provided type
      */
-    public static CommonGoalCardType getRandomType() {
-        // can return the same type multiple times.
-        // the controller will take care of destroying duplicates
-        return values.get(new Random().nextInt(Constants.numberOfItemCardTypes));
-    }
-
-    // mapping from the type to the corresponding class
     public static CommonGoalCardStrat getStrategyFromType(CommonGoalCardType type) {
         return switch (type) {
             case CROSS, DIAGONAL_FIVE, TWO_SQUARES, EQUAL_CORNERS -> new CommonGoalCardStrat_SHAPE(type);
@@ -50,7 +27,7 @@ public enum CommonGoalCardType {
             case FOUR_QUARTETS, SIX_PAIRS -> new CommonGoalCardStrat_AGGREGATE(type);
             case STAIR -> new CommonGoalCardStrat_STAIR();
             case TWO_RAINBOW_COLUMNS, TWO_RAINBOW_LINES -> new CommonGoalCardStrat_RAINBOWS(type);
-            default -> throw new IllegalArgumentException("invalid type");
+            default -> throw new IllegalArgumentException("Invalid Type");
         };
     }
 }

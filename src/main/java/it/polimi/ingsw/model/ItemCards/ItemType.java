@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.ItemCards;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
+/**
+ * An enumeration of the types of Item Cards.
+ */
 public enum ItemType {
     CATS('C'),
     GAMES('G'),
@@ -29,9 +32,11 @@ public enum ItemType {
     }
 
     /**
-     * FOR TEST PURPOSE!
+     * ***************************<p>
+     * * FOR TEST PURPOSES ONLY! *<p>
+     * ***************************<p>
      *
-     * @return a random value from the one in the enumeration.
+     * @return a random item type.
      */
     public static ItemType getRandomItemType() {
         final int numberOfItems = ItemType.values().length;
@@ -40,6 +45,11 @@ public enum ItemType {
         return ItemType.values()[randomIndex];
     }
 
+    /**
+     * The abbreviation consists of the first character in the Item Type name.
+     *
+     * @return the first abbreviation of the Item Type.
+     */
     public String getAbbreviation() {
         return String.valueOf(this.toString().charAt(0));
     }
