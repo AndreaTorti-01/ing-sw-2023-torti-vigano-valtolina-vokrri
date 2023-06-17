@@ -2,16 +2,12 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
-import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 
 import java.util.List;
-
-import static it.polimi.ingsw.utils.Constants.numberOfColumns;
-import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 /**
  * The controller of the MVC pattern.
@@ -84,18 +80,10 @@ public class GameController {
     }
 
     /**
-     * Fills the current player's shelf with random item cards, so that he wins
+     * Makes the current player win by filling its board with random Item Cards.
      */
     public void cheat() {
-        Shelf currentShelf = this.model.getCurrentPlayer().getShelf();
-
-        for (int column = 0; column < numberOfColumns; column++) {
-            while (currentShelf.getColumnLength(column) != numberOfRows) {
-                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 1);
-                currentShelf.insert(column, randomItemCard);
-            }
-        }
-
+        this.model.getCurrentPlayer().getShelf().fill();
         this.model.advancePlayerTurn();
     }
 }

@@ -22,14 +22,13 @@ import static it.polimi.ingsw.utils.Constants.*;
 public class Game extends ObservableImpl {
     private final Bag bag;
     private final Stack<ChatMsg> messages;
+    private final List<Player> players;
     private List<CommonGoalCard> commonGoalCards;
-    private List<Player> players;
     private Player currentPlayer;
     private Board board;
     private Game.Status gameStatus = Game.Status.WAITING;
     private Player winner;
     private int numberOfPlayers;
-    private boolean isGameEnded;
 
     /**
      * Creates a new Game, initializing all the game items.
@@ -63,9 +62,6 @@ public class Game extends ObservableImpl {
         // initialization of the common goal cards
         commonGoalCards = this.getRandomCommonGoalCards();
 
-        // current player is first player
-        this.currentPlayer = players.get(0);
-
         // notifies listeners of the changes
         notifyObservers(new GameViewMsg(this));
     }
@@ -76,15 +72,21 @@ public class Game extends ObservableImpl {
      * @param playerName the name of the player to be inserted.
      */
     public void addPlayer(String playerName) {
+        if (players.size() == numberOfPlayers || this.gameStatus == Game.Status.STARTED)
+            throw new IllegalAccessError("Maximum number of players reached for this game!");
+
         // init player
         Player newPlayer = new Player(playerName);
 
-        //set a random personalgoalcard to the player
+        // set a random personal goal card to the player
         int randomIndex = new Random().nextInt(0, numberOfPersonalGoalCardTypes);
         newPlayer.setPersonalGoalCard(new PersonalGoalCardFactory().createPersonalGoalCard(randomIndex));
 
         // add player to the list
         players.add(newPlayer);
+
+        // if it's the first added player, it's the current one.
+        if (players.size() == 1) this.currentPlayer = newPlayer;
 
         // check if the player cap is reached and eventually start the game!
         if (numberOfPlayers != 0 && numberOfPlayers == players.size()) {
@@ -235,7 +237,7 @@ public class Game extends ObservableImpl {
             player.setScore(currentScore + personalGoalCardScore);
         }
 
-        // is assigned a bonus point to the first player completing the shelf.
+        // a bonus point is assigned to the first player completing the shelf.
         // (in case of multiple full-shelves, the first one in the player list is necessarily the first-completed one)
         System.err.println("setting the final bonus point...");
         for (Player player : players) {
@@ -294,7 +296,7 @@ public class Game extends ObservableImpl {
         // with a full shelf, the game is over
         if (previousPlayer.equals(players.get(players.size() - 1))) {
             for (Player player : players) {
-                if (player.getShelf().isFull() && !this.gameStatus.equals(Status.ENDED)) { // ? ridondante
+                if (player.getShelf().isFull() && !this.gameStatus.equals(Status.ENDED)) {
                     this.endGame();
                     return;
                 }
@@ -372,6 +374,19 @@ public class Game extends ObservableImpl {
     public void addChatMessage(ChatMsg chatMsg) {
         this.messages.push(chatMsg);
         notifyObservers(new GameViewMsg(this));
+    }
+
+    /**
+     * ***************************** <p>
+     * * FOR TESTING PURPOSE ONLY! * <p>
+     * ***************************** <p>
+     *
+     * @return a random player from the ones playing this game.
+     */
+    public Player getRandomPlayer() {
+        Random random = new Random();
+        int randomIndex = random.nextInt(this.numberOfPlayers);
+        return this.getPlayers().get(randomIndex);
     }
 
     /**

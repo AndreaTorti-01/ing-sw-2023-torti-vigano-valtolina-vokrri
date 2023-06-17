@@ -5,16 +5,18 @@ import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.utils.Constants;
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfRows;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShelfTest {
 
     @Test
-    void testEmptyShelf() {
+    void testShelf() {
         Shelf shelf = new Shelf();
 
         // empty shelf initialized with null values
-        for (int row = 0; row < Constants.numberOfRows; row++) {
+        for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < Constants.numberOfColumns; column++) {
                 assertNull(shelf.getCardAt(row, column));
             }
@@ -22,11 +24,11 @@ class ShelfTest {
     }
 
     @Test
-    void testFullShelf() {
-        ItemCard[][] itemCards = new ItemCard[Constants.numberOfRows][Constants.numberOfColumns];
+    void testShelfFromItemCardMatrix() {
+        ItemCard[][] itemCards = new ItemCard[numberOfRows][Constants.numberOfColumns];
 
         // initializes the matrix to random values
-        for (int row = 0; row < Constants.numberOfRows; row++) {
+        for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < Constants.numberOfColumns; column++) {
                 // creates a random itemCard
                 ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
@@ -40,7 +42,7 @@ class ShelfTest {
         Shelf shelf = new Shelf(itemCards);
 
         // checks if the elements have the same type
-        for (int row = 0; row < Constants.numberOfRows; row++) {
+        for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < Constants.numberOfColumns; column++) {
                 // the items in the shelf are not the same as the ones in the matrix!
                 // the memory pointer should be different
@@ -55,12 +57,12 @@ class ShelfTest {
     }
 
     @Test
-    void testGetColumnLengthMethod() {
+    void testColumnLength() {
         Shelf shelf = this.initializeFullRandomShelf();
 
         // every column should have the maximum number of elements it can hold
         for (int column = 0; column < Constants.numberOfColumns; column++) {
-            assertEquals(shelf.getColumnLength(column), Constants.numberOfRows);
+            assertEquals(shelf.getColumnLength(column), numberOfRows);
         }
 
         shelf = new Shelf();
@@ -71,13 +73,19 @@ class ShelfTest {
         }
     }
 
+    @Test
+    void testIsFull() {
+        Shelf shelf = initializeFullRandomShelf();
+        assertTrue(shelf.isFull());
+    }
+
 
     @Test
-    void testSetCardAtMethod() {
+    void testSetCardAt() {
         Shelf shelf = new Shelf();
         Shelf shelfCopy = shelf.getCopy();
 
-        for (int row = 0; row < Constants.numberOfRows; row++) {
+        for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < Constants.numberOfColumns; column++) {
                 // because java is needy
                 final int finalRow = row;
@@ -101,7 +109,19 @@ class ShelfTest {
     }
 
     @Test
-    void testInsertMethod() {
+    void testGetCardAt() {
+        Shelf shelf = initializeFullRandomShelf();
+        ItemCard[][] items = shelf.getItems();
+
+        for (int row = 0; row < numberOfRows; row++) {
+            for (int col = 0; col < numberOfColumns; col++) {
+                assertEquals(items[row][col], shelf.getCardAt(row, col));
+            }
+        }
+    }
+
+    @Test
+    void testInsert() {
         Shelf shelf = this.initializeFullRandomShelf();
 
         // checks if the method throws error trying to insert elements in a full column
@@ -121,12 +141,12 @@ class ShelfTest {
     }
 
     @Test
-    void testGetCopyMethod() {
+    void testGetCopy() {
         Shelf shelf = this.initializeFullRandomShelf();
 
         // checks if the copy of the shelf has the same values inside
         Shelf shelfCopy = shelf.getCopy();
-        for (int row = 0; row < Constants.numberOfRows; row++) {
+        for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < Constants.numberOfColumns; column++) {
                 ItemCard actual = shelfCopy.getCardAt(row, column);
                 ItemCard expected = shelf.getCardAt(row, column);
@@ -142,6 +162,15 @@ class ShelfTest {
         }
     }
 
+    @Test
+    void testFill() {
+        Shelf shelf = new Shelf();
+        shelf.fill();
+
+        assertTrue(shelf.isFull());
+    }
+
+
     /**
      * Initializes a new <b>full</b> Shelf with random values
      *
@@ -151,7 +180,7 @@ class ShelfTest {
         Shelf shelf = new Shelf();
 
         for (int column = 0; column < Constants.numberOfColumns; column++) {
-            for (int row = 0; row < Constants.numberOfRows; row++) {
+            for (int row = 0; row < numberOfRows; row++) {
                 // creates a random itemCard
                 ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
 
@@ -167,7 +196,7 @@ class ShelfTest {
     public void toStringTest() {
         Shelf shelf = new Shelf();
         for (int column = 0; column < Constants.numberOfColumns; column++) {
-            for (int row = 0; row < Constants.numberOfRows; row++) {
+            for (int row = 0; row < numberOfRows; row++) {
                 // creates a random itemCard
                 ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
 

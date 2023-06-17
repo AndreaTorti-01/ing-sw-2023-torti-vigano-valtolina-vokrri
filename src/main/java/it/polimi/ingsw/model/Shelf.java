@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.ItemCards.ItemCard;
+import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.utils.Constants;
 
 import java.io.Serial;
@@ -161,6 +162,20 @@ public class Shelf implements Serializable {
             if (this.getCardAt(0, column) == null) return false;
         }
         return true;
+    }
+
+    /**
+     * Fills the current shelf with random Item Cards
+     */
+    public void fill() {
+        if (this.isFull()) return;
+
+        for (int column = 0; column < numberOfColumns; column++) {
+            while (this.getColumnLength(column) != numberOfRows) {
+                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 1);
+                this.insert(column, randomItemCard);
+            }
+        }
     }
 
     /**

@@ -14,6 +14,7 @@ public class PlayerTest {
         assertDoesNotThrow(() -> new Player(randomName));
     }
 
+    @Test
     void testGetName() {
         String randomName = this.generateRandomString();
         Player player = new Player(randomName);

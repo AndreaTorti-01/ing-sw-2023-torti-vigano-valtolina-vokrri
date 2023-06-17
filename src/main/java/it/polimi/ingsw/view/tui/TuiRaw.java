@@ -412,7 +412,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         if (modelView.getMessages().size() == 0) return;
         System.out.println("Chat: ");
         for (ChatMsg message : modelView.getMessages()) {
-            if (message.isPublic() || !message.isPublic() && (message.getDestinationPlayer().equals(playerName) || message.getSourcePlayer().equals(playerName)))
+            if (message.isPublic() || !message.isPublic() && (message.getRecipientPlayer().equals(playerName) || message.getSenderPlayer().equals(playerName)))
                 System.out.println(message);
         }
     }

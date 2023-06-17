@@ -38,6 +38,7 @@ class BagTest {
         for (ItemType it : itemTypes) {
             assertEquals(Constants.numberOfItemCardsWithSameType, bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(it)).toList().size());
         }
+
         assertEquals(21, bag.getCardsInside().stream().filter(itemCard -> itemCard.getType().equals(extracted)).toList().size());
 
         // draw 131 cards and check the bag is empty

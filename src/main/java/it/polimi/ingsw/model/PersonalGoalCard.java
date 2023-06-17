@@ -72,7 +72,7 @@ public class PersonalGoalCard implements Serializable {
                 ItemCard currentCard = shelf.getCardAt(row, column);
                 ItemType checker = this.getTypeAt(row, column);
 
-                if (currentCard.getType().equals(checker)) numberOfGoodTiles++;
+                if (currentCard != null && currentCard.getType().equals(checker)) numberOfGoodTiles++;
             }
         }
         return switch (numberOfGoodTiles) {

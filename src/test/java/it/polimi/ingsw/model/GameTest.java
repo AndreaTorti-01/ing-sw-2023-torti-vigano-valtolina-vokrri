@@ -1,68 +1,117 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.network.serializable.ChatMsg;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
+    // TODO: test refillBoard method
     @Test
-    void testGameWithTwoPlayers() {
-        int numberOfPlayers = 2;
-        List<String> playerNames = new LinkedList<>();
+    void testGameWithCorrectNumberOfPlayers() {
+        for (int numberOfPlayers = 2; numberOfPlayers <= 4; numberOfPlayers++) {
+            Game model = newGameWith(numberOfPlayers);
 
-        for (int i = 0; i < numberOfPlayers; i++)
-            playerNames.add(this.generateRandomString());
+            // all the game items should have been initialized.
+            assertNotNull(model.getBag());
+            assertNotNull(model.getBoard());
+            assertNotNull(model.getCommonGoalCards());
 
-        Game model = new Game();
-        assertDoesNotThrow(() -> model.initModel(numberOfPlayers));
-    }
+            // the game should start after adding all the required players
+            assertEquals(model.getGameStatus(), Game.Status.STARTED);
 
-    @Test
-    void testGameWithThreePlayers() {
-        int numberOfPlayers = 3;
-        List<String> playerNames = new LinkedList<>();
+            for (int i = 0; i < numberOfPlayers; i++) {
+                // the current player should be the player at index i in the list of players
+                assertEquals(model.getCurrentPlayer(), model.getPlayers().get(i));
+                // the player should have a personal goal card and a shelf
+                assertNotNull(model.getCurrentPlayer().getPersonalGoalCard());
+                assertNotNull(model.getCurrentPlayer().getShelf());
 
-        for (int i = 0; i < numberOfPlayers; i++)
-            playerNames.add(this.generateRandomString());
+                // advance the turn
+                model.advancePlayerTurn();
+            }
 
-        Game model = new Game();
-        assertDoesNotThrow(() -> model.initModel(numberOfPlayers));
-    }
-
-    @Test
-    void testGameWithFourPlayers() {
-        int numberOfPlayers = 4;
-        List<String> playerNames = new LinkedList<>();
-
-        for (int i = 0; i < numberOfPlayers; i++)
-            playerNames.add(this.generateRandomString());
-
-        Game model = new Game();
-        assertDoesNotThrow(() -> model.initModel(numberOfPlayers));
+            // the game should not accept new players after reaching the maximum
+            assertThrows(IllegalAccessError.class, () -> model.addPlayer(generateRandomString()));
+        }
     }
 
     @Test
     void testGameWithIllegalNumberOfPlayers() {
-        final List<String> playerNames = new LinkedList<>();
+        assertThrows(IllegalArgumentException.class, () -> newGameWith(1));
+        assertThrows(IllegalArgumentException.class, () -> newGameWith(5));
+    }
 
-        playerNames.add(this.generateRandomString());
-        Game model = new Game();
+    @Test
+    void testChat() {
+        // arbitrary number of players
+        Game model = newGameWith(4);
 
+        List<String> senders = new ArrayList<>();
+        List<String> messages = new ArrayList<>();
 
-        int numberOfPlayers = 5;
-        assertThrows(IllegalArgumentException.class, () -> model.initModel(numberOfPlayers));
-        final List<String> playerNames2 = new LinkedList<>();
+        // generates 1000 random messages
+        int numberOfMessages = 1000;
+        for (int i = 0; i < numberOfMessages; i++) {
+            String randomSenderPlayer = model.getRandomPlayer().getName();
+            String randomMessage = generateRandomString();
+
+            senders.add(randomSenderPlayer);
+            messages.add(randomMessage);
+
+            model.addChatMessage(new ChatMsg(null, randomSenderPlayer, true, randomMessage));
+        }
+
+        assertEquals(numberOfMessages, model.getMessages().size());
+
+        int i = 0;
+        for (ChatMsg chatMessage : model.getMessages()) {
+            assertEquals(chatMessage.getMessage(), messages.get(i));
+            assertEquals(chatMessage.getSenderPlayer(), senders.get(i));
+
+            i++;
+        }
+    }
+
+    @Test
+    void testWinner() {
+        // arbitrary number of players
+        Game model = newGameWith(4);
+
+        Player randomPlayer = model.getRandomPlayer();
+        model.setWinner(randomPlayer);
+        assertEquals(randomPlayer, model.getWinner());
+    }
+
+    // TODO: something more?
+    @Test
+    void testEndGame() {
+        Game model = newGameWith(4);
+        model.endGame();
+
+        assertEquals(Game.Status.ENDED, model.getGameStatus());
+    }
+
+    private Game newGameWith(int numberOfPlayers) {
+        List<String> playerNames = new ArrayList<>();
 
         for (int i = 0; i < numberOfPlayers; i++)
             playerNames.add(this.generateRandomString());
 
-        Game model2 = new Game();
-        assertThrows(IllegalArgumentException.class, () -> model2.initModel(numberOfPlayers));
+        // creates a new Game and initializes it.
+        Game model = new Game();
+        model.initModel(numberOfPlayers);
+
+        // adds the players
+        for (String playerName : playerNames) {
+            model.addPlayer(playerName);
+        }
+
+        return model;
     }
 
     private String generateRandomString() {
