@@ -3,11 +3,9 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.utils.Constants;
 
-import java.io.Serial;
-import java.io.Serializable;
+import java.io.*;
 
-import static it.polimi.ingsw.utils.Common.getLayoutFrom;
-import static it.polimi.ingsw.utils.Constants.*;
+import static it.polimi.ingsw.utils.Constants.boardSize;
 
 /**
  * A class that represents a Board.
@@ -25,13 +23,25 @@ public class Board implements Serializable {
      * @param numberOfPlayers the number of players by which the board layout is chosen.
      */
     public Board(int numberOfPlayers) {
-        // checking the numberOfPlayers is valid and setting it in the model
-        if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
-            throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers);
+        if (numberOfPlayers < Constants.minNumberOfPlayers || numberOfPlayers > Constants.maxNumberOfPlayers) {
+            throw new IllegalArgumentException("Number of players must be between 2 and 4");
+        }
 
-        this.layout = getLayoutFrom(numberOfPlayers);
-        this.tiles = new ItemCard[boardSize][boardSize];
+        tiles = new ItemCard[boardSize][boardSize];
+
+        // open the file corresponding to the chosen number of players (should not fail)
+        InputStream inputStream = getClass().getResourceAsStream(String.format("/board/board%d.dat", numberOfPlayers));
+
+        // parse the file as an object, read it and close it
+        try {
+            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+            layout = (boolean[][]) objectInputStream.readObject();
+            objectInputStream.close();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 
     /**
      * @param row    must be between boundaries (provided in the {@link Constants} file).

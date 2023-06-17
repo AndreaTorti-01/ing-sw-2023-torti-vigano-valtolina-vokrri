@@ -4,11 +4,57 @@ import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.ItemCards.ItemType;
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.utils.Common.getLayoutFrom;
 import static it.polimi.ingsw.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
+    private final boolean[][] twoPlayersBoardLayout = new boolean[][]{
+            {false, false, false, false, false, false, false, false, false},
+            {false, false, false, true, true, false, false, false, false},
+            {false, false, false, true, true, true, false, false, false},
+            {false, false, true, true, true, true, true, true, false},
+            {false, true, true, true, true, true, true, true, false},
+            {false, true, true, true, true, true, true, false, false},
+            {false, false, false, true, true, true, false, false, false},
+            {false, false, false, false, true, true, false, false, false},
+            {false, false, false, false, false, false, false, false, false},
+    };
+    private final boolean[][] threePlayersBoardLayout = new boolean[][]{
+            {false, false, false, true, false, false, false, false, false},
+            {false, false, false, true, true, false, false, false, false},
+            {false, false, true, true, true, true, true, false, false},
+            {false, false, true, true, true, true, true, true, true},
+            {false, true, true, true, true, true, true, true, false},
+            {true, true, true, true, true, true, true, false, false},
+            {false, false, true, true, true, true, true, false, false},
+            {false, false, false, false, true, true, false, false, false},
+            {false, false, false, false, false, true, false, false, false},
+
+    };
+    private final boolean[][] fourPlayersBoardLayout = new boolean[][]{
+            {false, false, false, true, true, false, false, false, false},
+            {false, false, false, true, true, true, false, false, false},
+            {false, false, true, true, true, true, true, false, false},
+            {false, true, true, true, true, true, true, true, true},
+            {true, true, true, true, true, true, true, true, true},
+            {true, true, true, true, true, true, true, true, false},
+            {false, false, true, true, true, true, true, false, false},
+            {false, false, false, true, true, true, false, false, false},
+            {false, false, false, false, true, true, false, false, false},
+    };
+
+    /**
+     * @param numberOfPlayers the number of players.
+     * @return a boolean matrix that represents the board's active tiles.
+     */
+    private boolean[][] getLayoutFrom(int numberOfPlayers) {
+        return switch (numberOfPlayers) {
+            case 2 -> twoPlayersBoardLayout;
+            case 3 -> threePlayersBoardLayout;
+            case 4 -> fourPlayersBoardLayout;
+            default -> new boolean[boardSize][boardSize];
+        };
+    }
 
     @Test
     void testBoardWithValidNumberOfPlayers() {
@@ -26,9 +72,11 @@ class BoardTest {
 
     @Test
     void testValidity() {
+        boolean[][] layout;
+        Board board;
         for (int numberOfPlayers = minNumberOfPlayers; numberOfPlayers <= maxNumberOfPlayers; numberOfPlayers++) {
-            Board board = new Board(numberOfPlayers);
-            boolean[][] layout = getLayoutFrom(numberOfPlayers);
+            board = new Board(numberOfPlayers);
+            layout = getLayoutFrom(numberOfPlayers);
 
             for (int row = 0; row < boardSize; row++) {
                 for (int col = 0; col < boardSize; col++) {

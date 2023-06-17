@@ -11,19 +11,6 @@ import java.util.List;
 import static it.polimi.ingsw.utils.Constants.*;
 
 public class Common {
-    /**
-     * @param numberOfPlayers the number of players.
-     * @return a boolean matrix that represents the board's active tiles.
-     */
-    public static boolean[][] getLayoutFrom(int numberOfPlayers) {
-        return switch (numberOfPlayers) {
-            case 2 -> twoPlayersBoardLayout;
-            case 3 -> threePlayersBoardLayout;
-            case 4 -> fourPlayersBoardLayout;
-            default -> new boolean[boardSize][boardSize];
-        };
-    }
-
     public static boolean isTakeable(GameViewMsg modelView, int row, int column, List<List<Integer>> pickedCoords) {
         // TODO diego fix this
 
