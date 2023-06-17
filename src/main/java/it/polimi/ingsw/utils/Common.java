@@ -10,7 +10,17 @@ import java.util.List;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
+/**
+ * A class containing all the common methods of the game.
+ */
 public class Common {
+    /**
+     * @param modelView    the current view.
+     * @param row          must be between boundaries (provided in the {@link Constants} file).
+     * @param column       must be between boundaries (provided in the {@link Constants} file).
+     * @param pickedCoords the cards picked by the player in the right order.
+     * @return true if the Item Card in the provided position can be taken by the player, false otherwise.
+     */
     public static boolean isTakeable(GameViewMsg modelView, int row, int column, List<List<Integer>> pickedCoords) {
         // TODO diego fix this
 
@@ -57,11 +67,22 @@ public class Common {
         return free && valid && adjacent;
     }
 
+    /**
+     * @param row     must be between boundaries (provided in the {@link Constants} file).
+     * @param column  must be between boundaries (provided in the {@link Constants} file).
+     * @param row2    must be between boundaries (provided in the {@link Constants} file).
+     * @param column2 must be between boundaries (provided in the {@link Constants} file).
+     * @return true if the cards at the provided positions are adjacent, false otherwise.
+     */
     public static boolean isAdjacent(int row, int column, int row2, int column2) {
         return Math.abs(row - row2) == 1 && column == column2 ||
                 row == row2 && Math.abs(column - column2) == 1;
     }
 
+    /**
+     * @param itemCard the Item Card whose resources to obtain.
+     * @return the file path to the provided Item Card graphical resource.
+     */
     public static String getTilePath(ItemCard itemCard) {
         String tilesPath = "/graphicalResources/itemTiles/";
         switch (itemCard.getType()) {
@@ -80,6 +101,14 @@ public class Common {
         return tilesPath;
     }
 
+    /**
+     * Counts and removes from the provided copy of the shelf all the adjacent Item Cards of same type,
+     * starting from the provided one.
+     *
+     * @param shelfCopy a copy of the shelf.
+     * @param hotCard   the card from where to start the procedure.
+     * @return the number of deleted Item Cards.
+     */
     public static int headLiminate(Shelf shelfCopy, ItemCard hotCard) {
         List<ItemCard> heads;
         int adjacentToHead = 0;
@@ -109,7 +138,12 @@ public class Common {
         return 0;
     }
 
-
+    /**
+     * @param shelfCopy a copy of the shelf.
+     * @param row       must be between boundaries (provided in the {@link Constants} file).
+     * @param column    must be between boundaries (provided in the {@link Constants} file).
+     * @return the list of all adjacent up/down/left/right Item Cards.
+     */
     public static List<ItemCard> getHeads(Shelf shelfCopy, int row, int column) {
         List<ItemCard> heads = new ArrayList<>();
         ItemCard currentCard = shelfCopy.getCardAt(row, column);
