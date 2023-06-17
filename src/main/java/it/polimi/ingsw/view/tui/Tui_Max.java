@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import static it.polimi.ingsw.utils.Common.isTakeable;
 import static it.polimi.ingsw.utils.Constants.*;
 
 public class Tui_Max extends ObservableImpl implements RunnableView {

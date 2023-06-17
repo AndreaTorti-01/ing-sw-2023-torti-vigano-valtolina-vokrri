@@ -119,7 +119,7 @@ public class Lobby implements Observer {
      * @param playerName the player's name to be added in the game.
      */
     public void update(String playerName) {
-        System.err.println("adding player " + playerName);
+        System.err.println("adding player: " + playerName);
         controller.addPlayer(playerName);
     }
 }

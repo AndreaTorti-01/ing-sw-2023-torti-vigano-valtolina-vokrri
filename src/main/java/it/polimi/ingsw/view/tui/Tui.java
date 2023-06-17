@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static it.polimi.ingsw.utils.Common.isTakeable;
 import static it.polimi.ingsw.utils.Constants.*;
 import static it.polimi.ingsw.view.tui.TerminalPrintables.*;
 
@@ -237,11 +238,10 @@ public class Tui extends ObservableImpl implements RunnableView {
                 orderId = scanner.nextInt();
             } while ((orderId < 1 || orderId > pickedCoords.size()));
 
-            if(!used.contains(orderId)) {
+            if (!used.contains(orderId)) {
                 used.add(orderId);
                 tmp.add(pickedCoords.get(orderId - 1));
-            }
-            else
+            } else
                 printError("You already used this number! retry");
         }
         pickedCoords = tmp;
@@ -276,6 +276,7 @@ public class Tui extends ObservableImpl implements RunnableView {
             System.out.print("\t");
         }
     }
+
     private void printGameStatus() {
         // Prints the title, boards and shelves
         clearConsole();

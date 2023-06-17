@@ -3,9 +3,11 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.utils.Constants;
 
-import java.io.*;
+import java.io.Serial;
+import java.io.Serializable;
 
-import static it.polimi.ingsw.utils.Constants.boardSize;
+import static it.polimi.ingsw.utils.Common.getLayoutFrom;
+import static it.polimi.ingsw.utils.Constants.*;
 
 /**
  * A class that represents a Board.
@@ -14,33 +16,21 @@ import static it.polimi.ingsw.utils.Constants.boardSize;
 public class Board implements Serializable {
     @Serial
     private static final long serialVersionUID = 6344140278693113L;
-    private final boolean[][] valid;
-    private final ItemCard[][] tile;
+    private final boolean[][] layout;
+    private final ItemCard[][] tiles;
 
     /**
      * Creates a new Board with a layout based on the number of players.
      *
      * @param numberOfPlayers the number of players by which the board layout is chosen.
-     * @throws FileNotFoundException if the provided number of players is not valid (provided in the {@link Constants} file)
      */
-    public Board(int numberOfPlayers) throws FileNotFoundException {
-        // deferred valid assignment because of multiple try/catches
-        boolean[][] valid1;
-        try {
-            // open the file corresponding to the chosen number of players
-            InputStream inputStream = getClass().getResourceAsStream(String.format("/board/board%d.dat", numberOfPlayers));
-            // parse the file as an object
-            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            // read the object: might fail
-            valid1 = (boolean[][]) objectInputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            valid1 = null;
-            e.printStackTrace();
-        }
-        if (valid1 == null) throw new FileNotFoundException();
-        // assign the valid matrix
-        valid = valid1;
-        tile = new ItemCard[boardSize][boardSize];
+    public Board(int numberOfPlayers) {
+        // checking the numberOfPlayers is valid and setting it in the model
+        if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
+            throw new IllegalArgumentException("provided number of players (" + numberOfPlayers + ") is out of range " + minNumberOfPlayers + "-" + maxNumberOfPlayers);
+
+        this.layout = getLayoutFrom(numberOfPlayers);
+        this.tiles = new ItemCard[boardSize][boardSize];
     }
 
     /**
@@ -48,68 +38,107 @@ public class Board implements Serializable {
      * @param column must be between boundaries (provided in the {@link Constants} file).
      * @return true if the tile at the provided position is valid, false otherwise.
      */
-    public boolean isValid(int row, int column) {
-        return valid[row][column];
+    public boolean isValid(int row, int column) throws IllegalArgumentException {
+        if (row < 0 || row > boardSize) {
+            throw new IllegalArgumentException(
+                    "Provided row (" + row + ") is out of range 0 - " + boardSize
+            );
+        }
+
+        if (column < 0 || column > boardSize) {
+            throw new IllegalArgumentException(
+                    "Provided column (" + column + ") is out of range 0 - " + boardSize
+            );
+        }
+
+        return layout[row][column];
     }
 
     /**
      * Inserts the provided ItemCard in the tile at the provided position.
      *
-     * @param tile   may be ItemCard or null.
-     * @param row    must be between boundaries (provided in the {@link Constants} file).
-     * @param column must be between boundaries (provided in the {@link Constants} file).
-     * @throws ArrayIndexOutOfBoundsException if the provided position is not valid.
+     * @param itemCard the Item Card to be inserted or null.
+     * @param row      must be between boundaries (provided in the {@link Constants} file).
+     * @param column   must be between boundaries (provided in the {@link Constants} file).
      */
-    public void setTile(ItemCard tile, int row, int column) throws ArrayIndexOutOfBoundsException {
+    public void setTile(ItemCard itemCard, int row, int column) throws IllegalArgumentException, IndexOutOfBoundsException {
+        if (row < 0 || row > boardSize) {
+            throw new IllegalArgumentException(
+                    "Provided row (" + row + ") is out of range 0 - " + boardSize
+            );
+        }
+
+        if (column < 0 || column > boardSize) {
+            throw new IllegalArgumentException(
+                    "Provided column (" + column + ") is out of range 0 - " + boardSize
+            );
+        }
+
         if (isValid(row, column)) {
-            this.tile[row][column] = tile;
-        } else throw new ArrayIndexOutOfBoundsException();
+            this.tiles[row][column] = itemCard;
+        } else throw new IndexOutOfBoundsException();
     }
 
     /**
      * @param row    must be between boundaries (provided in the {@link Constants} file).
      * @param column must be between boundaries (provided in the {@link Constants} file).
      * @return the card on the selected tile, without removing it, or null if the tile is empty.
-     * @throws ArrayIndexOutOfBoundsException if the provided position is not valid.
      */
-    public ItemCard peekCard(int row, int column) throws ArrayIndexOutOfBoundsException {
-        // go out of bounds even if the tile is not valid
+    public ItemCard peekCard(int row, int column) throws IllegalArgumentException, IndexOutOfBoundsException {
+        if (row < 0 || row > boardSize) {
+            throw new IllegalArgumentException(
+                    "Provided row (" + row + ") is out of range 0 - " + boardSize
+            );
+        }
+
+        if (column < 0 || column > boardSize) {
+            throw new IllegalArgumentException(
+                    "Provided column (" + column + ") is out of range 0 - " + boardSize
+            );
+        }
+
         if (isValid(row, column)) {
-            return tile[row][column];
-        } else throw new ArrayIndexOutOfBoundsException();
+            return tiles[row][column];
+        } else throw new IndexOutOfBoundsException();
     }
 
     /**
      * @param row    must be between boundaries (provided in the {@link Constants} file).
      * @param column must be between boundaries (provided in the {@link Constants} file).
      * @return the card on the selected tile, removing it, or null if the tile is empty.
-     * @throws NullPointerException           if the tile is already empty.
-     * @throws ArrayIndexOutOfBoundsException if the provided position is not valid.
      */
-    public ItemCard popCard(int row, int column) throws NullPointerException, ArrayIndexOutOfBoundsException {
-        ItemCard card;
-        try {
-            // try to get the card and set it to null
-            card = peekCard(row, column);
-            if (card != null) {
-                setTile(null, row, column);
-                return card;
-            } else throw new NullPointerException();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-            return null;
+    public ItemCard popCard(int row, int column) throws IllegalArgumentException, IndexOutOfBoundsException {
+        if (row < 0 || row > boardSize) {
+            throw new IllegalArgumentException(
+                    "Provided row (" + row + ") is out of range 0 - " + boardSize
+            );
         }
+
+        if (column < 0 || column > boardSize) {
+            throw new IllegalArgumentException(
+                    "Provided column (" + column + ") is out of range 0 - " + boardSize
+            );
+        }
+
+        ItemCard card = peekCard(row, column);
+        if (card != null) {
+            setTile(null, row, column);
+            return card;
+        } else throw new IndexOutOfBoundsException();
     }
 
     /**
      * @return the matrix that represents the valid tiles.
      */
-    public boolean[][] getValidMatrix() {
-        return valid;
+    public boolean[][] getLayout() {
+        return layout;
     }
 
-    public ItemCard[][] getTileMatrix() {
-        return tile;
+    /**
+     * @return the Item Cards on the board.
+     */
+    public ItemCard[][] getTiles() {
+        return tiles;
     }
 
     /**

@@ -10,8 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PlayerTest {
     @Test
     void testPlayer() {
-        String randomName = this.generateRandomString();
-        assertDoesNotThrow(() -> new Player(randomName));
+        assertDoesNotThrow(() -> new Player(this.generateRandomString()));
     }
 
     @Test
@@ -21,6 +20,7 @@ public class PlayerTest {
 
         assertEquals(player.getName(), randomName);
     }
+
 
     private String generateRandomString() {
         Random random = new Random();

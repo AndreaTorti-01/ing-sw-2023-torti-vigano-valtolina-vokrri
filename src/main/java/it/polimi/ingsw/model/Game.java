@@ -7,12 +7,13 @@ import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.utils.ObservableImpl;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
+import static it.polimi.ingsw.utils.Common.headLiminate;
+import static it.polimi.ingsw.utils.Common.isTakeable;
 import static it.polimi.ingsw.utils.Constants.*;
 
 /**
@@ -28,7 +29,7 @@ public class Game extends ObservableImpl {
     private Board board;
     private Game.Status gameStatus = Game.Status.WAITING;
     private Player winner;
-    private int numberOfPlayers;
+    private int numberOfPlayers = -1;
 
     /**
      * Creates a new Game, initializing all the game items.
@@ -50,11 +51,7 @@ public class Game extends ObservableImpl {
         this.numberOfPlayers = numberOfPlayers;
 
         // initialization of a new Board
-        try {
-            board = new Board(numberOfPlayers);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        board = new Board(numberOfPlayers);
 
         // refills the board
         this.refillBoard();
@@ -72,9 +69,6 @@ public class Game extends ObservableImpl {
      * @param playerName the name of the player to be inserted.
      */
     public void addPlayer(String playerName) {
-        if (players.size() == numberOfPlayers || this.gameStatus == Game.Status.STARTED)
-            throw new IllegalAccessError("Maximum number of players reached for this game!");
-
         // init player
         Player newPlayer = new Player(playerName);
 

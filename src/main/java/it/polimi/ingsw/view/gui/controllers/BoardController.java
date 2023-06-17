@@ -18,15 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static it.polimi.ingsw.utils.Common.isTakeable;
 import static it.polimi.ingsw.utils.Constants.*;
-import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class BoardController implements Initializable {
+    private static Gui gui;
     @FXML
     public GridPane gridBoard;
     public int clickedRow = -1;
     public int clickedColumn = -1;
-    private static Gui gui;
     private List<List<Integer>> pickedCoords = new ArrayList<>();
     private int pickedNum = 0;
 
@@ -90,7 +90,6 @@ public class BoardController implements Initializable {
         //stores row and column of the clicked image
 
 
-
         if (gui.getState().equals(State.PLAY) && pickedCoords.size() < 3 && !sentPicked) {
 
             ImageView clickedImageView = (ImageView) mouseEvent.getSource();
@@ -121,9 +120,9 @@ public class BoardController implements Initializable {
             }
             if (maxCards > 3) maxCards = 3;
 
-            if(pickedNum < maxCards) {
+            if (pickedNum < maxCards) {
                 //checking coordinate validity
-                if(!isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
+                if (!isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
                     System.out.println("non takable");
                 }
                 if (clickedRow >= 0 && clickedRow < numberOfBoardRows && clickedColumn >= 0 && clickedColumn < numberOfBoardColumns & isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
@@ -138,7 +137,7 @@ public class BoardController implements Initializable {
                 } else System.out.println("Invalid coordinates!, retry");
             }
             gui.setPicked(pickedCoords);
-            if(pickedCoords.size() == maxCards) {
+            if (pickedCoords.size() == maxCards) {
                 sentPicked = true;
             }
         }
@@ -155,7 +154,7 @@ public class BoardController implements Initializable {
             //prints the board for debugging
             for (int i = 0; i < numberOfBoardRows; i++) {
                 for (int j = 0; j < numberOfBoardColumns; j++)
-                    if(tileMatrix[i][j] == null)
+                    if (tileMatrix[i][j] == null)
                         System.out.print("x");
                     else
                         switch (tileMatrix[i][j].getType()) {
@@ -195,7 +194,7 @@ public class BoardController implements Initializable {
                     if (tileMatrix[i][j] != null) {
                         Image newImage = new Image(getTilePath(tileMatrix[i][j]));
                         imageView.setImage(newImage);
-                    }else{
+                    } else {
                         Image newImage = new Image("/graphicalResources/itemTiles/Empty.png");
                         imageView.setImage(newImage);
                     }

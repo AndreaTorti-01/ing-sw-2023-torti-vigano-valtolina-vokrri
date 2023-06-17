@@ -10,9 +10,9 @@ class ItemCardTest {
     @Test
     void testItemCard() {
         for (ItemType type : ItemType.values()) {
-            ItemCard currentItemCard = new ItemCard(type, 2);
+            ItemCard currentItemCard = new ItemCard(type, 0);
             assertEquals(currentItemCard.getType(), type);
-            assertEquals(currentItemCard.getSprite(), 2);
+            assertEquals(currentItemCard.getSprite(), 0);
         }
     }
 }

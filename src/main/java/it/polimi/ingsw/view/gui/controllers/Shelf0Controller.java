@@ -14,15 +14,17 @@ import javafx.scene.layout.GridPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static it.polimi.ingsw.utils.Constants.*;
+import static it.polimi.ingsw.utils.Common.getTilePath;
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 public class Shelf0Controller implements Initializable {
+    private static Gui gui;
+    private final boolean[] availableCols = new boolean[numberOfColumns];
     @FXML
     public GridPane shelf0;
     public int selectedColumn = -1;
-    private static Gui gui;
     private Player myID;
-    private final boolean[] availableCols = new boolean[numberOfColumns];
     private boolean sent = false;
 
     public int getSelectedColumn() {
@@ -35,12 +37,12 @@ public class Shelf0Controller implements Initializable {
         gui = (Gui) it.polimi.ingsw.network.client.ClientImpl.getView();
     }
 
-    public void setReady(int pickedSize){
+    public void setReady(int pickedSize) {
         selectedColumn = -1;
         int maxCards = 0;
         sent = false;
 
-        if(myID == null) //removable? updategraphics is always called before setready
+        if (myID == null) //removable? updategraphics is always called before setready
             for (Player p : gui.getModelView().getPlayers())
                 if (p.getName().equals(gui.getPlayerName())) {
                     myID = p;
@@ -55,13 +57,13 @@ public class Shelf0Controller implements Initializable {
             }
             if (freeSlots >= pickedSize) {
                 availableCols[j] = true;
-            }else availableCols[j] = false;
+            } else availableCols[j] = false;
         }
     }
 
     public void updateGraphics() {
 
-        if(myID == null)
+        if (myID == null)
             for (Player p : gui.getModelView().getPlayers())
                 if (p.getName().equals(gui.getPlayerName())) {
                     myID = p;
@@ -69,14 +71,14 @@ public class Shelf0Controller implements Initializable {
                 }
 
         Platform.runLater(() -> {
-            for(int i = 0; i < numberOfRows; i++) {
-                for(int j = 0; j < numberOfColumns; j++) {
-                    if(gui.getModelView().getShelfOf(myID)[i][j] != null) {
+            for (int i = 0; i < numberOfRows; i++) {
+                for (int j = 0; j < numberOfColumns; j++) {
+                    if (gui.getModelView().getShelfOf(myID)[i][j] != null) {
                         ItemCard itemCard = gui.getModelView().getShelfOf(myID)[i][j];
                         ImageView imageView = (ImageView) shelf0.getChildren().get(j * numberOfRows + i);
                         Image newImage = new Image(getTilePath(itemCard));
                         imageView.setImage(newImage);
-                    }else {
+                    } else {
                         ImageView imageView = (ImageView) shelf0.getChildren().get(j * numberOfRows + i);
                         imageView.setImage(new Image("graphicalResources/itemTiles/Empty.png"));
                     }
@@ -98,7 +100,7 @@ public class Shelf0Controller implements Initializable {
                 System.out.println("Available column");
                 gui.setMove(selectedColumn);
                 sent = true;
-            }else System.out.println("Not available column");
+            } else System.out.println("Not available column");
         }
     }
 }

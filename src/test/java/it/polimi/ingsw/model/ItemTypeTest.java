@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ItemTypeTest {
     @Test
-    void testGetItemTypeFromAbbreviationMethod() {
+    void testGetItemTypeFromAbbreviation() {
         for (ItemType type : ItemType.values()) {
             char abbreviation = type.toString().charAt(0);
             assertEquals(ItemType.getItemTypeFromAbbreviation(abbreviation), type);
@@ -20,7 +20,7 @@ public class ItemTypeTest {
     }
 
     @Test
-    void testGetRandomTypeMethod() {
+    void testGetRandomType() {
         ArrayList<ItemType> itemTypeValues = new ArrayList<>(Arrays.asList(ItemType.values()));
         assertTrue(itemTypeValues.contains(ItemType.getRandomItemType()));
     }

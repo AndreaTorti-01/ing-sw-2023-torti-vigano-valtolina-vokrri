@@ -21,16 +21,16 @@ sarà il vincitore. Ci sono 4 modi per guadagnare punti:
 FLUSSO DI GIOCO:
 
 - Il gioco è diviso in turni, svolti in senso orario a partire dal primo giocatore.
-Durante il vostro turno, dovete prendere 1, 2 o 3 tessere Oggetto dalla plancia
+Durante il vostro turno, dovete prendere una, due o tre tessere Oggetto dalla plancia
 Soggiorno, seguendo queste regole:
 Le tessere che prendete devono essere adiacenti l’una all’altra e formare
 una linea retta.
 Tutte le tessere che prendete devono avere almeno un lato libero (non toccare
 direttamente altre tessere) all’inizio del vostro turno (non potete, cioè, prendere
 una tessera che diventa libera dopo la vostra prima scelta).
-Dopodiché dovete mettere tutte le tessere che avete scelto in 1 colonna della
+Dopodiché dovete mettere tutte le tessere che avete scelto in una colonna della
 vostra Libreria. Potete decidere l’ordine, ma non potete mettere le tessere
-in più di 1 colonna nello stesso turno.
+in più di una colonna nello stesso turno.
 Nota: non potete prendere le tessere se non avete abbastanza spazi disponibili nella vostra Libreria.
 
 - Ripristino del soggiorno: Dovete ripristinare il Soggiorno quando, alla fine del vostro turno, le tessere sulla
@@ -51,14 +51,14 @@ di essere più veloci dei vostri avversari!
 
 FINE DELLA PARTITA:
 
-Il primo giocatore che riempie tutti gli spazi della propria Libreria da inzio alla fase finale della partita.
+Il primo giocatore che riempie tutti gli spazi della propria Libreria da inizio alla fase finale della partita.
 Il gioco continua fino alla fine del turno dell'ultimo giocatore. Si accede così al conteggio finale.
 Ogni giocatore guadagnerà:
-1/2/3/4/9/12 punti rispettivamenteper 1/2/3/4/5/6 tessere posizionate nella posizione indicata nella PersonalGoalCard.
+1/2/3/4/9/12 punti rispettivamente per 1/2/3/4/5/6 tessere posizionate nella posizione indicata nella PersonalGoalCard.
 2/3/5/8 punti rispettivamente per gruppi di 3/4/5/6+ tessere adiacenti dello stesso tipo nella sua libreria.
 1 punto addizionale al primo giocatore che riempe completamente la propria libreria.
 Questi punti andranno a sommarsi a quelli ottenuti durante il gioco al raggiungimento degli obiettivi comuni.
-Il giocatore che ha totalizzato più punti vince la partia. In caso di parità, vince il giocatore più in fondo
+Il giocatore che ha totalizzato più punti vince la partita. In caso di parità, vince il giocatore più in fondo
 nell`ordine di gioco.
 
 SPIEGAZIONE COMMON GOAL CARD:
@@ -66,15 +66,15 @@ SPIEGAZIONE COMMON GOAL CARD:
 --> DIAGONAL_FIVE: cinque tessere dello stesso tipo che formano una diagonale.
 --> EIGHT_EQUAL: otto tessere dello stesso tipo.
 --> EQUAL_CORNERS: tessere dello stesso tipo ai quattro angoli della libreria.
---> FOUR_LINE_MAX_THREE_TYPES: quattro righe formate ciascuno da 5 tessere di uno, due o tre tipi differenti.
---> FOUR_QUARTETS: quattro gruppi separati formati  da quattro tessere adiacenti dello stesso tipo. Le tessere
+--> FOUR_LINE_MAX_THREE_TYPES: quattro righe formate ciascuno da cinque tessere di uno, due o tre tipi differenti.
+--> FOUR_QUARTETS: quattro gruppi separati formati da quattro tessere adiacenti dello stesso tipo. Le tessere
 di un gruppo possono essere diverse da quelle di un altro gruppo.
 --> SIX_PAIRS: sei gruppi separati formati ciascuno da due tessere adiacenti dello stesso tipo. Le tessere
 di un gruppo possono essere diverse da quelle di un altro gruppo.
 --> STAIR: cinque colonne di altezza crescente o decrescente, le tessere possono essere di qualsiasi tipo.
---> THREE_COLUMNS_MAX_THREE_TYPES: tre colonne formate ciascuna da 6 tessere di uno, due o tre tipi differenti.
---> TWO_RAINBOW_COLUMNS: due colonne formate ciascuna da 6 tipi diversi di tessere.
---> TWO_RAINBOW_LINES: due righe formate ciascuna da 5 tipi diversi di tessere.
+--> THREE_COLUMNS_MAX_THREE_TYPES: tre colonne formate ciascuna da sei tessere di uno, due o tre tipi differenti.
+--> TWO_RAINBOW_COLUMNS: due colonne formate ciascuna da sei tipi diversi di tessere.
+--> TWO_RAINBOW_LINES: due righe formate ciascuna da cinque tipi diversi di tessere.
 --> TWO_SQUARES: due gruppi separati di quattro tessere dello stesso tipo che formano una 2x2. Le tessere
 dei due gruppi devono essere dello stesso tipo.
 

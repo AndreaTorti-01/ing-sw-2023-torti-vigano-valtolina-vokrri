@@ -36,8 +36,8 @@ public class GameViewMsg implements Serializable {
         if (model == null) throw new IllegalArgumentException();
 
         if (model.getBoard() != null) {
-            this.board = model.getBoard().getTileMatrix();
-            this.boardValid = model.getBoard().getValidMatrix();
+            this.board = model.getBoard().getTiles();
+            this.boardValid = model.getBoard().getLayout();
         } else {
             board = null;
             boardValid = null;
