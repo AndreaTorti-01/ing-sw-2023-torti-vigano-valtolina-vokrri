@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils;
 
 /**
- * A class containing all the constant values of the game
+ * A class containing all the constant values of the game.
  */
 public class Constants {
     public static final int numberOfColumns = 5;
