@@ -74,7 +74,11 @@ public class ClientSkeleton implements Client, Runnable {
                 Object message = ois.readObject();
                 this.clientHandler.receiveMessage(message);
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                try {
+                    ois.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
     }

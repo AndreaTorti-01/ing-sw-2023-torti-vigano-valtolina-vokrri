@@ -27,6 +27,8 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     private String playerName = "";
     private GameViewMsg modelView;
     private State state = State.ASK_NAME;
+    private volatile boolean running;
+
 
     public TuiRaw(ClientImpl client) {
         this.addObserver(client);
@@ -85,6 +87,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
 
         // create a thread passing the function that will handle the input
+        running = true;
         Thread inputHandler = new Thread(this::acceptInput);
         inputHandler.start();
 
@@ -98,12 +101,15 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
             }
         }
 
-        // kill the thread
-        inputHandler.interrupt(); // TODO investigate
-
-        // wait for input to close the game
+        // wait for the input handler to terminate and close the game
         System.out.println("Press enter to close the game");
-        scanner.nextLine();
+        running = false;
+        try {
+            inputHandler.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.exit(0);
     }
 
     /**
@@ -139,9 +145,11 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     private void acceptInput() {
-        while (true) {
+        while (running) {
             // scan for command
             String line = scanLine();
+            // check if running
+            if (!running) break;
             // check if it's a command
             if (line.charAt(0) == '/') {
                 String command = line.split(" ")[0];
@@ -191,7 +199,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
                     case "/cheat" -> {
                         if (modelView.getCurrentPlayer().getName().equals(playerName)) {
                             notifyObservers(new CheatMsg(playerName));
-                        }
+                        } else System.out.println("You can't cheat if it's not your turn!");
                     }
 
                     case "/help" -> {
@@ -419,8 +427,8 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     private void printEndScreen(String winnerName) {
-        System.out.println("The winner is " + winnerName + "!");
         printScores();
+        System.out.println("The winner is " + winnerName + "!");
     }
 
     /**
@@ -525,7 +533,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         String ret;
         do {
             ret = scanner.nextLine();
-        } while (ret.equals(""));
+        } while (ret.equals("") && running);
         return ret;
     }
 
