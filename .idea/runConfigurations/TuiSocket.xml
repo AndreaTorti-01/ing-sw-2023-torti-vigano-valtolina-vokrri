@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ClientAppSocketTui" type="Application" factoryName="Application" singleton="false">
+  <configuration default="false" name="TuiSocket" type="Application" factoryName="Application" singleton="false">
     <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.ClientApp" />
     <module name="softeng-gc33" />
     <option name="PROGRAM_PARAMETERS" value="-cli -s" />

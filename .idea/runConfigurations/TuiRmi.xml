@@ -1,7 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ServerApp" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.ServerApp" />
+  <configuration default="false" name="TuiRmi" type="Application" factoryName="Application" singleton="false">
+    <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.ClientApp" />
     <module name="softeng-gc33" />
+    <option name="PROGRAM_PARAMETERS" value="-cli" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="it.polimi.ingsw.*" />
