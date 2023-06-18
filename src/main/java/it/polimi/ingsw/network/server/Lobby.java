@@ -103,7 +103,7 @@ public class Lobby implements Observer {
 
     /**
      * Sends the provided message to the controller,
-     * which is responsible for making the current player win by filling its board.
+     * which is responsible for making the current player fill its board.
      *
      * @param cheatMsg the message to be sent.
      */

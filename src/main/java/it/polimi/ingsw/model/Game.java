@@ -7,6 +7,7 @@ import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.utils.ObservableImpl;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,10 +21,12 @@ import static it.polimi.ingsw.utils.Constants.*;
  * A class that represents the Game.
  * This class contains the status of a game, with all the information about it.
  */
-public class Game extends ObservableImpl {
-    private final Bag bag;
-    private final Stack<ChatMsg> messages;
-    private final List<Player> players;
+public class Game extends ObservableImpl implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5751410109027050560L;
+    private Bag bag;
+    private Stack<ChatMsg> messages;
+    private List<Player> players;
     private List<CommonGoalCard> commonGoalCards;
     private Player currentPlayer;
     private Board board;
@@ -38,6 +41,74 @@ public class Game extends ObservableImpl {
         this.bag = new Bag();
         this.players = new ArrayList<>();
         this.messages = new Stack<>();
+    }
+
+    private void loadGame(String fileName) {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+            Game game = (Game) ois.readObject();
+            ois.close();
+
+            this.bag = game.bag;
+            this.messages = game.messages;
+            this.players = game.players;
+            this.commonGoalCards = game.commonGoalCards;
+            this.currentPlayer = game.currentPlayer;
+            this.board = game.board;
+            this.gameStatus = game.gameStatus;
+            this.winner = game.winner;
+            this.numberOfPlayers = game.numberOfPlayers;
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * save the current game state (model) to a file
+     */
+    public void saveGame() {
+
+        // if there is no saves directory, create it
+        File savesDir = new File("saves");
+        if (!savesDir.exists()) {
+            if (savesDir.mkdir()) {
+                System.out.println("saves directory created");
+            } else {
+                throw new RuntimeException("saves directory creation failed");
+            }
+        }
+
+        // create file name using player names .sav
+        StringBuilder fileName = new StringBuilder();
+        for (Player player : players) {
+            fileName.append(player.getName());
+        }
+        fileName.append(".sav");
+
+        // open file, write game state (model) and close it
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("saves/" + fileName.toString()));
+            oos.writeObject(this);
+            oos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteSave() {
+        StringBuilder fileName = new StringBuilder();
+        for (Player player : players) {
+            fileName.append(player.getName());
+        }
+        fileName.append(".sav");
+
+        File file = new File("saves/" + fileName.toString());
+        if (file.delete()) {
+            System.out.println("save deleted");
+        } else {
+            throw new RuntimeException("save deletion failed");
+        }
     }
 
     /**
@@ -82,13 +153,49 @@ public class Game extends ObservableImpl {
         // if it's the first added player, it's the current one.
         if (players.size() == 1) this.currentPlayer = newPlayer;
 
-        // check if the player cap is reached and eventually start the game!
+        // check if the player cap is reached
         if (numberOfPlayers != 0 && numberOfPlayers == players.size()) {
+
+            // create all player names permutations possible
+            List<String> playerNames = new ArrayList<>();
+            for (Player player : players) {
+                playerNames.add(player.getName());
+            }
+            List<String> playerNamesPermutations = generatePermutations(playerNames);
+
+            // check if a file with said name exists
+            for (String playerNamesPermutation : playerNamesPermutations) {
+                File file = new File("saves/" + playerNamesPermutation + ".sav");
+                if (file.exists()) {
+                    loadGame("saves/" + playerNamesPermutation + ".sav");
+                    this.notifyObservers(new GameViewMsg(this));
+                    return;
+                }
+            }
+
+            // if no file exists, start the current game
             this.gameStatus = Game.Status.STARTED;
         }
 
         // notify lobby
         this.notifyObservers(new GameViewMsg(this));
+    }
+
+    List<String> generatePermutations(List<String> strings) {
+        List<String> permutations = new ArrayList<>();
+        if (strings.size() == 1) {
+            permutations.add(strings.get(0));
+            return permutations;
+        }
+        for (String string : strings) {
+            List<String> subList = new ArrayList<>(strings);
+            subList.remove(string);
+            List<String> subPermutations = generatePermutations(subList);
+            for (String subPermutation : subPermutations) {
+                permutations.add(string + subPermutation);
+            }
+        }
+        return permutations;
     }
 
     /**
@@ -212,6 +319,7 @@ public class Game extends ObservableImpl {
         this.gameStatus = Game.Status.ENDED;
         addFinalPoints();
         calculateWinner();
+        this.deleteSave();
         notifyObservers(new GameViewMsg(this));
     }
 
@@ -333,6 +441,8 @@ public class Game extends ObservableImpl {
         // 3  4  5  6+  grandezza cluster
         // 2  3  5  8   punteggio
 
+        this.saveGame();
+
         notifyObservers(new GameViewMsg(this));
     }
 
@@ -367,6 +477,7 @@ public class Game extends ObservableImpl {
      */
     public void addChatMessage(ChatMsg chatMsg) {
         this.messages.push(chatMsg);
+        this.saveGame();
         notifyObservers(new GameViewMsg(this));
     }
 

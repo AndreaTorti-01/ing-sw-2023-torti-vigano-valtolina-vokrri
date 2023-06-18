@@ -81,7 +81,11 @@ public class RemoteStub implements Server, ClientHandler, Runnable {
                 GameViewMsg message = (GameViewMsg) ois.readObject();
                 this.client.receiveMessage(message);
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                try {
+                    ois.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
     }
