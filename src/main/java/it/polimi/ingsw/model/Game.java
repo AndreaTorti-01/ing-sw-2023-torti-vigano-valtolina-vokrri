@@ -181,7 +181,7 @@ public class Game extends ObservableImpl implements Serializable {
         this.notifyObservers(new GameViewMsg(this));
     }
 
-    List<String> generatePermutations(List<String> strings) {
+    private List<String> generatePermutations(List<String> strings) {
         List<String> permutations = new ArrayList<>();
         if (strings.size() == 1) {
             permutations.add(strings.get(0));
