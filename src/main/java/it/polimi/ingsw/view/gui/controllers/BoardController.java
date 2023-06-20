@@ -88,57 +88,75 @@ public class BoardController implements Initializable {
 
     public void handleImageViewClick(MouseEvent mouseEvent) {
         //stores row and column of the clicked image
+        boolean deselection = false;
 
 
-        if (gui.getState().equals(State.PLAY) && pickedCoords.size() < 3 && !sentPicked) {
+
+        if (gui.getState().equals(State.PLAY)) {
 
             ImageView clickedImageView = (ImageView) mouseEvent.getSource();
             int clickedIndex = gridBoard.getChildren().indexOf(clickedImageView);
             clickedColumn = clickedIndex / numberOfBoardColumns;
             clickedRow = clickedIndex % numberOfBoardColumns;
 
-            System.out.println("Clicked on row: " + clickedRow + " column: " + clickedColumn);
-
-            //starts picking the cards (specular to pickcards)
-            Player me = null;
-            int maxCards = 0;
-
-            for (Player p : gui.getModelView().getPlayers())
-                if (p.getName().equals(gui.getPlayerName())) {
-                    me = p;
-                    break;
+            for (List<Integer> coords : pickedCoords) {
+                if (coords.get(0) == clickedRow && coords.get(1) == clickedColumn) {
+                    deselection = true;
+                    pickedCoords.remove(coords);
+                    pickedNum--;
+                    clickedImageView.setEffect(null);
+                    gui.setPicked(pickedCoords);
                 }
-            if (me == null) throw new NullPointerException();
-
-
-            for (int j = 0; j < numberOfColumns; j++) {
-                int freeSlots = 0;
-                for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
-                    if (gui.getModelView().getShelfOf(me)[i][j] == null) freeSlots++;
-                    if (freeSlots > maxCards) maxCards = freeSlots;
-                }
+                //TODO: remove the possibility of 3
             }
-            if (maxCards > 3) maxCards = 3;
 
-            if (pickedNum < maxCards) {
-                //checking coordinate validity
-                if (!isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
-                    System.out.println("non takable");
+
+            if (!deselection && pickedCoords.size() < 3 && !sentPicked) {
+
+
+                System.out.println("Clicked on row: " + clickedRow + " column: " + clickedColumn);
+
+                //starts picking the cards (specular to pickcards)
+                Player me = null;
+                int maxCards = 0;
+
+                for (Player p : gui.getModelView().getPlayers())
+                    if (p.getName().equals(gui.getPlayerName())) {
+                        me = p;
+                        break;
+                    }
+                if (me == null) throw new NullPointerException();
+
+
+                for (int j = 0; j < numberOfColumns; j++) {
+                    int freeSlots = 0;
+                    for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
+                        if (gui.getModelView().getShelfOf(me)[i][j] == null) freeSlots++;
+                        if (freeSlots > maxCards) maxCards = freeSlots;
+                    }
                 }
-                if (clickedRow >= 0 && clickedRow < numberOfBoardRows && clickedColumn >= 0 && clickedColumn < numberOfBoardColumns & isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
-                    List<Integer> coords = new ArrayList<>();
-                    coords.add(clickedRow);
-                    coords.add(clickedColumn);
-                    pickedCoords.add(coords);
-                    pickedNum++;
-                    //sets bloom effect
-                    //no need of runLater because it is called by the gui thread
-                    clickedImageView.setEffect(new Bloom());
-                } else System.out.println("Invalid coordinates!, retry");
-            }
-            gui.setPicked(pickedCoords);
-            if (pickedCoords.size() == maxCards) {
-                sentPicked = true;
+                if (maxCards > 3) maxCards = 3;
+
+                if (pickedNum < maxCards) {
+                    //checking coordinate validity
+                    if (!isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
+                        System.out.println("non takable");
+                    }
+                    if (clickedRow >= 0 && clickedRow < numberOfBoardRows && clickedColumn >= 0 && clickedColumn < numberOfBoardColumns & isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
+                        List<Integer> coords = new ArrayList<>();
+                        coords.add(clickedRow);
+                        coords.add(clickedColumn);
+                        pickedCoords.add(coords);
+                        pickedNum++;
+                        //sets bloom effect
+                        //no need of runLater because it is called by the gui thread
+                        clickedImageView.setEffect(new Bloom());
+                    } else System.out.println("Invalid coordinates!, retry");
+                }
+                gui.setPicked(pickedCoords);
+                if (pickedCoords.size() == maxCards) {
+                    sentPicked = true;
+                }
             }
         }
     }
