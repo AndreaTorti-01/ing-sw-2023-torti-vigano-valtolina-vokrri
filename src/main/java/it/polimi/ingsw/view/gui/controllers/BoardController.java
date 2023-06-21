@@ -29,25 +29,8 @@ public class BoardController implements Initializable {
     public int clickedColumn = -1;
     private List<List<Integer>> pickedCoords = new ArrayList<>();
     private int pickedNum = 0;
-
     private boolean sentPicked = false;
-
-
-    private void updateBoardGraphics(ItemCard[][] tileMatrix) {
-        resetSelection();
-
-        for (int i = 0; i < numberOfBoardRows; i++) {
-            for (int j = 0; j < numberOfBoardColumns; j++) {
-                if (tileMatrix[i][j] != null) {
-                    ItemCard itemCard = tileMatrix[i][j];
-
-                    ImageView imageView = (ImageView) gridBoard.getChildren().get(i * numberOfBoardColumns + j);
-                    Image newImage = new Image(getTilePath(itemCard));
-                    imageView.setImage(newImage);
-                }
-            }
-        }
-    }
+    private final Object comoputeLock = new Object();
 
     private String getTilePath(ItemCard itemCard) {
         String tilesPath = "/graphicalResources/itemTiles/";
@@ -68,7 +51,6 @@ public class BoardController implements Initializable {
     }
 
     public void resetSelection() {
-        sentPicked = true;
         this.clickedRow = -1;
         this.clickedColumn = -1;
         Platform.runLater(() -> {
@@ -87,75 +69,95 @@ public class BoardController implements Initializable {
     }
 
     public void handleImageViewClick(MouseEvent mouseEvent) {
-        //stores row and column of the clicked image
-        boolean deselection = false;
+
+        synchronized (comoputeLock) {
+
+            //stores row and column of the clicked image
+            boolean deselection = false;
 
 
+            if (gui.getState().equals(State.PLAY)) {
 
-        if (gui.getState().equals(State.PLAY)) {
+                ImageView clickedImageView = (ImageView) mouseEvent.getSource();
+                int clickedIndex = gridBoard.getChildren().indexOf(clickedImageView);
+                clickedColumn = clickedIndex / numberOfBoardColumns;
+                clickedRow = clickedIndex % numberOfBoardColumns;
 
-            ImageView clickedImageView = (ImageView) mouseEvent.getSource();
-            int clickedIndex = gridBoard.getChildren().indexOf(clickedImageView);
-            clickedColumn = clickedIndex / numberOfBoardColumns;
-            clickedRow = clickedIndex % numberOfBoardColumns;
+                for (List<Integer> coords : pickedCoords) {
+                    if (coords.get(0) == clickedRow && coords.get(1) == clickedColumn) {
+                        deselection = true;
+                    }
+                }
 
-            for (List<Integer> coords : pickedCoords) {
-                if (coords.get(0) == clickedRow && coords.get(1) == clickedColumn) {
-                    deselection = true;
-                    pickedCoords.remove(coords);
-                    pickedNum--;
-                    clickedImageView.setEffect(null);
+                if (deselection) {
+                    //finding the fixed coordinate, to check if the clicked tile is the center one
+                    //can't be possible to deselect the center tile
+                    //can't only chech the second element of the list because it is possible to re-order the tiles
+                    boolean fixedRow = false;
+                    boolean removable = true;
+                    if (pickedCoords.size() == 3) {
+                        if (pickedCoords.get(0).get(0).equals(pickedCoords.get(1).get(0)) && pickedCoords.get(1).get(0).equals(pickedCoords.get(2).get(0)))
+                            fixedRow = true;
+                        //already false in case of non-fixed row
+                        if (((fixedRow && (pickedCoords.get(0).get(1) > clickedColumn || pickedCoords.get(1).get(1) > clickedColumn || pickedCoords.get(2).get(1) > clickedColumn) && (pickedCoords.get(0).get(1) < clickedColumn || pickedCoords.get(1).get(1) < clickedColumn || pickedCoords.get(2).get(1) < clickedColumn)) ||
+                                (!fixedRow && (pickedCoords.get(0).get(0) > clickedRow || pickedCoords.get(1).get(0) > clickedRow || pickedCoords.get(2).get(0) > clickedRow) && (pickedCoords.get(0).get(0) < clickedRow || pickedCoords.get(1).get(0) < clickedRow || pickedCoords.get(2).get(0) < clickedRow))))
+                            removable = false;
+                    }
+                    if(removable) {
+                        for (List<Integer> coords : pickedCoords) {
+                            if (coords.get(0) == clickedRow && coords.get(1) == clickedColumn) {
+                                pickedCoords.remove(coords);
+                                pickedNum--;
+                                System.out.println("size of list is" + pickedCoords.size());
+                                clickedImageView.setEffect(null);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!deselection && pickedCoords.size() < 3) {
+
+
+                    System.out.println("Clicked on row: " + clickedRow + " column: " + clickedColumn);
+
+                    //starts picking the cards (specular to pickcards)
+                    Player me = null;
+                    int maxCards = 0;
+
+                    for (Player p : gui.getModelView().getPlayers())
+                        if (p.getName().equals(gui.getPlayerName())) {
+                            me = p;
+                            break;
+                        }
+                    if (me == null) throw new NullPointerException();
+
+
+                    for (int j = 0; j < numberOfColumns; j++) {
+                        int freeSlots = 0;
+                        for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
+                            if (gui.getModelView().getShelfOf(me)[i][j] == null) freeSlots++;
+                            if (freeSlots > maxCards) maxCards = freeSlots;
+                        }
+                    }
+                    if (maxCards > 3) maxCards = 3;
+
+                    if (pickedNum < maxCards) {
+                        //checking coordinate validity
+                        if (!isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
+                            System.out.println("non takable");
+                        }
+                        if (clickedRow >= 0 && clickedRow < numberOfBoardRows && clickedColumn >= 0 && clickedColumn < numberOfBoardColumns & isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
+                            List<Integer> coords = new ArrayList<>();
+                            coords.add(clickedRow);
+                            coords.add(clickedColumn);
+                            pickedCoords.add(coords);
+                            pickedNum++;
+                            //sets bloom effect
+                            //no need of runLater because it is called by the gui thread
+                            clickedImageView.setEffect(new Bloom());
+                        } else System.out.println("Invalid coordinates!, retry");
+                    }
                     gui.setPicked(pickedCoords);
-                }
-                //TODO: remove the possibility of 3
-            }
-
-
-            if (!deselection && pickedCoords.size() < 3 && !sentPicked) {
-
-
-                System.out.println("Clicked on row: " + clickedRow + " column: " + clickedColumn);
-
-                //starts picking the cards (specular to pickcards)
-                Player me = null;
-                int maxCards = 0;
-
-                for (Player p : gui.getModelView().getPlayers())
-                    if (p.getName().equals(gui.getPlayerName())) {
-                        me = p;
-                        break;
-                    }
-                if (me == null) throw new NullPointerException();
-
-
-                for (int j = 0; j < numberOfColumns; j++) {
-                    int freeSlots = 0;
-                    for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
-                        if (gui.getModelView().getShelfOf(me)[i][j] == null) freeSlots++;
-                        if (freeSlots > maxCards) maxCards = freeSlots;
-                    }
-                }
-                if (maxCards > 3) maxCards = 3;
-
-                if (pickedNum < maxCards) {
-                    //checking coordinate validity
-                    if (!isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
-                        System.out.println("non takable");
-                    }
-                    if (clickedRow >= 0 && clickedRow < numberOfBoardRows && clickedColumn >= 0 && clickedColumn < numberOfBoardColumns & isTakeable(gui.getModelView(), clickedRow, clickedColumn, pickedCoords)) {
-                        List<Integer> coords = new ArrayList<>();
-                        coords.add(clickedRow);
-                        coords.add(clickedColumn);
-                        pickedCoords.add(coords);
-                        pickedNum++;
-                        //sets bloom effect
-                        //no need of runLater because it is called by the gui thread
-                        clickedImageView.setEffect(new Bloom());
-                    } else System.out.println("Invalid coordinates!, retry");
-                }
-                gui.setPicked(pickedCoords);
-                if (pickedCoords.size() == maxCards) {
-                    sentPicked = true;
                 }
             }
         }
@@ -163,7 +165,6 @@ public class BoardController implements Initializable {
 
     public void updateGraphics() {
         pickedNum = 0;
-        sentPicked = false;
         pickedCoords = new ArrayList<>();
 
         Platform.runLater(() -> {
