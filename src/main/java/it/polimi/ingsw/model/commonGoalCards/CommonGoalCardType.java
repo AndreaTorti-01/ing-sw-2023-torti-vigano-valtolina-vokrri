@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.commonGoalCards;
 
-public enum CommonGoalCardType {
+public enum  CommonGoalCardType {
     CROSS,
     DIAGONAL_FIVE,
     EIGHT_EQUAL,

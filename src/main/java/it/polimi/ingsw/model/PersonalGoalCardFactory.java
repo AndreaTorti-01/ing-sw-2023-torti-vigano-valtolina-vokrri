@@ -25,6 +25,7 @@ public class PersonalGoalCardFactory {
             throw new IndexOutOfBoundsException("provided index (" + index + ") is out of range 0-" + (Constants.numberOfPersonalGoalCardTypes - 1));
 
         PersonalGoalCard personalGoalCard = new PersonalGoalCard();
+        personalGoalCard.setID(index);
         
         try {
             // gets the pattern file corresponding to the given index

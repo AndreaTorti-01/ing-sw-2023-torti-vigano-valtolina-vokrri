@@ -18,6 +18,7 @@ public class PersonalGoalCard implements Serializable {
     @Serial
     private static final long serialVersionUID = -8049860441030982905L;
     private final ItemType[][] pattern;
+    private int cardID;
 
     /**
      * Creates a new Personal Goal Card and initializes its pattern to a null matrix.
@@ -26,7 +27,12 @@ public class PersonalGoalCard implements Serializable {
         // initializes the pattern to a null matrix
         pattern = new ItemType[Constants.numberOfRows][Constants.numberOfColumns];
     }
-
+    public void setID(int id){
+        cardID = id;
+    }
+    public int getID(){
+        return cardID;
+    }
     /**
      * @return the pattern of this Personal Goal Card.
      */

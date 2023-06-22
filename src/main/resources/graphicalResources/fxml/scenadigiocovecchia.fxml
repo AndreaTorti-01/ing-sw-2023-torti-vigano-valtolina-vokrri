@@ -33,17 +33,17 @@
         </Pane>
         <ImageView fx:id="commonGoal1" fitHeight="150.0" fitWidth="200.0" layoutX="1120.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../common goal cards/1.jpg" />
+                <Image url="@../commonGoalCards/1.jpg" />
             </image>
         </ImageView>
         <ImageView fx:id="commonGoal2" fitHeight="150.0" fitWidth="200.0" layoutX="1364.0" layoutY="282.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../common goal cards/5.jpg" />
+                <Image url="@../commonGoalCards/5.jpg" />
             </image>
         </ImageView>
         <ImageView fx:id="personalGoal" fitHeight="226.0" fitWidth="150.0" layoutX="1153.0" layoutY="450.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../personal goal cards/0PGC.png" />
+                <Image url="@../personalGoalCards/0PGC.png" />
             </image>
         </ImageView>
         <ImageView fx:id="cranio" fitHeight="150.0" fitWidth="200.0" layoutX="726.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">

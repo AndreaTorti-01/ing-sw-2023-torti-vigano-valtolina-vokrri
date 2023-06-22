@@ -128,4 +128,12 @@ public class GameViewMsg implements Serializable {
         return this.messages;
     }
 
+    public Player getPlayerByName(String playerName) {
+        for (Player p : players) {
+            if (p.getName().equals(playerName)) {
+                return p;
+            }
+        }
+        return null;
+    }
 }

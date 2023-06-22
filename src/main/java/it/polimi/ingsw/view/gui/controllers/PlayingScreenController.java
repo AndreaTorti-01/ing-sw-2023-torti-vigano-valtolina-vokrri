@@ -1,8 +1,10 @@
 package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.view.gui.Gui;
+import it.polimi.ingsw.utils.Constants;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -47,6 +50,8 @@ public class PlayingScreenController implements Initializable {
     public Text scoreName1;
     public Text turn;
     public Text playerName3;
+    public ImageView commonPoint2;
+    public ImageView commonPoint1;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -148,9 +153,14 @@ public class PlayingScreenController implements Initializable {
                     score0.setText(" " + player.getScore());
                 }
             }
-            //TODO: update graphics for common goals
-            //TODO: update graphics for common points
-            //TODO: update graphics for personal goals
+            List<CommonGoalCard> commonCards= gui.getModelView().getCommonGoalCards();
+
+            commonGoal1.setImage(new Image(Constants.getCommonGoalCardPath(commonCards.get(0).getType())));
+            commonGoal2.setImage(new Image(Constants.getCommonGoalCardPath(commonCards.get(1).getType())));
+            commonPoint1.setImage(new Image(Constants.getCommonGoalCardPointPath(commonCards.get(0).peekPoints())));
+            commonPoint2.setImage(new Image(Constants.getCommonGoalCardPointPath(commonCards.get(1).peekPoints())));
+
+            personalGoal.setImage(new Image(Constants.getPersonalGoalCardPath(gui.getModelView().getPlayerByName(gui.getPlayerName()).getPersonalGoalCard().getID())));
         });
     }
 
