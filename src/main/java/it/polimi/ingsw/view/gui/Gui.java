@@ -1,18 +1,23 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.network.serializable.ChatMsg;
+import it.polimi.ingsw.network.serializable.CheatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.ObservableImpl;
 import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.gui.controllers.*;
+import it.polimi.ingsw.view.tui.TuiRaw;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -50,6 +55,50 @@ public class Gui extends ObservableImpl implements RunnableView {
             this.state = state;
             System.err.println("state changed to " + state);
             lock.notifyAll();
+        }
+    }
+    public void setMessage(String message) {
+        if (message.charAt(0) == '/') {
+            String command = message.split(" ")[0];
+
+            // check which command it is
+            switch (command) {
+                case "/privatechat" -> {
+                    // check that it has 3 arguments
+                    if (message.split(" ").length >= 3) {
+                        String destPlayer = message.split(" ")[1];
+                        List<String> playerNames = new ArrayList<>();
+                        for (Player player : modelView.getPlayers()) {
+                            playerNames.add(player.getName());
+                        }
+
+                        // check that the dest player exists and is not the player himself
+                        if (playerNames.contains(destPlayer) && !destPlayer.equals(playerName)) {
+                            String chatMessage = message.split(" ", 3)[2];
+                            notifyObservers(new ChatMsg(destPlayer, playerName, false, "[private]" + chatMessage));
+                        }
+                    } else
+                        playingScreenController.printOnChat(Constants.ANSI_RED + "Invalid arguments: Type /privatechat <player> <message> to send a private message to a player" + Constants.ANSI_RESET);
+                }
+
+                case "/cheat" -> {
+                    if (modelView.getCurrentPlayer().getName().equals(playerName)) {
+                        notifyObservers(new CheatMsg(playerName));
+                    } else playingScreenController.printOnChat(Constants.ANSI_RED + "You can't cheat if it's not your turn" + Constants.ANSI_RESET);
+                }
+
+                case "/help" -> {
+                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /cheat to cheat" + Constants.ANSI_RESET);
+                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /chat <message> to send a message to all players" + Constants.ANSI_RESET);
+                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /privatechat <player> <message> to send a private message to a player" + Constants.ANSI_RESET);
+                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /pick to start the card picking process" + Constants.ANSI_RESET);
+                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /help to see this list again" + Constants.ANSI_RESET);
+                }
+
+                default -> playingScreenController.printOnChat(Constants.ANSI_RED + "Invalid command: Type /help to see the list of available commands" + Constants.ANSI_RESET);
+            }
+        } else {
+            notifyObservers(new ChatMsg(null, playerName, true, message));
         }
     }
 
@@ -175,7 +224,6 @@ public class Gui extends ObservableImpl implements RunnableView {
 
             boardController.updateGraphics();
             shelf0Controller.updateGraphics();
-            System.out.println("shelf updated");
             playingScreenController.updateGraphics();
 
             if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
@@ -202,6 +250,8 @@ public class Gui extends ObservableImpl implements RunnableView {
             System.err.println("Interrupted while sleeping: " + e.getMessage());
         }
     }
+
+
 
     public enum State {
         ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY

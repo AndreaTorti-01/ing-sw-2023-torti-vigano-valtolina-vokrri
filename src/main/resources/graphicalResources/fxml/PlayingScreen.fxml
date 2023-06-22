@@ -54,7 +54,7 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <Text fx:id="playerName2" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" HBox.hgrow="ALWAYS">
+                              <Text fx:id="playerName2" strokeType="OUTSIDE" strokeWidth="0.0" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
                                     <Insets left="130.0" top="10.0" />
                                  </HBox.margin>
@@ -75,7 +75,7 @@
                         </HBox>
                         <HBox prefHeight="25.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <Text fx:id="playerName1" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                              <Text fx:id="playerName1" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -95,7 +95,7 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" HBox.hgrow="ALWAYS">
+                              <Text fx:id="playerName3" strokeType="OUTSIDE" strokeWidth="0.0" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
                                     <Insets left="115.0" top="10.0" />
                                  </HBox.margin>
@@ -111,7 +111,7 @@
             </HBox>
             <HBox fx:id="Hbox1c" alignment="TOP_CENTER" prefHeight="202.0" prefWidth="560.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="E il tuo turno" textAlignment="CENTER" wrappingWidth="404.484375" HBox.hgrow="ALWAYS">
+                  <Text fx:id="turn" fill="#c41b1b" strokeType="OUTSIDE" strokeWidth="0.0" text="E il tuo turno" textAlignment="CENTER" wrappingWidth="404.484375" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="64.0" />
                      </font>
@@ -176,7 +176,7 @@
                            <children>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="scoreName0" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE 0" VBox.vgrow="ALWAYS">
+                                    <Text fx:id="scoreName0" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -188,7 +188,7 @@
                               </VBox>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="score0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" VBox.vgrow="ALWAYS">
+                                    <Text fx:id="score0" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -203,7 +203,7 @@
                            <children>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="scoreName1" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE 1" VBox.vgrow="ALWAYS">
+                                    <Text fx:id="scoreName1" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -215,7 +215,7 @@
                               </VBox>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="score1" strokeType="OUTSIDE" strokeWidth="0.0" text="0" VBox.vgrow="ALWAYS">
+                                    <Text fx:id="score1" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -230,7 +230,7 @@
                            <children>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="scoreName2" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE 2" VBox.vgrow="ALWAYS">
+                                    <Text fx:id="scoreName2" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -245,7 +245,7 @@
                               </VBox>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="score2" strokeType="OUTSIDE" strokeWidth="0.0" text="0" VBox.vgrow="ALWAYS">
+                                    <Text fx:id="score2" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -260,7 +260,7 @@
                            <children>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="scoreName3" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE 3" VBox.vgrow="ALWAYS">
+                                    <Text fx:id="scoreName3" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -272,7 +272,7 @@
                               </VBox>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="score3" strokeType="OUTSIDE" strokeWidth="0.0" text="0" VBox.vgrow="ALWAYS">
+                                    <Text fx:id="score3" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -370,7 +370,7 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button fx:id="sendMessage" mnemonicParsing="false" prefHeight="32.0" prefWidth="46.0" text="Invia" VBox.vgrow="ALWAYS" />
+                        <Button fx:id="sendMessage" onAction="#handleMessage" mnemonicParsing="false" prefHeight="32.0" prefWidth="46.0" text="Invia" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>

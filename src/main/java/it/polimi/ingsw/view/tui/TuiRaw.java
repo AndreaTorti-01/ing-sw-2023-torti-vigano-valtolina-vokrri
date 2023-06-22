@@ -178,7 +178,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
                             // check that the dest player exists and is not the player himself
                             if (playerNames.contains(destPlayer) && !destPlayer.equals(playerName)) {
                                 String chatMessage = line.split(" ", 3)[2];
-                                notifyObservers(new ChatMsg(destPlayer, playerName, false, chatMessage));
+                                notifyObservers(new ChatMsg(destPlayer, playerName, false, "[private]" + chatMessage));
                             } else if (destPlayer.equals(playerName)) {
                                 System.out.println("You can't send a private message to yourself, touch some grass instead :)");
                             } else {
