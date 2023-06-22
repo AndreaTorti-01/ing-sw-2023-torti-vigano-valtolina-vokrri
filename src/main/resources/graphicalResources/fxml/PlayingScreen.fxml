@@ -7,7 +7,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -111,12 +114,12 @@
             </HBox>
             <HBox fx:id="Hbox1c" alignment="TOP_CENTER" prefHeight="202.0" prefWidth="560.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Text fx:id="turn" fill="#c41b1b" strokeType="OUTSIDE" strokeWidth="0.0" text="E il tuo turno" textAlignment="CENTER" wrappingWidth="404.484375" HBox.hgrow="ALWAYS">
+                  <Text fx:id="turn" fill="#c41b1b" strokeType="OUTSIDE" strokeWidth="0.0" text="E il tuo turno" textAlignment="CENTER" wrappingWidth="534.484375" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="64.0" />
+                        <Font size="48.0" />
                      </font>
                      <HBox.margin>
-                        <Insets top="40.0" />
+                        <Insets top="55.0" />
                      </HBox.margin>
                   </Text>
                </children>
@@ -151,7 +154,45 @@
                   <Insets left="10.0" top="40.0" />
                </padding>
             </HBox>
-            <HBox fx:id="Hbox2c" prefHeight="196.0" prefWidth="525.0" VBox.vgrow="ALWAYS" />
+            <HBox fx:id="Hbox2c" prefHeight="196.0" prefWidth="525.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="175.0">
+                     <children>
+                        <ImageView fx:id="picked0" fitHeight="127.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../itemTiles/Cornici1.1.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets left="45.0" top="50.0" />
+                           </VBox.margin>
+                        </ImageView>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="175.0">
+                     <children>
+                        <ImageView fx:id="picked1" fitHeight="127.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../itemTiles/Giochi1.2.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets left="35.0" top="50.0" />
+                           </VBox.margin>
+                        </ImageView>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="175.0">
+                     <children>
+                        <ImageView fx:id="picked2" fitHeight="127.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../itemTiles/Libri1.2.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets left="25.0" top="50.0" />
+                           </VBox.margin>
+                        </ImageView>
+                     </children>
+                  </VBox>
+               </children></HBox>
          </children>
       </VBox>
       <VBox fx:id="Vbox3" prefHeight="900.0" prefWidth="515.0" HBox.hgrow="ALWAYS">
@@ -176,7 +217,7 @@
                            <children>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="scoreName0" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
+                                    <Text fx:id="scoreName0" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -230,7 +271,7 @@
                            <children>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="scoreName2" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
+                                    <Text fx:id="scoreName2" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -245,7 +286,7 @@
                               </VBox>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="score2" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
+                                    <Text fx:id="score2" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -260,7 +301,7 @@
                            <children>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="scoreName3" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
+                                    <Text fx:id="scoreName3" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -272,7 +313,7 @@
                               </VBox>
                               <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="score3" strokeType="OUTSIDE" strokeWidth="0.0"  VBox.vgrow="ALWAYS">
+                                    <Text fx:id="score3" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font name="MS Gothic" size="21.0" />
                                        </font>
@@ -288,26 +329,65 @@
                <children>
                   <VBox prefHeight="193.0" prefWidth="254.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <ImageView fx:id="commonGoal1" fitHeight="138.0" fitWidth="248.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
-                           <image>
-                              <Image url="@../common goal cards/1.jpg" />
-                           </image>
+                        <GridPane prefHeight="156.0" prefWidth="255.0" VBox.vgrow="ALWAYS">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <ImageView fx:id="commonGoal1" fitHeight="138.0" fitWidth="248.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../common goal cards/1.jpg" />
+                                 </image>
+                                 <GridPane.margin>
+                                    <Insets left="25.0" />
+                                 </GridPane.margin>
+                              </ImageView>
+                              <ImageView fx:id="commonPoint1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="-7.9">
+                                 <image>
+                                    <Image url="@../scoring%20tokens/scoring_2.jpg" />
+                                 </image>
+                                 <GridPane.margin>
+                                    <Insets bottom="7.0" left="145.0" />
+                                 </GridPane.margin>
+                              </ImageView>
+                           </children>
                            <VBox.margin>
-                              <Insets left="23.0" top="25.0" />
+                              <Insets top="17.0" />
                            </VBox.margin>
-                        </ImageView>
+                        </GridPane>
                      </children>
                   </VBox>
                   <VBox prefHeight="193.0" prefWidth="258.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <ImageView fx:id="commonGoal2" fitHeight="138.0" fitWidth="248.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
-                           <image>
-                              <Image url="@../common goal cards/2.jpg" />
-                           </image>
+                        <GridPane prefHeight="156.0" prefWidth="255.0" VBox.vgrow="ALWAYS">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <ImageView fx:id="commonGoal2" fitHeight="138.0" fitWidth="248.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../common goal cards/2.jpg" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="commonPoint2" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="-7.9">
+                                 <image>
+                                    <Image url="@../scoring%20tokens/scoring_4.jpg" />
+                                 </image>
+                                 <GridPane.margin>
+                                    <Insets bottom="8.0" left="122.0" />
+                                 </GridPane.margin>
+                              </ImageView>
+                           </children>
                            <VBox.margin>
-                              <Insets left="10.0" top="25.0" />
+                              <Insets left="25.0" top="17.0" />
                            </VBox.margin>
-                        </ImageView>
+                        </GridPane>
                      </children>
                   </VBox>
                </children>
@@ -370,7 +450,7 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button fx:id="sendMessage" onAction="#handleMessage" mnemonicParsing="false" prefHeight="32.0" prefWidth="46.0" text="Invia" VBox.vgrow="ALWAYS" />
+                        <Button fx:id="sendMessage" mnemonicParsing="false" onAction="#handleMessage" prefHeight="32.0" prefWidth="46.0" text="Invia" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>
