@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import javafx.scene.image.Image;
 
@@ -85,10 +86,29 @@ public class Constants {
     }
 
     public static String getCommonGoalCardPointPath(int i) {
+        if(i == 0) return "/graphicalResources/scoringTokens/scoring.jpg";
         return String.format("/graphicalResources/scoringTokens/scoring_%d.jpg", i);
     }
 
     public static String getPersonalGoalCardPath(int id) {
         return String.format("/graphicalResources/personalGoalCards/%dPGC.png", id);
+    }
+
+    public static String getTilePath(ItemCard itemCard) {
+        String tilesPath = "/graphicalResources/itemTiles/";
+        switch (itemCard.getType()) {
+            case CATS -> tilesPath += "Gatti1.";
+            case BOOKS -> tilesPath += "Libri1.";
+            case PLANTS -> tilesPath += "Piante1.";
+            case TROPHIES -> tilesPath += "Trofei1.";
+            case FRAMES -> tilesPath += "Cornici1.";
+            case GAMES -> tilesPath += "Giochi1.";
+        }
+        switch (itemCard.getSprite()) {
+            case 0 -> tilesPath += "1.png";
+            case 1 -> tilesPath += "2.png";
+            case 2 -> tilesPath += "3.png";
+        }
+        return tilesPath;
     }
 }

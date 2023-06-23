@@ -32,24 +32,6 @@ public class BoardController implements Initializable {
     private boolean sentPicked = false;
     private final Object comoputeLock = new Object();
 
-    private String getTilePath(ItemCard itemCard) {
-        String tilesPath = "/graphicalResources/itemTiles/";
-        switch (itemCard.getType()) {
-            case CATS -> tilesPath += "Gatti1.";
-            case BOOKS -> tilesPath += "Libri1.";
-            case PLANTS -> tilesPath += "Piante1.";
-            case TROPHIES -> tilesPath += "Trofei1.";
-            case FRAMES -> tilesPath += "Cornici1.";
-            case GAMES -> tilesPath += "Giochi1.";
-        }
-        switch (itemCard.getSprite()) {
-            case 0 -> tilesPath += "1.png";
-            case 1 -> tilesPath += "2.png";
-            case 2 -> tilesPath += "3.png";
-        }
-        return tilesPath;
-    }
-
     public void resetSelection() {
         this.clickedRow = -1;
         this.clickedColumn = -1;
@@ -108,6 +90,7 @@ public class BoardController implements Initializable {
                             if (coords.get(0) == clickedRow && coords.get(1) == clickedColumn) {
                                 pickedCoords.remove(coords);
                                 pickedNum--;
+                                gui.setPicked(pickedCoords);
                                 System.out.println("size of list is" + pickedCoords.size());
                                 clickedImageView.setEffect(null);
                                 break;

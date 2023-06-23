@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.client.ClientImpl;
@@ -75,27 +76,26 @@ public class Gui extends ObservableImpl implements RunnableView {
                         // check that the dest player exists and is not the player himself
                         if (playerNames.contains(destPlayer) && !destPlayer.equals(playerName)) {
                             String chatMessage = message.split(" ", 3)[2];
-                            notifyObservers(new ChatMsg(destPlayer, playerName, false, "[private]" + chatMessage));
+                            notifyObservers(new ChatMsg(destPlayer, playerName, false, "[private] " + chatMessage));
                         }
                     } else
-                        playingScreenController.printOnChat(Constants.ANSI_RED + "Invalid arguments: Type /privatechat <player> <message> to send a private message to a player" + Constants.ANSI_RESET);
+                        playingScreenController.printOnChat("Invalid arguments: Type /privatechat <player> <message> to send a private message to a player" );
                 }
 
                 case "/cheat" -> {
                     if (modelView.getCurrentPlayer().getName().equals(playerName)) {
                         notifyObservers(new CheatMsg(playerName));
-                    } else playingScreenController.printOnChat(Constants.ANSI_RED + "You can't cheat if it's not your turn" + Constants.ANSI_RESET);
+                    } else playingScreenController.printOnChat("You can't cheat if it's not your turn");
                 }
 
                 case "/help" -> {
-                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /cheat to cheat" + Constants.ANSI_RESET);
-                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /chat <message> to send a message to all players" + Constants.ANSI_RESET);
-                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /privatechat <player> <message> to send a private message to a player" + Constants.ANSI_RESET);
-                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /pick to start the card picking process" + Constants.ANSI_RESET);
-                    playingScreenController.printOnChat(Constants.ANSI_YELLOW + "Type /help to see this list again" + Constants.ANSI_RESET);
+                    playingScreenController.printOnChat("Type /cheat to cheat");
+                    playingScreenController.printOnChat("Type /chat <message> to send a message to all players");
+                    playingScreenController.printOnChat("Type /privatechat <player> <message> to send a private message to a player");
+                    playingScreenController.printOnChat("Type /help to see this list again");
                 }
 
-                default -> playingScreenController.printOnChat(Constants.ANSI_RED + "Invalid command: Type /help to see the list of available commands" + Constants.ANSI_RESET);
+                default -> playingScreenController.printOnChat("Invalid command: Type /help to see the list of available commands");
             }
         } else {
             notifyObservers(new ChatMsg(null, playerName, true, message));
@@ -110,11 +110,17 @@ public class Gui extends ObservableImpl implements RunnableView {
     public void setPicked(List<List<Integer>> pickedCoords) {
         this.pickedCoords = pickedCoords;
         shelf0Controller.setReady(pickedCoords.size());
+        List<ItemCard> pickedCards = new ArrayList<>();
+        for (List<Integer> coords : pickedCoords) {
+            pickedCards.add(modelView.getBoard()[coords.get(0)][coords.get(1)]);
+        }
+        playingScreenController.showPickedTypes(pickedCards);
     }
 
     public void setMove(int shelfCol) {
         boardController.resetSelection();
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
+        pickedCoords.clear();
     }
 
     public void sendMsg(String destPlayer, String sourcePlayer, boolean isMsgPublic, String message) {
@@ -215,7 +221,7 @@ public class Gui extends ObservableImpl implements RunnableView {
             while (!GuiApp.controllersAvailable())
                 sleep(100);
             welcomeScreenController = GuiApp.getWelcomeScreenController();
-            welcomeScreenController.changescene();
+            welcomeScreenController.changeScene();
 
 
             playingScreenController = GuiApp.getPlayingScreenController();
@@ -225,14 +231,21 @@ public class Gui extends ObservableImpl implements RunnableView {
             boardController.updateGraphics();
             shelf0Controller.updateGraphics();
             playingScreenController.updateGraphics();
+            playingScreenController.refreshChat();
 
             if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
                 setState(Gui.State.PLAY); // it's my turn
-                //TODO playingScreenController.setMyTurn(); // only displays a message on the screen
             } else setState(Gui.State.WAITING_FOR_TURN); // it's not my turn
-            //TODO playingScreenController.setTurnOf(modelView.getCurrentPlayer().getName()); // only displays a message on the screen
+        }
+        // the game ends
+        else if (modelView.getGameStatus().equals(Game.Status.ENDED)) {
+            playingScreenController.changeScene();
+            endScreenController = GuiApp.getEndScreenController();
+            endScreenController.updateGraphics();
+            setState(Gui.State.ENDED);
         }
     }
+
 
     public String getPlayerName() {
         return playerName;
@@ -251,10 +264,12 @@ public class Gui extends ObservableImpl implements RunnableView {
         }
     }
 
-
+    public List<List<Integer>> getPickedCoords() {
+        return pickedCoords;
+    }
 
     public enum State {
-        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY
+        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY, ENDED
     }
 
 }

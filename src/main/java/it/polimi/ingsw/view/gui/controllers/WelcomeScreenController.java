@@ -115,7 +115,7 @@ public class WelcomeScreenController implements Initializable {
         gui.setPlayerNumber(numberOfPlayers);
         waitForPlayers();
     }
-    public void changescene(){
+    public void changeScene(){
         GuiApp.changeScene(GuiApp.getPlayingScreenRoot());
     }
     public void waitForPlayers(){

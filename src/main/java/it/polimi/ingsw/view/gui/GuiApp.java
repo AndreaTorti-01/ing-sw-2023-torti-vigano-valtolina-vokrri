@@ -71,6 +71,8 @@ public class GuiApp extends Application {
 
         Scene scene = new Scene(welcomeScreenRoot);
         mainStage.setScene(scene);
+        mainStage.setMinWidth(1600);
+        mainStage.setMinHeight(900);
         mainStage.setResizable(true);
         mainStage.setMaximized(false);
         mainStage.setFullScreen(false);

@@ -1,10 +1,13 @@
 package it.polimi.ingsw.view.gui.controllers;
 
+import it.polimi.ingsw.model.ItemCards.ItemCard;
+import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.utils.Constants;
+import it.polimi.ingsw.view.gui.GuiApp;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,8 +20,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -52,10 +57,14 @@ public class PlayingScreenController implements Initializable {
     public Text playerName3;
     public ImageView commonPoint2;
     public ImageView commonPoint1;
+    public ImageView picked0;
+    public ImageView picked1;
+    public ImageView picked2;
     private Stage stage;
     private Scene scene;
     private Parent root;
     private Gui gui;
+    private int orderSwitcher = -1;
     @FXML
     private BoardController boardController;
     @FXML
@@ -66,6 +75,7 @@ public class PlayingScreenController implements Initializable {
     private Shelf2Controller shelf2Controller;
     @FXML
     private Shelf3Controller shelf3Controller;
+    private int localChatSize = 0;
 
     public Parent loadResource(String fxmlName, Parent root) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
@@ -83,21 +93,23 @@ public class PlayingScreenController implements Initializable {
 
     @FXML
     private void handleMessage(){
+        //gestisce l'invio di messaggi alla gui
         String message = messageSpace.getText();
         if(!message.equals("")){
+            System.out.println("Message sent");
             gui.setMessage(message);
             messageSpace.clear();
         }
     };
 
-    private void refreshChat(){
-        if (gui.getModelView().getMessages().size() == 0) return;
-        System.out.println("Chat: ");
-        int localChatSize = 0;
+    public void refreshChat(){
+
         for(int i = localChatSize; i < gui.getModelView().getMessages().size(); i++){
-            ChatMsg message = gui.getModelView().getMessages().get(i - 1);
-            if (message.isPublic() || !message.isPublic() && (message.getRecipientPlayer().equals(gui.getPlayerName()) || message.getSenderPlayer().equals(gui.getPlayerName())))
-                Platform.runLater(() -> ChatTextArea.appendText(message.getSenderPlayer() + ": " + message.getMessage() + "\n"));
+            ChatMsg message = gui.getModelView().getMessages().get(i);
+            if (message.isPublic() || !message.isPublic() && (message.getRecipientPlayer().equals(gui.getPlayerName()) || message.getSenderPlayer().equals(gui.getPlayerName()))) {
+                Platform.runLater(() -> ChatTextArea.appendText("[" + message.getSenderPlayer() + "] : " + message.getMessage() + "\n"));
+                localChatSize++;
+            }
         }
     }
 
@@ -112,6 +124,10 @@ public class PlayingScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gui = (Gui) it.polimi.ingsw.network.client.ClientImpl.getView();
+        picked0.setImage(null);
+        picked1.setImage(null);
+        picked2.setImage(null);
+        ChatTextArea.setEditable(false);
     }
 
     public void updateGraphics() {
@@ -182,5 +198,92 @@ public class PlayingScreenController implements Initializable {
 
     public Shelf3Controller getShelf3Controller() {
         return shelf3Controller;
+    }
+    public void showPickedTypes(List<ItemCard> cards){
+        Platform.runLater(
+                () -> {
+                    switch (cards.size()){
+                        case 0 -> {
+                            picked0.setImage(null);
+                            picked1.setImage(null);
+                            picked2.setImage(null);
+                        }
+                        case 1 -> {
+                            picked0.setImage(new Image(Constants.getTilePath(cards.get(0))));
+                            picked1.setImage(null);
+                            picked2.setImage(null);
+                        }
+                        case 2 -> {
+                            picked0.setImage(new Image(Constants.getTilePath(cards.get(0))));
+                            picked1.setImage(new Image(Constants.getTilePath(cards.get(1))));
+                            picked2.setImage(null);
+                        }
+                        case 3 -> {
+                            picked0.setImage(new Image(Constants.getTilePath(cards.get(0))));
+                            picked1.setImage(new Image(Constants.getTilePath(cards.get(1))));
+                            picked2.setImage(new Image(Constants.getTilePath(cards.get(2))));
+                        }
+                    }
+                }
+        );
+    }
+    public void reorderInput0(MouseEvent mouseEvent) {
+        if (gui.getPickedCoords().size() == 0) return;
+        if(orderSwitcher == -1) {
+            orderSwitcher = 0;
+            picked0.setEffect(new Bloom());
+        }else{
+            List<List<Integer>> pickedCoords = gui.getPickedCoords();
+            List<Integer> tmpCoords = pickedCoords.get(orderSwitcher);
+            pickedCoords.set(orderSwitcher, pickedCoords.get(0));
+            pickedCoords.set(0, tmpCoords);
+            gui.setPicked(pickedCoords);
+
+            picked0.setEffect(null);
+            picked1.setEffect(null);
+            picked2.setEffect(null);
+            orderSwitcher = -1;
+        }
+    }
+
+    public void reorderInput1(MouseEvent mouseEvent) {
+        if (gui.getPickedCoords().size() == 0) return;
+        if(orderSwitcher == -1) {
+            orderSwitcher = 1;
+            picked1.setEffect(new Bloom());
+        }else{
+            List<List<Integer>> pickedCoords = gui.getPickedCoords();
+            List<Integer> tmpCoords = pickedCoords.get(orderSwitcher);
+            pickedCoords.set(orderSwitcher, pickedCoords.get(1));
+            pickedCoords.set(1, tmpCoords);
+            gui.setPicked(pickedCoords);
+
+            picked0.setEffect(null);
+            picked1.setEffect(null);
+            picked2.setEffect(null);
+            orderSwitcher = -1;
+        }
+    }
+    public void reorderInput2(MouseEvent mouseEvent) {
+        if (gui.getPickedCoords().size() == 0) return;
+        if(orderSwitcher == -1) {
+            orderSwitcher = 2;
+            picked2.setEffect(new Bloom());
+        }else{
+            List<List<Integer>> pickedCoords = gui.getPickedCoords();
+            List<Integer> tmpCoords = pickedCoords.get(orderSwitcher);
+            pickedCoords.set(orderSwitcher, pickedCoords.get(2));
+            pickedCoords.set(2, tmpCoords);
+            gui.setPicked(pickedCoords);
+
+            picked0.setEffect(null);
+            picked1.setEffect(null);
+            picked2.setEffect(null);
+            orderSwitcher = -1;
+        }
+    }
+
+    public void changeScene() {
+        GuiApp.changeScene(GuiApp.getEndScreenRoot());
     }
 }
