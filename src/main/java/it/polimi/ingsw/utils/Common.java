@@ -3,6 +3,7 @@ package it.polimi.ingsw.utils;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Shelf;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 
 import java.util.ArrayList;
@@ -83,24 +84,6 @@ public class Common {
      * @param itemCard the Item Card whose resources to obtain.
      * @return the file path to the provided Item Card graphical resource.
      */
-    public static String getTilePath(ItemCard itemCard) {
-        String tilesPath = "/graphicalResources/itemTiles/";
-        switch (itemCard.getType()) {
-            case CATS -> tilesPath += "Gatti1.";
-            case BOOKS -> tilesPath += "Libri1.";
-            case PLANTS -> tilesPath += "Piante1.";
-            case TROPHIES -> tilesPath += "Trofei1.";
-            case FRAMES -> tilesPath += "Cornici1.";
-            case GAMES -> tilesPath += "Giochi1.";
-        }
-        switch (itemCard.getSprite()) {
-            case 0 -> tilesPath += "1.png";
-            case 1 -> tilesPath += "2.png";
-            case 2 -> tilesPath += "3.png";
-        }
-        return tilesPath;
-    }
-
     /**
      * Counts and removes from the provided copy of the shelf all the adjacent Item Cards of same type,
      * starting from the provided one.
@@ -182,5 +165,75 @@ public class Common {
         }
 
         return heads;
+    }
+    public static String getCommonGoalCardPath(CommonGoalCardType type) {
+        switch (type) {
+            case CROSS -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 10);
+            }
+            case DIAGONAL_FIVE -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 11);
+            }
+            case EIGHT_EQUAL -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 9);
+            }
+            case EQUAL_CORNERS -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 8);
+            }
+            case FOUR_LINES_MAX_THREE_TYPES -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 7);
+            }
+            case FOUR_QUARTETS -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 3);
+            }
+            case SIX_PAIRS -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 4);
+            }
+            case STAIR -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 12);
+            }
+            case THREE_COLUMNS_MAX_THREE_TYPES -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 5);
+            }
+            case TWO_RAINBOW_COLUMNS -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 2);
+            }
+            case TWO_RAINBOW_LINES -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 6);
+            }
+            case TWO_SQUARES -> {
+                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 1);
+            }
+            default -> {
+                return "";
+            }
+        }
+    }
+
+    public static String getCommonGoalCardPointPath(int i) {
+        if(i == 0) return "/graphicalResources/scoringTokens/scoring.jpg";
+        return String.format("/graphicalResources/scoringTokens/scoring_%d.jpg", i);
+    }
+
+    public static String getPersonalGoalCardPath(int id) {
+        return String.format("/graphicalResources/personalGoalCards/%dPGC.png", id);
+    }
+
+    public static String getTilePath(ItemCard itemCard) {
+        String tilesPath = "/graphicalResources/itemTiles/";
+        switch (itemCard.getType()) {
+            case CATS -> tilesPath += "Gatti1.";
+            case BOOKS -> tilesPath += "Libri1.";
+            case PLANTS -> tilesPath += "Piante1.";
+            case TROPHIES -> tilesPath += "Trofei1.";
+            case FRAMES -> tilesPath += "Cornici1.";
+            case GAMES -> tilesPath += "Giochi1.";
+        }
+        switch (itemCard.getSprite()) {
+            case 0 -> tilesPath += "1.png";
+            case 1 -> tilesPath += "2.png";
+            case 2 -> tilesPath += "3.png";
+        }
+        return tilesPath;
     }
 }

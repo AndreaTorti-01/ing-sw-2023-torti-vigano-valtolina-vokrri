@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.ChatMsg;
+import it.polimi.ingsw.utils.Common;
 import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.view.gui.GuiApp;
@@ -31,6 +32,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static it.polimi.ingsw.utils.Common.*;
 
 
 public class PlayingScreenController implements Initializable {
@@ -171,33 +174,20 @@ public class PlayingScreenController implements Initializable {
             }
             List<CommonGoalCard> commonCards= gui.getModelView().getCommonGoalCards();
 
-            commonGoal1.setImage(new Image(Constants.getCommonGoalCardPath(commonCards.get(0).getType())));
-            commonGoal2.setImage(new Image(Constants.getCommonGoalCardPath(commonCards.get(1).getType())));
-            commonPoint1.setImage(new Image(Constants.getCommonGoalCardPointPath(commonCards.get(0).peekPoints())));
-            commonPoint2.setImage(new Image(Constants.getCommonGoalCardPointPath(commonCards.get(1).peekPoints())));
+            commonGoal1.setImage(new Image(getCommonGoalCardPath(commonCards.get(0).getType())));
+            commonGoal2.setImage(new Image(getCommonGoalCardPath(commonCards.get(1).getType())));
+            commonPoint1.setImage(new Image(getCommonGoalCardPointPath(commonCards.get(0).peekPoints())));
+            commonPoint2.setImage(new Image(getCommonGoalCardPointPath(commonCards.get(1).peekPoints())));
 
-            personalGoal.setImage(new Image(Constants.getPersonalGoalCardPath(gui.getModelView().getPlayerByName(gui.getPlayerName()).getPersonalGoalCard().getID())));
+            personalGoal.setImage(new Image(getPersonalGoalCardPath(gui.getModelView().getPlayerByName(gui.getPlayerName()).getPersonalGoalCard().getID())));
         });
     }
-
     public BoardController getBoardController() {
         return boardController;
     }
 
     public Shelf0Controller getShelf0Controller() {
         return shelf0Controller;
-    }
-
-    public Shelf1Controller getShelf1Controller() {
-        return shelf1Controller;
-    }
-
-    public Shelf2Controller getShelf2Controller() {
-        return shelf2Controller;
-    }
-
-    public Shelf3Controller getShelf3Controller() {
-        return shelf3Controller;
     }
     public void showPickedTypes(List<ItemCard> cards){
         Platform.runLater(
@@ -209,19 +199,19 @@ public class PlayingScreenController implements Initializable {
                             picked2.setImage(null);
                         }
                         case 1 -> {
-                            picked0.setImage(new Image(Constants.getTilePath(cards.get(0))));
+                            picked0.setImage(new Image(Common.getTilePath(cards.get(0))));
                             picked1.setImage(null);
                             picked2.setImage(null);
                         }
                         case 2 -> {
-                            picked0.setImage(new Image(Constants.getTilePath(cards.get(0))));
-                            picked1.setImage(new Image(Constants.getTilePath(cards.get(1))));
+                            picked0.setImage(new Image(Common.getTilePath(cards.get(0))));
+                            picked1.setImage(new Image(Common.getTilePath(cards.get(1))));
                             picked2.setImage(null);
                         }
                         case 3 -> {
-                            picked0.setImage(new Image(Constants.getTilePath(cards.get(0))));
-                            picked1.setImage(new Image(Constants.getTilePath(cards.get(1))));
-                            picked2.setImage(new Image(Constants.getTilePath(cards.get(2))));
+                            picked0.setImage(new Image(Common.getTilePath(cards.get(0))));
+                            picked1.setImage(new Image(Common.getTilePath(cards.get(1))));
+                            picked2.setImage(new Image(Common.getTilePath(cards.get(2))));
                         }
                     }
                 }

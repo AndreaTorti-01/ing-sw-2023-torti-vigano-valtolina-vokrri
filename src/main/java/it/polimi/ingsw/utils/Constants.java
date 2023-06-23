@@ -21,7 +21,7 @@ public class Constants {
     public static final int numberOfCommonGoalCardsInGame = 2;
     public static final int numberOfPersonalGoalCardTypes = 12;
     public static final int boardSize = 9;
-    public static final String serverIpAddress = "127.0.0.1";
+    public static final String serverIpAddress = "butterbean.duckdns.org";
     public static final int serverPort = 8888;
     public static final int rmiServerPort = 1099;
     public static final String ANSI_RESET = "\u001B[0m";
@@ -41,74 +41,4 @@ public class Constants {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-    public static String getCommonGoalCardPath(CommonGoalCardType type) {
-        switch (type) {
-            case CROSS -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 10);
-            }
-            case DIAGONAL_FIVE -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 11);
-            }
-            case EIGHT_EQUAL -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 9);
-            }
-            case EQUAL_CORNERS -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 8);
-            }
-            case FOUR_LINES_MAX_THREE_TYPES -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 7);
-            }
-            case FOUR_QUARTETS -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 3);
-            }
-            case SIX_PAIRS -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 4);
-            }
-            case STAIR -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 12);
-            }
-            case THREE_COLUMNS_MAX_THREE_TYPES -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 5);
-            }
-            case TWO_RAINBOW_COLUMNS -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 2);
-            }
-            case TWO_RAINBOW_LINES -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 6);
-            }
-            case TWO_SQUARES -> {
-                return String.format("/graphicalResources/commonGoalCards/%d.jpg", 1);
-            }
-            default -> {
-                return "";
-            }
-        }
-    }
-
-    public static String getCommonGoalCardPointPath(int i) {
-        if(i == 0) return "/graphicalResources/scoringTokens/scoring.jpg";
-        return String.format("/graphicalResources/scoringTokens/scoring_%d.jpg", i);
-    }
-
-    public static String getPersonalGoalCardPath(int id) {
-        return String.format("/graphicalResources/personalGoalCards/%dPGC.png", id);
-    }
-
-    public static String getTilePath(ItemCard itemCard) {
-        String tilesPath = "/graphicalResources/itemTiles/";
-        switch (itemCard.getType()) {
-            case CATS -> tilesPath += "Gatti1.";
-            case BOOKS -> tilesPath += "Libri1.";
-            case PLANTS -> tilesPath += "Piante1.";
-            case TROPHIES -> tilesPath += "Trofei1.";
-            case FRAMES -> tilesPath += "Cornici1.";
-            case GAMES -> tilesPath += "Giochi1.";
-        }
-        switch (itemCard.getSprite()) {
-            case 0 -> tilesPath += "1.png";
-            case 1 -> tilesPath += "2.png";
-            case 2 -> tilesPath += "3.png";
-        }
-        return tilesPath;
-    }
 }

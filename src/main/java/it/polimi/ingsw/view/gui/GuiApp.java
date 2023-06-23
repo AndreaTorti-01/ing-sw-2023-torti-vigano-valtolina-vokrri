@@ -19,11 +19,8 @@ public class GuiApp extends Application {
     private static EndScreenController endScreenController;
     private static PlayingScreenController playingScreenController;
     private static Shelf0Controller shelf0Controller;
-    private static Shelf1Controller shelf1Controller;
-    private static Shelf2Controller shelf2Controller;
-    private static Shelf3Controller shelf3Controller;
     private static Parent welcomeScreenRoot, endScreenRoot, playingScreenRoot;
-    private Parent root = new Parent() {
+    private final Parent root = new Parent() {
     };
 
     public static void main(String[] args) {
@@ -60,11 +57,9 @@ public class GuiApp extends Application {
         } catch (IOException e) {
             System.exit(1);
         }
+
         boardController = playingScreenController.getBoardController();
         shelf0Controller = playingScreenController.getShelf0Controller();
-        shelf1Controller = playingScreenController.getShelf1Controller();
-        shelf2Controller = playingScreenController.getShelf2Controller();
-        shelf3Controller = playingScreenController.getShelf3Controller();
 
         //to simply resolve synchronization problems between gui and guiApp
         createdController = true;
@@ -87,9 +82,6 @@ public class GuiApp extends Application {
         });
     }
 
-    public static Parent getWelcomeScreenRoot() {
-        return welcomeScreenRoot;
-    }
     public static Parent getEndScreenRoot() {
         return endScreenRoot;
     }
@@ -114,28 +106,8 @@ public class GuiApp extends Application {
     public static Shelf0Controller getShelf0Controller() {
         return shelf0Controller;
     }
-    public static Shelf1Controller getShelf1Controller() {
-        return shelf1Controller;
-    }
-    public static Shelf2Controller getShelf2Controller() {
-        return shelf2Controller;
-    }
-    public static Shelf3Controller getShelf3Controller() {
-        return shelf3Controller;
-    }
     public static boolean controllersAvailable() {
         return createdController;
     }
-    public static Stage getMainStage() {
-        return mainStage;
-    }
-    public FXMLLoader loadResource(String fxmlName, Parent root, FXMLLoader loader) {
-        loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            System.exit(1);
-        }
-        return loader;
-    }
+
 }

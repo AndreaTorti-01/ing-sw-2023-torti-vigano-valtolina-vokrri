@@ -39,7 +39,6 @@ public class Shelf0Controller implements Initializable {
 
     public void setReady(int pickedSize) {
         selectedColumn = -1;
-        int maxCards = 0;
         sent = false;
 
         if (myID == null) //removable? updategraphics is always called before setready

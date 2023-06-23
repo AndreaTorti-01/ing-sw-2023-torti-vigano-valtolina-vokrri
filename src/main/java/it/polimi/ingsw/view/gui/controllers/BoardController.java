@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.utils.Common;
 import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.view.gui.Gui.State;
 import javafx.application.Platform;
@@ -52,7 +53,7 @@ public class BoardController implements Initializable {
 
     public void handleImageViewClick(MouseEvent mouseEvent) {
 
-        synchronized (comoputeLock) {
+        synchronized (comoputeLock) { //TODO sistemare
 
             //stores row and column of the clicked image
             boolean deselection = false;
@@ -194,7 +195,7 @@ public class BoardController implements Initializable {
                 for (int j = 0; j < numberOfBoardColumns; j++) {
                     ImageView imageView = (ImageView) gridBoard.getChildren().get(j * numberOfBoardColumns + i);
                     if (tileMatrix[i][j] != null) {
-                        Image newImage = new Image(getTilePath(tileMatrix[i][j]));
+                        Image newImage = new Image(Common.getTilePath(tileMatrix[i][j]));
                         imageView.setImage(newImage);
                     } else {
                         Image newImage = new Image("/graphicalResources/itemTiles/Empty.png");
