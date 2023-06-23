@@ -43,10 +43,10 @@
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
-            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="8" />
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5" />
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6" />
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="7" />
+            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="8" />
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="10.0" layoutY="11.0" onMouseClicked="#handleImageViewClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />

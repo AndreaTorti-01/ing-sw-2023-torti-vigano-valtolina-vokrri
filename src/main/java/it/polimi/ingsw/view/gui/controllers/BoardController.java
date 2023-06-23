@@ -29,7 +29,7 @@ public class BoardController implements Initializable {
     public int clickedColumn = -1;
     private List<List<Integer>> pickedCoords = new ArrayList<>();
     private int pickedNum = 0;
-    private boolean sentPicked = false;
+    private final boolean sentPicked = false;
     private final Object comoputeLock = new Object();
 
     public void resetSelection() {
