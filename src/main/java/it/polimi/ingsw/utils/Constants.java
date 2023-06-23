@@ -1,9 +1,5 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.model.ItemCards.ItemCard;
-import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
-import javafx.scene.image.Image;
-
 /**
  * A class containing all the constant values of the game.
  */
@@ -21,7 +17,7 @@ public class Constants {
     public static final int numberOfCommonGoalCardsInGame = 2;
     public static final int numberOfPersonalGoalCardTypes = 12;
     public static final int boardSize = 9;
-    public static final String serverIpAddress = "butterbean.duckdns.org";
+    public static final String serverIpAddress = "127.0.0.1";
     public static final int serverPort = 8888;
     public static final int rmiServerPort = 1099;
     public static final String ANSI_RESET = "\u001B[0m";

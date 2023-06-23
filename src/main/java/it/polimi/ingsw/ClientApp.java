@@ -10,6 +10,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import static it.polimi.ingsw.utils.Constants.serverIpAddress;
+
 /**
  * Client App main class.
  */
@@ -47,7 +49,7 @@ public class ClientApp {
             // locate the registry (hosted on server machine)
             Registry registry = null;
             try {
-                registry = LocateRegistry.getRegistry(1099);
+                registry = LocateRegistry.getRegistry(serverIpAddress, 1099);
                 // connect to RMI server
                 server = (Server) registry.lookup("server");
             } catch (RemoteException | NotBoundException e) {
