@@ -95,32 +95,6 @@ public class Tui_Max extends ObservableImpl implements RunnableView {
     /**
      * Public method used to run internal private functions for testing purposes
      */
-    private void ScreenOutTest() {
-        System.out.println("ScreenOutTest");
-        printEndScreen("Fabio");
-
-        //printWaitingScreen();
-        clearConsole();
-    }
-
-    private void waitForCommands() {
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        boolean validCommand = false;
-
-        //compared the textual input with the possible commands
-        for (Command command : Command.values()) {
-            if (input.equals(command.getCommandName())) {
-                validCommand = true;
-                break;
-            }
-        }
-        if (!validCommand)
-            printError("Invalid command");
-        else
-            handleCommand(input);
-    }
-
     private void handleCommand(String input) {
         //TODO handle the command types
     }
@@ -490,43 +464,6 @@ public class Tui_Max extends ObservableImpl implements RunnableView {
             for (int i = 0; i < p.getScore(); i++)
                 System.out.print("★");
             System.out.println();
-        }
-    }
-
-
-    public enum Command {
-        CHAT("/chat"),
-        PRIVATECHAT("/privatechat"),
-        QUIT("/quit"),
-        HELP("/help");
-
-
-        private final String commandName;
-
-        Command(String identifier) {
-            this.commandName = identifier;
-        }
-
-        public String getCommandName() {
-            return this.commandName;
-        }
-
-        public void printList() {
-            System.out.println("List of commands:");
-            for (Tui.Command command : Tui.Command.values()) {
-                printCommandInfo(command);
-            }
-        }
-
-        public void printCommandInfo(Tui.Command command) {
-            switch (command) {
-                case CHAT -> System.out.println("Type /chat <message> to send a message to the other players");
-                case PRIVATECHAT ->
-                        System.out.println("Type /privatechat <player> <message> to send a private message to a player");
-                case QUIT -> System.out.println("Type /quit to quit the game");
-                case HELP -> System.out.println("Type /help to see the list of commands");
-
-            }
         }
     }
 }

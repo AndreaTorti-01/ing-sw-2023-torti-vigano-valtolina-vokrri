@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.client.ClientImpl;
+import it.polimi.ingsw.network.serializable.ChatMsg;
+import it.polimi.ingsw.network.serializable.CheatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.ObservableImpl;
@@ -25,6 +27,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     private String playerName = "";
     private GameViewMsg modelView;
     private State state = State.ASK_NAME;
+    private volatile boolean running;
 
     public Tui(Client client) {
         this.addObserver((ClientImpl) client);
@@ -47,12 +50,29 @@ public class Tui extends ObservableImpl implements RunnableView {
     @Override
     public void run() {
 
-        // asks the player for his name
-        printWelcomeScreen();
-        this.playerName = askPlayerName();
+        while (getState() == Tui.State.ASK_NAME) {
+            synchronized (lock) {
+                try {
+                    new Thread(this::askPlayerName).start();
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    System.err.println("Interrupted while waiting for server: " + e.getMessage());
+                }
+            }
+        }
 
-        // waits for state to change
-        while (getState() == State.ASK_NAME) {
+        while (getState() == Tui.State.ASK_NUMBER) {
+            synchronized (lock) {
+                try {
+                    new Thread(this::askPlayerNumber).start();
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    System.err.println("Interrupted while waiting for server: " + e.getMessage());
+                }
+            }
+        }
+
+        while (getState() == Tui.State.WAITING_FOR_PLAYERS) {
             synchronized (lock) {
                 try {
                     lock.wait();
@@ -62,13 +82,12 @@ public class Tui extends ObservableImpl implements RunnableView {
             }
         }
 
-        //
-        if (getState() == State.ASK_NUMBER) {
-            askPlayerNumber();
-            gaveNumber = true;
-        }
+        // create a thread passing the function that will handle the input
+        running = true;
+        Thread inputHandler = new Thread(this::acceptInput);
+        inputHandler.start();
 
-        while (getState() == State.WAITING_FOR_PLAYERS) {
+        while (!(getState() == Tui.State.ENDED)) {
             synchronized (lock) {
                 try {
                     lock.wait();
@@ -77,31 +96,16 @@ public class Tui extends ObservableImpl implements RunnableView {
                 }
             }
         }
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            while (getState() == State.WAITING_FOR_TURN) {
-                printGameStatus(); // TODO complete
-                synchronized (lock) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
-                    }
-                }
-            }
 
-            while (getState() == State.PLAY) {
-                printGameStatus(); // TODO complete
-                pickCards();
-                synchronized (lock) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
-                    }
-                }
-            }
+        // wait for the input handler to terminate and close the game
+        System.out.println("Press enter to close the game");
+        running = false;
+        try {
+            inputHandler.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+        System.exit(0);
     }
 
     /**
@@ -113,18 +117,103 @@ public class Tui extends ObservableImpl implements RunnableView {
     public void updateView(GameViewMsg modelView) {
         this.modelView = modelView;
 
+        // check the name input is valid
+        if (getState() == Tui.State.ASK_NAME && !playerName.equals("") && modelView.getNameError()) {
+            this.playerName = "";
+            setState(Tui.State.ASK_NAME);
+        }
+
         // the game is waiting for players
         if (!playerName.equals("") && modelView.getGameStatus().equals(Game.Status.WAITING)) {
-            if (playerName.equals(modelView.getPlayers().get(0).getName()) && !gaveNumber)
-                setState(State.ASK_NUMBER); // I am lobby leader
-            else
-                setState(State.WAITING_FOR_PLAYERS); // I am not lobby leader
+            if (playerName.equals(modelView.getPlayers().get(0).getName()) && !gaveNumber) {
+                setState(Tui.State.ASK_NUMBER); // I am lobby leader
+            } else setState(Tui.State.WAITING_FOR_PLAYERS); // I am not lobby leader
         }
         // the game has started
         else if (modelView.getGameStatus().equals(Game.Status.STARTED)) {
-            if (modelView.getCurrentPlayer().getName().equals(this.playerName)) {
-                setState(State.PLAY); // it's my turn
-            } else setState(State.WAITING_FOR_TURN); // it's not my turn
+            if (modelView.getCurrentPlayer().getName().equals(this.playerName))
+                setState(Tui.State.PLAY); // it's my turn
+            else setState(Tui.State.WAITING_FOR_TURN); // it's not my turn
+            printGameStatus();
+            if (getState() == Tui.State.PLAY) {
+                System.out.println("It's your turn!");
+            }
+        }
+        // the game ends
+        else if (modelView.getGameStatus().equals(Game.Status.ENDED)) {
+            printEndScreen(modelView.getWinner().getName());
+            setState(Tui.State.ENDED);
+        }
+    }
+
+    private void acceptInput() {
+        while (running) {
+            // scan for command
+            String line = scanLine();
+            // check if running
+            if (!running) break;
+            // check if it's a command
+            if (line.charAt(0) == '/') {
+                String command = line.split(" ")[0];
+
+                // check which command it is
+                switch (command) {
+                    case "/chat" -> {
+                        // check that it has 2 arguments
+                        if (line.split(" ").length >= 2) {
+                            String chatMessage = line.split(" ", 2)[1];
+                            notifyObservers(new ChatMsg(null, playerName, true, chatMessage));
+                        } else {
+                            System.out.println("Invalid arguments: Type /chat <message> to send a message to all players");
+                        }
+                    }
+
+                    case "/privatechat" -> {
+                        // check that it has 3 arguments
+                        if (line.split(" ").length >= 3) {
+                            String destPlayer = line.split(" ")[1];
+                            List<String> playerNames = new ArrayList<>();
+                            for (Player player : modelView.getPlayers()) {
+                                playerNames.add(player.getName());
+                            }
+
+                            // check that the dest player exists and is not the player himself
+                            if (playerNames.contains(destPlayer) && !destPlayer.equals(playerName)) {
+                                String chatMessage = line.split(" ", 3)[2];
+                                notifyObservers(new ChatMsg(destPlayer, playerName, false, "[private]" + chatMessage));
+                            } else if (destPlayer.equals(playerName)) {
+                                System.out.println("You can't send a private message to yourself, touch some grass instead :)");
+                            } else {
+                                System.out.println("Invalid player name");
+                            }
+                        } else {
+                            System.out.println("Invalid arguments: Type /privatechat <player> <message> to send a private message to a player");
+                        }
+                    }
+
+                    case "/pick" -> {
+                        // check if it's the player's turn
+                        if (state.equals(Tui.State.PLAY)) {
+                            pickCards();
+                        } else System.out.println("Picking cards is not an option right now.");
+                    }
+
+                    case "/cheat" -> {
+                        if (modelView.getCurrentPlayer().getName().equals(playerName)) {
+                            notifyObservers(new CheatMsg(playerName));
+                        } else System.out.println("You can't cheat if it's not your turn!");
+                    }
+
+                    case "/help" -> {
+                        System.out.println("Type /chat <message> to send a message to all players");
+                        System.out.println("Type /privatechat <player> <message> to send a private message to a player");
+                        System.out.println("Type /pick to start the card picking process");
+                        System.out.println("Type /help to see this list again");
+                    }
+
+                    default -> System.out.println("Invalid command: type /help for a list of commands");
+                }
+            } else System.out.println("Invalid command: type /help for a list of commands");
         }
     }
 
@@ -144,8 +233,9 @@ public class Tui extends ObservableImpl implements RunnableView {
                 printError("Invalid number or non-numeric input");
             }
         }
-        printWaitingForPlayers();
+        gaveNumber = true;
         notifyObservers(playerNumber);
+        printWaitingForPlayers();
     }
 
     /**
@@ -223,6 +313,7 @@ public class Tui extends ObservableImpl implements RunnableView {
                 System.out.println("Do you want to pick another card?");
                 if (!askBoolean()) break;
             }
+
         }
 
         System.out.println("These are the cards you picked: ");
@@ -235,7 +326,11 @@ public class Tui extends ObservableImpl implements RunnableView {
         while (tmp.size() < pickedCoords.size()) {
 
             do {
-                orderId = scanner.nextInt();
+                try {
+                    orderId = Integer.parseInt(scanLine());
+                } catch (NumberFormatException e) {
+                    printError("Invalid number or non-numeric input");
+                }
             } while ((orderId < 1 || orderId > pickedCoords.size()));
 
             if (!used.contains(orderId)) {
@@ -282,15 +377,11 @@ public class Tui extends ObservableImpl implements RunnableView {
         clearConsole();
         printSeparee();
         printMyShelfie();
-        printSeparee();
         printBoard(modelView.getBoard(), modelView.getBoardValid());
         System.out.println("\n");
         printShelves();
-        printSeparee();
         printCommonGoalCards();
-        System.out.println();
         printPersonalGoalCards();
-        printSeparee();
         printScores();
         printSeparee();
     }
@@ -348,10 +439,21 @@ public class Tui extends ObservableImpl implements RunnableView {
             System.out.println();
         } else System.err.println("Error: player not found");
     }
-
+    private void printChat() {
+        if (modelView.getMessages().size() == 0) return;
+        System.out.println("Chat: ");
+        for (ChatMsg message : modelView.getMessages()) {
+            if (message.isPublic() || !message.isPublic() && (message.getRecipientPlayer().equals(playerName) || message.getSenderPlayer().equals(playerName)))
+                System.out.println(ANSI_BLUE + message.getSenderPlayer() + ": " + ANSI_RESET + ANSI_GREY + message.getMessage() + ANSI_RESET);
+        }
+    }
     private void printEndScreen(String winnerName) {
+        printSeparee();
+        if(modelView.getWinner().getName().equals(playerName)) printWon();
+        else printLost();
         System.out.println("The winner is " + winnerName + "!");
         printScores();
+        printSeparee();
     }
 
     /**
@@ -359,12 +461,11 @@ public class Tui extends ObservableImpl implements RunnableView {
      *
      * @return the name of the player
      */
-    private String askPlayerName() {
+    private void askPlayerName() {
         // Ask the name of the player
         System.out.println("  >>  Enter your name:  ");
-        String name = scanLine();
-        notifyObservers(name);
-        return name;
+        this.playerName = scanLine();
+        notifyObservers(playerName);
     }
 
     private boolean askBoolean() {
@@ -481,47 +582,11 @@ public class Tui extends ObservableImpl implements RunnableView {
         String ret;
         do {
             ret = scanner.nextLine();
-        } while (ret.equals(""));
+        } while (ret.equals("") && running);
         return ret;
     }
 
     private enum State {
-        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY
-    }
-
-    public enum Command {
-        CHAT("/chat"),
-        PRIVATECHAT("/privatechat"),
-        QUIT("/quit"),
-        HELP("/help");
-
-
-        private final String commandName;
-
-        Command(String identifier) {
-            this.commandName = identifier;
-        }
-
-        public String getCommandName() {
-            return this.commandName;
-        }
-
-        public void printList() {
-            System.out.println("List of commands:");
-            for (Command command : Command.values()) {
-                printCommandInfo(command);
-            }
-        }
-
-        public void printCommandInfo(Command command) {
-            switch (command) {
-                case CHAT -> System.out.println("Type /chat <message> to send a message to the other players");
-                case PRIVATECHAT ->
-                        System.out.println("Type /privatechat <player> <message> to send a private message to a player");
-                case QUIT -> System.out.println("Type /quit to quit the game");
-                case HELP -> System.out.println("Type /help to see the list of commands");
-
-            }
-        }
+        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY, ENDED
     }
 }

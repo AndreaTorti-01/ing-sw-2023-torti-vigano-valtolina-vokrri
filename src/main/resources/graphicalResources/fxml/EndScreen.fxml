@@ -17,47 +17,47 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Text fx:id="Player1name" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE1" textAlignment="CENTER">
+      <Text fx:id="Player1name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE1" textAlignment="CENTER">
          <font>
-            <Font name="System Bold" size="36.0" />
+            <Font name="Consolas Bold Italic" size="44.0" />
          </font>
          <GridPane.margin>
             <Insets bottom="400.0" left="175.0" />
          </GridPane.margin>
       </Text>
-      <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="CLASSIFICA">
+      <Text fx:id="title" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="CLASSIFICA">
          <font>
-            <Font name="Arial Italic" size="64.0" />
+            <Font name="Consolas Bold Italic" size="70.0" />
          </font>
          <GridPane.margin>
             <Insets bottom="725.0" left="615.0" />
          </GridPane.margin>
       </Text>
-      <Text fx:id="Player2name" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE2" textAlignment="CENTER">
+      <Text fx:id="Player2name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE2" textAlignment="CENTER">
          <font>
-            <Font name="System Bold" size="36.0" />
+            <Font name="Consolas Bold Italic" size="44.0" />
          </font>
          <GridPane.margin>
             <Insets bottom="160.0" left="175.0" />
          </GridPane.margin>
       </Text>
-      <Text fx:id="Player3name" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE3">
+      <Text fx:id="Player3name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE3">
          <font>
-            <Font name="System Bold" size="36.0" />
+            <Font name="Consolas Bold Italic" size="44.0" />
          </font>
          <GridPane.margin>
             <Insets left="175.0" top="80.0" />
          </GridPane.margin>
       </Text>
-      <Text fx:id="Player4name" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE4">
+      <Text fx:id="Player4name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE4">
          <GridPane.margin>
             <Insets left="175.0" top="320.0" />
          </GridPane.margin>
          <font>
-            <Font name="System Bold" size="36.0" />
+            <Font name="Consolas Bold Italic" size="44.0" />
          </font>
       </Text>
-      <Text fx:id="score1" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+      <Text fx:id="score1" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
@@ -65,7 +65,7 @@
             <Insets bottom="400.0" left="500.0" />
          </GridPane.margin>
       </Text>
-      <Text fx:id="score2" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+      <Text fx:id="score2" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
@@ -73,7 +73,7 @@
             <Insets bottom="160.0" left="500.0" />
          </GridPane.margin>
       </Text>
-      <Text fx:id="score3" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+      <Text fx:id="score3" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
@@ -81,7 +81,7 @@
             <Insets left="500.0" top="80.0" />
          </GridPane.margin>
       </Text>
-      <Text fx:id="score4" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+      <Text fx:id="score4" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>

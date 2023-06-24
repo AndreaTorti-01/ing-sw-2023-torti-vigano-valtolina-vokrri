@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.serializable.MoveMsg;
 import it.polimi.ingsw.utils.Observer;
 import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.gui.Gui;
+import it.polimi.ingsw.view.tui.Tui;
 import it.polimi.ingsw.view.tui.TuiRaw;
 
 import java.io.Serial;
@@ -37,7 +38,8 @@ public class ClientImpl extends UnicastRemoteObject implements Client, Observer 
         super();
 
         if (isTui) {
-            view = new TuiRaw(this);
+            view = new Tui(this);
+//            view = new TuiRaw(this);
             new Thread(view).start();
         } else {
             view = new Gui(this);

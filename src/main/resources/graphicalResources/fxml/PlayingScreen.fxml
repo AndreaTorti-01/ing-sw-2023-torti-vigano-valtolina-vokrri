@@ -14,7 +14,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <GridPane fx:id="gridPaneBG" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.PlayingScreenController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -212,7 +211,7 @@
                            <children>
                               <HBox prefHeight="57.0" prefWidth="500.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Text fill="#dddddd" strokeType="OUTSIDE" strokeWidth="0.0" text="SCOREBOARD" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SCOREBOARD" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font name="Consolas Bold Italic" size="41.0" />
                                        </font>
@@ -226,9 +225,9 @@
                                  <children>
                                     <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Text fx:id="scoreName0" fill="#dddddd" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                          <Text fx:id="scoreName0" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font name="Consolas" size="21.0" />
+                                                <Font name="Consolas Bold Italic" size="30.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets left="100.0" top="20.0" />
@@ -238,9 +237,9 @@
                                     </VBox>
                                     <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Text fx:id="score0" fill="#dddddd" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                          <Text fx:id="score0" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font name="Consolas" size="21.0" />
+                                                <Font name="Consolas Bold Italic" size="30.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets top="20.0" />
@@ -254,9 +253,9 @@
                                  <children>
                                     <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Text fx:id="scoreName1" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                          <Text fx:id="scoreName1" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font name="MS Gothic" size="21.0" />
+                                                <Font name="Consolas Bold Italic" size="30.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets left="100.0" top="15.0" />
@@ -266,9 +265,9 @@
                                     </VBox>
                                     <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Text fx:id="score1" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                          <Text fx:id="score1" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font name="MS Gothic" size="21.0" />
+                                                <Font name="Consolas Bold Italic" size="30.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets top="15.0" />
@@ -282,9 +281,9 @@
                                  <children>
                                     <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Text fx:id="scoreName2" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                          <Text fx:id="scoreName2" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font name="MS Gothic" size="21.0" />
+                                                <Font name="Consolas Bold Italic" size="30.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets left="100.0" top="8.0" />
@@ -297,9 +296,9 @@
                                     </VBox>
                                     <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Text fx:id="score2" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                          <Text fx:id="score2" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font name="MS Gothic" size="21.0" />
+                                                <Font name="Consolas Bold Italic" size="30.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets top="8.0" />
@@ -313,9 +312,9 @@
                                  <children>
                                     <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Text fx:id="scoreName3" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                          <Text fx:id="scoreName3" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font name="MS Gothic" size="21.0" />
+                                                <Font name="Consolas Bold Italic" size="30.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets left="100.0" />
@@ -325,9 +324,9 @@
                                     </VBox>
                                     <VBox prefHeight="51.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Text fx:id="score3" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                          <Text fx:id="score3" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font name="MS Gothic" size="21.0" />
+                                                <Font name="Consolas Bold Italic" size="30.0" />
                                              </font>
                                           </Text>
                                        </children>
