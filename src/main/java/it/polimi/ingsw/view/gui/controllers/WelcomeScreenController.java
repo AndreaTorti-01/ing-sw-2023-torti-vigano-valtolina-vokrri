@@ -15,7 +15,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,8 +29,6 @@ import java.util.ResourceBundle;
 public class WelcomeScreenController implements Initializable {
     @FXML
     private static final String fxmlPath = "/graphicalResources/fxml/";
-    @FXML
-    public ImageView background;
     @FXML
     public TextField textField;
     @FXML
@@ -39,6 +41,8 @@ public class WelcomeScreenController implements Initializable {
     public Button button2;
     @FXML
     public Label askerLabel;
+    @FXML
+    public GridPane gridPaneBG;
 
     //other parameters
     private Gui gui;
@@ -52,6 +56,12 @@ public class WelcomeScreenController implements Initializable {
     //initialize method is standard-called when the fxml file is loaded
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.gui = (Gui) ClientImpl.getView();
+        //set scene background
+        BackgroundImage myBI = new BackgroundImage(new Image("/graphicalResources/home_my_shelfie.jpg", 1600, 900, false, true),
+                null, null, null, null);
+        gridPaneBG.setBackground(new Background(myBI));
+
+        GuiApp.getMainStage().setResizable(false);
 
         enterButton.setText("Enter");
         askerLabel.setText("Insert your nickname");
@@ -117,6 +127,9 @@ public class WelcomeScreenController implements Initializable {
     }
     public void changeScene(){
         GuiApp.changeScene(GuiApp.getPlayingScreenRoot());
+        Platform.runLater(() -> {
+            GuiApp.getMainStage().setResizable(true);
+        });
     }
     public void waitForPlayers(){
         Platform.runLater(() -> {
