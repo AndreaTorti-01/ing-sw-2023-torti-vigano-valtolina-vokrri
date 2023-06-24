@@ -13,7 +13,6 @@ import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.ObservableImpl;
 import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.gui.controllers.*;
-import it.polimi.ingsw.view.tui.TuiRaw;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -106,6 +105,10 @@ public class Gui extends ObservableImpl implements RunnableView {
         gaveNumber = true;
         notifyObservers(playerNumber);
     }
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+        notifyObservers(playerName);
+    }
 
     public void setPicked(List<List<Integer>> pickedCoords) {
         this.pickedCoords = pickedCoords;
@@ -121,10 +124,6 @@ public class Gui extends ObservableImpl implements RunnableView {
         boardController.resetSelection();
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
         pickedCoords.clear();
-    }
-
-    public void sendMsg(String destPlayer, String sourcePlayer, boolean isMsgPublic, String message) {
-        notifyObservers(new ChatMsg(destPlayer, sourcePlayer, isMsgPublic, message));
     }
 
     public GameViewMsg getModelView() {
@@ -198,6 +197,14 @@ public class Gui extends ObservableImpl implements RunnableView {
         this.modelView = modelView;
 
         // the game is waiting for players
+        if (getState() == Gui.State.ASK_NAME && !playerName.equals("") && modelView.getNameError()) {
+            this.playerName = "";
+            setState(Gui.State.ASK_NAME);
+            while (!GuiApp.controllersAvailable())
+                sleep(100);
+            welcomeScreenController = GuiApp.getWelcomeScreenController();
+            welcomeScreenController.resetAskName();
+        }
         System.out.println("notified");
         if (!playerName.equals("") && modelView.getGameStatus().equals(Game.Status.WAITING)) {
             if (playerName.equals(modelView.getPlayers().get(0).getName()) && !gaveNumber) {
@@ -251,10 +258,7 @@ public class Gui extends ObservableImpl implements RunnableView {
         return playerName;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-        notifyObservers(playerName);
-    }
+
 
     private void sleep(int millis) {
         try {

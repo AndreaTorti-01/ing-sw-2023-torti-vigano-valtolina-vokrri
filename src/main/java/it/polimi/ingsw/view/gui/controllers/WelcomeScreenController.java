@@ -62,8 +62,21 @@ public class WelcomeScreenController implements Initializable {
         playerName = "";
         numberOfPlayers = 0;
     }
+    public void resetAskName(){
+        Platform.runLater(() -> {
+            askerLabel.setText("Insert your nickname");
+            textField.setVisible(true);
+            textField.setDisable(false);
+
+            enterButton.setVisible(true);
+            enterButton.setDisable(false);
+            playerName = "";
+            insertedName = false;
+        });
+    }
     public void ButtonAction(ActionEvent actionEvent) {
 
+        System.out.println("ButtonAction called");
         if(!textField.getText().isEmpty() && !insertedName){
             this.playerName = textField.getText();
 

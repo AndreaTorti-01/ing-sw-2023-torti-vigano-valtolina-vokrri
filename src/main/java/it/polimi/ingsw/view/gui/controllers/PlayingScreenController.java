@@ -128,7 +128,7 @@ public class PlayingScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        gridPaneBG.setStyle("-fx-background-image: url('/graphicalResources/oak_wood_planks.jpg'); -fx-background-size: stretch; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+        gridPaneBG.setStyle("-fx-background-image: url('/graphicalResources/misc/sfondo_parquet.jpg'); -fx-background-size: stretch; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
 
         gui = (Gui) it.polimi.ingsw.network.client.ClientImpl.getView();
         picked0.setImage(null);
