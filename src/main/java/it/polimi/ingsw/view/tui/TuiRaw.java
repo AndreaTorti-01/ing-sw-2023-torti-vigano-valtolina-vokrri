@@ -51,13 +51,10 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     @Override
     public void run() {
 
-        // asks the player for his name
-        this.playerName = askPlayerName();
-
-        // waits for state to change
         while (getState() == State.ASK_NAME) {
             synchronized (lock) {
                 try {
+                    new Thread(this::askPlayerName).start();
                     lock.wait();
                 } catch (InterruptedException e) {
                     System.err.println("Interrupted while waiting for server: " + e.getMessage());
@@ -120,6 +117,12 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     @Override
     public void updateView(GameViewMsg modelView) {
         this.modelView = modelView;
+
+        // check the name input is valid
+        if (getState() == State.ASK_NAME && !playerName.equals("") && modelView.getNameError()) {
+            this.playerName = "";
+            setState(State.ASK_NAME);
+        }
 
         // the game is waiting for players
         if (!playerName.equals("") && modelView.getGameStatus().equals(Game.Status.WAITING)) {
@@ -436,13 +439,11 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
      *
      * @return the name of the player
      */
-    private String askPlayerName() {
+    private void askPlayerName() {
         // Ask the name of the player
         System.out.println("  >>  Enter your name:  ");
-        String name = scanLine();
-        this.playerName = name;
-        notifyObservers(name);
-        return name;
+        this.playerName = scanLine();
+        notifyObservers(playerName);
     }
 
     private boolean askBoolean() {
