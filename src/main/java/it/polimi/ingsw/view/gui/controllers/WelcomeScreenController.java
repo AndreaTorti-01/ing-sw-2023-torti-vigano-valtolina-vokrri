@@ -57,11 +57,7 @@ public class WelcomeScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.gui = (Gui) ClientImpl.getView();
         //set scene background
-        BackgroundImage myBI = new BackgroundImage(new Image("/graphicalResources/home_my_shelfie.jpg", 1600, 900, false, true),
-                null, null, null, null);
-        gridPaneBG.setBackground(new Background(myBI));
-
-        GuiApp.getMainStage().setResizable(false);
+        gridPaneBG.setStyle("-fx-background-image: url('/graphicalResources/home_my_shelfie.jpg'); -fx-background-size: stretch; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
 
         enterButton.setText("Enter");
         askerLabel.setText("Insert your nickname");
@@ -127,9 +123,6 @@ public class WelcomeScreenController implements Initializable {
     }
     public void changeScene(){
         GuiApp.changeScene(GuiApp.getPlayingScreenRoot());
-        Platform.runLater(() -> {
-            GuiApp.getMainStage().setResizable(true);
-        });
     }
     public void waitForPlayers(){
         Platform.runLater(() -> {

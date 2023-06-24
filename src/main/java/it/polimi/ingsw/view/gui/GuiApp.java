@@ -73,7 +73,6 @@ public class GuiApp extends Application {
         mainStage.setFullScreen(false);
         mainStage.setFullScreenExitHint("");
         mainStage.setTitle("MyShelfie ~ gc_33");
-        mainStage.setResizable(false);
         mainStage.show();
 
         //stops gui if closed

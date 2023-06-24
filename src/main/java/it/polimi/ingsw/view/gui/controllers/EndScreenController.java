@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.controllers;
 import it.polimi.ingsw.view.gui.Gui;
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -18,11 +19,12 @@ public class EndScreenController implements Initializable {
     public Text score3;
     public Text score4;
     public Text title;
+    public GridPane gridPaneBG;
     private Gui gui;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        gridPaneBG.setStyle("-fx-background-image: url('/graphicalResources/oak_wood_planks.jpg'); -fx-background-size: stretch; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
     }
 
     public void updateGraphics(){

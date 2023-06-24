@@ -25,6 +25,7 @@ import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -63,6 +64,7 @@ public class PlayingScreenController implements Initializable {
     public ImageView picked0;
     public ImageView picked1;
     public ImageView picked2;
+    public GridPane gridPaneBG;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -126,6 +128,8 @@ public class PlayingScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        gridPaneBG.setStyle("-fx-background-image: url('/graphicalResources/oak_wood_planks.jpg'); -fx-background-size: stretch; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
+
         gui = (Gui) it.polimi.ingsw.network.client.ClientImpl.getView();
         picked0.setImage(null);
         picked1.setImage(null);
