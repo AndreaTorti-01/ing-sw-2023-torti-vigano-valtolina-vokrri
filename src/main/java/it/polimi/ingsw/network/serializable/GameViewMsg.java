@@ -26,6 +26,7 @@ public class GameViewMsg implements Serializable {
     private final Game.Status status;
     private final Player winner;
     private final Stack<ChatMsg> messages;
+    private final Boolean nameError;
 
     /**
      * Creates a new Game View Message from the provided model.
@@ -50,6 +51,28 @@ public class GameViewMsg implements Serializable {
         this.status = model.getGameStatus();
         this.winner = model.getWinner();
         this.messages = model.getMessages();
+        this.nameError = false;
+    }
+
+    public GameViewMsg(Game model, Boolean nameError) {
+        if (model == null) throw new IllegalArgumentException();
+
+        if (model.getBoard() != null) {
+            this.board = model.getBoard().getTiles();
+            this.boardValid = model.getBoard().getLayout();
+        } else {
+            board = null;
+            boardValid = null;
+        }
+
+        this.commonGoalCards = model.getCommonGoalCards();
+        this.players = model.getPlayers();
+        this.currentPlayer = model.getCurrentPlayer();
+        this.isBagEmpty = model.getBag().getCardsInside().size() == 0;
+        this.status = model.getGameStatus();
+        this.winner = model.getWinner();
+        this.messages = model.getMessages();
+        this.nameError = nameError;
     }
 
     /**
@@ -126,6 +149,10 @@ public class GameViewMsg implements Serializable {
      */
     public Stack<ChatMsg> getMessages() {
         return this.messages;
+    }
+
+    public Boolean getNameError() {
+        return this.nameError;
     }
 
     public Player getPlayerByName(String playerName) {

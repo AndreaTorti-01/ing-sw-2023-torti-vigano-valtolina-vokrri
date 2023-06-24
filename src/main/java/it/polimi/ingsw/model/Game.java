@@ -140,6 +140,14 @@ public class Game extends ObservableImpl implements Serializable {
      * @param playerName the name of the player to be inserted.
      */
     public void addPlayer(String playerName) {
+        // check if player name is already taken
+        for (Player player : players) {
+            if (player.getName().equals(playerName)) {
+                this.notifyObservers(new GameViewMsg(this, true));
+                return;
+            }
+        }
+
         // init player
         Player newPlayer = new Player(playerName);
 
