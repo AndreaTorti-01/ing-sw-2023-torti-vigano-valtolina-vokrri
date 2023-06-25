@@ -3,8 +3,6 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Shelf;
-import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
@@ -47,7 +45,7 @@ public class GameController {
      *
      * @param move the move to be made.
      */
-    public void makeMove(MoveMsg move) {
+    public boolean makeMove(MoveMsg move) {
         ItemCard card;
         GameViewMsg modelView = new GameViewMsg(model);
         int[] freeSlotsNumber = new int[numberOfColumns]; //number of max cards that can be inserted in each column
@@ -64,13 +62,13 @@ public class GameController {
         }
 
         // check validity of the move
-        if (move.getPickedCards().size() > 3) return;
+        if (move.getPickedCards().size() > 3) return false;
         for (List<Integer> coords : move.getPickedCards()) {
             if (coords.get(0) < 0 || coords.get(0) > numberOfRows || coords.get(1) < 0 || coords.get(1) > numberOfColumns)
-                return;
+                return false;
         }
         if (move.getColumn() < 0 || move.getColumn() > numberOfColumns || freeSlotsNumber[move.getColumn()] < move.getPickedCards().size())
-            return;
+            return false;
 
         // make the move
         for (List<Integer> coords : move.getPickedCards()) {
@@ -79,6 +77,7 @@ public class GameController {
         }
 
         model.advancePlayerTurn();
+        return true;
     }
 
     /**
@@ -88,18 +87,6 @@ public class GameController {
      */
     public void addPlayer(String playerName) {
         this.model.addPlayer(playerName);
-    }
-
-
-    /**
-     * Checks if the pattern of the common goal card is satisfied.
-     *
-     * @param shelf          the shelf to check for the pattern in.
-     * @param commonGoalCard the pattern to check.
-     * @return true if the pattern is satisfied, false otherwise.
-     */
-    private boolean checkCommonGoalCardPattern(Shelf shelf, CommonGoalCard commonGoalCard) {
-        return commonGoalCard.checkPattern(shelf);
     }
 
     /**

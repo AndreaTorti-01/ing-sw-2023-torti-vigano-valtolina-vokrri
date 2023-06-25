@@ -59,7 +59,7 @@ public class Game extends ObservableImpl implements Serializable {
     /**
      * The number of players in this game. Set to -1 by default.
      */
-    private int numberOfPlayers = -1;
+    private int numberOfPlayers;
 
     /**
      * Creates a new Game, initializing all the game items.
@@ -148,6 +148,10 @@ public class Game extends ObservableImpl implements Serializable {
      * Initializes all the model elements.
      */
     public void initModel(Integer numberOfPlayers) throws IllegalArgumentException {
+
+        // check the model is not already initialized
+        if (this.numberOfPlayers != 0)
+            throw new IllegalStateException("the model is already initialized");
 
         // checking the numberOfPlayers is valid and setting it in the model
         if (numberOfPlayers < minNumberOfPlayers || numberOfPlayers > maxNumberOfPlayers)
