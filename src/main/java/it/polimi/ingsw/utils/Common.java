@@ -23,7 +23,6 @@ public class Common {
      * @return true if the Item Card in the provided position can be taken by the player, false otherwise.
      */
     public static boolean isTakeable(GameViewMsg modelView, int row, int column, List<List<Integer>> pickedCoords) {
-        // TODO diego fix this
 
         boolean free = false; //has a null adjacent card
         boolean valid = true; //is a valid card (not taken yet, in the same row or col as the others)

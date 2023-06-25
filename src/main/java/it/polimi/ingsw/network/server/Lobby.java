@@ -13,6 +13,9 @@ import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static it.polimi.ingsw.utils.Constants.maxNumberOfPlayers;
+import static it.polimi.ingsw.utils.Constants.minNumberOfPlayers;
+
 /**
  * A class that represents a Lobby.
  * This class contains the Model and the Controller,
@@ -64,6 +67,8 @@ public class Lobby implements Observer {
      * @param numberOfPlayersMessage the number of players the game should have.
      */
     public void update(Integer numberOfPlayersMessage) {
+        if (numberOfPlayersMessage < minNumberOfPlayers || numberOfPlayersMessage > maxNumberOfPlayers)
+            return;
         this.controller.initGame(numberOfPlayersMessage);
         this.isOpen = true;
     }

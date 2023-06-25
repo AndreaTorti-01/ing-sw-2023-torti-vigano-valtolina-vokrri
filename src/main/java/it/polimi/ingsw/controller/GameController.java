@@ -2,12 +2,17 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Shelf;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.ChatMsg;
+import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
 
 import java.util.List;
+
+import static it.polimi.ingsw.utils.Constants.numberOfColumns;
+import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
 /**
  * The controller of the MVC pattern.
@@ -44,6 +49,30 @@ public class GameController {
      */
     public void makeMove(MoveMsg move) {
         ItemCard card;
+        GameViewMsg modelView = new GameViewMsg(model);
+        int[] freeSlotsNumber = new int[numberOfColumns]; //number of max cards that can be inserted in each column
+        int maxCards = 0; //maximum cards that can be picked
+        Player me = model.getCurrentPlayer();
+
+        for (int j = 0; j < numberOfColumns; j++) {
+            int freeSlots = 0;
+            for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
+                if (modelView.getShelfOf(me)[i][j] == null) freeSlots++;
+                if (freeSlots > maxCards) maxCards = freeSlots;
+                freeSlotsNumber[j] = freeSlots;
+            }
+        }
+
+        // check validity of the move
+        if (move.getPickedCards().size() > 3) return;
+        for (List<Integer> coords : move.getPickedCards()) {
+            if (coords.get(0) < 0 || coords.get(0) > numberOfRows || coords.get(1) < 0 || coords.get(1) > numberOfColumns)
+                return;
+        }
+        if (move.getColumn() < 0 || move.getColumn() > numberOfColumns || freeSlotsNumber[move.getColumn()] < move.getPickedCards().size())
+            return;
+
+        // make the move
         for (List<Integer> coords : move.getPickedCards()) {
             card = model.getBoard().popCard(coords.get(0), coords.get(1));
             model.getCurrentPlayer().getShelf().insert(move.getColumn(), card);
