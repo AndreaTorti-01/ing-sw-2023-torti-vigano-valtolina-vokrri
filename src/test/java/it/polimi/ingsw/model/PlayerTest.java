@@ -1,28 +1,19 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Constants;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
-    @Test
-    void testPlayer() {
-        assertDoesNotThrow(() -> new Player(this.generateRandomString()));
-    }
-
-    @Test
-    void testGetName() {
-        String randomName = this.generateRandomString();
-        Player player = new Player(randomName);
-
-        assertEquals(player.getName(), randomName);
-    }
+    private Player player;
+    private String name;
 
 
-    private String generateRandomString() {
+    private String getRandomName() {
         Random random = new Random();
         String lettersAndNumbers = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_.";
         StringBuilder randomString = new StringBuilder();
@@ -33,5 +24,85 @@ public class PlayerTest {
         }
 
         return randomString.toString();
+    }
+
+    @BeforeEach
+    void setUp() {
+        name = this.getRandomName();
+        player = new Player(name);
+    }
+
+    @Test
+    void testGetScore() {
+        int randomScore = new Random().nextInt(50);
+        player.setScore(randomScore);
+
+        assertEquals(player.getScore(), randomScore);
+    }
+
+    @Test
+    void setScore() {
+        int randomScore = new Random().nextInt(50);
+        player.setScore(randomScore);
+
+        assertEquals(player.getScore(), randomScore);
+    }
+
+    @Test
+    void getPersonalGoalCard() {
+        for (int i = 0; i < Constants.numberOfPersonalGoalCardTypes; i++) {
+            PersonalGoalCard personalGoalCard = new PersonalGoalCardFactory().createPersonalGoalCard(i);
+            player.setPersonalGoalCard(personalGoalCard);
+
+            assertEquals(player.getPersonalGoalCard(), personalGoalCard);
+        }
+    }
+
+    @Test
+    void setPersonalGoalCard() {
+        for (int i = 0; i < Constants.numberOfPersonalGoalCardTypes; i++) {
+            PersonalGoalCard personalGoalCard = new PersonalGoalCardFactory().createPersonalGoalCard(i);
+            player.setPersonalGoalCard(personalGoalCard);
+
+            assertEquals(player.getPersonalGoalCard(), personalGoalCard);
+        }
+    }
+
+    @Test
+    void getShelf() {
+        assertNotNull(player.getShelf());
+        assertDoesNotThrow(() -> player.getShelf());
+    }
+
+    @Test
+    void getName() {
+        assertEquals(player.getName(), name);
+    }
+
+    @Test
+    void hasAchievedCommonGoalCard() {
+        assertFalse(player.hasAchievedCommonGoalCard(0));
+        assertFalse(player.hasAchievedCommonGoalCard(1));
+
+        player.setAchievedCommonGoalCard(0);
+        assertTrue(player.hasAchievedCommonGoalCard(0));
+
+        player.setAchievedCommonGoalCard(1);
+        assertTrue(player.hasAchievedCommonGoalCard(1));
+
+        assertThrows(IllegalArgumentException.class, () -> player.hasAchievedCommonGoalCard(-1));
+        assertThrows(IllegalArgumentException.class, () -> player.hasAchievedCommonGoalCard(2));
+    }
+
+    @Test
+    void setAchievedCommonGoalCard() {
+        player.setAchievedCommonGoalCard(0);
+        assertTrue(player.hasAchievedCommonGoalCard(0));
+
+        player.setAchievedCommonGoalCard(1);
+        assertTrue(player.hasAchievedCommonGoalCard(1));
+
+        assertThrows(IllegalArgumentException.class, () -> player.setAchievedCommonGoalCard(-1));
+        assertThrows(IllegalArgumentException.class, () -> player.setAchievedCommonGoalCard(2));
     }
 }

@@ -19,7 +19,7 @@ public class ShelfFactory {
      * @return the Shelf containing the elements parsed from the file.
      */
     public Shelf createShelf(String fileName) {
-        Shelf shelf = new Shelf();
+        Shelf shelf = new Shelf().getCopy();
         try {
             InputStream inputStream = this.getClass().getResourceAsStream(fileName);
             assert inputStream != null;

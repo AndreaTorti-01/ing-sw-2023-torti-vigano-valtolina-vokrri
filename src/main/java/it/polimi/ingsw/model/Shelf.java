@@ -64,13 +64,13 @@ public class Shelf implements Serializable {
      * @return ItemCard at the provided position (if any), null otherwise.
      */
     public ItemCard getCardAt(int row, int column) throws IllegalArgumentException {
-        if (row < 0 || row > numberOfRows) {
+        if (row < 0 || row >= numberOfRows) {
             throw new IllegalArgumentException(
                     "Provided row (" + row + ") is out of range 0 - " + numberOfRows
             );
         }
 
-        if (column < 0 || column > numberOfColumns) {
+        if (column < 0 || column >= numberOfColumns) {
             throw new IllegalArgumentException(
                     "Provided column (" + column + ") is out of range 0 - " + numberOfColumns
             );
@@ -96,7 +96,6 @@ public class Shelf implements Serializable {
         this.items[row][column] = newCard;
     }
 
-    // TODO keep? bad practice
     public ItemCard[][] getItems() {
         return items;
     }

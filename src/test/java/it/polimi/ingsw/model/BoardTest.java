@@ -71,7 +71,7 @@ class BoardTest {
     }
 
     @Test
-    void testValidity() {
+    void testIsValid() {
         boolean[][] layout;
         Board board;
         for (int numberOfPlayers = minNumberOfPlayers; numberOfPlayers <= maxNumberOfPlayers; numberOfPlayers++) {
@@ -83,7 +83,14 @@ class BoardTest {
                     assertEquals(board.isValid(row, col), layout[row][col]);
                 }
             }
+            Board finalBoard = board;
+            assertThrows(IllegalArgumentException.class, () -> finalBoard.isValid(-1, -1));
+            assertThrows(IllegalArgumentException.class, () -> finalBoard.isValid(0, -1));
+            assertThrows(IllegalArgumentException.class, () -> finalBoard.isValid(boardSize, boardSize));
+            assertThrows(IllegalArgumentException.class, () -> finalBoard.isValid(0, boardSize));
+
         }
+
     }
 
     @Test
@@ -107,6 +114,9 @@ class BoardTest {
 
         ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
         assertThrows(IllegalArgumentException.class, () -> board.setTile(randomItemCard, -1, -1));
+        assertThrows(IllegalArgumentException.class, () -> board.setTile(randomItemCard, 0, -1));
+        assertThrows(IllegalArgumentException.class, () -> board.setTile(randomItemCard, boardSize, boardSize));
+        assertThrows(IllegalArgumentException.class, () -> board.setTile(randomItemCard, 0, boardSize));
     }
 
     @Test
@@ -129,6 +139,9 @@ class BoardTest {
         }
 
         assertThrows(IllegalArgumentException.class, () -> board.peekCard(-1, -1));
+        assertThrows(IllegalArgumentException.class, () -> board.peekCard(0, -1));
+        assertThrows(IllegalArgumentException.class, () -> board.peekCard(boardSize, boardSize));
+        assertThrows(IllegalArgumentException.class, () -> board.peekCard(0, boardSize));
     }
 
     @Test
@@ -152,5 +165,8 @@ class BoardTest {
         }
 
         assertThrows(IllegalArgumentException.class, () -> board.popCard(-1, -1));
+        assertThrows(IllegalArgumentException.class, () -> board.popCard(0, -1));
+        assertThrows(IllegalArgumentException.class, () -> board.popCard(boardSize, boardSize));
+        assertThrows(IllegalArgumentException.class, () -> board.popCard(0, boardSize));
     }
 }

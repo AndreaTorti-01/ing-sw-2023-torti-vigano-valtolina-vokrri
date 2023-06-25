@@ -55,13 +55,13 @@ public class Board implements Serializable {
      * @return true if the tile at the provided position is valid, false otherwise.
      */
     public boolean isValid(int row, int column) throws IllegalArgumentException {
-        if (row < 0 || row > boardSize) {
+        if (row < 0 || row >= boardSize) {
             throw new IllegalArgumentException(
                     "Provided row (" + row + ") is out of range 0 - " + boardSize
             );
         }
 
-        if (column < 0 || column > boardSize) {
+        if (column < 0 || column >= boardSize) {
             throw new IllegalArgumentException(
                     "Provided column (" + column + ") is out of range 0 - " + boardSize
             );
@@ -78,13 +78,13 @@ public class Board implements Serializable {
      * @param column   must be between boundaries (provided in the {@link Constants} file).
      */
     public void setTile(ItemCard itemCard, int row, int column) throws IllegalArgumentException, IndexOutOfBoundsException {
-        if (row < 0 || row > boardSize) {
+        if (row < 0 || row >= boardSize) {
             throw new IllegalArgumentException(
                     "Provided row (" + row + ") is out of range 0 - " + boardSize
             );
         }
 
-        if (column < 0 || column > boardSize) {
+        if (column < 0 || column >= boardSize) {
             throw new IllegalArgumentException(
                     "Provided column (" + column + ") is out of range 0 - " + boardSize
             );
@@ -101,13 +101,13 @@ public class Board implements Serializable {
      * @return the card on the selected tile, without removing it, or null if the tile is empty.
      */
     public ItemCard peekCard(int row, int column) throws IllegalArgumentException, IndexOutOfBoundsException {
-        if (row < 0 || row > boardSize) {
+        if (row < 0 || row >= boardSize) {
             throw new IllegalArgumentException(
                     "Provided row (" + row + ") is out of range 0 - " + boardSize
             );
         }
 
-        if (column < 0 || column > boardSize) {
+        if (column < 0 || column >= boardSize) {
             throw new IllegalArgumentException(
                     "Provided column (" + column + ") is out of range 0 - " + boardSize
             );
@@ -124,7 +124,7 @@ public class Board implements Serializable {
      * @return the card on the selected tile, removing it, or null if the tile is empty.
      */
     public ItemCard popCard(int row, int column) throws IllegalArgumentException, IndexOutOfBoundsException {
-        if (row < 0 || row > boardSize) {
+        if (row < 0 || row >= boardSize) {
             throw new IllegalArgumentException(
                     "Provided row (" + row + ") is out of range 0 - " + boardSize
             );

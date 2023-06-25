@@ -173,6 +173,8 @@ public class Game extends ObservableImpl implements Serializable {
      * @param playerName the name of the player to be inserted.
      */
     public void addPlayer(String playerName) {
+        if (this.players.size() == numberOfPlayers) throw new IllegalStateException("the game is full");
+
         // check if player name is already taken
         for (Player player : players) {
             if (player.getName().equals(playerName)) {
@@ -195,7 +197,7 @@ public class Game extends ObservableImpl implements Serializable {
         if (players.size() == 1) this.currentPlayer = newPlayer;
 
         // check if the player cap is reached
-        if (numberOfPlayers != 0 && numberOfPlayers == players.size()) {
+        if (numberOfPlayers != 0 && players.size() == numberOfPlayers) {
 
             // create all player names permutations possible
             List<String> playerNames = new ArrayList<>();

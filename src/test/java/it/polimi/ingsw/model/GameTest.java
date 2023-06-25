@@ -36,7 +36,7 @@ public class GameTest {
             }
 
             // the game should not accept new players after reaching the maximum
-            assertThrows(IllegalAccessError.class, () -> model.addPlayer(generateRandomString()));
+            assertThrows(IllegalStateException.class, () -> model.addPlayer(generateRandomString()));
         }
     }
 
@@ -129,6 +129,7 @@ public class GameTest {
             model.addPlayer(playerName);
         }
 
+        model.saveGame();
         return model;
     }
 

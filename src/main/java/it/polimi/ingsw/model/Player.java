@@ -23,10 +23,6 @@ public class Player implements Serializable {
      */
     private final boolean[] hasAchievedCommonGoalCard;
     /**
-     * True if this player has achieved the Personal Goal Card.
-     */
-    private final boolean hasAchievedPersonalGoalCard;
-    /**
      * The Personal Goal Card of this player.
      */
     private PersonalGoalCard personalGoalCard;
@@ -45,7 +41,6 @@ public class Player implements Serializable {
         this.shelf = new Shelf();
         this.score = 0;
         this.hasAchievedCommonGoalCard = new boolean[2];
-        this.hasAchievedPersonalGoalCard = false;
     }
 
     /**
@@ -99,11 +94,9 @@ public class Player implements Serializable {
      * @return true if the player has achieved the Common Goal Card at the provided index.
      */
     public boolean hasAchievedCommonGoalCard(int index) {
-        if (index >= 0 && index < 2) return hasAchievedCommonGoalCard[index];
-        else {
-            System.err.println("invalid CGC index!");
-            return false;
-        }
+        if (index < 0 || index > 1)
+            throw new IllegalArgumentException("Index must be between 0 and 1");
+        return hasAchievedCommonGoalCard[index];
     }
 
     /**
@@ -112,7 +105,8 @@ public class Player implements Serializable {
      * @param index the index of the Common Goal Card to be set as achieved.
      */
     public void setAchievedCommonGoalCard(int index) {
-        if (index >= 0 && index < 2) hasAchievedCommonGoalCard[index] = true;
-        else System.err.println("invalid CGC index!");
+        if (index < 0 || index > 1)
+            throw new IllegalArgumentException("Index must be between 0 and 1");
+        hasAchievedCommonGoalCard[index] = true;
     }
 }

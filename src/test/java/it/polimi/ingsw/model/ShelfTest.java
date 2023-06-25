@@ -118,6 +118,26 @@ class ShelfTest {
                 assertEquals(items[row][col], shelf.getCardAt(row, col));
             }
         }
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> shelf.getCardAt(-1, 0)
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> shelf.getCardAt(0, -1)
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> shelf.getCardAt(numberOfRows, 0)
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> shelf.getCardAt(0, numberOfColumns)
+        );
     }
 
     @Test
@@ -191,24 +211,4 @@ class ShelfTest {
 
         return shelf;
     }
-
-    @Test
-    public void toStringTest() {
-        Shelf shelf = new Shelf();
-        for (int column = 0; column < Constants.numberOfColumns; column++) {
-            for (int row = 0; row < numberOfRows; row++) {
-                // creates a random itemCard
-                ItemCard randomItemCard = new ItemCard(ItemType.getRandomItemType(), 0);
-
-                // inserts it in the shelf
-                shelf.insert(column, randomItemCard);
-            }
-        }
-        Shelf copy = shelf.getCopy();
-        copy.setCardAt(3, 3, null);
-        copy.setCardAt(2, 3, null);
-
-        System.out.println(copy);
-    }
-
 }
