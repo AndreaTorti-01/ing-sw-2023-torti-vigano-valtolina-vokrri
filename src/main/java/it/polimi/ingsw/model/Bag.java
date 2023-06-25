@@ -19,6 +19,9 @@ import static it.polimi.ingsw.utils.Constants.numberOfItemCardsWithSameType;
 public class Bag implements Serializable {
     @Serial
     private static final long serialVersionUID = -141148278954951272L;
+    /**
+     * The set of cards contained in the bag.
+     */
     private final Set<ItemCard> cardsInside;
 
     /**

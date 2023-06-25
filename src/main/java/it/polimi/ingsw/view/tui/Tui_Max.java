@@ -195,7 +195,7 @@ public class Tui_Max extends ObservableImpl implements RunnableView {
         printMyShelfie();
         printSeparee();
         System.out.println("\n\n");
-        printBoard(modelView.getBoard(), modelView.getBoardValid());
+        printBoard(modelView.getBoard(), modelView.getLayout());
         System.out.println("\n\n");
         printShelves();
         printSeparee();

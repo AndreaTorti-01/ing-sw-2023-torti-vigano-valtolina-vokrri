@@ -404,7 +404,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
      * Prints the current Game state.
      */
     private void printGameStatus() {
-        printBoard(modelView.getBoard(), modelView.getBoardValid());
+        printBoard(modelView.getBoard(), modelView.getLayout());
         System.out.println("\n");
         printShelves();
         printPersonalGoalCards();

@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * A factory class that creates Shelves.
+ * A factory class that creates Shelves from a file.
  */
 public class ShelfFactory {
     /**

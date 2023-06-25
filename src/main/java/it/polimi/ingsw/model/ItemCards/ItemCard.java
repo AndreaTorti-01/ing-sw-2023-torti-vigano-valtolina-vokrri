@@ -9,7 +9,13 @@ import java.io.Serializable;
 public class ItemCard implements Serializable {
     @Serial
     private static final long serialVersionUID = -648130833358549189L;
+    /**
+     * The type of the Item Card.
+     */
     private final ItemType type;
+    /**
+     * The sprite of the Item Card.
+     */
     private final int sprite;
 
     /**

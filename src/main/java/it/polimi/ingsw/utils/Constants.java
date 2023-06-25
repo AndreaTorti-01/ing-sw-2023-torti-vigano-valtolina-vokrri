@@ -4,22 +4,67 @@ package it.polimi.ingsw.utils;
  * A class containing all the constant values of the game.
  */
 public class Constants {
+    /**
+     * The number of columns of the shelf.
+     */
     public static final int numberOfColumns = 5;
+    /**
+     * The number of rows of the shelf.
+     */
     public static final int numberOfRows = 6;
+    /**
+     * The number of rows of the board.
+     */
     public static final int numberOfBoardRows = 9;
+    /**
+     * The number of columns of the board.
+     */
     public static final int numberOfBoardColumns = 9;
 
-    public static final int maxNumberOfPlayers = 4;
-    public static final int minNumberOfPlayers = 2;
-    public static final int numberOfItemCardsWithSameType = 22;
-    public static final int numberOfItemCardTypes = 6;
-    public static final int maxNumberOfItemCards = numberOfItemCardTypes * numberOfItemCardsWithSameType;
-    public static final int numberOfCommonGoalCardsInGame = 2;
-    public static final int numberOfPersonalGoalCardTypes = 12;
+    /**
+     * The size of the board.
+     */
     public static final int boardSize = 9;
+
+    /**
+     * The maximum number of players allowed in game.
+     */
+    public static final int maxNumberOfPlayers = 4;
+    /**
+     * The minimum number of players allowed in game.
+     */
+    public static final int minNumberOfPlayers = 2;
+    /**
+     * The number of Item Cards with the same type.
+     */
+    public static final int numberOfItemCardsWithSameType = 22;
+    /**
+     * The number of Item Card types.
+     */
+    public static final int numberOfItemCardTypes = 6;
+    /**
+     * The maximum number of Item Cards.
+     */
+    public static final int maxNumberOfItemCards = numberOfItemCardTypes * numberOfItemCardsWithSameType;
+    /**
+     * The number of Common Goal Cards in game.
+     */
+    public static final int numberOfCommonGoalCardsInGame = 2;
+    /**
+     * The number of Common Goal Card types.
+     */
+    public static final int numberOfPersonalGoalCardTypes = 12;
+
     public static final String serverIpAddress = "127.0.0.1";
+    /**
+     * The default socket server port.
+     */
     public static final int serverPort = 8888;
+    /**
+     * The default RMI server port.
+     */
     public static final int rmiServerPort = 1099;
+    
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";

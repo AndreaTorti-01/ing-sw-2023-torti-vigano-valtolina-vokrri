@@ -17,8 +17,18 @@ import java.rmi.RemoteException;
  */
 public class ClientSkeleton implements Client, Runnable {
 
+    /**
+     * The Client Handler associated with this middleman.
+     */
     private ClientHandler clientHandler;
+    /**
+     * The communication stream to the client side.
+     */
     private ObjectOutputStream oos;
+
+    /**
+     * The communication stream from the client side.
+     */
     private ObjectInputStream ois;
 
 

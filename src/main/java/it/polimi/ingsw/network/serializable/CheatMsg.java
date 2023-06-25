@@ -9,6 +9,9 @@ import java.io.Serializable;
 public class CheatMsg implements Serializable {
     @Serial
     private static final long serialVersionUID = 5419262571274903799L;
+    /**
+     * The player who cheated.
+     */
     String cheater;
 
     /**

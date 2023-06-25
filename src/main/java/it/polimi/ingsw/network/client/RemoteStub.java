@@ -21,8 +21,17 @@ import static it.polimi.ingsw.utils.Constants.serverPort;
  * establishing a socket communication channel between the Client and the server objects.
  */
 public class RemoteStub implements Server, ClientHandler, Runnable {
+    /**
+     * The Client associated with this middleman.
+     */
     private Client client;
+    /**
+     * The communication stream to the server side.
+     */
     private ObjectOutputStream oos;
+    /**
+     * The communication stream from the server side.
+     */
     private ObjectInputStream ois;
 
     /**

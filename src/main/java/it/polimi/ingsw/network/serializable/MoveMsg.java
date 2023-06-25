@@ -11,7 +11,13 @@ import java.util.List;
 public class MoveMsg implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    /**
+     * The cards chosen by the player already in order.
+     */
     private final List<List<Integer>> pickedCards;
+    /**
+     * The column chosen by the player in which to insert the chosen cards.
+     */
     private final int column;
 
     /**

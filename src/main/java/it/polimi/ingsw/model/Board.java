@@ -14,7 +14,13 @@ import static it.polimi.ingsw.utils.Constants.boardSize;
 public class Board implements Serializable {
     @Serial
     private static final long serialVersionUID = 6344140278693113L;
+    /**
+     * The layout of the board.
+     */
     private final boolean[][] layout;
+    /**
+     * The cards placed on the board.
+     */
     private final ItemCard[][] tiles;
 
     /**

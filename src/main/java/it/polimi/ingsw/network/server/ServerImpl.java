@@ -22,6 +22,9 @@ import java.util.List;
 public class ServerImpl extends UnicastRemoteObject implements Server, Runnable {
     @Serial
     private static final long serialVersionUID = -6751882795824411L;
+    /**
+     * The list of lobbies currently active.
+     */
     private final List<Lobby> lobbies = new LinkedList<>();
 
     /**

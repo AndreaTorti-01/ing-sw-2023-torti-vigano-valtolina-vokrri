@@ -13,6 +13,9 @@ import java.util.List;
  * The controller of the MVC pattern.
  */
 public class GameController {
+    /**
+     * The state of the game.
+     */
     private final Game model;
 
     /**

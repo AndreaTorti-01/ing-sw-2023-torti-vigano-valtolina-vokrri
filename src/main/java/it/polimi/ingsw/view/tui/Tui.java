@@ -377,7 +377,7 @@ public class Tui extends ObservableImpl implements RunnableView {
         clearConsole();
         printSeparee();
         printMyShelfie();
-        printBoard(modelView.getBoard(), modelView.getBoardValid());
+        printBoard(modelView.getBoard(), modelView.getLayout());
         System.out.println("\n");
         printShelves();
         printCommonGoalCards();
@@ -439,6 +439,7 @@ public class Tui extends ObservableImpl implements RunnableView {
             System.out.println();
         } else System.err.println("Error: player not found");
     }
+
     private void printChat() {
         if (modelView.getMessages().size() == 0) return;
         System.out.println("Chat: ");
@@ -447,9 +448,10 @@ public class Tui extends ObservableImpl implements RunnableView {
                 System.out.println(ANSI_BLUE + message.getSenderPlayer() + ": " + ANSI_RESET + ANSI_GREY + message.getMessage() + ANSI_RESET);
         }
     }
+
     private void printEndScreen(String winnerName) {
         printSeparee();
-        if(modelView.getWinner().getName().equals(playerName)) printWon();
+        if (modelView.getWinner().getName().equals(playerName)) printWon();
         else printLost();
         System.out.println("The winner is " + winnerName + "!");
         printScores();

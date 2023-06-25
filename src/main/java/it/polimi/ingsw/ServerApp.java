@@ -11,8 +11,13 @@ import java.rmi.registry.Registry;
  */
 public class ServerApp {
 
+    /**
+     * The main method of the server app.
+     *
+     * @param args the arguments provided from the player.
+     */
     public static void main(String[] args) {
-        // // default port 8888
+        // default port 8888
         // int serverPort = Constants.serverPort;
         // // parses the port at which the server should listen
         // // for connection requests from the clients

@@ -8,12 +8,18 @@ import java.io.Serializable;
 import java.util.Stack;
 
 /**
- * A class representing the Common Goal Card
+ * A class representing the Common Goal Card.
  */
 public class CommonGoalCard implements Serializable {
     @Serial
     private static final long serialVersionUID = -4000317221403330726L;
+    /**
+     * The stack of points the players can get by completing the common goal cards.
+     */
     private final Stack<Integer> assignedPoints;
+    /**
+     * The specific Common Goal Card implementation.
+     */
     private final CommonGoalCardStrat strategy;
 
     /**

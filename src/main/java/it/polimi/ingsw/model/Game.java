@@ -24,14 +24,41 @@ import static it.polimi.ingsw.utils.Constants.*;
 public class Game extends ObservableImpl implements Serializable {
     @Serial
     private static final long serialVersionUID = -5751410109027050560L;
+    /**
+     * The bag from which to take the Item Cards to refill the board.
+     */
     private Bag bag;
+    /**
+     * The stack of messages sent by the players in this game.
+     */
     private Stack<ChatMsg> messages;
+    /**
+     * The list of players in this game.
+     */
     private List<Player> players;
+    /**
+     * The list of Common Goal Cards in this game.
+     */
     private List<CommonGoalCard> commonGoalCards;
+    /**
+     * The current player of this game.
+     */
     private Player currentPlayer;
+    /**
+     * The board of this game from which the players will take the Item Cards.
+     */
     private Board board;
+    /**
+     * The status of this game. Set to WAITING by default.
+     */
     private Game.Status gameStatus = Game.Status.WAITING;
+    /**
+     * The winner of this game.
+     */
     private Player winner;
+    /**
+     * The number of players in this game. Set to -1 by default.
+     */
     private int numberOfPlayers = -1;
 
     /**
@@ -43,6 +70,12 @@ public class Game extends ObservableImpl implements Serializable {
         this.messages = new Stack<>();
     }
 
+    /**
+     * Loads a game from a file.
+     * For persistence purposes.
+     *
+     * @param fileName the name of the file to load the game from.
+     */
     private void loadGame(String fileName) {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
@@ -88,7 +121,7 @@ public class Game extends ObservableImpl implements Serializable {
 
         // open file, write game state (model) and close it
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("saves/" + fileName.toString()));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("saves/" + fileName));
             oos.writeObject(this);
             oos.close();
         } catch (IOException e) {
@@ -103,7 +136,7 @@ public class Game extends ObservableImpl implements Serializable {
         }
         fileName.append(".sav");
 
-        File file = new File("saves/" + fileName.toString());
+        File file = new File("saves/" + fileName);
         if (file.delete()) {
             System.out.println("save deleted");
         } else {
@@ -189,6 +222,12 @@ public class Game extends ObservableImpl implements Serializable {
         this.notifyObservers(new GameViewMsg(this));
     }
 
+    /**
+     * Generates a list of random permutations from the provided list of strings.
+     *
+     * @param strings the list to be permutated.
+     * @return a list of permutated strings.
+     */
     private List<String> generatePermutations(List<String> strings) {
         List<String> permutations = new ArrayList<>();
         if (strings.size() == 1) {
@@ -383,6 +422,7 @@ public class Game extends ObservableImpl implements Serializable {
      * Moreover, checks if the current player has achieved his Common Goal Card,
      * if any of the players completed his shelf in order to end the game and
      * if the board needs to be refilled.
+     * Saves the game to the specific file.
      */
     public void advancePlayerTurn() {
         // advances the player

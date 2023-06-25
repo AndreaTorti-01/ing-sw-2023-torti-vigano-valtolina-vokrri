@@ -17,7 +17,13 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 public class PersonalGoalCard implements Serializable {
     @Serial
     private static final long serialVersionUID = -8049860441030982905L;
+    /**
+     * The pattern of this Personal Goal Card.
+     */
     private final ItemType[][] pattern;
+    /**
+     * The id of this Personal Goal Card.
+     */
     private int cardID;
 
     /**
@@ -27,12 +33,25 @@ public class PersonalGoalCard implements Serializable {
         // initializes the pattern to a null matrix
         pattern = new ItemType[Constants.numberOfRows][Constants.numberOfColumns];
     }
-    public void setID(int id){
-        cardID = id;
-    }
-    public int getID(){
+
+    /**
+     * Gets the id of this Personal Goal Card.
+     *
+     * @return the id of this Personal Goal Card.
+     */
+    public int getID() {
         return cardID;
     }
+
+    /**
+     * Sets the id of this Personal Goal Card to the provided one.
+     *
+     * @param id the id to be set.
+     */
+    public void setID(int id) {
+        cardID = id;
+    }
+
     /**
      * @return the pattern of this Personal Goal Card.
      */

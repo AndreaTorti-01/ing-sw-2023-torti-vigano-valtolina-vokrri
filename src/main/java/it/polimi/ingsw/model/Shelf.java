@@ -17,7 +17,13 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 public class Shelf implements Serializable {
     @Serial
     private static final long serialVersionUID = 1599653120498179003L;
+    /**
+     * The Item Cards inside the shelf.
+     */
     private final ItemCard[][] items;
+    /**
+     * True if this shelf is a copy of another one.
+     */
     private boolean isACopy;
 
     /**

@@ -33,14 +33,14 @@ public class Common {
         // out of bound check
         if (row < 0 || row >= numberOfBoardRows || column < 0 || column >= numberOfBoardColumns) return false;
         // non-existing card check
-        if (!modelView.getBoardValid()[row][column] || modelView.getBoard()[row][column] == null) return false;
+        if (!modelView.getLayout()[row][column] || modelView.getBoard()[row][column] == null) return false;
 
         // checking if the card is adjacent to a free space (necessary to be takeable)
         if (row == 0 || row == numberOfBoardRows - 1) free = true;
         else if (column == 0 || column == numberOfBoardColumns - 1) free = true;
         else if (modelView.getBoard()[row - 1][column] == null || modelView.getBoard()[row + 1][column] == null || modelView.getBoard()[row][column - 1] == null || modelView.getBoard()[row][column + 1] == null)
             free = true;
-        else if (!modelView.getBoardValid()[row - 1][column] || !modelView.getBoardValid()[row + 1][column] || !modelView.getBoardValid()[row][column - 1] || !modelView.getBoardValid()[row][column + 1])
+        else if (!modelView.getLayout()[row - 1][column] || !modelView.getLayout()[row + 1][column] || !modelView.getLayout()[row][column - 1] || !modelView.getLayout()[row][column + 1])
             free = true;
 
         // the cards must be adjacent to each other (in line or in column) -> valid is used to check this condition
@@ -166,6 +166,13 @@ public class Common {
 
         return heads;
     }
+
+    /**
+     * Gets the path of the provided Common Goal Card graphical resources.
+     *
+     * @param type the Common Goal Card type.
+     * @return the path of the provided Common Goal Card graphical resources.
+     */
     public static String getCommonGoalCardPath(CommonGoalCardType type) {
         switch (type) {
             case CROSS -> {
@@ -210,15 +217,33 @@ public class Common {
         }
     }
 
+    /**
+     * Gets the path of the points card graphical resources.
+     *
+     * @param i the number of points.
+     * @return the path of the points card graphical resources.
+     */
     public static String getCommonGoalCardPointPath(int i) {
-        if(i == 0) return "/graphicalResources/scoringTokens/scoring.jpg";
+        if (i == 0) return "/graphicalResources/scoringTokens/scoring.jpg";
         return String.format("/graphicalResources/scoringTokens/scoring_%d.jpg", i);
     }
 
+    /**
+     * Gets the path of the provided Personal Goal Card graphical resources.
+     *
+     * @param id the Personal Goal Card id.
+     * @return the path of the provided Personal Goal Card graphical resources.
+     */
     public static String getPersonalGoalCardPath(int id) {
         return String.format("/graphicalResources/personalGoalCards/%dPGC.png", id);
     }
 
+    /**
+     * Gets the path of the provided Item Card graphical resources.
+     *
+     * @param itemCard the Item Card.
+     * @return the path of the provided Item Card graphical resources.
+     */
     public static String getTilePath(ItemCard itemCard) {
         String tilesPath = "/graphicalResources/itemTiles/";
         switch (itemCard.getType()) {

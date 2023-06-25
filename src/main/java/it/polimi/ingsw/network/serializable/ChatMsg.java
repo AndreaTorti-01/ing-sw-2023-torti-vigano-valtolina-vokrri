@@ -9,9 +9,21 @@ import java.io.Serializable;
 public class ChatMsg implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    /**
+     * The player to whom the message is intended.
+     */
     private final String recipientPlayer;
+    /**
+     * The player who sent the message.
+     */
     private final String senderPlayer;
+    /**
+     * True if the message is public.
+     */
     private final boolean isPublic;
+    /**
+     * The message to be sent.
+     */
     private final String message;
 
     /**

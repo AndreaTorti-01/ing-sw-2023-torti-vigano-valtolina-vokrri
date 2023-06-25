@@ -53,7 +53,7 @@ public class CommonGoalCardStrat_AGGREGATE implements CommonGoalCardStrat {
         for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < numberOfColumns; column++) {
 
-                // if the current card is null, no pattern possible and i skip the for loop
+                // if the current card is null, no pattern is possible
                 if (shelfCopy.getCardAt(row, column) != null) {
 
                     // retrieves the card on top, bottom, left and right

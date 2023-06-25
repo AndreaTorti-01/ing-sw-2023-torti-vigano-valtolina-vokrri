@@ -19,8 +19,17 @@ import java.util.Set;
  * and it's required in order to have multiple game instances on the same server.
  */
 public class Lobby implements Observer {
+    /**
+     * The Game Controller of this Lobby.
+     */
     private final GameController controller;
+    /**
+     * The Client Handlers of this Lobby.
+     */
     private final Set<ClientHandler> clientHandlers;
+    /**
+     * A boolean that represents if the lobby can accept new players.
+     */
     private boolean isOpen;
 
     /**

@@ -17,16 +17,46 @@ import java.util.Stack;
 public class GameViewMsg implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    /**
+     * The current state of the board.
+     */
     private final ItemCard[][] board;
-    private final boolean[][] boardValid;
+    /**
+     * The layout of the board.
+     */
+    private final boolean[][] layout;
+    /**
+     * The Common Goal Cards of the game.
+     */
     private final List<CommonGoalCard> commonGoalCards;
+    /**
+     * The players of the game.
+     */
     private final List<Player> players;
+    /**
+     * The current player.
+     */
     private final Player currentPlayer;
+    /**
+     * True if the bag is empty.
+     */
     private final boolean isBagEmpty;
+    /**
+     * The status of the game.
+     */
     private final Game.Status status;
+    /**
+     * The winner of the game.
+     */
     private final Player winner;
+    /**
+     * The messages sent during the game.
+     */
     private final Stack<ChatMsg> messages;
-    private final Boolean nameError;
+    /**
+     * True if the name of the player is already taken or invalid.
+     */
+    private Boolean nameError;
 
     /**
      * Creates a new Game View Message from the provided model.
@@ -38,10 +68,10 @@ public class GameViewMsg implements Serializable {
 
         if (model.getBoard() != null) {
             this.board = model.getBoard().getTiles();
-            this.boardValid = model.getBoard().getLayout();
+            this.layout = model.getBoard().getLayout();
         } else {
             board = null;
-            boardValid = null;
+            layout = null;
         }
 
         this.commonGoalCards = model.getCommonGoalCards();
@@ -54,24 +84,14 @@ public class GameViewMsg implements Serializable {
         this.nameError = false;
     }
 
+    /**
+     * Creates a new Game View Message from the provided model.
+     *
+     * @param model     the model from which the Game View Message is created.
+     * @param nameError true if the name of the player is already taken or invalid.
+     */
     public GameViewMsg(Game model, Boolean nameError) {
-        if (model == null) throw new IllegalArgumentException();
-
-        if (model.getBoard() != null) {
-            this.board = model.getBoard().getTiles();
-            this.boardValid = model.getBoard().getLayout();
-        } else {
-            board = null;
-            boardValid = null;
-        }
-
-        this.commonGoalCards = model.getCommonGoalCards();
-        this.players = model.getPlayers();
-        this.currentPlayer = model.getCurrentPlayer();
-        this.isBagEmpty = model.getBag().getCardsInside().size() == 0;
-        this.status = model.getGameStatus();
-        this.winner = model.getWinner();
-        this.messages = model.getMessages();
+        this(model);
         this.nameError = nameError;
     }
 
@@ -85,8 +105,8 @@ public class GameViewMsg implements Serializable {
     /**
      * @return the board valid tiles.
      */
-    public boolean[][] getBoardValid() {
-        return boardValid;
+    public boolean[][] getLayout() {
+        return layout;
     }
 
     /**
@@ -151,14 +171,25 @@ public class GameViewMsg implements Serializable {
         return this.messages;
     }
 
+    /**
+     * Gets the name error.
+     *
+     * @return true if the name of the player is already taken or invalid.
+     */
     public Boolean getNameError() {
         return this.nameError;
     }
 
+    /**
+     * Gets the player by the provided name.
+     *
+     * @param playerName the name of the player to get.
+     * @return the player with the provided name.
+     */
     public Player getPlayerByName(String playerName) {
-        for (Player p : players) {
-            if (p.getName().equals(playerName)) {
-                return p;
+        for (Player player : players) {
+            if (player.getName().equals(playerName)) {
+                return player;
             }
         }
         return null;

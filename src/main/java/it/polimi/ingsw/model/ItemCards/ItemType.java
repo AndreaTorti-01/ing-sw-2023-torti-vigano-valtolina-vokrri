@@ -14,6 +14,11 @@ public enum ItemType {
     TROPHIES('T'),
     PLANTS('P');
 
+    /**
+     * Creates a new ItemType with the provided abbreviation.
+     *
+     * @param abbreviation the abbreviation of the ItemType
+     */
     ItemType(char abbreviation) {
     }
 

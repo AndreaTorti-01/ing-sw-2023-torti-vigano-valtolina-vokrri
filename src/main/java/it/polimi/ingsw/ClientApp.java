@@ -16,6 +16,11 @@ import static it.polimi.ingsw.utils.Constants.serverIpAddress;
  * Client App main class.
  */
 public class ClientApp {
+    /**
+     * The main method of the client app.
+     *
+     * @param args the arguments provided from the player.
+     */
     public static void main(String[] args) {
         boolean isSocket = false;
         boolean isTui = false;
@@ -47,7 +52,7 @@ public class ClientApp {
             server = new RemoteStub();
         } else { // RMI
             // locate the registry (hosted on server machine)
-            Registry registry = null;
+            Registry registry;
             try {
                 registry = LocateRegistry.getRegistry(serverIpAddress, 1099);
                 // connect to RMI server
@@ -57,7 +62,7 @@ public class ClientApp {
             }
         }
 
-        ClientHandler clientHandler = null;
+        ClientHandler clientHandler;
         try {
             assert server != null;
             // register the client object

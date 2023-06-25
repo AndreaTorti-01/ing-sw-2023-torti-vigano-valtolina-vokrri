@@ -10,11 +10,29 @@ import java.io.Serializable;
 public class Player implements Serializable {
     @Serial
     private static final long serialVersionUID = 8215888944172497532L;
+    /**
+     * The name of this player.
+     */
     private final String name;
+    /**
+     * The shelf of this player.
+     */
     private final Shelf shelf;
+    /**
+     * The Personal Goal Card of this player.
+     */
     private PersonalGoalCard personalGoalCard;
+    /**
+     * The Common Goal Cards this player has achieved.
+     */
     private boolean[] hasAchievedCommonGoalCard;
+    /**
+     * True if this player has achieved the Personal Goal Card.
+     */
     private boolean hasAchievedPersonalGoalCard;
+    /**
+     * The score of this player.
+     */
     private int score;
 
     /**

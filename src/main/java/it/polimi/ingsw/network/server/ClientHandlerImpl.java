@@ -23,7 +23,14 @@ public class ClientHandlerImpl extends UnicastRemoteObject implements ClientHand
 
     @Serial
     private static final long serialVersionUID = -6793473008684706283L;
+    /**
+     * The Client associated with this Client Handler.
+     */
     private final Client client;
+
+    /**
+     * The list of observers of this observable.
+     */
     private final Vector<Observer> observers = new Vector<>();
 
     /**
