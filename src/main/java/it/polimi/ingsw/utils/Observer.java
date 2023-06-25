@@ -5,7 +5,7 @@ package it.polimi.ingsw.utils;
  */
 public interface Observer {
     /**
-     * Notifies the Observer class of the changes contained in the provided message.
+     * Notifies the Observer object of the changes contained in the provided message.
      *
      * @param message the message containing information about the changes.
      */

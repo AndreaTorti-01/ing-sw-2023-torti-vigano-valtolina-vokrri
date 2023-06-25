@@ -64,18 +64,21 @@ public class TerminalPrintables {
                 \t\t\t\t█▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀""");
     }
 
-    public static void printWelcomeScreen(){
+    public static void printWelcomeScreen() {
         welcome();
         printMyShelfie();
         credits();
         System.out.println("\n");
     }
 
-    public static void credits(){
+    public static void credits() {
         System.out.println("\n" + ANSI_CYAN + "\n \n \n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  developed by gc-33" + ANSI_RESET);
         System.out.println(ANSI_CYAN + "\n \t\t\t\t\t\t\t\t\t Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
     }
 
+    /**
+     *
+     */
     public static void welcome() {
         System.out.println("\n" + ANSI_YELLOW +
                 "\t\t\t\t\t\t\t\t\t\t\t\t█   █ █▀▀ █   █▀▀ █▀▀█ █▀▄▀█ █▀▀ 　 ▀▀█▀▀ █▀▀█\n" +

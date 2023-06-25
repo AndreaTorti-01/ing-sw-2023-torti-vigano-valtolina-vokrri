@@ -65,7 +65,7 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
-     * save the current game state (model) to a file
+     * Saves the current game state (model) to a file
      */
     public void saveGame() {
 

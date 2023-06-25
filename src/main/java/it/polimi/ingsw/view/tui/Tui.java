@@ -239,7 +239,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * takes care of notifying observer
+     * Asks the player to pick the cards from the board.
      */
     private void pickCards() {
         List<List<Integer>> pickedCoords = new ArrayList<>();

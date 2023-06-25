@@ -23,7 +23,13 @@ import java.rmi.server.UnicastRemoteObject;
 public class ClientImpl extends UnicastRemoteObject implements Client, Observer {
     @Serial
     private static final long serialVersionUID = 2177950121442992758L;
+    /**
+     * The View associated with this Client.
+     */
     private static RunnableView view;
+    /**
+     * The Client Handler associated with this Client.
+     */
     private ClientHandler clientHandler;
 
     /**
@@ -48,6 +54,8 @@ public class ClientImpl extends UnicastRemoteObject implements Client, Observer 
     }
 
     /**
+     * Gets the view associated with this Client.
+     *
      * @return the view selected by the user.
      */
     public static RunnableView getView() {

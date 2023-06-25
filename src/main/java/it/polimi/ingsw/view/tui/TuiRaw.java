@@ -29,17 +29,32 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     private State state = State.ASK_NAME;
     private volatile boolean running;
 
-
+    /**
+     * Creates a new Textual User Interface associated with the provided Client.
+     *
+     * @param client the client associated with this view.
+     */
     public TuiRaw(ClientImpl client) {
         this.addObserver(client);
     }
 
+    /**
+     * Gets the state of this view.
+     * The state can be ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY, ENDED.
+     *
+     * @return the state of this view.
+     */
     private State getState() {
         synchronized (lock) {
             return state;
         }
     }
 
+    /**
+     * Sets the state of this view to the provided state.
+     *
+     * @param state the state to be set to this game.
+     */
     private void setState(State state) {
         synchronized (lock) {
             this.state = state;
@@ -48,6 +63,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
     }
 
+    /**
+     * Main game loop.
+     */
     @Override
     public void run() {
 
@@ -147,6 +165,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
     }
 
+    /**
+     * Accepts input from the user and notifies the observers with the chosen message.
+     */
     private void acceptInput() {
         while (running) {
             // scan for command
@@ -220,7 +241,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
 
 
     /**
-     * takes care of notifying observers
+     * Asks the player how many players are playing.
      */
     private void askPlayerNumber() {
         int playerNumber = 0;
@@ -359,6 +380,11 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         notifyObservers(new MoveMsg(pickedCoords, shelfCol));
     }
 
+    /**
+     * Prints the cards picked by the player.
+     *
+     * @param pickedCards list of cards picked by the player.
+     */
     private void printPickedCards(List<ItemCard> pickedCards) {
         for (ItemCard card : pickedCards) {
             switch (card.getType()) {
@@ -374,6 +400,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
 
     }
 
+    /**
+     * Prints the current Game state.
+     */
     private void printGameStatus() {
         printBoard(modelView.getBoard(), modelView.getBoardValid());
         System.out.println("\n");
@@ -384,6 +413,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         printChat();
     }
 
+    /**
+     * Prints the Common Goal Cards.
+     */
     private void printCommonGoalCards() {
         System.out.println("Common goal cards: ");
         for (int i = 0; i < modelView.getCommonGoalCards().size(); i++) {
@@ -392,6 +424,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         System.out.println();
     }
 
+    /**
+     * Prints the Personal Goal Cards.
+     */
     private void printPersonalGoalCards() {
         System.out.println("Personal goal cards: ");
         for (Player p : modelView.getPlayers()) {
@@ -420,6 +455,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
     }
 
+    /**
+     * Prints the Chat messages.
+     */
     private void printChat() {
         if (modelView.getMessages().size() == 0) return;
         System.out.println("Chat: ");
@@ -429,15 +467,20 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
     }
 
+    /**
+     * Prints the scores of the players and the winner.
+     *
+     * @param winnerName the name of the winner.
+     */
     private void printEndScreen(String winnerName) {
         printScores();
         System.out.println("The winner is " + winnerName + "!");
     }
 
     /**
-     * takes care of notifying observers
+     * Asks the player's name.
      *
-     * @return the name of the player
+     * @return the name provided by the player.
      */
     private void askPlayerName() {
         // Ask the name of the player
@@ -446,6 +489,11 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         notifyObservers(playerName);
     }
 
+    /**
+     * Takes a true or false input from the player.
+     *
+     * @return the boolean value provided by the player.
+     */
     private boolean askBoolean() {
         System.out.print("  >>  (y/n) ");
 
@@ -462,6 +510,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
     }
 
+    /**
+     * Prints the shelves of every player.
+     */
     private void printShelves() {
         for (Player p : modelView.getPlayers()) {
             Shelf shelf = p.getShelf();
@@ -489,6 +540,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
     }
 
+    /**
+     * Prints the scores of every player.
+     */
     private void printScores() {
         System.out.println("Scores:");
         for (Player p : modelView.getPlayers()) {
@@ -496,7 +550,13 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         }
     }
 
-    private void printBoard(ItemCard[][] board, boolean[][] boardValid) {
+    /**
+     * Prints the current Board.
+     *
+     * @param board  the board to be printed.
+     * @param layout the board layout.
+     */
+    private void printBoard(ItemCard[][] board, boolean[][] layout) {
         StringBuilder output = new StringBuilder("The board:\n");
 
         output.append("   ");
@@ -509,7 +569,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         for (int i = 0; i < boardSize; i++) {
             output.append(i).append("| ");
             for (int j = 0; j < boardSize; j++) {
-                if (boardValid[i][j]) {
+                if (layout[i][j]) {
                     ItemCard card = board[i][j];
                     if (card != null) output.append(card).append(" ");
                     else output.append("* ");
@@ -525,11 +585,21 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         System.out.print(output);
     }
 
+    /**
+     * Prints an error message.
+     *
+     * @param error the message to be printed.
+     */
     private void printError(String error) {
         // Print an error message
         System.out.println(ANSI_PURPLE + error + ANSI_RESET);
     }
 
+    /**
+     * Takes user input.
+     *
+     * @return the input provided by the user.
+     */
     private String scanLine() {
         String ret;
         do {
@@ -538,6 +608,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
         return ret;
     }
 
+    /**
+     * The View's state.
+     */
     private enum State {
         ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY, ENDED
     }
