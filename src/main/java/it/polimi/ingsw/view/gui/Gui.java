@@ -9,7 +9,6 @@ import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.network.serializable.CheatMsg;
 import it.polimi.ingsw.network.serializable.GameViewMsg;
 import it.polimi.ingsw.network.serializable.MoveMsg;
-import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.ObservableImpl;
 import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.gui.controllers.*;
@@ -57,6 +56,7 @@ public class Gui extends ObservableImpl implements RunnableView {
             lock.notifyAll();
         }
     }
+
     public void setMessage(String message) {
         if (message.charAt(0) == '/') {
             String command = message.split(" ")[0];
@@ -78,7 +78,7 @@ public class Gui extends ObservableImpl implements RunnableView {
                             notifyObservers(new ChatMsg(destPlayer, playerName, false, "[private] " + chatMessage));
                         }
                     } else
-                        playingScreenController.printOnChat("Invalid arguments: Type /privatechat <player> <message> to send a private message to a player" );
+                        playingScreenController.printOnChat("Invalid arguments: Type /privatechat <player> <message> to send a private message to a player");
                 }
 
                 case "/cheat" -> {
@@ -94,7 +94,8 @@ public class Gui extends ObservableImpl implements RunnableView {
                     playingScreenController.printOnChat("Type /help to see this list again");
                 }
 
-                default -> playingScreenController.printOnChat("Invalid command: Type /help to see the list of available commands");
+                default ->
+                        playingScreenController.printOnChat("Invalid command: Type /help to see the list of available commands");
             }
         } else {
             notifyObservers(new ChatMsg(null, playerName, true, message));
@@ -104,10 +105,6 @@ public class Gui extends ObservableImpl implements RunnableView {
     public void setPlayerNumber(int playerNumber) {
         gaveNumber = true;
         notifyObservers(playerNumber);
-    }
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-        notifyObservers(playerName);
     }
 
     public void setPicked(List<List<Integer>> pickedCoords) {
@@ -253,12 +250,14 @@ public class Gui extends ObservableImpl implements RunnableView {
         }
     }
 
-
     public String getPlayerName() {
         return playerName;
     }
 
-
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+        notifyObservers(playerName);
+    }
 
     private void sleep(int millis) {
         try {

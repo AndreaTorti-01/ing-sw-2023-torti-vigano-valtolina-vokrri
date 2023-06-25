@@ -1,13 +1,11 @@
 package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.ItemCards.ItemCard;
-import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.utils.Common;
 import it.polimi.ingsw.view.gui.Gui;
-import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.view.gui.GuiApp;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -97,19 +95,19 @@ public class PlayingScreenController implements Initializable {
     }
 
     @FXML
-    private void handleMessage(){
+    private void handleMessage() {
         //gestisce l'invio di messaggi alla gui
         String message = messageSpace.getText();
-        if(!message.equals("")){
+        if (!message.equals("")) {
             System.out.println("Message sent");
             gui.setMessage(message);
             messageSpace.clear();
         }
-    };
+    }
 
-    public void refreshChat(){
+    public void refreshChat() {
 
-        for(int i = localChatSize; i < gui.getModelView().getMessages().size(); i++){
+        for (int i = localChatSize; i < gui.getModelView().getMessages().size(); i++) {
             ChatMsg message = gui.getModelView().getMessages().get(i);
             if (message.isPublic() || !message.isPublic() && (message.getRecipientPlayer().equals(gui.getPlayerName()) || message.getSenderPlayer().equals(gui.getPlayerName()))) {
                 Platform.runLater(() -> ChatTextArea.appendText("[" + message.getSenderPlayer() + "] : " + message.getMessage() + "\n"));
@@ -139,7 +137,7 @@ public class PlayingScreenController implements Initializable {
 
     public void updateGraphics() {
 
-        Platform.runLater( () -> {
+        Platform.runLater(() -> {
             if (gui.getPlayerName().equals(gui.getModelView().getCurrentPlayer().getName()))
                 turn.setText("It's your turn!");
             else turn.setText("It's " + gui.getModelView().getCurrentPlayer().getName() + "'s turn!");
@@ -176,7 +174,7 @@ public class PlayingScreenController implements Initializable {
                     score0.setText(" " + player.getScore());
                 }
             }
-            List<CommonGoalCard> commonCards= gui.getModelView().getCommonGoalCards();
+            List<CommonGoalCard> commonCards = gui.getModelView().getCommonGoalCards();
 
             commonGoal1.setImage(new Image(getCommonGoalCardPath(commonCards.get(0).getType())));
             commonGoal2.setImage(new Image(getCommonGoalCardPath(commonCards.get(1).getType())));
@@ -186,6 +184,7 @@ public class PlayingScreenController implements Initializable {
             personalGoal.setImage(new Image(getPersonalGoalCardPath(gui.getModelView().getPlayerByName(gui.getPlayerName()).getPersonalGoalCard().getID())));
         });
     }
+
     public BoardController getBoardController() {
         return boardController;
     }
@@ -193,10 +192,11 @@ public class PlayingScreenController implements Initializable {
     public Shelf0Controller getShelf0Controller() {
         return shelf0Controller;
     }
-    public void showPickedTypes(List<ItemCard> cards){
+
+    public void showPickedTypes(List<ItemCard> cards) {
         Platform.runLater(
                 () -> {
-                    switch (cards.size()){
+                    switch (cards.size()) {
                         case 0 -> {
                             picked0.setImage(null);
                             picked1.setImage(null);
@@ -221,12 +221,13 @@ public class PlayingScreenController implements Initializable {
                 }
         );
     }
+
     public void reorderInput0(MouseEvent mouseEvent) {
         if (gui.getPickedCoords().size() == 0) return;
-        if(orderSwitcher == -1) {
+        if (orderSwitcher == -1) {
             orderSwitcher = 0;
             picked0.setEffect(new Bloom());
-        }else{
+        } else {
             List<List<Integer>> pickedCoords = gui.getPickedCoords();
             List<Integer> tmpCoords = pickedCoords.get(orderSwitcher);
             pickedCoords.set(orderSwitcher, pickedCoords.get(0));
@@ -242,10 +243,10 @@ public class PlayingScreenController implements Initializable {
 
     public void reorderInput1(MouseEvent mouseEvent) {
         if (gui.getPickedCoords().size() == 0) return;
-        if(orderSwitcher == -1) {
+        if (orderSwitcher == -1) {
             orderSwitcher = 1;
             picked1.setEffect(new Bloom());
-        }else{
+        } else {
             List<List<Integer>> pickedCoords = gui.getPickedCoords();
             List<Integer> tmpCoords = pickedCoords.get(orderSwitcher);
             pickedCoords.set(orderSwitcher, pickedCoords.get(1));
@@ -258,12 +259,13 @@ public class PlayingScreenController implements Initializable {
             orderSwitcher = -1;
         }
     }
+
     public void reorderInput2(MouseEvent mouseEvent) {
         if (gui.getPickedCoords().size() == 0) return;
-        if(orderSwitcher == -1) {
+        if (orderSwitcher == -1) {
             orderSwitcher = 2;
             picked2.setEffect(new Bloom());
-        }else{
+        } else {
             List<List<Integer>> pickedCoords = gui.getPickedCoords();
             List<Integer> tmpCoords = pickedCoords.get(orderSwitcher);
             pickedCoords.set(orderSwitcher, pickedCoords.get(2));

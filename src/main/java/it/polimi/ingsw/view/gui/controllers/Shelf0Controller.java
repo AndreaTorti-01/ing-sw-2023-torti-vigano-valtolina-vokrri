@@ -54,9 +54,7 @@ public class Shelf0Controller implements Initializable {
             for (int i = 0; i < numberOfRows && freeSlots < 3; i++) {
                 if (gui.getModelView().getShelfOf(myID)[i][j] == null) freeSlots++;
             }
-            if (freeSlots >= pickedSize) {
-                availableCols[j] = true;
-            } else availableCols[j] = false;
+            availableCols[j] = freeSlots >= pickedSize;
         }
     }
 

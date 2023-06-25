@@ -24,14 +24,14 @@ import static it.polimi.ingsw.utils.Constants.*;
 
 public class BoardController implements Initializable {
     private static Gui gui;
+    private final boolean sentPicked = false;
+    private final Object comoputeLock = new Object();
     @FXML
     public GridPane gridBoard;
     public int clickedRow = -1;
     public int clickedColumn = -1;
     private List<List<Integer>> pickedCoords = new ArrayList<>();
     private int pickedNum = 0;
-    private final boolean sentPicked = false;
-    private final Object comoputeLock = new Object();
 
     public void resetSelection() {
         this.clickedRow = -1;
@@ -69,6 +69,7 @@ public class BoardController implements Initializable {
                 for (List<Integer> coords : pickedCoords) {
                     if (coords.get(0) == clickedRow && coords.get(1) == clickedColumn) {
                         deselection = true;
+                        break;
                     }
                 }
 
@@ -86,7 +87,7 @@ public class BoardController implements Initializable {
                                 (!fixedRow && (pickedCoords.get(0).get(0) > clickedRow || pickedCoords.get(1).get(0) > clickedRow || pickedCoords.get(2).get(0) > clickedRow) && (pickedCoords.get(0).get(0) < clickedRow || pickedCoords.get(1).get(0) < clickedRow || pickedCoords.get(2).get(0) < clickedRow))))
                             removable = false;
                     }
-                    if(removable) {
+                    if (removable) {
                         for (List<Integer> coords : pickedCoords) {
                             if (coords.get(0) == clickedRow && coords.get(1) == clickedColumn) {
                                 pickedCoords.remove(coords);

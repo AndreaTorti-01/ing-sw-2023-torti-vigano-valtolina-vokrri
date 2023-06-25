@@ -10,7 +10,6 @@ import it.polimi.ingsw.utils.Observer;
 import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.view.tui.Tui;
-import it.polimi.ingsw.view.tui.TuiRaw;
 
 import java.io.Serial;
 import java.rmi.RemoteException;

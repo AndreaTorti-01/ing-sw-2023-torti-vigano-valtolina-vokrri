@@ -19,17 +19,17 @@ public class Player implements Serializable {
      */
     private final Shelf shelf;
     /**
-     * The Personal Goal Card of this player.
-     */
-    private PersonalGoalCard personalGoalCard;
-    /**
      * The Common Goal Cards this player has achieved.
      */
-    private boolean[] hasAchievedCommonGoalCard;
+    private final boolean[] hasAchievedCommonGoalCard;
     /**
      * True if this player has achieved the Personal Goal Card.
      */
-    private boolean hasAchievedPersonalGoalCard;
+    private final boolean hasAchievedPersonalGoalCard;
+    /**
+     * The Personal Goal Card of this player.
+     */
+    private PersonalGoalCard personalGoalCard;
     /**
      * The score of this player.
      */

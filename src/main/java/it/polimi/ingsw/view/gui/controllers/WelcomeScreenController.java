@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.view.gui.Gui;
-import it.polimi.ingsw.view.gui.Gui.State;
 import it.polimi.ingsw.view.gui.GuiApp;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -12,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -32,11 +32,10 @@ public class WelcomeScreenController implements Initializable {
     public Label askerLabel;
     @FXML
     public GridPane gridPaneBG;
-
+    boolean insertedName = false;
     //other parameters
     private Gui gui;
     private String playerName;
-    boolean insertedName = false;
     private int numberOfPlayers;
 
 
@@ -62,7 +61,8 @@ public class WelcomeScreenController implements Initializable {
         playerName = "";
         numberOfPlayers = 0;
     }
-    public void resetAskName(){
+
+    public void resetAskName() {
         Platform.runLater(() -> {
             askerLabel.setText("Insert your nickname");
             textField.setVisible(true);
@@ -74,10 +74,11 @@ public class WelcomeScreenController implements Initializable {
             insertedName = false;
         });
     }
+
     public void ButtonAction(ActionEvent actionEvent) {
 
         System.out.println("ButtonAction called");
-        if(!textField.getText().isEmpty() && !insertedName){
+        if (!textField.getText().isEmpty() && !insertedName) {
             this.playerName = textField.getText();
 
             gui.setPlayerName(playerName);
@@ -93,7 +94,8 @@ public class WelcomeScreenController implements Initializable {
             enterButton.setDisable(true);
         }
     }
-    public void askNumber(){
+
+    public void askNumber() {
         Platform.runLater(() -> {
             askerLabel.setText("How many players?");
             button2.setVisible(true);
@@ -123,10 +125,12 @@ public class WelcomeScreenController implements Initializable {
         gui.setPlayerNumber(numberOfPlayers);
         waitForPlayers();
     }
-    public void changeScene(){
+
+    public void changeScene() {
         GuiApp.changeScene(GuiApp.getPlayingScreenRoot());
     }
-    public void waitForPlayers(){
+
+    public void waitForPlayers() {
         Platform.runLater(() -> {
             askerLabel.setText("Waiting for other players...");
             button2.setVisible(false);

@@ -1,141 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
-<GridPane fx:id="gridPaneBG" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.EndScreenController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Text fx:id="Player1name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE1" textAlignment="CENTER">
-         <font>
-            <Font name="Consolas Bold Italic" size="44.0" />
-         </font>
-         <GridPane.margin>
-            <Insets bottom="400.0" left="175.0" />
-         </GridPane.margin>
-      </Text>
-      <Text fx:id="title" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="CLASSIFICA">
-         <font>
-            <Font name="Consolas Bold Italic" size="70.0" />
-         </font>
-         <GridPane.margin>
-            <Insets bottom="725.0" left="615.0" />
-         </GridPane.margin>
-      </Text>
-      <Text fx:id="Player2name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE2" textAlignment="CENTER">
-         <font>
-            <Font name="Consolas Bold Italic" size="44.0" />
-         </font>
-         <GridPane.margin>
-            <Insets bottom="160.0" left="175.0" />
-         </GridPane.margin>
-      </Text>
-      <Text fx:id="Player3name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE3">
-         <font>
-            <Font name="Consolas Bold Italic" size="44.0" />
-         </font>
-         <GridPane.margin>
-            <Insets left="175.0" top="80.0" />
-         </GridPane.margin>
-      </Text>
-      <Text fx:id="Player4name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE4">
-         <GridPane.margin>
-            <Insets left="175.0" top="320.0" />
-         </GridPane.margin>
-         <font>
-            <Font name="Consolas Bold Italic" size="44.0" />
-         </font>
-      </Text>
-      <Text fx:id="score1" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
-         <font>
-            <Font name="System Bold" size="36.0" />
-         </font>
-         <GridPane.margin>
-            <Insets bottom="400.0" left="500.0" />
-         </GridPane.margin>
-      </Text>
-      <Text fx:id="score2" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
-         <font>
-            <Font name="System Bold" size="36.0" />
-         </font>
-         <GridPane.margin>
-            <Insets bottom="160.0" left="500.0" />
-         </GridPane.margin>
-      </Text>
-      <Text fx:id="score3" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
-         <font>
-            <Font name="System Bold" size="36.0" />
-         </font>
-         <GridPane.margin>
-            <Insets left="500.0" top="80.0" />
-         </GridPane.margin>
-      </Text>
-      <Text fx:id="score4" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
-         <font>
-            <Font name="System Bold" size="36.0" />
-         </font>
-         <GridPane.margin>
-            <Insets left="500.0" top="320.0" />
-         </GridPane.margin>
-      </Text>
-      <ImageView fx:id="podium" fitHeight="499.0" fitWidth="703.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../posizionamento/podium.png" />
-         </image>
-         <GridPane.margin>
-            <Insets left="950.0" />
-         </GridPane.margin>
-      </ImageView>
-      <ImageView fx:id="shrek1" fitHeight="199.0" fitWidth="342.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../posizionamento/shrek.gif" />
-         </image>
-         <GridPane.margin>
-            <Insets bottom="124.0" left="1015.0" />
-         </GridPane.margin>
-      </ImageView>
-      <ImageView fx:id="shrek2" fitHeight="136.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true" rotate="-3.9">
-         <image>
-            <Image url="@../posizionamento/shrek2.gif" />
-         </image>
-         <GridPane.margin>
-            <Insets bottom="-2.0" left="947.0" />
-         </GridPane.margin>
-      </ImageView>
-      <ImageView fx:id="shrek3" fitHeight="135.0" fitWidth="161.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../posizionamento/shrek6.gif" />
-         </image>
-         <GridPane.margin>
-            <Insets bottom="-28.0" left="1265.0" />
-         </GridPane.margin>
-      </ImageView>
-      <ImageView fx:id="shrek4" fitHeight="110.0" fitWidth="131.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-         <GridPane.margin>
-            <Insets bottom="-185.0" left="1075.0" />
-         </GridPane.margin>
-         <image>
-            <Image url="@../posizionamento/shrek4png.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="225.0" fitWidth="342.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../posizionamento/fuochi-d-artificio-immagine-animata-0087.gif" />
-         </image>
-         <GridPane.margin>
-            <Insets bottom="370.0" left="1086.0" />
-         </GridPane.margin>
-      </ImageView>
-   </children>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:id="gridPaneBG" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+          minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19"
+          fx:controller="it.polimi.ingsw.view.gui.controllers.EndScreenController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <children>
+        <Text fx:id="Player1name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE1"
+              textAlignment="CENTER">
+            <font>
+                <Font name="Consolas Bold Italic" size="44.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets bottom="400.0" left="175.0"/>
+            </GridPane.margin>
+        </Text>
+        <Text fx:id="title" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="CLASSIFICA">
+            <font>
+                <Font name="Consolas Bold Italic" size="70.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets bottom="725.0" left="615.0"/>
+            </GridPane.margin>
+        </Text>
+        <Text fx:id="Player2name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE2"
+              textAlignment="CENTER">
+            <font>
+                <Font name="Consolas Bold Italic" size="44.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets bottom="160.0" left="175.0"/>
+            </GridPane.margin>
+        </Text>
+        <Text fx:id="Player3name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE3">
+            <font>
+                <Font name="Consolas Bold Italic" size="44.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets left="175.0" top="80.0"/>
+            </GridPane.margin>
+        </Text>
+        <Text fx:id="Player4name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE4">
+            <GridPane.margin>
+                <Insets left="175.0" top="320.0"/>
+            </GridPane.margin>
+            <font>
+                <Font name="Consolas Bold Italic" size="44.0"/>
+            </font>
+        </Text>
+        <Text fx:id="score1" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+            <font>
+                <Font name="System Bold" size="36.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets bottom="400.0" left="500.0"/>
+            </GridPane.margin>
+        </Text>
+        <Text fx:id="score2" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+            <font>
+                <Font name="System Bold" size="36.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets bottom="160.0" left="500.0"/>
+            </GridPane.margin>
+        </Text>
+        <Text fx:id="score3" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+            <font>
+                <Font name="System Bold" size="36.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets left="500.0" top="80.0"/>
+            </GridPane.margin>
+        </Text>
+        <Text fx:id="score4" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+            <font>
+                <Font name="System Bold" size="36.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets left="500.0" top="320.0"/>
+            </GridPane.margin>
+        </Text>
+        <ImageView fx:id="podium" fitHeight="499.0" fitWidth="703.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../posizionamento/podium.png"/>
+            </image>
+            <GridPane.margin>
+                <Insets left="950.0"/>
+            </GridPane.margin>
+        </ImageView>
+        <ImageView fx:id="shrek1" fitHeight="199.0" fitWidth="342.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../posizionamento/shrek.gif"/>
+            </image>
+            <GridPane.margin>
+                <Insets bottom="124.0" left="1015.0"/>
+            </GridPane.margin>
+        </ImageView>
+        <ImageView fx:id="shrek2" fitHeight="136.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true"
+                   rotate="-3.9">
+            <image>
+                <Image url="@../posizionamento/shrek2.gif"/>
+            </image>
+            <GridPane.margin>
+                <Insets bottom="-2.0" left="947.0"/>
+            </GridPane.margin>
+        </ImageView>
+        <ImageView fx:id="shrek3" fitHeight="135.0" fitWidth="161.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../posizionamento/shrek6.gif"/>
+            </image>
+            <GridPane.margin>
+                <Insets bottom="-28.0" left="1265.0"/>
+            </GridPane.margin>
+        </ImageView>
+        <ImageView fx:id="shrek4" fitHeight="110.0" fitWidth="131.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true"
+                   preserveRatio="true">
+            <GridPane.margin>
+                <Insets bottom="-185.0" left="1075.0"/>
+            </GridPane.margin>
+            <image>
+                <Image url="@../posizionamento/shrek4png.png"/>
+            </image>
+        </ImageView>
+        <ImageView fitHeight="225.0" fitWidth="342.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../posizionamento/fuochi-d-artificio-immagine-animata-0087.gif"/>
+            </image>
+            <GridPane.margin>
+                <Insets bottom="370.0" left="1086.0"/>
+            </GridPane.margin>
+        </ImageView>
+    </children>
 </GridPane>
