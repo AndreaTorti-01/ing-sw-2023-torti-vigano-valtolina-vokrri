@@ -1,8 +1,0 @@
-TODO
-4) la tui non è pienamente finita, manca la gestione della schermata finale -> anche gui
-
-6) nel playing screen devono esserci sia un textfield che un button per inviare il messaggio, e un textpane per visualizzare i messaggi
-
-7) aggiungere metodo handleImageViewClick a tutte le celle degli fxml delle shelf (come in board)
-
-8) TODOS segnati in updateview di gui
