@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The GUI view of the game.
+ */
 public class Gui extends ObservableImpl implements RunnableView {
     private static final String fxmlPath = "/graphicalResources/fxml/";
     private final Object lock = new Object();

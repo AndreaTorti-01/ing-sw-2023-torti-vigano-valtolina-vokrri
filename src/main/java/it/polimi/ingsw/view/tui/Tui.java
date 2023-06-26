@@ -20,6 +20,9 @@ import static it.polimi.ingsw.utils.Common.isTakeable;
 import static it.polimi.ingsw.utils.Constants.*;
 import static it.polimi.ingsw.view.tui.TerminalPrintables.*;
 
+/**
+ * The TUI view of the game.
+ */
 public class Tui extends ObservableImpl implements RunnableView {
     private final Object lock = new Object();
     private final Scanner scanner = new Scanner(System.in);
