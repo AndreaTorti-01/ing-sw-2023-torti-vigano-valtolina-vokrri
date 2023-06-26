@@ -68,13 +68,13 @@ public class PersonalGoalCard implements Serializable {
      * @throws IllegalArgumentException if the provided position is not valid.
      */
     public void setTileAt(int row, int column, ItemType itemType) throws IllegalArgumentException {
-        if (row < 0 || row > numberOfRows) {
+        if (row < 0 || row >= numberOfRows) {
             throw new IllegalArgumentException(
                     "Provided row (" + row + ") is out of range 0 - " + numberOfRows
             );
         }
 
-        if (column < 0 || column > numberOfColumns) {
+        if (column < 0 || column >= numberOfColumns) {
             throw new IllegalArgumentException(
                     "Provided column (" + column + ") is out of range 0 - " + numberOfColumns
             );
@@ -117,13 +117,13 @@ public class PersonalGoalCard implements Serializable {
      * @return the type of the Item Card at the provided position.
      */
     public ItemType getTypeAt(int row, int column) throws IllegalArgumentException {
-        if (row < 0 || row > numberOfRows) {
+        if (row < 0 || row >= numberOfRows) {
             throw new IllegalArgumentException(
                     "Provided row (" + row + ") is out of range 0 - " + numberOfRows
             );
         }
 
-        if (column < 0 || column > numberOfColumns) {
+        if (column < 0 || column >= numberOfColumns) {
             throw new IllegalArgumentException(
                     "Provided column (" + column + ") is out of range 0 - " + numberOfColumns
             );

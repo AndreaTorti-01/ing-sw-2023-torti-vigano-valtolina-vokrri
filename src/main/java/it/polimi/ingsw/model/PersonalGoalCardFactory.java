@@ -1,12 +1,13 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.ItemCards.ItemType;
-import it.polimi.ingsw.utils.Constants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import static it.polimi.ingsw.utils.Constants.numberOfPersonalGoalCardTypes;
 
 /**
  * A factory class that creates Personal Goal Cards.
@@ -21,12 +22,12 @@ public class PersonalGoalCardFactory {
      * @return the Personal Goal Card containing the parsed pattern.
      */
     public PersonalGoalCard createPersonalGoalCard(int index) {
-        if (index < 0 || index > Constants.numberOfPersonalGoalCardTypes - 1)
-            throw new IndexOutOfBoundsException("provided index (" + index + ") is out of range 0-" + (Constants.numberOfPersonalGoalCardTypes - 1));
+        if (index < 0 || index >= numberOfPersonalGoalCardTypes)
+            throw new IndexOutOfBoundsException("provided index (" + index + ") is out of range 0-" + (numberOfPersonalGoalCardTypes - 1));
 
         PersonalGoalCard personalGoalCard = new PersonalGoalCard();
         personalGoalCard.setID(index);
-        
+
         try {
             // gets the pattern file corresponding to the given index
             InputStream inputStream = getClass().getResourceAsStream(String.format("/personalGoalCards/%dPGC.txt", index));
