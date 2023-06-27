@@ -9,8 +9,7 @@ import it.polimi.ingsw.network.serializable.MoveMsg;
 
 import java.util.List;
 
-import static it.polimi.ingsw.utils.Constants.numberOfColumns;
-import static it.polimi.ingsw.utils.Constants.numberOfRows;
+import static it.polimi.ingsw.utils.Constants.*;
 
 /**
  * The controller of the MVC pattern.
@@ -65,7 +64,7 @@ public class GameController {
         // check validity of the move
         if (move.getPickedCards().size() > 3) return false;
         for (List<Integer> coords : move.getPickedCards()) {
-            if (coords.get(0) < 0 || coords.get(0) > numberOfRows || coords.get(1) < 0 || coords.get(1) > numberOfColumns)
+            if (coords.get(0) < 0 || coords.get(0) > numberOfBoardRows || coords.get(1) < 0 || coords.get(1) > numberOfBoardColumns)
                 return false;
         }
         if (move.getColumn() < 0 || move.getColumn() > numberOfColumns || freeSlotsNumber[move.getColumn()] < move.getPickedCards().size())
