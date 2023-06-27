@@ -59,13 +59,17 @@ public class CommonGoalCard implements Serializable {
     }
 
     /**
-     * @return the type of the common goal card.
+     * Gets the type of this Common Goal Card.
+     *
+     * @return the type of the Common Goal Card.
      */
     public CommonGoalCardType getType() {
         return strategy.getType();
     }
 
     /**
+     * Gets the point the player gets by completing the Common Goal Card, without popping it from the stack.
+     *
      * @return the next point the player can get by completing the common goal card.
      */
     public int peekPoints() {
@@ -76,6 +80,8 @@ public class CommonGoalCard implements Serializable {
     }
 
     /**
+     * Gets the point the player gets by completing the Common Goal Card and pops it from the stack.
+     *
      * @return the point the player gets by completing the common goal card, popping it from the stack.
      */
     public int popPoints() {

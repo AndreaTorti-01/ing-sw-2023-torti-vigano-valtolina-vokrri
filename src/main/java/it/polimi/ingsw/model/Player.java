@@ -44,6 +44,8 @@ public class Player implements Serializable {
     }
 
     /**
+     * Gets the score of this player.
+     *
      * @return the player's score.
      */
     public int getScore() {
@@ -60,6 +62,8 @@ public class Player implements Serializable {
     }
 
     /**
+     * Gets the Personal Goal Card of this player.
+     *
      * @return the player's Personal Goal Card.
      */
     public PersonalGoalCard getPersonalGoalCard() {
@@ -76,6 +80,8 @@ public class Player implements Serializable {
     }
 
     /**
+     * Gets the Shelf of this player.
+     *
      * @return the player's shelf.
      */
     public Shelf getShelf() {
@@ -83,6 +89,8 @@ public class Player implements Serializable {
     }
 
     /**
+     * Gets the name of this player.
+     *
      * @return the player's name.
      */
     public String getName() {
@@ -90,6 +98,8 @@ public class Player implements Serializable {
     }
 
     /**
+     * Gets the Common Goal Cards this player has achieved.
+     *
      * @param index must be between boundaries (0-1).
      * @return true if the player has achieved the Common Goal Card at the provided index.
      */

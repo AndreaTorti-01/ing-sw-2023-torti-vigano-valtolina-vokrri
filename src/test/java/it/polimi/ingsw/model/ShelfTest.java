@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.ItemCards.ItemType;
 import it.polimi.ingsw.utils.Constants;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 import static org.junit.jupiter.api.Assertions.*;
@@ -188,6 +191,22 @@ class ShelfTest {
         shelf.fill();
 
         assertTrue(shelf.isFull());
+    }
+
+    @Test
+    void testToString() {
+        Shelf shelf = initializeFullRandomShelf();
+        List<String> representation = Arrays.asList(shelf.toString().replaceAll(" ", "").split("\n"));
+
+        for (int row = 0; row < numberOfRows; row++) {
+            for (int col = 0; col < numberOfColumns; col++) {
+
+                assertEquals(
+                        String.valueOf(representation.get(row).charAt(col)),
+                        shelf.getCardAt(row, col).getType().getAbbreviation()
+                );
+            }
+        }
     }
 
 

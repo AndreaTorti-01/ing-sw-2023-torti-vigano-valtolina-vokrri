@@ -16,6 +16,8 @@ import static it.polimi.ingsw.utils.Constants.*;
  */
 public class Common {
     /**
+     * Tells whether the provided coordinates are valid to be picked by the player or not.
+     *
      * @param modelView    the current view.
      * @param row          must be between boundaries (provided in the {@link Constants} file).
      * @param column       must be between boundaries (provided in the {@link Constants} file).
@@ -68,6 +70,8 @@ public class Common {
     }
 
     /**
+     * Tells whether the provided coordinates are adjacent to one another or not.
+     *
      * @param row     must be between boundaries (provided in the {@link Constants} file).
      * @param column  must be between boundaries (provided in the {@link Constants} file).
      * @param row2    must be between boundaries (provided in the {@link Constants} file).
@@ -79,10 +83,6 @@ public class Common {
                 row == row2 && Math.abs(column - column2) == 1;
     }
 
-    /**
-     * @param itemCard the Item Card whose resources to obtain.
-     * @return the file path to the provided Item Card graphical resource.
-     */
     /**
      * Counts and removes from the provided copy of the shelf all the adjacent Item Cards of same type,
      * starting from the provided one.
@@ -121,6 +121,8 @@ public class Common {
     }
 
     /**
+     * Gets the list of all adjacent up/down/left/right Item Cards of the same type of the provided one.
+     *
      * @param shelfCopy a copy of the shelf.
      * @param row       must be between boundaries (provided in the {@link Constants} file).
      * @param column    must be between boundaries (provided in the {@link Constants} file).

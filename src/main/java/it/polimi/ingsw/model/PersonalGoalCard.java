@@ -53,6 +53,8 @@ public class PersonalGoalCard implements Serializable {
     }
 
     /**
+     * Gets the pattern of this Personal Goal Card.
+     *
      * @return the pattern of this Personal Goal Card.
      */
     public ItemType[][] getPattern() {
@@ -112,6 +114,8 @@ public class PersonalGoalCard implements Serializable {
     }
 
     /**
+     * Gets the type of the Item Card at the provided position.
+     *
      * @param row    must be between boundaries (provided in the {@link Constants} file).
      * @param column must be between boundaries (provided in the {@link Constants} file).
      * @return the type of the Item Card at the provided position.
@@ -132,6 +136,8 @@ public class PersonalGoalCard implements Serializable {
     }
 
     /**
+     * Gets a string representation of this Common Goal Card.
+     *
      * @return a string representation of this Common Goal Card.
      */
     @Override

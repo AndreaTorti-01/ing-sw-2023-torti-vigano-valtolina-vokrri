@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat_RAINBOWS;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CommonGoalCardStrat_RAINBOWSTest {
     String fileExtension = ".txt";
@@ -62,6 +62,23 @@ class CommonGoalCardStrat_RAINBOWSTest {
 
             assertTrue(commonGoalCardStrat.checkPattern(shelf));
         }
+    }
+
+    @Test
+    void testGetType() {
+        CommonGoalCard commonGoalCard = new CommonGoalCard(4, new CommonGoalCardStrat_RAINBOWS(CommonGoalCardType.TWO_RAINBOW_COLUMNS));
+        assertEquals(
+                commonGoalCard.getType(),
+                CommonGoalCardType.TWO_RAINBOW_COLUMNS
+        );
+
+        commonGoalCard = new CommonGoalCard(4, new CommonGoalCardStrat_RAINBOWS(CommonGoalCardType.TWO_RAINBOW_LINES));
+        assertEquals(
+                commonGoalCard.getType(),
+                CommonGoalCardType.TWO_RAINBOW_LINES
+        );
+
+        assertThrows(IllegalArgumentException.class, () -> new CommonGoalCard(4, new CommonGoalCardStrat_RAINBOWS(CommonGoalCardType.EIGHT_EQUAL)));
     }
 
 }

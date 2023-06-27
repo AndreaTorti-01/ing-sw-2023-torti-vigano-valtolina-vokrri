@@ -46,6 +46,8 @@ public class Lobby implements Observer {
     }
 
     /**
+     * Tells whether this lobby is open.
+     *
      * @return true if the lobby can accept new players, false otherwise.
      */
     public boolean isOpen() {

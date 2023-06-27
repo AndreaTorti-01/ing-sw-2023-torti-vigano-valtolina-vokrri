@@ -46,6 +46,8 @@ public class CommonGoalCardStrat_EIGHT_EQUAL implements CommonGoalCardStrat {
     }
 
     /**
+     * Gets the type of this Common Goal Card.
+     *
      * @return the type of this Common Goal Card ({@code EIGHT_EQUAL})
      */
     @Override

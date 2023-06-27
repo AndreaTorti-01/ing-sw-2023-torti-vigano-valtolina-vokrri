@@ -59,6 +59,8 @@ public class Shelf implements Serializable {
     }
 
     /**
+     * Gets the card at the provided position.
+     *
      * @param row    must be between boundaries (provided in the {@link Constants} file)
      * @param column must be between boundaries (provided in the {@link Constants} file)
      * @return ItemCard at the provided position (if any), null otherwise.
@@ -101,6 +103,8 @@ public class Shelf implements Serializable {
     }
 
     /**
+     * Gets a copy of this shelf.
+     *
      * @return a deep copy of the current Shelf.
      */
     public Shelf getCopy() {
@@ -146,6 +150,8 @@ public class Shelf implements Serializable {
     }
 
     /**
+     * Gets the length of the provided shelf column.
+     *
      * @param column must be between boundaries (provided in the {@link Constants} file).
      * @return length of the provided column.
      */
@@ -159,6 +165,8 @@ public class Shelf implements Serializable {
     }
 
     /**
+     * Tells whether this shelf is full.
+     *
      * @return true if the shelf does not have any available space left, false otherwise.
      */
     public boolean isFull() {
@@ -184,6 +192,8 @@ public class Shelf implements Serializable {
     }
 
     /**
+     * Gets a string representation of this shelf.
+     *
      * @return a string representation of this shelf.
      */
     @Override

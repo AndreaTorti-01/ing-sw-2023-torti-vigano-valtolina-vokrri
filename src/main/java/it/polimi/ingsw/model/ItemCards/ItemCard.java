@@ -32,6 +32,8 @@ public class ItemCard implements Serializable {
     }
 
     /**
+     * Gets the type of this Item Card.
+     *
      * @return the type of this Item Card.
      */
     public ItemType getType() {
@@ -39,6 +41,8 @@ public class ItemCard implements Serializable {
     }
 
     /**
+     * Gets the sprite of this Item Card.
+     *
      * @return the sprite of this Item Card.
      */
     public int getSprite() {
@@ -46,6 +50,8 @@ public class ItemCard implements Serializable {
     }
 
     /**
+     * Gets the abbreviation of this Item Card.
+     *
      * @return the abbreviation of this Item Card
      */
     @Override

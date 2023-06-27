@@ -22,6 +22,12 @@ public class CommonGoalCardTest {
         randomStrat = CommonGoalCardType.getStrategyFromType(randomType);
     }
 
+    @Test
+    void testGetType() {
+        CommonGoalCard commonGoalCard = new CommonGoalCard(4, randomStrat);
+        assertEquals(commonGoalCard.getType(), randomStrat.getType());
+    }
+
 
     @Test
     void testFourPlayersFunctionalities() {

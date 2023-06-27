@@ -13,8 +13,17 @@ public class CommonGoalCardStrat_AGGREGATE implements CommonGoalCardStrat {
 
     @Serial
     private static final long serialVersionUID = 3039026104293719772L;
+    /**
+     * The number of aggregates to find in the shelf.
+     */
     private final int aggregatesToFind;
+    /**
+     * The size of each aggregate to find in the shelf.
+     */
     private final int aggregateSize;
+    /**
+     * The type of the Common Goal Card Strategy.
+     */
     private final CommonGoalCardType type;
 
     /**
@@ -80,6 +89,8 @@ public class CommonGoalCardStrat_AGGREGATE implements CommonGoalCardStrat {
     }
 
     /**
+     * Gets the type of this Common Goal Card.
+     *
      * @return the type of this Common Goal Card ({@code SIX_PAIRS} or {@code FOUR_QUARTETS})
      */
     @Override

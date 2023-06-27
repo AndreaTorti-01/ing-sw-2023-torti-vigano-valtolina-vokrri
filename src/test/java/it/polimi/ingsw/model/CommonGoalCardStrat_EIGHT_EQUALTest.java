@@ -1,10 +1,11 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat_EIGHT_EQUAL;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CommonGoalCardStrat_EIGHT_EQUALTest {
     String folderName = "/shelvesForTesting/testForEIGHT_EQUAL/";
@@ -12,7 +13,7 @@ class CommonGoalCardStrat_EIGHT_EQUALTest {
     int numberOfTests = 10;
 
     @Test
-    void testCheckPatternMethod() {
+    void testCheckPattern() {
         CommonGoalCardStrat_EIGHT_EQUAL commonGoalCardStrat = new CommonGoalCardStrat_EIGHT_EQUAL();
 
         for (int i = 0; i < numberOfTests; i++) {
@@ -34,6 +35,15 @@ class CommonGoalCardStrat_EIGHT_EQUALTest {
 
             assertTrue(commonGoalCardStrat.checkPattern(shelf));
         }
+    }
+
+    @Test
+    void testGetType() {
+        CommonGoalCard commonGoalCard = new CommonGoalCard(4, new CommonGoalCardStrat_EIGHT_EQUAL());
+        assertEquals(
+                commonGoalCard.getType(),
+                CommonGoalCardType.EIGHT_EQUAL
+        );
     }
 
 }

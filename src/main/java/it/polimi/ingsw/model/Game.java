@@ -129,6 +129,9 @@ public class Game extends ObservableImpl implements Serializable {
         }
     }
 
+    /**
+     * Deletes the file containing the state of this game.
+     */
     private void deleteSave() {
         StringBuilder fileName = new StringBuilder();
         for (Player player : players) {
@@ -252,6 +255,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Gets the winner.
+     *
      * @return the Player that won this game.
      */
     public Player getWinner() {
@@ -282,6 +287,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Gets the list of players playing this game.
+     *
      * @return a list of players playing this game.
      */
     public List<Player> getPlayers() {
@@ -289,6 +296,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Gets the current player whose turn it is.
+     *
      * @return the current player whose turn it is.
      */
     public Player getCurrentPlayer() {
@@ -296,6 +305,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Gets the Bag of this game.
+     *
      * @return the bag of this game.
      */
     public Bag getBag() {
@@ -303,6 +314,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Gets the boar of this game.
+     *
      * @return the board of this game.
      */
     public Board getBoard() {
@@ -310,6 +323,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Gets the list of the Common Goal Cards in this game.
+     *
      * @return a list of common goal cards in this game.
      */
     public List<CommonGoalCard> getCommonGoalCards() {
@@ -317,6 +332,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Generates a list of random Common Goal Cards.
+     *
      * @return a list of random Common Goal Cards.
      */
     private List<CommonGoalCard> getRandomCommonGoalCards() {
@@ -346,6 +363,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Gets a list of indexes in range 0 (included) - bound (excluded).
+     *
      * @param bound the upper bound (excluded).
      * @return a list with all indexes in range 0 (included) - bound (excluded)
      */
@@ -358,6 +377,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Gets the status of this game.
+     *
      * @return the status of this game.
      */
     public Game.Status getGameStatus() {
@@ -518,6 +539,8 @@ public class Game extends ObservableImpl implements Serializable {
     }
 
     /**
+     * Gets the messages sent during this game.
+     *
      * @return the messages sent during this game.
      */
     public Stack<ChatMsg> getMessages() {
@@ -539,6 +562,8 @@ public class Game extends ObservableImpl implements Serializable {
      * ***************************** <p>
      * * FOR TESTING PURPOSE ONLY! * <p>
      * ***************************** <p>
+     * <p>
+     * Gets a random player from the ones playing this game.
      *
      * @return a random player from the ones playing this game.
      */

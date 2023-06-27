@@ -42,6 +42,8 @@ public class ChatMsg implements Serializable {
     }
 
     /**
+     * Gets the player to whom the message is intended.
+     *
      * @return the player to whom the message is intended.
      */
     public String getRecipientPlayer() {
@@ -49,6 +51,8 @@ public class ChatMsg implements Serializable {
     }
 
     /**
+     * Gets the player who sent the message.
+     *
      * @return The player who sent the message.
      */
     public String getSenderPlayer() {
@@ -56,6 +60,8 @@ public class ChatMsg implements Serializable {
     }
 
     /**
+     * Tells whether the message is public or not.
+     *
      * @return true if the message is public, false otherwise.
      */
     public boolean isPublic() {
@@ -63,6 +69,8 @@ public class ChatMsg implements Serializable {
     }
 
     /**
+     * Gets the message to be sent.
+     *
      * @return the message to be sent.
      */
     public String getMessage() {
@@ -70,6 +78,8 @@ public class ChatMsg implements Serializable {
     }
 
     /**
+     * Gets a string representation of this message.
+     *
      * @return a string representation of this message.
      */
     @Override

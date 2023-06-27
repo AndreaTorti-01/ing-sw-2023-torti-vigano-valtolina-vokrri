@@ -20,13 +20,13 @@ public class Bag implements Serializable {
     @Serial
     private static final long serialVersionUID = -141148278954951272L;
     /**
-     * The set of cards contained in the bag.
+     * The set of cards contained in this bag.
      */
     private final Set<ItemCard> cardsInside;
 
     /**
-     * Fills the bag with every type of ItemCard.
-     * See {@link Constants} to know the number of cards inside the bag
+     * Fills this bag with every type of ItemCard.
+     * See {@link Constants} to know the number of cards inside this bag
      * and the number of Item Cards with the same type.
      */
     public Bag() {
@@ -39,14 +39,18 @@ public class Bag implements Serializable {
     }
 
     /**
-     * @return the set of cards contained in the bag.
+     * Gets the set of cards contained in this bag.
+     *
+     * @return the set of cards contained in this bag.
      */
     public Set<ItemCard> getCardsInside() {
         return cardsInside;
     }
 
     /**
-     * @return a random ItemCard from the bag, if not empty.
+     * Draws a random ItemCard from this bag.
+     *
+     * @return a random ItemCard from this bag, if not empty.
      */
     public ItemCard drawCard() {
         if (cardsInside.size() == 0) return null;

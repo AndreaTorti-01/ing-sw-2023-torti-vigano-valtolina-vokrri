@@ -24,7 +24,9 @@ public class CheatMsg implements Serializable {
     }
 
     /**
-     * @return the name of the player who created the message.
+     * Gets the name of the player who cheated.
+     *
+     * @return the name of the player who cheated.
      */
     public String getCheater() {
         return cheater;

@@ -14,7 +14,13 @@ public class CommonGoalCardStrat_RAINBOWS implements CommonGoalCardStrat {
 
     @Serial
     private static final long serialVersionUID = -7349223966947005027L;
+    /**
+     * The number of columns to find in the shelf.
+     */
     private final int numOfRowsToFind;  // number of rainbow rows
+    /**
+     * The number of lines to find in the shelf.
+     */
     private final int numOfColsToFind; // number of rainbow columns
     private final CommonGoalCardType type;
 
@@ -84,6 +90,8 @@ public class CommonGoalCardStrat_RAINBOWS implements CommonGoalCardStrat {
     }
 
     /**
+     * Gets the type of this Common Goal Type.
+     *
      * @return the type of this Common Goal Card ({@code TWO_RAINBOW_COLUMNS} or {@code TWO_RAINBOW_LINES}).
      */
     public CommonGoalCardType getType() {

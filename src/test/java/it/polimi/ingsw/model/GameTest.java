@@ -10,7 +10,6 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
-    // TODO: test refillBoard method
     @Test
     void testGameWithCorrectNumberOfPlayers() {
         for (int numberOfPlayers = 2; numberOfPlayers <= 4; numberOfPlayers++) {
@@ -95,24 +94,6 @@ public class GameTest {
 
         assertEquals(Game.Status.ENDED, model.getGameStatus());
     }
-
-    /*
-    @Test
-    void testGeneratePermutations() {
-        List<String> playerNames = new ArrayList<>();
-        playerNames.add("Asdrubale");
-        playerNames.add("Bufalo");
-        playerNames.add("Carlo");
-        playerNames.add("Davide");
-
-        Game model = Game.createGame();
-        List<String> permutations = model.generatePermutations(playerNames);
-        for (String permutation : permutations) {
-            System.out.println(permutation);
-        }
-        System.out.println(permutations.size());
-    }
-    */
 
     private Game newGameWith(int numberOfPlayers) {
         List<String> playerNames = new ArrayList<>();

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.commonGoalCards;
 
-public enum  CommonGoalCardType {
+public enum CommonGoalCardType {
     CROSS,
     DIAGONAL_FIVE,
     EIGHT_EQUAL,
@@ -15,6 +15,8 @@ public enum  CommonGoalCardType {
     TWO_SQUARES;
 
     /**
+     * Gets the Common Goal Card Strategy corresponding to the provided type.
+     *
      * @param type the type of Common Goal Card to get the strategy from.
      * @return the Common Goal Card Strategy corresponding to the provided type
      */

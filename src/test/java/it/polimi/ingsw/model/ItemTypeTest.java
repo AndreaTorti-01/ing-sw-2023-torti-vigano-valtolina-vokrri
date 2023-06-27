@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ItemTypeTest {
+
     @Test
     void testGetItemTypeFromAbbreviation() {
         for (ItemType type : ItemType.values()) {
@@ -17,6 +19,7 @@ public class ItemTypeTest {
         }
 
         assertNull(ItemType.getItemTypeFromAbbreviation('*'));
+        assertThrows(NoSuchElementException.class, () -> ItemType.getItemTypeFromAbbreviation('X'));
     }
 
     @Test

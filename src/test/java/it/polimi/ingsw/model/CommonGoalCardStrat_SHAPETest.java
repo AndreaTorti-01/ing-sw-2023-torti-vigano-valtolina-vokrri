@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat_SHAPE;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CommonGoalCardStrat_SHAPETest {
     String fileExtension = ".txt";
@@ -115,4 +115,32 @@ class CommonGoalCardStrat_SHAPETest {
         }
     }
 
+    @Test
+    void testGetType() {
+        CommonGoalCard commonGoalCard = new CommonGoalCard(4, new CommonGoalCardStrat_SHAPE(CommonGoalCardType.EQUAL_CORNERS));
+        assertEquals(
+                commonGoalCard.getType(),
+                CommonGoalCardType.EQUAL_CORNERS
+        );
+
+        commonGoalCard = new CommonGoalCard(4, new CommonGoalCardStrat_SHAPE(CommonGoalCardType.CROSS));
+        assertEquals(
+                commonGoalCard.getType(),
+                CommonGoalCardType.CROSS
+        );
+
+        commonGoalCard = new CommonGoalCard(4, new CommonGoalCardStrat_SHAPE(CommonGoalCardType.DIAGONAL_FIVE));
+        assertEquals(
+                commonGoalCard.getType(),
+                CommonGoalCardType.DIAGONAL_FIVE
+        );
+
+        commonGoalCard = new CommonGoalCard(4, new CommonGoalCardStrat_SHAPE(CommonGoalCardType.TWO_SQUARES));
+        assertEquals(
+                commonGoalCard.getType(),
+                CommonGoalCardType.TWO_SQUARES
+        );
+
+        assertThrows(IllegalArgumentException.class, () -> new CommonGoalCard(4, new CommonGoalCardStrat_SHAPE(CommonGoalCardType.TWO_RAINBOW_COLUMNS)));
+    }
 }

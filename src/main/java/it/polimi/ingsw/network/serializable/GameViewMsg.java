@@ -96,6 +96,8 @@ public class GameViewMsg implements Serializable {
     }
 
     /**
+     * Gets the current state of the board.
+     *
      * @return the current state of the board.
      */
     public ItemCard[][] getBoard() {
@@ -103,6 +105,8 @@ public class GameViewMsg implements Serializable {
     }
 
     /**
+     * Gets the layout of the board.
+     *
      * @return the board valid tiles.
      */
     public boolean[][] getLayout() {
@@ -110,6 +114,8 @@ public class GameViewMsg implements Serializable {
     }
 
     /**
+     * Gets the shelf of the provided player.
+     *
      * @param player the player whose shelf to get of.
      * @return the shelf of the provided player.
      */
@@ -123,6 +129,8 @@ public class GameViewMsg implements Serializable {
     }
 
     /**
+     * Gets the list of Common Goal Cards in the current game.
+     *
      * @return the Common Goal Cards in the current game.
      */
     public List<CommonGoalCard> getCommonGoalCards() {
@@ -130,6 +138,8 @@ public class GameViewMsg implements Serializable {
     }
 
     /**
+     * Gets the player whose turn it is in the current game.
+     *
      * @return the player whose turn it is in the current game.
      */
     public Player getCurrentPlayer() {
@@ -137,6 +147,8 @@ public class GameViewMsg implements Serializable {
     }
 
     /**
+     * Gets the list of players playing the current game.
+     *
      * @return the list of players playing the current game.
      */
     public List<Player> getPlayers() {
@@ -144,13 +156,8 @@ public class GameViewMsg implements Serializable {
     }
 
     /**
-     * @return true if the bag of the current game has no more Item Cards, false otherwise.
-     */
-    public boolean isBagEmpty() {
-        return isBagEmpty;
-    }
-
-    /**
+     * Gets the status of the current game.
+     *
      * @return the status of the current game.
      */
     public Game.Status getGameStatus() {
@@ -158,6 +165,8 @@ public class GameViewMsg implements Serializable {
     }
 
     /**
+     * Gets the winner of the current game.
+     *
      * @return the player who won the current game.
      */
     public Player getWinner() {
@@ -165,6 +174,8 @@ public class GameViewMsg implements Serializable {
     }
 
     /**
+     * Gets the messages sent during the current game.
+     *
      * @return the messages sent during the current game.
      */
     public Stack<ChatMsg> getMessages() {

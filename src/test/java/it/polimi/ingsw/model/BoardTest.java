@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.ItemCards.ItemType;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static it.polimi.ingsw.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -168,5 +171,30 @@ class BoardTest {
         assertThrows(IllegalArgumentException.class, () -> board.popCard(0, -1));
         assertThrows(IllegalArgumentException.class, () -> board.popCard(boardSize, boardSize));
         assertThrows(IllegalArgumentException.class, () -> board.popCard(0, boardSize));
+    }
+
+    @Test
+    void testToString() {
+        for (int i = minNumberOfPlayers; i < maxNumberOfPlayers; i++) {
+            Board board = new Board(i);
+            // refills the board with random item cards
+            for (int row = 0; row < boardSize; row++) {
+                for (int col = 0; col < boardSize; col++) {
+                    if (board.isValid(row, col))
+                        board.setTile(new ItemCard(ItemType.getRandomItemType(), 0), row, col);
+                }
+            }
+
+            List<String> representation = Arrays.asList(board.toString().replaceAll(" ", "").split("\n"));
+            for (int row = 0; row < boardSize; row++) {
+                for (int col = 0; col < boardSize; col++) {
+                    if (board.isValid(row, col)) {
+                        assertEquals(String.valueOf(representation.get(row).charAt(col)), board.peekCard(row, col).getType().getAbbreviation());
+                    } else {
+                        assertEquals(representation.get(row).charAt(col), '-');
+                    }
+                }
+            }
+        }
     }
 }

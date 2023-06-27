@@ -12,18 +12,25 @@ import static it.polimi.ingsw.utils.Constants.numberOfRows;
 public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
     @Serial
     private static final long serialVersionUID = 2165136835284717126L;
+    /**
+     * The shape to find in the Common Goal Card Strategy.
+     */
     private final Shape shape;
+    /**
+     * The type of the Common Goal Card Strategy.
+     */
     private final CommonGoalCardType type;
-
-    // TODO rewrite JavaDOC
 
     /**
      * Creates a new SHAPE Common Goal Card Strategy of the provided type.
      *
      * @param cardType the type of the Common Goal Card Strategy.
-     *                 Must be {@code SIX_PAIRS} or {@code FOUR_QUARTETS}.
+     *                 Must be {@code TWO_SQUARES}, {@code DIAGONAL_FIVE}, {@code EQUAL_CORNERS} and {@code CROSS}.
      */
     public CommonGoalCardStrat_SHAPE(CommonGoalCardType cardType) {
+        if (cardType != CommonGoalCardType.TWO_SQUARES && cardType != CommonGoalCardType.DIAGONAL_FIVE && cardType != CommonGoalCardType.EQUAL_CORNERS && cardType != CommonGoalCardType.CROSS)
+            throw new IllegalArgumentException("The type of Common Goal Card Strategy must be " + CommonGoalCardType.TWO_SQUARES.name() + ", " + CommonGoalCardType.DIAGONAL_FIVE.name() + ", " + CommonGoalCardType.EQUAL_CORNERS.name() + " or " + CommonGoalCardType.CROSS.name());
+
         // load the shape from file based on the type
         try {
             this.shape = loadShape(cardType);
@@ -90,7 +97,7 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         return false;
     }
 
-    // TODO Add JavaDOC
+    // TODO
     private int checkPatternsNumber(boolean[][] maskedShelf, Shape shape) {
         int shapesFound = 0;
         int row, column, shapeRow, shapeColumn, startingRow, startingColumn;
@@ -174,6 +181,8 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
     }
 
     /**
+     * Gets the type of this Common Goal Type.
+     *
      * @return the type of this Common Goal Card.
      */
     @Override

@@ -23,6 +23,8 @@ public enum ItemType {
     }
 
     /**
+     * Gets the ItemType from the provided abbreviation.
+     *
      * @param abbreviation the abbreviation of the ItemType
      * @return the ItemType given its abbreviation
      */

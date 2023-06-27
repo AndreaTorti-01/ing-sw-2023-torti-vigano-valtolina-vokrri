@@ -21,7 +21,7 @@ public class PersonalGoalCardFactory {
      * @param index the index of the file containing the pattern to be parsed.
      * @return the Personal Goal Card containing the parsed pattern.
      */
-    public PersonalGoalCard createPersonalGoalCard(int index) {
+    public static PersonalGoalCard createPersonalGoalCard(int index) {
         if (index < 0 || index >= numberOfPersonalGoalCardTypes)
             throw new IndexOutOfBoundsException("provided index (" + index + ") is out of range 0-" + (numberOfPersonalGoalCardTypes - 1));
 
@@ -30,7 +30,7 @@ public class PersonalGoalCardFactory {
 
         try {
             // gets the pattern file corresponding to the given index
-            InputStream inputStream = getClass().getResourceAsStream(String.format("/personalGoalCards/%dPGC.txt", index));
+            InputStream inputStream = PersonalGoalCardFactory.class.getResourceAsStream(String.format("/personalGoalCards/%dPGC.txt", index));
 
             // allows to read data from the obtained file
             assert inputStream != null;

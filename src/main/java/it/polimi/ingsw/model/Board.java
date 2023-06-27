@@ -50,6 +50,8 @@ public class Board implements Serializable {
 
 
     /**
+     * Gets whether the tile at the provided position is valid or not.
+     *
      * @param row    must be between boundaries (provided in the {@link Constants} file).
      * @param column must be between boundaries (provided in the {@link Constants} file).
      * @return true if the tile at the provided position is valid, false otherwise.
@@ -96,6 +98,8 @@ public class Board implements Serializable {
     }
 
     /**
+     * Gets the card at the given position without removing it.
+     *
      * @param row    must be between boundaries (provided in the {@link Constants} file).
      * @param column must be between boundaries (provided in the {@link Constants} file).
      * @return the card on the selected tile, without removing it, or null if the tile is empty.
@@ -119,6 +123,8 @@ public class Board implements Serializable {
     }
 
     /**
+     * Gets the card at the given position removing it.
+     *
      * @param row    must be between boundaries (provided in the {@link Constants} file).
      * @param column must be between boundaries (provided in the {@link Constants} file).
      * @return the card on the selected tile, removing it, or null if the tile is empty.
@@ -144,6 +150,8 @@ public class Board implements Serializable {
     }
 
     /**
+     * Gets the layout of the board.
+     *
      * @return the matrix that represents the valid tiles.
      */
     public boolean[][] getLayout() {
@@ -151,6 +159,8 @@ public class Board implements Serializable {
     }
 
     /**
+     * Gets the Item Cards on the board.
+     *
      * @return the Item Cards on the board.
      */
     public ItemCard[][] getTiles() {
@@ -158,6 +168,8 @@ public class Board implements Serializable {
     }
 
     /**
+     * Gets a string representation of this board.
+     *
      * @return a string representation of this board.
      */
     @Override
@@ -171,7 +183,6 @@ public class Board implements Serializable {
                     if (card != null) output.append(card).append(" ");
                     else output.append("* ");
                 } else output.append("- ");
-
             }
             output.append("\n");
         }

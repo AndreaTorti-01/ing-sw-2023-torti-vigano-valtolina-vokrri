@@ -1,10 +1,11 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardStrat_STAIR;
+import it.polimi.ingsw.model.commonGoalCards.CommonGoalCardType;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CommonGoalCardStrat_STAIRTest {
     String folderName = "/shelvesForTesting/testForSTAIR/";
@@ -36,4 +37,12 @@ class CommonGoalCardStrat_STAIRTest {
         }
     }
 
+    @Test
+    void testGetType() {
+        CommonGoalCard commonGoalCard = new CommonGoalCard(4, new CommonGoalCardStrat_STAIR());
+        assertEquals(
+                commonGoalCard.getType(),
+                CommonGoalCardType.STAIR
+        );
+    }
 }

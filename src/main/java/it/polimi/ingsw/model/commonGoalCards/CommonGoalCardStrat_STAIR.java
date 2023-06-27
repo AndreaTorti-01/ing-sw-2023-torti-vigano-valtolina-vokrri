@@ -83,6 +83,8 @@ public class CommonGoalCardStrat_STAIR implements CommonGoalCardStrat {
     }
 
     /**
+     * Gets the type of this Common Goal Type.
+     *
      * @return the type of this Common Goal Card ({@code STAIR}).
      */
     @Override

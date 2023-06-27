@@ -15,10 +15,21 @@ public class CommonGoalCardStrat_MAX_THREE_TYPES implements CommonGoalCardStrat 
 
     @Serial
     private static final long serialVersionUID = -6262685542763303817L;
+    /**
+     * The number of columns to check in the shelf.
+     */
     private final int numberOfColumnsToCheck;
-
+    /**
+     * The number of lines to check in the shelf.
+     */
     private final int numberOfLinesToCheck;
+    /**
+     * The maximum number of types of cards that can be on the shelf.
+     */
     private final int maxNumberOfTypes;
+    /**
+     * The type of the Common Goal Card Strategy.
+     */
     private final CommonGoalCardType type;
 
     /**
@@ -112,6 +123,8 @@ public class CommonGoalCardStrat_MAX_THREE_TYPES implements CommonGoalCardStrat 
     }
 
     /**
+     * Gets the type of this Common Goal Type.
+     *
      * @return the type of this Common Goal Type ({@code FOUR_LINES_MAX_THREE_TYPE} or {@code THREE_COLUMNS_MAX_THREE_TYPES})
      */
     public CommonGoalCardType getType() {
