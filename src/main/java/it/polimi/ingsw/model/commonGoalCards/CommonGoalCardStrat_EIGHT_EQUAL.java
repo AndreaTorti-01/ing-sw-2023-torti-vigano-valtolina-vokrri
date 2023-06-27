@@ -9,6 +9,9 @@ import java.io.Serial;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
+/**
+ * A class representing the EIGHT_EQUAL Common Goal Card Strategy.
+ */
 public class CommonGoalCardStrat_EIGHT_EQUAL implements CommonGoalCardStrat {
     @Serial
     private static final long serialVersionUID = -5460232929999583608L;

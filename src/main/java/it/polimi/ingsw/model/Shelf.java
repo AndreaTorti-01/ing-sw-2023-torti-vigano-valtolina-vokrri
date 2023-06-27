@@ -84,7 +84,6 @@ public class Shelf implements Serializable {
     /**
      * Sets the card at the provided position to the provided value.
      * <p>
-     * <p>
      * ************************************* <p>
      * * USE ONLY ON A CLONE OF THE SHELF! * <p>
      * ************************************* <p>
@@ -98,6 +97,11 @@ public class Shelf implements Serializable {
         this.items[row][column] = newCard;
     }
 
+    /**
+     * Gets the items in the shelf.
+     *
+     * @return a matrix of ItemCards representing the shelf.
+     */
     public ItemCard[][] getItems() {
         return items;
     }

@@ -44,6 +44,7 @@ public class GameController {
      * Makes the provided move and advances the turn.
      *
      * @param move the move to be made.
+     * @return true if the move was valid, false otherwise.
      */
     public boolean makeMove(MoveMsg move) {
         ItemCard card;

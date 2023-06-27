@@ -7,6 +7,9 @@ import java.io.Serial;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
+/**
+ * A class representing the STAIR Common Goal Card Strategy.
+ */
 public class CommonGoalCardStrat_STAIR implements CommonGoalCardStrat {
     @Serial
     private static final long serialVersionUID = -6277214700657472564L;

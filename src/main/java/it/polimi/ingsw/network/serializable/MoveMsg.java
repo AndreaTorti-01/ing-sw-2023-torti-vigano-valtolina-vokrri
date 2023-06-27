@@ -32,6 +32,8 @@ public class MoveMsg implements Serializable {
     }
 
     /**
+     * Gets the cards chosen by the player.
+     *
      * @return the cards chosen by the player.
      */
     public List<List<Integer>> getPickedCards() {
@@ -39,6 +41,8 @@ public class MoveMsg implements Serializable {
     }
 
     /**
+     * Gets the column chosen by the player in which to insert the chosen cards.
+     *
      * @return the column chosen by the player in which to insert the chosen cards.
      */
     public int getColumn() {

@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
  */
 public class ShelfFactory {
     /**
-     * Creates a new Shelf by parsing a well formatted file that contains its pattern.<p>
+     * Creates a new Shelf by parsing a well formatted file that contains its pattern.
      *
      * @param fileName the name of the file containing the pattern to be parsed.
      * @return the Shelf containing the elements parsed from the file.

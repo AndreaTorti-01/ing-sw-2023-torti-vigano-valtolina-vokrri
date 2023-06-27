@@ -55,6 +55,9 @@ public class Constants {
      */
     public static final int numberOfPersonalGoalCardTypes = 12;
 
+    /**
+     * The ip address of the server.
+     */
     public static final String serverIpAddress = "127.0.0.1";
     /**
      * The default socket server port.
@@ -64,7 +67,7 @@ public class Constants {
      * The default RMI server port.
      */
     public static final int rmiServerPort = 1099;
-    
+
     /*************** TERMINAL ANSI COLORS ***************/
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";

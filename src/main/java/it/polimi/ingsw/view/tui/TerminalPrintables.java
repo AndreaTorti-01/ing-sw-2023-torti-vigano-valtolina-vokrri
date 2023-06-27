@@ -2,6 +2,9 @@ package it.polimi.ingsw.view.tui;
 
 import static it.polimi.ingsw.utils.Constants.*;
 
+/**
+ * A class containing all the strings that are printed to the terminal.
+ */
 public class TerminalPrintables {
     /**
      * Prints to the terminal a separator.

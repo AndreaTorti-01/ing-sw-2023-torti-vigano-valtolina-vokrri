@@ -3,20 +3,16 @@ package it.polimi.ingsw.view.gui.controllers;
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.commonGoalCards.CommonGoalCard;
+import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.network.serializable.ChatMsg;
 import it.polimi.ingsw.utils.Common;
 import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.view.gui.GuiApp;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.Bloom;
@@ -25,75 +21,172 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import static it.polimi.ingsw.utils.Common.*;
 
-
+/**
+ * Controller for the playing screen.
+ */
 public class PlayingScreenController implements Initializable {
-
+    /**
+     * FXML file path.
+     */
     private static final String fxmlPath = "/graphicalResources/fxml/";
-    public Text playerName2;
-    public Text playerName1;
+    /**
+     * The name of the second player.
+     */
+    public Text player1Name;
+    /**
+     * The name of the third player.
+     */
+    public Text player2Name;
+    /**
+     * The name of the fourth player.
+     */
+    public Text player3Name;
+    /**
+     * The first player score label.
+     */
     public Text scoreName0;
-    public Text score0;
-    public ImageView commonGoal1;
-    public ImageView commonGoal2;
-    public ImageView personalGoal;
-    public TextArea ChatTextArea;
-    public TextField messageSpace;
-    public Button sendMessage;
-    public ScrollBar chatScrollBar;
-    public Text score3;
-    public Text scoreName3;
-    public Text score2;
-    public Text scoreName2;
-    public Text score1;
+    /**
+     * The second player score label.
+     */
     public Text scoreName1;
-    public Text turn;
-    public Text playerName3;
-    public ImageView commonPoint2;
+    /**
+     * The third player score label.
+     */
+    public Text scoreName2;
+    /**
+     * The fourth player score label.
+     */
+    public Text scoreName3;
+    /**
+     * The first player score.
+     */
+    public Text score0;
+    /**
+     * The second player score.
+     */
+    public Text score1;
+    /**
+     * The third player score.
+     */
+    public Text score2;
+    /**
+     * The fourth player score.
+     */
+    public Text score3;
+    /**
+     * The personal goal card of the player.
+     */
+    public ImageView personalGoal;
+    /**
+     * The first common goal card in the game.
+     */
+    public ImageView commonGoal1;
+    /**
+     * The second common goal card in the game.
+     */
+    public ImageView commonGoal2;
+    /**
+     * The points associated with the first common goal card.
+     */
     public ImageView commonPoint1;
+    /**
+     * The points associated with the second common goal card.
+     */
+    public ImageView commonPoint2;
+    /**
+     * The first card picked by the player.
+     */
     public ImageView picked0;
+    /**
+     * The second card picked by the player.
+     */
     public ImageView picked1;
+    /**
+     * The third card picked by the player.
+     */
     public ImageView picked2;
+    /**
+     * The text label that indicates whose player turn it is.
+     */
+    public Text turn;
+    /**
+     * The text area where the cat is displayed.
+     */
+    public TextArea ChatTextArea;
+    /**
+     * The text field where the player can write a message.
+     */
+    public TextField messageSpace;
+    /**
+     * The button that sends the message.
+     */
+    public Button sendMessage;
+    /**
+     * The background image of the playing scene.
+     */
     public GridPane gridPaneBG;
-    private Stage stage;
-    private Scene scene;
+    /**
+     * The root of the FXML scene.
+     */
     private Parent root;
+    /**
+     * The gui instance.
+     */
     private Gui gui;
+    /**
+     * The index of the picked card to switch.
+     */
     private int orderSwitcher = -1;
+    /**
+     * The board controller.
+     */
     @FXML
     private BoardController boardController;
+    /**
+     * The first shelf controller.
+     */
     @FXML
     private Shelf0Controller shelf0Controller;
+    /**
+     * The second shelf controller.
+     */
     @FXML
     private Shelf1Controller shelf1Controller;
+    /**
+     * The third shelf controller.
+     */
     @FXML
     private Shelf2Controller shelf2Controller;
+    /**
+     * The fourth shelf controller.
+     */
     @FXML
     private Shelf3Controller shelf3Controller;
+    /**
+     * The size of the client chat considering also help and error messages .
+     */
     private int localChatSize = 0;
 
-    public Parent loadResource(String fxmlName, Parent root) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + fxmlName));
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            System.exit(1);
-        }
-        return root;
-    }
-
+    /**
+     * Prints the provided message to the chat text area.
+     * Only used to print help and error messages.
+     *
+     * @param message the message to be printed.
+     */
     public void printOnChat(String message) {
         Platform.runLater(() -> ChatTextArea.appendText(message + "\n"));
     }
 
+    /**
+     * Handles the chat messages whenever the send button is clicked.
+     */
     @FXML
     private void handleMessage() {
         //gestisce l'invio di messaggi alla gui
@@ -105,8 +198,10 @@ public class PlayingScreenController implements Initializable {
         }
     }
 
+    /**
+     * Refreshes the chat text area whenever a new message is received.
+     */
     public void refreshChat() {
-
         for (int i = localChatSize; i < gui.getModelView().getMessages().size(); i++) {
             ChatMsg message = gui.getModelView().getMessages().get(i);
             if (message.isPublic() || !message.isPublic() && (message.getRecipientPlayer().equals(gui.getPlayerName()) || message.getSenderPlayer().equals(gui.getPlayerName()))) {
@@ -116,25 +211,26 @@ public class PlayingScreenController implements Initializable {
         }
     }
 
-    public void changeScene(ActionEvent actionEvent) throws IOException {
-        root = loadResource("EndScreen.fxml", root);
-        stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
+    /**
+     * FXML standard method: initializes the background image and the gui.
+     *
+     * @param url            ignored.
+     * @param resourceBundle ignored.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gridPaneBG.setStyle("-fx-background-image: url('/graphicalResources/misc/sfondo_parquet.jpg'); -fx-background-size: stretch; -fx-background-repeat: no-repeat; -fx-background-position: center center;");
 
-        gui = (Gui) it.polimi.ingsw.network.client.ClientImpl.getView();
+        gui = (Gui) ClientImpl.getView();
         picked0.setImage(null);
         picked1.setImage(null);
         picked2.setImage(null);
         ChatTextArea.setEditable(false);
     }
 
+    /**
+     * Updates the graphics of the scene.
+     */
     public void updateGraphics() {
 
         Platform.runLater(() -> {
@@ -149,21 +245,21 @@ public class PlayingScreenController implements Initializable {
                     switch (plID) {
                         case 1 -> {
                             shelf1Controller.updateGraphics(player.getShelf().getItems());
-                            playerName1.setText(player.getName());
+                            player1Name.setText(player.getName());
                             scoreName1.setText(player.getName());
                             score1.setText(" " + player.getScore());
                             plID++;
                         }
                         case 2 -> {
                             shelf2Controller.updateGraphics(player.getShelf().getItems());
-                            playerName2.setText(player.getName());
+                            player2Name.setText(player.getName());
                             scoreName2.setText(player.getName());
                             score2.setText(" " + player.getScore());
                             plID++;
                         }
                         case 3 -> {
                             shelf3Controller.updateGraphics(player.getShelf().getItems());
-                            playerName3.setText(player.getName());
+                            player3Name.setText(player.getName());
                             scoreName3.setText(player.getName());
                             score3.setText(" " + player.getScore());
                             plID++;
@@ -185,14 +281,29 @@ public class PlayingScreenController implements Initializable {
         });
     }
 
+    /**
+     * Gets the board controller.
+     *
+     * @return the board controller.
+     */
     public BoardController getBoardController() {
         return boardController;
     }
 
+    /**
+     * Gets the first shelf controller.
+     *
+     * @return the first shelf controller.
+     */
     public Shelf0Controller getShelf0Controller() {
         return shelf0Controller;
     }
 
+    /**
+     * Displays the picked cards.
+     *
+     * @param cards the cards to be displayed.
+     */
     public void showPickedTypes(List<ItemCard> cards) {
         Platform.runLater(
                 () -> {
@@ -222,8 +333,14 @@ public class PlayingScreenController implements Initializable {
         );
     }
 
+    /**
+     * Reorders the picked cards switching the card at index 0 with the card at index orderSwitcher.
+     *
+     * @param mouseEvent ignored.
+     */
     public void reorderInput0(MouseEvent mouseEvent) {
         if (gui.getPickedCoords().size() == 0) return;
+
         if (orderSwitcher == -1) {
             orderSwitcher = 0;
             picked0.setEffect(new Bloom());
@@ -241,6 +358,11 @@ public class PlayingScreenController implements Initializable {
         }
     }
 
+    /**
+     * Reorders the picked cards switching the card at index 1 with the card at index orderSwitcher.
+     *
+     * @param mouseEvent ignored.
+     */
     public void reorderInput1(MouseEvent mouseEvent) {
         if (gui.getPickedCoords().size() == 0) return;
         if (orderSwitcher == -1) {
@@ -260,6 +382,11 @@ public class PlayingScreenController implements Initializable {
         }
     }
 
+    /**
+     * Reorders the picked cards switching the card at index 2 with the card at index orderSwitcher.
+     *
+     * @param mouseEvent ignored
+     */
     public void reorderInput2(MouseEvent mouseEvent) {
         if (gui.getPickedCoords().size() == 0) return;
         if (orderSwitcher == -1) {
@@ -279,6 +406,9 @@ public class PlayingScreenController implements Initializable {
         }
     }
 
+    /**
+     * Changes the current scene.
+     */
     public void changeScene() {
         GuiApp.changeScene(GuiApp.getEndScreenRoot());
     }

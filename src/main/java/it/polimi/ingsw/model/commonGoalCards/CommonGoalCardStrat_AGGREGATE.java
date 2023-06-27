@@ -9,6 +9,9 @@ import java.util.List;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
+/**
+ * A class representing the AGGREGATE Common Goal Card Strategy.
+ */
 public class CommonGoalCardStrat_AGGREGATE implements CommonGoalCardStrat {
 
     @Serial

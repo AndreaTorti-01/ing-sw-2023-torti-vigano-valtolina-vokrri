@@ -149,6 +149,8 @@ public class Game extends ObservableImpl implements Serializable {
 
     /**
      * Initializes all the model elements.
+     *
+     * @param numberOfPlayers the number of players in the game.
      */
     public void initModel(Integer numberOfPlayers) throws IllegalArgumentException {
 
@@ -562,7 +564,6 @@ public class Game extends ObservableImpl implements Serializable {
      * ***************************** <p>
      * * FOR TESTING PURPOSE ONLY! * <p>
      * ***************************** <p>
-     * <p>
      * Gets a random player from the ones playing this game.
      *
      * @return a random player from the ones playing this game.
@@ -577,8 +578,17 @@ public class Game extends ObservableImpl implements Serializable {
      * An Enum representing the status of the game.
      */
     public enum Status {
+        /**
+         * WAITING status.
+         */
         WAITING,
+        /**
+         * STARTED status.
+         */
         STARTED,
+        /**
+         * ENDED status.
+         */
         ENDED
     }
 }

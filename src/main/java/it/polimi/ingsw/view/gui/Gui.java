@@ -13,45 +13,84 @@ import it.polimi.ingsw.utils.ObservableImpl;
 import it.polimi.ingsw.view.RunnableView;
 import it.polimi.ingsw.view.gui.controllers.*;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * The GUI view of the game.
  */
 public class Gui extends ObservableImpl implements RunnableView {
-    private static final String fxmlPath = "/graphicalResources/fxml/";
+    /**
+     * A lock to synchronize all the methods that change the state of this view.
+     */
     private final Object lock = new Object();
-    private final Scanner scanner = new Scanner(System.in);
+    /**
+     * Whether the player gave the number of players that will play the game or not.
+     */
     boolean gaveNumber;
+    /**
+     * The name of the player.
+     */
     private String playerName = "";
+    /**
+     * The model view of the game.
+     */
     private GameViewMsg modelView;
+    /**
+     * The state of the view.
+     */
     private Gui.State state = Gui.State.ASK_NAME;
-    private GuiApp gui;
+    /**
+     * The controller of the Welcome Screen.
+     */
     private WelcomeScreenController welcomeScreenController;
+    /**
+     * The controller of the Playing Screen.
+     */
     private PlayingScreenController playingScreenController;
+    /**
+     * The controller of the End Screen.
+     */
     private EndScreenController endScreenController;
+    /**
+     * The board controller.
+     */
     private BoardController boardController;
+    /**
+     * The controller of the player's shelf.
+     */
     private Shelf0Controller shelf0Controller;
-    private FXMLLoader loader;
-    private Parent root;
+    /**
+     * The coordinates of the cards picked by the player.
+     */
     private List<List<Integer>> pickedCoords;
 
-
+    /**
+     * Creates a new GUI view associated with the provided client.
+     *
+     * @param client associated with this view.
+     */
     public Gui(Client client) {
         this.addObserver((ClientImpl) client);
     }
 
+    /**
+     * Gets the state of the view.
+     *
+     * @return the state of the view.
+     */
     public Gui.State getState() {
         synchronized (lock) {
             return state;
         }
     }
 
+    /**
+     * Sets the state of the view to the provided one.
+     *
+     * @param state the new state of the view.
+     */
     private void setState(Gui.State state) {
         synchronized (lock) {
             this.state = state;
@@ -60,6 +99,11 @@ public class Gui extends ObservableImpl implements RunnableView {
         }
     }
 
+    /**
+     * Sends the provided message to the view and inserts it to the one sent during this game.
+     *
+     * @param message the message to be sent.
+     */
     public void setMessage(String message) {
         if (message.charAt(0) == '/') {
             String command = message.split(" ")[0];
@@ -105,11 +149,21 @@ public class Gui extends ObservableImpl implements RunnableView {
         }
     }
 
+    /**
+     * Sets the number of players to the provided one.
+     *
+     * @param playerNumber the number of players to be set.
+     */
     public void setPlayerNumber(int playerNumber) {
         gaveNumber = true;
         notifyObservers(playerNumber);
     }
 
+    /**
+     * Sets the picked card coordinates to the provided ones.
+     *
+     * @param pickedCoords the coordinates of the picked cards.
+     */
     public void setPicked(List<List<Integer>> pickedCoords) {
         this.pickedCoords = pickedCoords;
         shelf0Controller.setReady(pickedCoords.size());
@@ -120,16 +174,31 @@ public class Gui extends ObservableImpl implements RunnableView {
         playingScreenController.showPickedTypes(pickedCards);
     }
 
-    public void setMove(int shelfCol) {
+    /**
+     * Inserts the picked cards into the provided column of the shelf.
+     * Also resets the selection of the tiles on the board.
+     *
+     * @param column the column where to insert the cards.
+     */
+    public void setMove(int column) {
         boardController.resetSelection();
-        notifyObservers(new MoveMsg(pickedCoords, shelfCol));
+        notifyObservers(new MoveMsg(pickedCoords, column));
         pickedCoords.clear();
     }
 
+    /**
+     * Gets the model view of the game.
+     *
+     * @return the model view of the game.
+     */
     public GameViewMsg getModelView() {
         return modelView;
     }
 
+    /**
+     * The main game loop.
+     * Launches the JavaFX GUI application.
+     */
     @Override
     public void run() {
         //TODO: pulire le stampe
@@ -188,9 +257,9 @@ public class Gui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * updates the view with the new model state
+     * Updates the view with the provided model state.
      *
-     * @param modelView which contains a representation of the model state
+     * @param modelView the model view that contains a representation of the model state.
      */
     @Override
     public void updateView(GameViewMsg modelView) {
@@ -253,29 +322,75 @@ public class Gui extends ObservableImpl implements RunnableView {
         }
     }
 
+    /**
+     * Gets the name of the player.
+     *
+     * @return the name of the player.
+     */
     public String getPlayerName() {
         return playerName;
     }
 
+    /**
+     * Sets the name of the player to the provided one.
+     *
+     * @param playerName the name of the player.
+     */
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
         notifyObservers(playerName);
     }
 
-    private void sleep(int millis) {
+    /**
+     * Pauses the current thread for the provided amount of milliseconds.
+     *
+     * @param milliseconds the amount of milliseconds to wait.
+     */
+    private void sleep(int milliseconds) {
         try {
-            Thread.sleep(millis);
+            Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             System.err.println("Interrupted while sleeping: " + e.getMessage());
         }
     }
 
+    /**
+     * Gets the coordinates of the cards that have been picked by the player in the correct order.
+     *
+     * @return the coordinates of the cards that have been picked by the player in the correct order.
+     */
     public List<List<Integer>> getPickedCoords() {
         return pickedCoords;
     }
 
+    /**
+     * The state of the view.
+     */
     public enum State {
-        ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY, ENDED
+        /**
+         * ASK_NAME state.
+         */
+        ASK_NAME,
+        /**
+         * ASK_NUMBER state.
+         */
+        ASK_NUMBER,
+        /**
+         * WAITING_FOR_PLAYERS state.
+         */
+        WAITING_FOR_PLAYERS,
+        /**
+         * WAITING_FOR_TURN state.
+         */
+        WAITING_FOR_TURN,
+        /**
+         * PLAY state.
+         */
+        PLAY,
+        /**
+         * ENDED state.
+         */
+        ENDED
     }
 
 }

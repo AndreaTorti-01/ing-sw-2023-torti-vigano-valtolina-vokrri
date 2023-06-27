@@ -7,11 +7,29 @@ import java.util.Random;
  * An enumeration of the types of Item Cards.
  */
 public enum ItemType {
+    /**
+     * Cat item type.
+     */
     CATS('C'),
+    /**
+     * Game item type.
+     */
     GAMES('G'),
+    /**
+     * Book item type.
+     */
     BOOKS('B'),
+    /**
+     * Frames item type.
+     */
     FRAMES('F'),
+    /**
+     * Trophies item type.
+     */
     TROPHIES('T'),
+    /**
+     * Plants item type.
+     */
     PLANTS('P');
 
     /**

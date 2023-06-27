@@ -8,6 +8,9 @@ import java.util.Vector;
  * An abstract class that implements the Observable interface.
  */
 public abstract class ObservableImpl {
+    /**
+     * The vector of observers.
+     */
     private final Vector<Observer> observers;
 
     /**

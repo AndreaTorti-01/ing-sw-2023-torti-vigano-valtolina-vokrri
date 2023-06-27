@@ -4,7 +4,8 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:id="gridPaneBG" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:id="gridPaneBG" maxHeight="-Infinity" maxWidth="-Infinity"
+          minHeight="-Infinity"
           minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19"
           fx:controller="it.polimi.ingsw.view.gui.controllers.EndScreenController">
     <columnConstraints>
@@ -14,7 +15,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
-        <Text fx:id="Player1name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE1"
+        <Text fx:id="player0Name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE1"
               textAlignment="CENTER">
             <font>
                 <Font name="Consolas Bold Italic" size="44.0"/>
@@ -23,7 +24,7 @@
                 <Insets bottom="400.0" left="175.0"/>
             </GridPane.margin>
         </Text>
-        <Text fx:id="title" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="CLASSIFICA">
+        <Text fx:id="winnerTitle" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="CLASSIFICA">
             <font>
                 <Font name="Consolas Bold Italic" size="70.0"/>
             </font>
@@ -31,7 +32,7 @@
                 <Insets bottom="725.0" left="615.0"/>
             </GridPane.margin>
         </Text>
-        <Text fx:id="Player2name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE2"
+        <Text fx:id="player1Name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE2"
               textAlignment="CENTER">
             <font>
                 <Font name="Consolas Bold Italic" size="44.0"/>
@@ -40,7 +41,7 @@
                 <Insets bottom="160.0" left="175.0"/>
             </GridPane.margin>
         </Text>
-        <Text fx:id="Player3name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE3">
+        <Text fx:id="player2Name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE3">
             <font>
                 <Font name="Consolas Bold Italic" size="44.0"/>
             </font>
@@ -48,7 +49,7 @@
                 <Insets left="175.0" top="80.0"/>
             </GridPane.margin>
         </Text>
-        <Text fx:id="Player4name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE4">
+        <Text fx:id="player3Name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GIOCATORE4">
             <GridPane.margin>
                 <Insets left="175.0" top="320.0"/>
             </GridPane.margin>
@@ -56,7 +57,7 @@
                 <Font name="Consolas Bold Italic" size="44.0"/>
             </font>
         </Text>
-        <Text fx:id="score1" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+        <Text fx:id="player0Score" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
             <font>
                 <Font name="System Bold" size="36.0"/>
             </font>
@@ -64,7 +65,7 @@
                 <Insets bottom="400.0" left="500.0"/>
             </GridPane.margin>
         </Text>
-        <Text fx:id="score2" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+        <Text fx:id="player1Score" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
             <font>
                 <Font name="System Bold" size="36.0"/>
             </font>
@@ -72,7 +73,7 @@
                 <Insets bottom="160.0" left="500.0"/>
             </GridPane.margin>
         </Text>
-        <Text fx:id="score3" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+        <Text fx:id="player2Score" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
             <font>
                 <Font name="System Bold" size="36.0"/>
             </font>
@@ -80,7 +81,7 @@
                 <Insets left="500.0" top="80.0"/>
             </GridPane.margin>
         </Text>
-        <Text fx:id="score4" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
+        <Text fx:id="player3Score" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100">
             <font>
                 <Font name="System Bold" size="36.0"/>
             </font>

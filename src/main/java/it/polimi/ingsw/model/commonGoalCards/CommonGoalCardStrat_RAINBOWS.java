@@ -10,6 +10,9 @@ import java.util.List;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
+/**
+ * A class representing the RAINBOWS Common Goal Card Strategy.
+ */
 public class CommonGoalCardStrat_RAINBOWS implements CommonGoalCardStrat {
 
     @Serial
@@ -22,6 +25,9 @@ public class CommonGoalCardStrat_RAINBOWS implements CommonGoalCardStrat {
      * The number of lines to find in the shelf.
      */
     private final int numOfColsToFind; // number of rainbow columns
+    /**
+     * The type of the Common Goal Card Strategy.
+     */
     private final CommonGoalCardType type;
 
     /**

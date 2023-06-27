@@ -11,6 +11,9 @@ import java.util.Set;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
+/**
+ * A class representing the MAX THREE TYPES Common Goal Card Strategy.
+ */
 public class CommonGoalCardStrat_MAX_THREE_TYPES implements CommonGoalCardStrat {
 
     @Serial

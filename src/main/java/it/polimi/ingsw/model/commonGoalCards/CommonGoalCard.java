@@ -27,6 +27,7 @@ public class CommonGoalCard implements Serializable {
      *
      * @param numberOfPlayers the number of players in the game in order to create the stack accordingly,
      *                        must be in range 2-4
+     * @param strategy        the specific Common Goal Card strategy to implement.
      */
     public CommonGoalCard(int numberOfPlayers, CommonGoalCardStrat strategy) {
         if (numberOfPlayers < Constants.minNumberOfPlayers || numberOfPlayers > Constants.maxNumberOfPlayers)

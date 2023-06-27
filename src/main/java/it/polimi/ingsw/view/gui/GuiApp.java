@@ -10,29 +10,147 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * GUI App main class.
+ */
 public class GuiApp extends Application {
+    /**
+     * The path to the fxml files.
+     */
     private static final String fxmlPath = "/graphicalResources/fxml/";
+    /**
+     * Whether the controllers have been created or not.
+     */
     private static boolean createdController = false;
+    /**
+     * The main stage of the application.
+     */
     private static Stage mainStage;
+    /**
+     * The controller of the Welcome Screen.
+     */
     private static WelcomeScreenController welcomeScreenController;
+    /**
+     * The controller of the Board.
+     */
     private static BoardController boardController;
+    /**
+     * The controller of the End Screen.
+     */
     private static EndScreenController endScreenController;
+    /**
+     * The controller of the Playing Screen.
+     */
     private static PlayingScreenController playingScreenController;
+    /**
+     * The controller of the player's shelf.
+     */
     private static Shelf0Controller shelf0Controller;
+    /**
+     * The root of the fxml files.
+     */
     private static Parent welcomeScreenRoot, endScreenRoot, playingScreenRoot;
-    private final Parent root = new Parent() {
-    };
 
+    /**
+     * Starts the application.
+     *
+     * @param args the arguments of the application.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Gets the End Screen fxml root.
+     *
+     * @return the End Screen fxml root.
+     */
+    public static Parent getEndScreenRoot() {
+        return endScreenRoot;
+    }
+
+    /**
+     * Gets the Playing Screen fxml root.
+     *
+     * @return the Playing Screen fxml root.
+     */
+    public static Parent getPlayingScreenRoot() {
+        return playingScreenRoot;
+    }
+
+    /**
+     * Changes the scene of the main stage.
+     *
+     * @param root the root of the new scene.
+     */
+    public static void changeScene(Parent root) {
+        Platform.runLater(() -> mainStage.getScene().setRoot(root));
+    }
+
+    /**
+     * Gets the Welcome Screen controller.
+     *
+     * @return the Welcome Screen controller.
+     */
+    public static WelcomeScreenController getWelcomeScreenController() {
+        return welcomeScreenController;
+    }
+
+    /**
+     * Gets the Board controller.
+     *
+     * @return the Board controller.
+     */
+    public static BoardController getBoardController() {
+        return boardController;
+    }
+
+    /**
+     * Gets the End Screen controller.
+     *
+     * @return the End Screen controller.
+     */
+    public static EndScreenController getEndScreenController() {
+        return endScreenController;
+    }
+
+    /**
+     * Gets the Playing Screen controller.
+     *
+     * @return the Playing Screen controller.
+     */
+    public static PlayingScreenController getPlayingScreenController() {
+        return playingScreenController;
+    }
+
+    /**
+     * Gets the controller of the player's shelf.
+     *
+     * @return the Shelf controller.
+     */
+    public static Shelf0Controller getShelf0Controller() {
+        return shelf0Controller;
+    }
+
+    /**
+     * Checks if the controllers have been created.
+     *
+     * @return true if the controllers have been created, false otherwise.
+     */
+    public static boolean controllersAvailable() {
+        return createdController;
+    }
+
+    /**
+     * Starts the application.
+     *
+     * @param stage the main stage of the application.
+     * @throws IOException if the fxml files are not found.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         mainStage = stage;
-
         FXMLLoader loader;
-
 
         loader = new FXMLLoader(getClass().getResource(fxmlPath + "WelcomeScreen.fxml"));
         try {
@@ -72,7 +190,7 @@ public class GuiApp extends Application {
         mainStage.setMaximized(false);
         mainStage.setFullScreen(false);
         mainStage.setFullScreenExitHint("");
-        mainStage.setTitle("MyShelfie ~ gc_33");
+        mainStage.setTitle("MyShelfie");
         mainStage.show();
 
         //stops gui if closed
@@ -81,35 +199,4 @@ public class GuiApp extends Application {
             System.exit(0);
         });
     }
-    public static Stage getMainStage() {
-        return mainStage;
-    }
-    public static Parent getEndScreenRoot() {
-        return endScreenRoot;
-    }
-    public static Parent getPlayingScreenRoot() {
-        return playingScreenRoot;
-    }
-    public static void changeScene(Parent root) {
-        Platform.runLater(() -> mainStage.getScene().setRoot(root));
-    }
-    public static WelcomeScreenController getWelcomeScreenController() {
-        return welcomeScreenController;
-    }
-    public static BoardController getBoardController() {
-        return boardController;
-    }
-    public static EndScreenController getEndScreenController() {
-        return endScreenController;
-    }
-    public static PlayingScreenController getPlayingScreenController() {
-        return playingScreenController;
-    }
-    public static Shelf0Controller getShelf0Controller() {
-        return shelf0Controller;
-    }
-    public static boolean controllersAvailable() {
-        return createdController;
-    }
-
 }

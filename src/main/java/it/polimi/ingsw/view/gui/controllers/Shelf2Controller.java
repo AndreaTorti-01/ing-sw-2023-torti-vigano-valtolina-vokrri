@@ -15,26 +15,43 @@ import static it.polimi.ingsw.utils.Common.getTilePath;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
+/**
+ * The controller for the third player's shelf.
+ */
 public class Shelf2Controller implements Initializable {
+    /**
+     * The grid representing the shelf.
+     */
     @FXML
     public GridPane shelf2;
 
+    /**
+     * FXML standard method.
+     *
+     * @param url            ignored.
+     * @param resourceBundle ignored.
+     */
     @FXML
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }
 
+    /**
+     * Updates the shelf graphics.
+     *
+     * @param newShelf the new shelf to be displayed.
+     */
     public void updateGraphics(ItemCard[][] newShelf) {
         Platform.runLater(() -> {
-            for (int i = 0; i < numberOfRows; i++) {
-                for (int j = 0; j < numberOfColumns; j++) {
-                    if (newShelf[i][j] != null) {
-                        ItemCard itemCard = newShelf[i][j];
-                        ImageView imageView = (ImageView) shelf2.getChildren().get(j * numberOfRows + i);
+            for (int row = 0; row < numberOfRows; row++) {
+                for (int col = 0; col < numberOfColumns; col++) {
+                    if (newShelf[row][col] != null) {
+                        ItemCard itemCard = newShelf[row][col];
+                        ImageView imageView = (ImageView) shelf2.getChildren().get(col * numberOfRows + row);
                         Image newImage = new Image(getTilePath(itemCard));
                         imageView.setImage(newImage);
                     } else {
-                        ImageView imageView = (ImageView) shelf2.getChildren().get(j * numberOfRows + i);
+                        ImageView imageView = (ImageView) shelf2.getChildren().get(col * numberOfRows + row);
                         Image newImage = new Image("/graphicalResources/itemTiles/Empty.png");
                         imageView.setImage(newImage);
                     }

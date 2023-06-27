@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.ItemCards.ItemCard;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.network.client.ClientImpl;
 import it.polimi.ingsw.utils.Common;
 import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.view.gui.Gui.State;
@@ -22,17 +23,43 @@ import java.util.ResourceBundle;
 import static it.polimi.ingsw.utils.Common.isTakeable;
 import static it.polimi.ingsw.utils.Constants.*;
 
+/**
+ * Controller for the board.
+ */
 public class BoardController implements Initializable {
+    /**
+     * The gui instance.
+     */
     private static Gui gui;
-    private final boolean sentPicked = false;
-    private final Object comoputeLock = new Object();
+    /**
+     * The lock used to synchronize the click events.
+     */
+    private final Object lock = new Object();
+    /**
+     * The grid pane containing the images of the board cards.
+     */
     @FXML
     public GridPane gridBoard;
+    /**
+     * The row clicked by the player.
+     */
     public int clickedRow = -1;
+    /**
+     * The column clicked by the player.
+     */
     public int clickedColumn = -1;
+    /**
+     * The coordinates of the cards picked by the players in the correct order.
+     */
     private List<List<Integer>> pickedCoords = new ArrayList<>();
+    /**
+     * The number of cards picked by the player.
+     */
     private int pickedNum = 0;
 
+    /**
+     * Resets the bloom effect on the selected cards.
+     */
     public void resetSelection() {
         this.clickedRow = -1;
         this.clickedColumn = -1;
@@ -46,14 +73,25 @@ public class BoardController implements Initializable {
         });
     }
 
+    /**
+     * FXML standard method: initializes the Gui instance.
+     *
+     * @param url            ignored.
+     * @param resourceBundle ignored.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        gui = (Gui) it.polimi.ingsw.network.client.ClientImpl.getView();
+        gui = (Gui) ClientImpl.getView();
     }
 
+    /**
+     * Handles click events on the board cards.
+     *
+     * @param mouseEvent the mouse event.
+     */
     public void handleImageViewClick(MouseEvent mouseEvent) {
 
-        synchronized (comoputeLock) { //TODO sistemare
+        synchronized (lock) {
 
             //stores row and column of the clicked image
             boolean deselection = false;
@@ -101,19 +139,18 @@ public class BoardController implements Initializable {
                     }
                 }
                 if (!deselection && pickedCoords.size() < 3) {
-
-
                     System.out.println("Clicked on row: " + clickedRow + " column: " + clickedColumn);
 
                     //starts picking the cards (specular to pickcards)
                     Player me = null;
                     int maxCards = 0;
 
-                    for (Player p : gui.getModelView().getPlayers())
-                        if (p.getName().equals(gui.getPlayerName())) {
-                            me = p;
+                    for (Player player : gui.getModelView().getPlayers())
+                        if (player.getName().equals(gui.getPlayerName())) {
+                            me = player;
                             break;
                         }
+
                     if (me == null) throw new NullPointerException();
 
 
@@ -148,6 +185,9 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * Updates the graphics of the board.
+     */
     public void updateGraphics() {
         pickedNum = 0;
         pickedCoords = new ArrayList<>();
@@ -195,13 +235,10 @@ public class BoardController implements Initializable {
             for (int i = 0; i < numberOfBoardRows; i++) {
                 for (int j = 0; j < numberOfBoardColumns; j++) {
                     ImageView imageView = (ImageView) gridBoard.getChildren().get(j * numberOfBoardColumns + i);
-                    if (tileMatrix[i][j] != null) {
-                        Image newImage = new Image(Common.getTilePath(tileMatrix[i][j]));
-                        imageView.setImage(newImage);
-                    } else {
-                        Image newImage = new Image("/graphicalResources/itemTiles/Empty.png");
-                        imageView.setImage(newImage);
-                    }
+                    Image newImage;
+                    if (tileMatrix[i][j] != null) newImage = new Image(Common.getTilePath(tileMatrix[i][j]));
+                    else newImage = new Image("/graphicalResources/itemTiles/Empty.png");
+                    imageView.setImage(newImage);
                 }
             }
         });

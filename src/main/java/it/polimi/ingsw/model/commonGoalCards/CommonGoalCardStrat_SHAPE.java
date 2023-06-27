@@ -8,7 +8,9 @@ import java.io.*;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
-
+/**
+ * A class representing the SHAPE Common Goal Card Strategy.
+ */
 public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
     @Serial
     private static final long serialVersionUID = 2165136835284717126L;
@@ -97,7 +99,13 @@ public class CommonGoalCardStrat_SHAPE implements CommonGoalCardStrat {
         return false;
     }
 
-    // TODO
+    /**
+     * Gets how many times the shape is found in the shelf.
+     *
+     * @param maskedShelf the matrix representing the shelf with the cards of the same type as the shape.
+     * @param shape       the shape to check in the shelf.
+     * @return the number of times the shape is found in the shelf.
+     */
     private int checkPatternsNumber(boolean[][] maskedShelf, Shape shape) {
         int shapesFound = 0;
         int row, column, shapeRow, shapeColumn, startingRow, startingColumn;
