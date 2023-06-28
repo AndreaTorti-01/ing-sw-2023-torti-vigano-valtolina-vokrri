@@ -14,6 +14,10 @@ public class ItemCard implements Serializable {
      */
     private final ItemType type;
     /**
+     * A boolean used to perform search algorithms.
+     */
+    private boolean marked = false;
+    /**
      * The sprite of the Item Card.
      */
     private final int sprite;
@@ -38,6 +42,22 @@ public class ItemCard implements Serializable {
      */
     public ItemType getType() {
         return type;
+    }
+    /**
+     * Gets the marked status of this Item Card.
+     *
+     * @return the marked status of this Item Card.
+     */
+    public boolean isMarked() {
+        return marked;
+    }
+    /**
+     * Sets the marked status of this Item Card.
+     *
+     * @param newMark the new marked status of this Item Card.
+     */
+    public void setMarked(boolean newMark) {
+        marked = newMark;
     }
 
     /**

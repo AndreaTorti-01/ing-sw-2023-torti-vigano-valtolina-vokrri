@@ -419,7 +419,7 @@ public class Tui extends ObservableImpl implements RunnableView {
                 case TROPHIES -> printTrophies();
                 case FRAMES -> printFrame();
             }
-            System.out.print("\t");
+            System.out.print("    ");
         }
     }
 
@@ -447,7 +447,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     private void printCommonGoalCards() {
         System.out.println("Common goal cards: ");
         for (int i = 0; i < modelView.getCommonGoalCards().size(); i++) {
-            System.out.print((i + 1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString() + "\t\t\t");
+            System.out.print((i + 1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString() + "    " + "    " + "    " + "");
         }
         System.out.println();
     }
@@ -471,11 +471,11 @@ public class Tui extends ObservableImpl implements RunnableView {
         }
 
         if (playingPlayer != null) {
-            System.out.print("\t\t\t╔═════╦═════╦═════╦═════╦═════╗");
+            System.out.print("    " + "    " + "    " + "╔═════╦═════╦═════╦═════╦═════╗");
             System.out.print("\n");
 
             for (int i = 0; i < numberOfRows; i++) {
-                System.out.print("\t\t\t║");
+                System.out.print("    " + "    " + "    " + "║");
                 for (int j = 0; j < numberOfColumns; j++) {
                     if (playingPlayer.getPersonalGoalCard().getPattern()[i][j] == null) printEmpty();
                     else {
@@ -492,11 +492,11 @@ public class Tui extends ObservableImpl implements RunnableView {
                 System.out.print(" " + i);
                 System.out.print("\n");
                 if (i != numberOfRows - 1)
-                    System.out.println("\t\t\t╠═════╬═════╬═════╬═════╬═════╣");
+                    System.out.println("    " + "    " + "    " + "╠═════╬═════╬═════╬═════╬═════╣");
             }
-            System.out.print("\t\t\t╚═════╩═════╩═════╩═════╩═════╝");
+            System.out.print("    " + "    " + "    " + "╚═════╩═════╩═════╩═════╩═════╝");
             System.out.print("\n");
-            System.out.print("\t\t\t   0     1     2     3     4  ");
+            System.out.print("    " + "    " + "    " + "   0     1     2     3     4  ");
             System.out.println();
         } else System.err.println("Error: player not found");
     }
@@ -564,17 +564,21 @@ public class Tui extends ObservableImpl implements RunnableView {
     private void printShelves() {
         int numOfPlayers = modelView.getPlayers().size();
 
-        for (Player p : modelView.getPlayers())
-            System.out.print("\t\t\t\t\t\t\t\t\t\t" + p.getName());
+        for (Player p : modelView.getPlayers()) {
+            System.out.print("    " + "    " + "    " + "" + p.getName());
+            for(int spaceCounter = 0; spaceCounter < 31 - p.getName().length(); spaceCounter++) System.out.print(" ");
+            System.out.print("  ");
+        }
         System.out.print("\n");
 
-        for (int nop = 0; nop < numOfPlayers; nop++)
-            System.out.print("\t\t\t╔═════╦═════╦═════╦═════╦═════╗  ");
+        for (int nop = 0; nop < numOfPlayers; nop++) {
+            System.out.print("    " + "    " + "    " + "╔═════╦═════╦═════╦═════╦═════╗  ");
+        }
         System.out.print("\n");
 
         for (int i = 0; i < numberOfRows; i++) {
             for (Player p : modelView.getPlayers()) {
-                System.out.print("\t\t\t║");
+                System.out.print("    " + "    " + "    " + "║");
                 for (int j = 0; j < numberOfColumns; j++) {
                     if (modelView.getShelfOf(p)[i][j] == null) printEmpty();
                     else {
@@ -594,15 +598,15 @@ public class Tui extends ObservableImpl implements RunnableView {
             if (i != numberOfRows - 1) {
                 for (Player p : modelView.getPlayers())
                     if (i != numberOfRows - 1)
-                        System.out.print("\t\t\t╠═════╬═════╬═════╬═════╬═════╣  ");
+                        System.out.print("    " + "    " + "    " + "╠═════╬═════╬═════╬═════╬═════╣  ");
                 System.out.print("\n");
             }
         }
         for (int nop = 0; nop < numOfPlayers; nop++)
-            System.out.print("\t\t\t╚═════╩═════╩═════╩═════╩═════╝  ");
+            System.out.print("    " + "    " + "    " + "╚═════╩═════╩═════╩═════╩═════╝  ");
         System.out.print("\n");
         for (int nop = 0; nop < numOfPlayers; nop++)
-            System.out.print("\t\t\t   0     1     2     3     4");
+            System.out.print("    " + "    " + "    " + "   0     1     2     3     4");
         System.out.print("\n");
     }
 
@@ -613,9 +617,9 @@ public class Tui extends ObservableImpl implements RunnableView {
         System.out.println("Scores:");
         for (Player p : modelView.getPlayers()) {
             if (modelView.getPlayers().indexOf(p) != modelView.getPlayers().size() - 1)
-                System.out.print("\t\t╠════> " + p.getName() + ": " + p.getScore() + "\t");
+                System.out.print("    " + "    " + "╠════> " + p.getName() + ": " + p.getScore() + "    " + "");
             else
-                System.out.print("\t\t╚════> " + p.getName() + ": " + p.getScore() + "\t");
+                System.out.print("    " + "    " + "╚════> " + p.getName() + ": " + p.getScore() + "    " + "");
 
             for (int i = 0; i < p.getScore(); i++)
                 System.out.print("★");
@@ -632,10 +636,10 @@ public class Tui extends ObservableImpl implements RunnableView {
     private void printBoard(ItemCard[][] board, boolean[][] layout) {
 
         int boardSize = 9;
-        System.out.println("\t\t\t\t\t\t\t\t\t\t\t╔═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╗");
+        System.out.println("    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "╔═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╦═════╗");
 
         for (int i = 0; i < boardSize; i++) {
-            System.out.print("\t\t\t\t\t\t\t\t\t\t\t║");
+            System.out.print("    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "║");
             for (int j = 0; j < boardSize; j++) {
                 if (!layout[i][j]) {
                     printInvalid();
@@ -653,10 +657,10 @@ public class Tui extends ObservableImpl implements RunnableView {
             }
             System.out.print(" " + i + "\n");
             if (i != boardSize - 1)
-                System.out.println("\t\t\t\t\t\t\t\t\t\t\t╠═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╣");
+                System.out.println("    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "╠═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════╣");
         }
-        System.out.println("\t\t\t\t\t\t\t\t\t\t\t╚═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╝");
-        System.out.println("\t\t\t\t\t\t\t\t\t\t\t   0     1     2     3     4     5     6     7     8");
+        System.out.println("    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "╚═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╩═════╝");
+        System.out.println("    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "   0     1     2     3     4     5     6     7     8");
     }
 
     /**
