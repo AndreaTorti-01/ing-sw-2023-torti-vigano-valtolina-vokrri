@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.serializable.MoveMsg;
 
 import java.util.List;
 
+import static it.polimi.ingsw.utils.Common.isTakeable;
 import static it.polimi.ingsw.utils.Constants.*;
 
 /**
@@ -70,6 +71,19 @@ public class GameController {
         if (move.getColumn() < 0 || move.getColumn() > numberOfColumns || freeSlotsNumber[move.getColumn()] < move.getPickedCards().size())
             return false;
 
+
+        // check if the move is takeable
+        List<List<Integer>> pickedCoords = move.getPickedCards();
+        List<Integer> lastCoords;
+
+        for(int i = 0; i < pickedCoords.size(); i++){
+            lastCoords = pickedCoords.get(0);
+            pickedCoords.remove(0);
+            //cards are removed and re-enlisted in the same order
+            if(!isTakeable(modelView , lastCoords.get(0), lastCoords.get(1), pickedCoords)) return false;
+            pickedCoords.add(lastCoords);
+        }
+        
         // make the move
         for (List<Integer> coords : move.getPickedCards()) {
             card = model.getBoard().popCard(coords.get(0), coords.get(1));
