@@ -431,7 +431,7 @@ public class Game extends ObservableImpl implements Serializable {
             for (int i = 0; i < numberOfRows; i++)
                 for (int j = 0; j < numberOfColumns; j++) {
                     int aggregateScore;
-                    int aggregateSize = headLiminate(shelfCopy, shelfCopy.getCardAt(i, j));
+                    int aggregateSize = 1+headLiminate(shelfCopy, shelfCopy.getCardAt(i, j));
 
                     switch (aggregateSize) {
                         case 0, 1, 2 -> aggregateScore = 0;

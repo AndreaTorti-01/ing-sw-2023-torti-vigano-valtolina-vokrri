@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.Shelf;
 
 import java.io.Serial;
 import java.util.List;
-
+import static it.polimi.ingsw.utils.Common.*;
 import static it.polimi.ingsw.utils.Constants.numberOfColumns;
 import static it.polimi.ingsw.utils.Constants.numberOfRows;
 
@@ -69,7 +69,7 @@ public class CommonGoalCardStrat_AGGREGATE implements CommonGoalCardStrat {
                 if (shelfCopy.getCardAt(row, column) != null) {
 
                     // retrieves the card on top, bottom, left and right
-                    heads = this.getHeads(shelfCopy, row, column);
+                    heads = getHeads(shelfCopy, row, column);
 
                     // if heads contains cards the shelf has a pair of that type
                     if (!heads.isEmpty()) {
