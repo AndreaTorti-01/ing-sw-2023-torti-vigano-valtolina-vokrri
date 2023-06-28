@@ -1,9 +1,11 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.model.ItemCards.ItemCard;
+import it.polimi.ingsw.model.ItemCards.ItemType;
+import it.polimi.ingsw.model.Shelf;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CommonTest {
 
@@ -23,6 +25,16 @@ class CommonTest {
 
     @Test
     void headLiminate() {
+        Shelf shelf = new Shelf().getCopy();
+        ItemCard itemCard = new ItemCard(ItemType.TROPHIES,2);
+        ItemCard itemCard1 = new ItemCard(ItemType.CATS,2);
+        for(int row=0; row < Constants.numberOfRows; row++){
+            for(int col=0; col< Constants.numberOfColumns; col++) {
+                if((row<3 && col<2)||row==3){shelf.setCardAt(row,col,new ItemCard(ItemType.TROPHIES,2));}
+                else{shelf.setCardAt(row,col,new ItemCard(ItemType.CATS,2));}
+            }
+        }
+        assertEquals(11, 1+Common.headLiminate(shelf,shelf.getCardAt(0,0)));
 
     }
 
