@@ -20,13 +20,37 @@ import static it.polimi.ingsw.utils.Common.isTakeable;
 import static it.polimi.ingsw.utils.Constants.*;
 import static it.polimi.ingsw.view.tui.TerminalPrintables.*;
 
+/**
+ * A raw TUI view of the game.
+ */
 public class TuiRaw extends ObservableImpl implements RunnableView {
+    /**
+     * A lock to synchronize all the methods that change the state of this view.
+     */
     private final Object lock = new Object();
+    /**
+     * The scanner used to read the input.
+     */
     private final Scanner scanner = new Scanner(System.in);
+    /**
+     * Whether the player gave the number of players that will play the game or not.
+     */
     boolean gaveNumber;
+    /**
+     * The name of the player.
+     */
     private String playerName = "";
+    /**
+     * The model view of the game.
+     */
     private GameViewMsg modelView;
+    /**
+     * The state of the view.
+     */
     private State state = State.ASK_NAME;
+    /**
+     * Whether the view is running or not.
+     */
     private volatile boolean running;
 
     /**
@@ -64,7 +88,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Main game loop.
+     * The main game loop.
      */
     @Override
     public void run() {
@@ -128,9 +152,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * updates the view with the new model state
+     * Updates the view with the new model state.
      *
-     * @param modelView which contains a representation of the model state
+     * @param modelView the model view that contains a representation of the model state.
      */
     @Override
     public void updateView(GameViewMsg modelView) {
@@ -241,7 +265,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
 
 
     /**
-     * Asks the player how many players are playing.
+     * Asks the player the number of players that will play the game.
      */
     private void askPlayerNumber() {
         int playerNumber = 0;
@@ -261,7 +285,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * takes care of notifying observer
+     * Asks the player to pick the cards from the board.
+     * The cards will be in the exact order.
+     * Notifies the observers of the picked cards.
      */
     private void pickCards() {
         List<List<Integer>> pickedCoords = new ArrayList<>();
@@ -383,7 +409,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     /**
      * Prints the cards picked by the player.
      *
-     * @param pickedCards list of cards picked by the player.
+     * @param pickedCards the cards picked by the player.
      */
     private void printPickedCards(List<ItemCard> pickedCards) {
         for (ItemCard card : pickedCards) {
@@ -479,8 +505,6 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
 
     /**
      * Asks the player's name.
-     *
-     * @return the name provided by the player.
      */
     private void askPlayerName() {
         // Ask the name of the player
@@ -490,7 +514,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Takes a true or false input from the player.
+     * Asks the player a true/false question.
      *
      * @return the boolean value provided by the player.
      */
@@ -586,9 +610,9 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Prints an error message.
+     * Prints the provided error.
      *
-     * @param error the message to be printed.
+     * @param error the error to be printed.
      */
     private void printError(String error) {
         // Print an error message
@@ -596,7 +620,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Takes user input.
+     * Scans the input of the user.
      *
      * @return the input provided by the user.
      */
@@ -609,7 +633,7 @@ public class TuiRaw extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * The View's state.
+     * The View's possible states.
      */
     private enum State {
         ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY, ENDED

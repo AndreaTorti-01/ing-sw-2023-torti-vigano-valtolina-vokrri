@@ -54,7 +54,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     private volatile boolean running;
 
     /**
-     * Creates a new TUI view associated with the provided client.
+     * Creates a new Textual User Interface view associated with the provided client.
      *
      * @param client the client associated with this view.
      */
@@ -189,7 +189,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Accepts a command from the user.
+     * Accepts input from the user and notifies the observers with the chosen message.
      */
     private void acceptInput() {
         while (running) {
@@ -286,6 +286,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     /**
      * Asks the player to pick the cards from the board.
      * The cards will be in the exact order.
+     * Notifies the observers of the picked cards.
      */
     private void pickCards() {
         List<List<Integer>> pickedCoords = new ArrayList<>();
@@ -424,7 +425,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Prints the game status.
+     * Prints the current Game state.
      */
     private void printGameStatus() {
         // Prints the title, boards and shelves
@@ -502,7 +503,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Prints the chat.
+     * Prints the chat messages.
      */
     private void printChat() {
         if (modelView.getMessages().size() == 0) return;
@@ -528,7 +529,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Asks the player his name.
+     * Asks the player's name.
      */
     private void askPlayerName() {
         // Ask the name of the player
@@ -559,14 +560,14 @@ public class Tui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Prints the shelves.
+     * Prints the shelves of every player.
      */
     private void printShelves() {
         int numOfPlayers = modelView.getPlayers().size();
 
         for (Player p : modelView.getPlayers()) {
             System.out.print("    " + "    " + "    " + "" + p.getName());
-            for(int spaceCounter = 0; spaceCounter < 31 - p.getName().length(); spaceCounter++) System.out.print(" ");
+            for (int spaceCounter = 0; spaceCounter < 31 - p.getName().length(); spaceCounter++) System.out.print(" ");
             System.out.print("  ");
         }
         System.out.print("\n");
@@ -611,7 +612,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Prints the scores of the players.
+     * Prints the scores of every player.
      */
     private void printScores() {
         System.out.println("Scores:");
@@ -628,10 +629,10 @@ public class Tui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * Prints the board.
+     * Prints the current board.
      *
      * @param board  the board to be printed.
-     * @param layout the layout of the board.
+     * @param layout the board layout.
      */
     private void printBoard(ItemCard[][] board, boolean[][] layout) {
 
@@ -687,7 +688,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     }
 
     /**
-     * The state of the view.
+     * The View's possible states.
      */
     private enum State {
         ASK_NAME, ASK_NUMBER, WAITING_FOR_PLAYERS, WAITING_FOR_TURN, PLAY, ENDED
