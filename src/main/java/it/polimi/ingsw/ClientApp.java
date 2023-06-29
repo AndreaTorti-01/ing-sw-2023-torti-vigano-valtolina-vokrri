@@ -27,14 +27,16 @@ public class ClientApp {
 
         // parses the arguments provided from the player
         // in the terminal when launching the client app
-        for (String arg : args) {
-            // if one of the arguments is "-s" or "--socket"
-            // launches the app in socket mode
-            if (arg.equals("-s") || arg.equals("--socket")) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-s") || args[i].equals("--socket")) {
                 isSocket = true;
             }
-            if (arg.equals("-cli") || arg.equals("--terminal")) {
+            if (args[i].equals("-cli") || args[i].equals("--terminal")) {
                 isTui = true;
+            }
+            if (args[i].equals("-ip") || args[i].equals("--ip")) {
+                serverIpAddress = args[i + 1];
+                System.out.println("Server IP address: " + serverIpAddress);
             }
         }
 
