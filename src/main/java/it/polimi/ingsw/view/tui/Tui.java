@@ -623,7 +623,7 @@ public class Tui extends ObservableImpl implements RunnableView {
                 System.out.print("    " + "    " + "╚════> " + p.getName() + ": " + p.getScore() + "    " + "");
 
             for (int i = 0; i < p.getScore(); i++)
-                System.out.print("★");
+                System.out.print("#");
             System.out.println();
         }
     }
