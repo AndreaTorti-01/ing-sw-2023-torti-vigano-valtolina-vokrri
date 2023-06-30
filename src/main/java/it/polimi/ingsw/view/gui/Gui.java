@@ -135,7 +135,6 @@ public class Gui extends ObservableImpl implements RunnableView {
                 }
 
                 case "/help" -> {
-                    playingScreenController.printOnChat("Type /cheat to cheat");
                     playingScreenController.printOnChat("Type /chat <message> to send a message to all players");
                     playingScreenController.printOnChat("Type /privatechat <player> <message> to send a private message to a player");
                     playingScreenController.printOnChat("Type /help to see this list again");
