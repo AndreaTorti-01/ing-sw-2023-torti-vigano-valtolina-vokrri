@@ -81,7 +81,6 @@ public class Tui extends ObservableImpl implements RunnableView {
     private void setState(State state) {
         synchronized (lock) {
             this.state = state;
-            System.err.println("state changed to " + state);
             lock.notifyAll();
         }
     }
@@ -117,6 +116,7 @@ public class Tui extends ObservableImpl implements RunnableView {
         while (getState() == Tui.State.WAITING_FOR_PLAYERS) {
             synchronized (lock) {
                 try {
+                    printWaitingForPlayers();
                     lock.wait();
                 } catch (InterruptedException e) {
                     System.err.println("Interrupted while waiting for server: " + e.getMessage());
@@ -280,7 +280,6 @@ public class Tui extends ObservableImpl implements RunnableView {
         }
         gaveNumber = true;
         notifyObservers(playerNumber);
-        printWaitingForPlayers();
     }
 
     /**
@@ -448,7 +447,7 @@ public class Tui extends ObservableImpl implements RunnableView {
     private void printCommonGoalCards() {
         System.out.println("Common goal cards: ");
         for (int i = 0; i < modelView.getCommonGoalCards().size(); i++) {
-            System.out.print((i + 1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString() + "    " + "    " + "    " + "");
+            System.out.print((i + 1) + ": " + modelView.getCommonGoalCards().get(i).getType().toString() + "    " + "    " + "    ");
         }
         System.out.println();
     }
@@ -458,13 +457,6 @@ public class Tui extends ObservableImpl implements RunnableView {
      */
     private void printPersonalGoalCards() {
         System.out.println("Personal goal cards: ");
-
-        for (Player player : modelView.getPlayers()) {
-            if (player.getName().equals(playerName)) {
-                StringBuilder output = new StringBuilder();
-
-            }
-        }
 
         Player playingPlayer = null;
         for (Player p : modelView.getPlayers()) {
@@ -566,7 +558,7 @@ public class Tui extends ObservableImpl implements RunnableView {
         int numOfPlayers = modelView.getPlayers().size();
 
         for (Player p : modelView.getPlayers()) {
-            System.out.print("    " + "    " + "    " + "" + p.getName());
+            System.out.print("    " + "    " + "    " + p.getName());
             for (int spaceCounter = 0; spaceCounter < 31 - p.getName().length(); spaceCounter++) System.out.print(" ");
             System.out.print("  ");
         }
@@ -598,8 +590,7 @@ public class Tui extends ObservableImpl implements RunnableView {
             System.out.print("\n");
             if (i != numberOfRows - 1) {
                 for (Player p : modelView.getPlayers())
-                    if (i != numberOfRows - 1)
-                        System.out.print("    " + "    " + "    " + "╠═════╬═════╬═════╬═════╬═════╣  ");
+                    System.out.print("    " + "    " + "    " + "╠═════╬═════╬═════╬═════╬═════╣  ");
                 System.out.print("\n");
             }
         }
@@ -618,9 +609,9 @@ public class Tui extends ObservableImpl implements RunnableView {
         System.out.println("Scores:");
         for (Player p : modelView.getPlayers()) {
             if (modelView.getPlayers().indexOf(p) != modelView.getPlayers().size() - 1)
-                System.out.print("    " + "    " + "╠════> " + p.getName() + ": " + p.getScore() + "    " + "");
+                System.out.print("    " + "    " + "╠════> " + p.getName() + ": " + p.getScore() + "    ");
             else
-                System.out.print("    " + "    " + "╚════> " + p.getName() + ": " + p.getScore() + "    " + "");
+                System.out.print("    " + "    " + "╚════> " + p.getName() + ": " + p.getScore() + "    ");
 
             for (int i = 0; i < p.getScore(); i++)
                 System.out.print("#");

@@ -106,27 +106,17 @@ public class TerminalPrintables {
         printMyShelfie();
         credits();
         System.out.print(
-                    "                █   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █▀▀█ 　 █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█ 　 █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀\n" +
-                    "                █ █ █ █▄▄█ █   █   █ █  █ █ ▀█ 　 █▀▀ █  █ █▄▄▀ 　 █  █   █   █▀▀█ █▀▀ █▄▄▀ 　 █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█\n" +
-                    "                █▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀ 　 ▀   ▀▀▀▀ ▀ ▀▀ 　 ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀ 　 █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀\n");
-    }
-
-    /**
-     * Prints to the terminal the welcome screen.
-     */
-    public static void printWelcomeScreen() {
-        welcome();
-        printMyShelfie();
-        credits();
-        System.out.println("\n");
+                "                      █   █ █▀▀█ ▀ ▀▀█▀▀ ▀ █▀▀▄ █▀▀▀   █▀▀ █▀▀█ █▀▀█   █▀▀█ ▀▀█▀▀ █  █ █▀▀ █▀▀█   █▀▀█ █   █▀▀█ █  █ █▀▀ █▀▀█ █▀▀\n" +
+                        "                      █ █ █ █▄▄█ █   █   █ █  █ █ ▀█   █▀▀ █  █ █▄▄▀   █  █   █   █▀▀█ █▀▀ █▄▄▀   █  █ █   █▄▄█ █▄▄█ █▀▀ █▄▄▀ ▀▀█\n" +
+                        "                      █▄▀▄█ ▀  ▀ ▀   ▀   ▀ ▀  ▀ ▀▀▀▀   ▀   ▀▀▀▀ ▀ ▀▀   ▀▀▀▀   ▀   ▀  ▀ ▀▀▀ ▀ ▀▀   █▀▀▀ ▀▀▀ ▀  ▀ ▄▄▄█ ▀▀▀ ▀ ▀▀ ▀▀▀\n");
     }
 
     /**
      * Prints to the terminal the credits screen.
      */
     public static void credits() {
-        System.out.println("\n" + ANSI_CYAN + "\n \n \n     " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "  developed by gc-33" + ANSI_RESET);
-        System.out.println(ANSI_CYAN + "\n     " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + " Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET);
+        System.out.println("\n" + ANSI_CYAN + "\n \n \n     " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "developed by gc-33" + ANSI_RESET);
+        System.out.println(ANSI_CYAN + "\n     " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "Torti Andrea - Valtolina Cristiano - Viganò Diego - Vokrri Fabio" + ANSI_RESET + "\n\n");
     }
 
     /**
@@ -134,9 +124,9 @@ public class TerminalPrintables {
      */
     public static void welcome() {
         System.out.println("\n" + ANSI_YELLOW +
-                "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "█   █ █▀▀ █   █▀▀ █▀▀█ █▀▄▀█ █▀▀ 　 ▀▀█▀▀ █▀▀█\n" +
-                "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "█ █ █ █▀▀ █   █   █  █ █ ▀ █ █▀▀ 　   █   █  █\n" +
-                "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "█▄▀▄█ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀   ▀ ▀▀▀ 　   █   ▀▀▀▀\n\n\n");
+                "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "█   █ █▀▀ █   █▀▀ █▀▀█ █▀▄▀█ █▀▀   ▀▀█▀▀ █▀▀█\n" +
+                "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "█ █ █ █▀▀ █   █   █  █ █ ▀ █ █▀▀     █   █  █\n" +
+                "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "    " + "█▄▀▄█ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀   ▀ ▀▀▀     █   ▀▀▀▀\n\n\n");
     }
 
     /**
