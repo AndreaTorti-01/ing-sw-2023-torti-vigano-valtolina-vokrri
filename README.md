@@ -1,5 +1,10 @@
 # My Shelfie - Progetto Finale di Ingegneria del Software PoliMi
 
+![Screenshot 2024-04-08 141432](https://github.com/AndreaTorti-01/ing-sw-2023-torti-vigano-valtolina-vokrri/assets/74457299/6eae8afa-1fa7-487f-a552-7f685f0010e3)
+![Screenshot 2024-04-08 141615](https://github.com/AndreaTorti-01/ing-sw-2023-torti-vigano-valtolina-vokrri/assets/74457299/2be6c32d-e96f-4b96-a64d-ddf3ba4f530d)
+![Screenshot 2024-04-08 141923](https://github.com/AndreaTorti-01/ing-sw-2023-torti-vigano-valtolina-vokrri/assets/74457299/ddb27d04-bdd0-40a3-8426-64321125a2bc)
+![Screenshot 2024-04-08 142144](https://github.com/AndreaTorti-01/ing-sw-2023-torti-vigano-valtolina-vokrri/assets/74457299/c1e035f0-73aa-40e9-9291-bf94872567b3)
+
 ## Features
 
 - [x] Regole Complete
